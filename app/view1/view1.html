@@ -1,1 +1,9 @@
-<p ng-controller="View1Ctrl">Hello <b ng-bind="name"></b>!</p>
+<p class="view1">
+	<form ng-submit="openDialog()" ng-controller="View1Ctrl">
+		<label>
+			Name:
+			<input type="text" ng-model="name" placeholder="Your name here" autofocus></input>
+		</label>
+		<input type="submit"></input>
+	</form>
+</p>

@@ -2,6 +2,7 @@ var browserify = require('browserify'),
 	gulp = require('gulp'),
 	gulpif = require('gulp-if'),
 	jshint = require('gulp-jshint'),
+	sass = require('gulp-sass'),
 	uglify = require('gulp-uglify'),
 	webserver = require('gulp-webserver'),
 	buffer = require('vinyl-buffer'),
@@ -16,8 +17,9 @@ gulp.task('dev', function () {
 gulp.task('build', function () {
 	lint();
 	bundlejs();
-	views();
 	images();
+	views();
+	styles();
 });
 
 gulp.task('serve', function() {
@@ -37,19 +39,17 @@ function lint() {
 		.pipe(jshint.reporter('default'));
 }
 
-gulp.task('browserify', bundlejs);
+gulp.task('bundlejs', bundlejs);
 function bundlejs() {
 	browserify('./app/app.js')
 		.bundle()
-		.pipe(source('bundle.js'))
+		.on('error', function(err){
+      console.log(err.message);
+      this.emit('end');
+    })
+    .pipe(source('bundle.js'))
 		.pipe(buffer())
 		.pipe(gulpif(prod, uglify()))
-		.pipe(gulp.dest('./build'));
-}
-
-gulp.task('views', views);
-function views() {
-	gulp.src(['./app/index.html', './app/**/*.html'])
 		.pipe(gulp.dest('./build'));
 }
 
@@ -59,15 +59,34 @@ function images() {
 		.pipe(gulp.dest('./build/img'));
 }
 
+gulp.task('views', views);
+function views() {
+	gulp.src(['./app/index.html', './app/**/*.html'])
+		.pipe(gulp.dest('./build'));
+}
+
+gulp.task('styles', styles);
+function styles() {
+	gulp.src(['app/main.scss'])
+		.pipe(sass({
+			outputStyle: 'compressed',
+			follow: true
+		}).on('error', sass.logError))
+		.pipe(gulp.dest('./build'));
+}
+
 gulp.task('watch', function () {
+	gulp.watch(['app/app.js', 'app/**/*.js'], [
+		'lint',
+		'bundlejs'
+	]);
 	gulp.watch(['app/img/*'], [
 		'images'
 	]);
-	gulp.watch(['app/app.js', 'app/**/*.js'], [
-		'lint',
-		'browserify'
-	]);
 	gulp.watch(['app/index.html', 'app/**/*.html'], [
 		'views'
+	]);
+	gulp.watch(['app/main.scss', 'app/**/*.scss', 'app/**/*.css'], [
+		'styles'
 	]);
 });

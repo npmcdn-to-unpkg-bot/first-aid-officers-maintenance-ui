@@ -5,7 +5,8 @@
     "start": "gulp dev build serve watch"
   },
   "browser": {
-    "angular": "./bower_components/angular/angular.min.js"
+    "angular": "./bower_components/angular/angular.min.js",
+    "ng-dialog": "./bower_components/ng-dialog/js/ngDialog.min.js"
   },
   "browserify": {
     "transform": [
@@ -23,6 +24,7 @@
     "gulp": "^3.9.0",
     "gulp-if": "^2.0.0",
     "gulp-jshint": "^2.0.0",
+    "gulp-sass": "^2.1.1",
     "gulp-uglify": "^1.5.1",
     "gulp-util": "^3.0.7",
     "gulp-webserver": "^0.9.1",

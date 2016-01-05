@@ -1,0 +1,18 @@
+@import 'bower_components/ng-dialog/css/ngDialog-theme-default.min';
+@import 'bower_components/ng-dialog/css/ngDialog.min';
+@import 'view1/view1';
+
+$theme:		#280C6E;
+
+@function asdf($color) {
+  @if (lightness($color) > 50%) {
+    @return darken($color, 60%);
+  } @else {
+    @return lighten($color, 60%);
+  }
+}
+
+body {
+  background-color: $theme;
+  color: asdf($theme);
+}

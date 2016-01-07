@@ -5,8 +5,11 @@
     "start": "gulp dev build serve watch"
   },
   "browser": {
-    "angular": "./bower_components/angular/angular.min.js",
-    "ng-dialog": "./bower_components/ng-dialog/js/ngDialog.min.js"
+    "arrive": "./bower_components/arrive/minified/arrive.min.js",
+    "bootstrap": "./bower_components/bootstrap/dist/js/bootstrap.js",
+    "bootstrap_material_design": "./bower_components/bootstrap-material-design/dist/js/material.min.js",
+    "jquery": "./bower_components/jquery/dist/jquery.min.js",
+    "ripples": "./bower_components/bootstrap-material-design/dist/js/ripples.min.js"
   },
   "browserify": {
     "transform": [
@@ -14,8 +17,25 @@
     ]
   },
   "browserify-shim": {
-    "angular": {
-      "exports": "angular"
+    "bootstrap_material_design": {
+      "exports": "bootstrap_material_design",
+      "depends": [
+        "jquery",
+        "bootstrap",
+        "ripples"
+      ]
+    },
+    "ripples": {
+      "exports": "ripples",
+      "depends": [
+        "jquery",
+        "arrive"
+      ]
+    },
+    "jquery": {
+      "exports": {
+        "jquery": "$"
+      }
     }
   },
   "devDependencies": {
@@ -31,5 +51,13 @@
     "jshint": "^2.9.1-rc2",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "angular": "^1.4.8",
+    "angular-cookies": "^1.4.8",
+    "angular-route": "^1.4.8",
+    "angular-sanitize": "^1.4.8",
+    "ng-dialog": "^0.5.6",
+    "underscore": "^1.8.3"
   }
 }

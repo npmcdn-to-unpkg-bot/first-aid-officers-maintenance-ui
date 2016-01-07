@@ -1,13 +1,58 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<script type="text/javascript" src="bundle.js"></script>
-	<link rel="stylesheet" type="text/css" href="main.css" />
-	<title>ccjmne's Angular Seed application</title>
-</head>
-<body ng-app="MyApp">
-	<div ng-include="'./view1/view1.html'"></div>
-	<hr />
-	<div ng-include="'./view2/view2.html'"></div>
-</body>
+<html lang="fr" ng-app="faomaintenanceApp">
+	<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="bundle.js"></script>
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <title>Gestion des Formations Sécurité</title>
+    <link rel="shortcut icon" href="./img/favicon.ico" />
+
+    <!-- support for effing old browsers like the client has -->
+    <script src="https://www.promisejs.org/polyfills/promise-6.1.0.min.js"></script>
+	</head>
+
+  <body ng-controller="IndexCtrl">
+    <div class="alerts-container">
+      <alert class="animation" ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)"><span ng-bind-html="alert.msg" /></alert>
+    </div>
+    <div class="container">
+      <header ng-controller="HeaderCtrl">
+        <div class="row top-panel">
+          <div class="col-md-4 col-sm-4"></div>
+          <div class="col-md-4 col-sm-4">
+            <a href="#/home" class="logo"><img src="./img/logo.png" alt="Pole emploi" /></a>
+          </div>
+          <div class="col-md-4 col-sm-4 vcenter">
+            <div if-role="user">Connect&eacute;(e) en tant que <span class="text-primary">{{userInfo.empl_firstname}} {{userInfo.empl_surname}}</span><br /><button type="button" class="btn btn-sm btn-default" ng-click="disconnect()">Se d&eacute;connecter</button></div>
+          </div>
+        </div>
+
+        <nav class="navbar" role="navigation">
+          <div class="collapse navbar-collapse" collapse="navbarCollapsed" if-role="user">
+            <ul class="nav navbar-nav">
+              <li ng-class="{ active: isActive('/home') || isActive('/login')}"><a href="#/home">Accueil</a></li>
+              <li ng-class="{ active: isActive('/sites')}"><a href="#/sites">Sites</a></li>
+              <li ng-class="{ active: isActive('/employees')}"><a href="#/employees">Agents</a></li>
+              <li ng-class="{ active: isActive('/trainings')}"><a href="#/trainings">Formations</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li ng-class="{ active: isActive('/account')}" if-role="user"><a href="#/account">Mon compte</a></li>
+              <li ng-class="{ active: isActive('/admin')}" if-role="admin"><a href="#/admin">Administration</a></li>
+              <li ng-class="{ active: isActive('/management')}" if-role="trainer"><a href="#/management">Espace Formateurs</a></li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+
+      <div class="content">
+        <div ng-view autoscroll="true"></div>
+      </div>
+
+      <footer>
+        <br />
+        <p>&copy; 2014-2015 NCLS&nbsp;Development<span class="text-danger">&nbsp;|&nbsp;</span><a href="mailto:nclsdevelopment@gmail.com?subject=Enquiry about {{title}} at {{whereami}}">nous contacter</a>
+        <span class="pull-right" ng-if="onLocation('/admin')">Features some icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a></span></p>
+      </footer>
+    </div>
+  </body>
 </html>

@@ -17,10 +17,15 @@
     ]
   },
   "browserify-shim": {
+    "arrive": {
+      "exports": "arrive",
+      "depends": ["jquery"]
+    },
     "bootstrap_material_design": {
       "exports": "bootstrap_material_design",
       "depends": [
         "jquery",
+        "arrive",
         "bootstrap",
         "ripples"
       ]
@@ -28,8 +33,7 @@
     "ripples": {
       "exports": "ripples",
       "depends": [
-        "jquery",
-        "arrive"
+        "jquery"
       ]
     },
     "jquery": {

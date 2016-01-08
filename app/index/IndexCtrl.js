@@ -5,6 +5,7 @@ var _ = require('underscore');
 module.exports = function ($rootScope, $scope, $document, $location, ngDialog) {
 	$scope.whereami = $location.host();
 	$scope.title = $document[0].title;
+	$scope.today = new Date();
 	$rootScope.$watch('currentUser.info', function (userInfo) {
 		$scope.userInfo = userInfo;
 	}, true);

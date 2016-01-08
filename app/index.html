@@ -23,7 +23,7 @@
             <a href="#/home" class="logo"><img src="./img/logo.png" alt="Pole emploi" /></a>
           </div>
           <div class="col-md-4 col-sm-4 vcenter">
-            <div if-role="user">Connect&eacute;(e) en tant que <span class="text-primary">{{userInfo.empl_firstname}} {{userInfo.empl_surname}}</span><br /><button type="button" class="btn btn-sm btn-default" ng-click="disconnect()">Se d&eacute;connecter</button></div>
+            <div if-role="user">Connect&eacute;(e) en tant que <span class="text-primary">{{userInfo.empl_firstname}} {{userInfo.empl_surname}}</span><br /><button type="button" class="btn btn-raised btn-default btn-sm" ng-click="disconnect()">Se d&eacute;connecter</button></div>
           </div>
         </div>
 
@@ -50,7 +50,7 @@
 
       <footer>
         <br />
-        <p>&copy; 2014-2015 NCLS&nbsp;Development<span class="text-danger">&nbsp;|&nbsp;</span><a href="mailto:nclsdevelopment@gmail.com?subject=Enquiry about {{title}} at {{whereami}}">nous contacter</a>
+        <p>&copy; 2014-{{today | date: 'YYYY'}} NCLS&nbsp;Development<span class="text-danger">&nbsp;|&nbsp;</span><a href="mailto:nclsdevelopment@gmail.com?subject=Enquiry about {{title}} at {{whereami}}">nous contacter</a>
         <span class="pull-right" ng-if="onLocation('/admin')">Features some icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a></span></p>
       </footer>
     </div>

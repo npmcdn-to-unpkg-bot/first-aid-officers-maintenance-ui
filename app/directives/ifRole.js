@@ -13,13 +13,13 @@ module.exports = function ($rootScope, ngIfDirective) {
     
     ngIf.link.apply(ngIf, arguments);
     $rootScope.$watch('currentUser.info.roles', function (roles) {
-	    if(attrs.ifRole.indexOf('!') !== 0) {
-	      shown = _.contains(roles, attrs.ifRole);
-	    } else {
+	    if(attrs.ifRole.indexOf('!') === 0) {
 	      shown = !_.contains(roles, attrs.ifRole.substr(1));
+      } else {
+        shown = _.contains(roles, attrs.ifRole);
 	    }
-	    });
-	  }
+    });
+  }
 
   return {
     priority: ngIf.priority,

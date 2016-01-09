@@ -17,8 +17,20 @@ $brand-danger:	#e51c23 !default;
 
 .ngdialog.ngdialog-theme-default .ngdialog-content {
 	padding: 0;
+
+	.panel {
+		border-radius: 4px;
+	}
 }
 
 .clickme {
   cursor: pointer;
+}
+
+.form-group {
+	margin: 0;
+
+	label.control-label {
+		font-size: 14px;
+	}
 }

@@ -5,8 +5,25 @@ var angular = require('angular');
 require('bootstrap_material_design');
 require('angular-bootstrap');
 require('angular-bootstrap-templates');
+var Trianglify = require('trianglify');
+
 $(function() {
-    $.material.init();
+  $.material.init();
+
+	function trianglify()	{
+		/*jshint camelcase: false*/
+	  var pattern = new Trianglify({
+		  width: window.innerWidth,
+		  height: window.innerHeight,
+		  x_colors: 'Blues'
+	  });
+
+	  document.body.style['background-image'] = 'url(' + pattern.png() + ')';
+	  //document.getElementById('top-panel').style['background-image'] = 'url(' + pattern.png() + ')';
+	}
+	window.onresize = trianglify;
+
+	trianglify();
 });
 
 angular.module('faomaintenanceApp', [
@@ -14,6 +31,7 @@ angular.module('faomaintenanceApp', [
 	require('angular-animate'),
 	require('angular-route'),
 	require('angular-sanitize'),
+	require('./filters/customFilters'),
 	require('ng-dialog'),
 	'ui.bootstrap'
 ]).config(['$routeProvider', 'ngDialogProvider', function ($routeProvider, $ngDialogProvider) {
@@ -30,6 +48,7 @@ angular.module('faomaintenanceApp', [
 		});
 }])
 	.directive('ifRole', ['$rootScope', 'ngIfDirective', require('./directives/ifRole.js')])
+	.directive('loading', [require('./directives/loading.js')])
 	.factory('ApiSvc', ['$http', '$q', require('./services/ApiSvc.js')])
 	.factory('AdminSvc', ['$http', '$q', '$rootScope', 'ApiSvc', require('./services/AdminSvc.js')])
 	.factory('AuthenticationSvc', ['$http', '$cookies', '$rootScope', '$timeout', 'ApiSvc', require('./services/AuthenticationSvc.js')])

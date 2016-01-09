@@ -10,12 +10,16 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog) {
 		$scope.userInfo = userInfo;
 	}, true);
 
+	$scope.isActive = function (viewLocation) {
+		return viewLocation === '/' ? viewLocation === $location.path() : $location.path().indexOf(viewLocation) === 0;
+	};
+
 	$scope.disconnect = function () {
 		var dialogScope = $scope.$new(false);
 		dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">vous d&eacute;connecter</span>&nbsp;?';
 		ngDialog.closeAll();
 		ngDialog.openConfirm({
-			template: 'partials/warning.html',
+			template: 'dialogs/warning.html',
 			scope: dialogScope
 		}).then(function () {
 			$rootScope.disconnect();

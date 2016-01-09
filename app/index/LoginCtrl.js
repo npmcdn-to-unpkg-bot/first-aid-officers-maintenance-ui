@@ -1,17 +1,17 @@
 'use strict';
 
-module.exports = function ($rootScope, $location, AuthenticationService, ngDialog, $window) {
+module.exports = function ($rootScope, $location, AuthenticationSvc, ngDialog, $window) {
 	var vm = this;
 
 	(function initController() {
-		AuthenticationService.ClearCredentials();
+		AuthenticationSvc.ClearCredentials();
 	})();
 
 	function login() {
 		vm.busy = true;
-		AuthenticationService.Login(vm.username, vm.password, function (data) {
+		AuthenticationSvc.Login(vm.username, vm.password, function (data) {
 			vm.busy = false;
-			AuthenticationService.SetCredentials(vm.username, vm.password, data);
+			AuthenticationSvc.SetCredentials(vm.username, vm.password, data);
 			$window.location.reload();
 			ngDialog.closeAll();
 		}, function () {

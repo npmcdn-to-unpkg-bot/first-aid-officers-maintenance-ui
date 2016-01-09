@@ -5,7 +5,8 @@ $brand-primary: #1b559b !default;
 $brand-warning:	#ff9800 !default;
 $brand-danger:	#e51c23 !default;
 
-@import 'bower_components/bootstrap/dist/css/bootstrap';
+//@import 'bower_components/bootstrap/dist/css/bootstrap';
+@import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
 @import 'bower_components/bootstrap-material-design/sass/bootstrap-material-design';
 @import 'bower_components/bootstrap-material-design/sass/ripples';
 
@@ -18,17 +19,6 @@ $brand-danger:	#e51c23 !default;
 	padding: 0;
 }
 
-
-.alerts-container {
-  position: fixed;
-  z-index: 10001;
-  top: 10px;
-  left: 10px;
-  width: 400px;
-  pointer-events: none;
-}
-
-.alerts-container .alert {
-  /*box-shadow: black 0px 0px 5px 0px;*/
-  pointer-events: all;
+.clickme {
+  cursor: pointer;
 }

@@ -20,6 +20,7 @@
   "dependencies": {
     "bootstrap-material-design": "~0.5.7",
     "arrive": "~2.3.0",
-    "bootstrap-sass": "~3.3.6"
+    "bootstrap-sass": "~3.3.6",
+    "angular-bootstrap": "~1.0.0"
   }
 }

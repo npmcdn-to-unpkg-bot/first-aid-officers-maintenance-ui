@@ -6,6 +6,8 @@
   },
   "browser": {
     "arrive": "./bower_components/arrive/minified/arrive.min.js",
+    "angular-bootstrap": "./bower_components/angular-bootstrap/ui-bootstrap.min.js",
+    "angular-bootstrap-templates": "./bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js",
     "bootstrap": "./bower_components/bootstrap/dist/js/bootstrap.js",
     "bootstrap_material_design": "./bower_components/bootstrap-material-design/dist/js/material.min.js",
     "jquery": "./bower_components/jquery/dist/jquery.min.js",
@@ -19,7 +21,9 @@
   "browserify-shim": {
     "arrive": {
       "exports": "arrive",
-      "depends": ["jquery"]
+      "depends": [
+        "jquery"
+      ]
     },
     "bootstrap_material_design": {
       "exports": "bootstrap_material_design",
@@ -58,6 +62,7 @@
   },
   "dependencies": {
     "angular": "^1.4.8",
+    "angular-animate": "^1.4.8",
     "angular-cookies": "^1.4.8",
     "angular-route": "^1.4.8",
     "angular-sanitize": "^1.4.8",

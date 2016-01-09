@@ -1,5 +1,5 @@
 'use strict';
-/*jshint camelcase: false */
+/*jshint camelcase: false*/
 
 var _ = require('underscore');
 

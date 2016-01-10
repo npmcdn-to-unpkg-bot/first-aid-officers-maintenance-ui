@@ -114,7 +114,7 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="empl in shown track by empl.empl_pk" class="clickme" ng-click="selectEmployee(empl.empl_pk)" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
-					<td><button type="button" class="btn btn-xs" ng-class="{'btn-primary': hover}">VOIR</button></td>
+					<td><button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button></td>
 					<td class="shrinkable">{{empl.empl_pk}}</td>
 					<td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_surname}}&nbsp;</td>
 					<td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_firstname}}&nbsp;</td>

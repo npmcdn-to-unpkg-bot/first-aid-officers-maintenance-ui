@@ -71,6 +71,9 @@ angular.module('faomaintenanceApp', [
 		.when('/sites/:site_pk', {
 			templateUrl: 'sites/site.html',
 			controller: 'SiteCtrl'
+		})
+		.otherwise({
+			redirectTo : '/home'
 		});
 }])
 	.directive('ifRole', ['$rootScope', 'ngIfDirective', require('./directives/ifRole.js')])

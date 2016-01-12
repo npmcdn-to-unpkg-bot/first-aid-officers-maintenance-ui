@@ -10,6 +10,8 @@ $brand-danger:	#e51c23 !default;
 @import 'bower_components/bootstrap-material-design/sass/bootstrap-material-design';
 @import 'bower_components/bootstrap-material-design/sass/ripples';
 
+@import 'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min';
+
 @import 'node_modules/ng-dialog/css/ngDialog-theme-default.min';
 @import 'node_modules/ng-dialog/css/ngDialog.min';
 

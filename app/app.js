@@ -7,6 +7,7 @@ require('angular-bootstrap-templates');
 require('angular-i18n-fr');
 require('angular-smart-table');
 require('bootstrap_material_design');
+require('bootstrap-switch');
 require('moment-fr');
 var Trianglify = require('trianglify');
 
@@ -86,6 +87,7 @@ angular.module('faomaintenanceApp', [
 			redirectTo : '/home'
 		});
 }])
+	.directive('bswitch', ['$parse', require('./directives/bSwitch.js')])
 	.directive('ifRole', ['$rootScope', 'ngIfDirective', require('./directives/ifRole.js')])
 	.directive('loading', [require('./directives/loading.js')])
 	.directive('stateSustain', ['$rootScope', '$cookies', require('./directives/stateSustain.js')])

@@ -1,21 +1,18 @@
-<div>
-	<form class="form-inline pull-right">
-		<div class="form-group is-empty">
-			<div class="input-group">
-				<span class="input-group-addon">Consulter un autre site</span>
-				<input type="text" class="form-control"	ng-model="viewSite" placeholder="Rechercher..." class="form-control" uib-typeahead="viewSite as viewSite.site_name for viewSite in sites | filterSite:$viewValue | limitTo:8" />
-				<span class="input-group-btn">
-					<button class="btn btn-raised btn-primary" type="submit" ng-disabled="viewSite.site_pk === undefined" ng-click="select(viewSite.site_pk)">GO</button>
-				</span>
-			</div>
+<h3 class="pull-left">{{site.site_name}}</h3>
+
+<form class="form-inline pull-right">
+	<div class="form-group is-empty">
+		<div class="input-group">
+			<span class="input-group-addon">Consulter un autre site</span>
+			<input type="text" class="form-control"	ng-model="viewSite" placeholder="Rechercher..." class="form-control" uib-typeahead="viewSite as viewSite.site_name for viewSite in sites | filterSite:$viewValue | limitTo:8" />
+			<span class="input-group-btn">
+				<button class="btn btn-primary" type="submit" ng-disabled="viewSite.site_pk === undefined" ng-click="select(viewSite.site_pk)">GO</button>
+			</span>
 		</div>
-	</form>
-</div>
+	</div>
+</form>
 
-<h3>{{site.site_name}}</h3>
-<br />
-
-<div class="row">
+<div class="row clear">
 	<div class="col-md-offset-2 col-md-8">
 		<div class="panel panel-primary">
 			<div class="panel-heading">

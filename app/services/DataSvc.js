@@ -6,7 +6,7 @@ var _ = require('underscore');
 module.exports = function ($http, $q, $rootScope, apiSvc, $filter) {
 
 	var dataSvc = {};
-	var dateFullFilter = $filter('dateFull');
+	var dateFilter = $filter('date');
 
 	dataSvc.getDepartments = function() {
 		return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'departments');
@@ -124,7 +124,7 @@ module.exports = function ($http, $q, $rootScope, apiSvc, $filter) {
 		var deferred = $q.defer();
 		apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainings').then(function (trainings) {
 			_.each(_.values(trainings), function (training) {
-				training.trng_displayDate = dateFullFilter(training.trng_date);
+				training.trng_displayDate = dateFilter(training.trng_date, 'fullDate');
 			});
 
 			deferred.resolve(trainings);

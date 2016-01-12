@@ -39,9 +39,9 @@
             </div>
             <div class="navbar-collapse collapse navbar-responsive-collapse">
               <ul class="nav navbar-nav">
-                <li ng-class="{ active: isActive('/sites')}"><a href="#/sites">Sites</a></li>
-                <li ng-class="{ active: isActive('/employees')}"><a href="#/employees">Agents</a></li>
-                <li ng-class="{ active: isActive('/trainings')}"><a href="#/trainings" if-role="!trainer">Formations</a></li>
+                <li ng-class="{ active: isActive('/sites')}" if-role="user"><a href="#/sites">Sites</a></li>
+                <li ng-class="{ active: isActive('/employees')}" if-role="user"><a href="#/employees">Agents</a></li>
+                <li ng-class="{ active: isActive('/trainings')}" if-role="user"><a href="#/trainings" if-role="!trainer">Formations</a></li>
                 <li class="dropdown" ng-class="{ active: isActive('/trainings')}" if-role="trainer">
                   <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Formations
                     <b class="caret"></b></a>
@@ -51,9 +51,9 @@
                   </ul>
                 </li>
               </ul>
-              <form class="navbar-form navbar-left">
+              <form class="navbar-form navbar-left" ng-show="currentUser.info">
                 <div class="form-group">
-                  <input type="text" class="form-control col-md-8" placeholder="Rechercher...">
+                  <input type="text" class="form-control col-md-8" placeholder="Recherche globale..." uib-typeahead="select as select.summary for select in globalIndex | filterGlobal:$viewValue | limitTo:8" ng-model="select" />
                 </div>
               </form>
               <ul class="nav navbar-nav navbar-right">

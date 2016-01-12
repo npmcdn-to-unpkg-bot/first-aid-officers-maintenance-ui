@@ -2,10 +2,12 @@
 
 var $ = window.jQuery = require('jquery');
 var angular = require('angular');
-require('bootstrap_material_design');
 require('angular-bootstrap');
 require('angular-bootstrap-templates');
+require('angular-i18n-fr');
 require('angular-smart-table');
+require('bootstrap_material_design');
+require('moment-fr');
 var Trianglify = require('trianglify');
 
 $(function() {
@@ -64,6 +66,14 @@ angular.module('faomaintenanceApp', [
 			templateUrl: 'account/account.html',
 			controller: 'AccountCtrl'
 		})
+		.when('/employees', {
+			templateUrl: 'employees/employees.html',
+			controller: 'EmployeesCtrl'
+		})
+		.when('/employees/:empl_pk', {
+			templateUrl: 'employees/employee.html',
+			controller: 'EmployeeCtrl'
+		})
 		.when('/sites', {
 			templateUrl: 'sites/sites.html',
 			controller: 'SitesCtrl'
@@ -84,9 +94,12 @@ angular.module('faomaintenanceApp', [
 	.factory('AuthenticationSvc', ['$http', '$cookies', '$rootScope', '$timeout', 'ApiSvc', require('./services/AuthenticationSvc.js')])
 	.factory('DataSvc', ['$http', '$q', '$rootScope', 'ApiSvc', '$filter', require('./services/DataSvc.js')])
 	.controller('AccountCtrl', ['$scope', '$rootScope', 'AdminSvc', 'ngDialog', require('./account/AccountCtrl.js')])
+	.controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', require('./employees/EmployeesCtrl.js')])
+	.controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', require('./employees/EmployeeCtrl.js')])
 	.controller('HomeCtrl', ['$scope', 'ngDialog', require('./home/HomeCtrl.js')])
-	.controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', require('./index/IndexCtrl.js')])
+	.controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./index/IndexCtrl.js')])
 	.controller('LoginCtrl', ['$rootScope', '$location', 'AuthenticationSvc', 'ngDialog', '$window', require('./index/LoginCtrl.js')])
+	.controller('RolesEditCtrl', ['$rootScope', '$scope', 'AdminSvc', 'ngDialog', require('./dialogs/roles_edit/RolesEditCtrl.js')])
 	.controller('SiteCtrl', ['$scope', '$routeParams', '$location', 'DataSvc', require('./sites/SiteCtrl.js')])
 	.controller('SitesCtrl', ['$scope', '$location', 'DataSvc', require('./sites/SitesCtrl.js')])
 	.run(['$rootScope', '$location', '$cookies', '$http', 'ngDialog', 'AuthenticationSvc', function ($rootScope, $location, $cookies, $http, ngDialog, authenticationSvc) {

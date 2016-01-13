@@ -5,7 +5,7 @@
 		<div class="form-group is-empty">
 			<div class="input-group">
 				<span class="input-group-addon">Consulter un autre agent</span>
-				<input type="text" class="form-control"	ng-model="viewEmpl" placeholder="Rechercher..." class="form-control" uib-typeahead="viewEmpl as viewEmpl.summary for viewEmpl in employees | filterEmpl:$viewValue | limitTo:8" />
+				<input type="text" class="form-control"	ng-model="viewEmpl" placeholder="Rechercher..." class="form-control" uib-typeahead="viewEmpl as viewEmpl.summary for viewEmpl in employeesIndex | filterEmpl:$viewValue | limitTo:8" />
 			</div>
 			<button class="btn btn-primary" type="submit" ng-disabled="viewEmpl.empl_pk === undefined" ng-click="select(viewEmpl.empl_pk)">GO</button>
 		</div>
@@ -60,10 +60,6 @@
 			<label for="pageSize">Formations par page :&nbsp;</label>
 			<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size as size for size in [5, 10, 25, 100]"></select>
 		</div>
-		<!--<div class="col-md-8 form-group text-right">
-			<label for="filter" class="control-label">Rechercher formation&nbsp;:&nbsp;</label>
-			<input st-search="asdf" st-delay="0" ng-model="filter" class="form-control" id="filter" type="text" placeholder="Type, commentaire, date..."/>
-		</div>-->
 	</form>
 
 	<div class="panel panel-primary">

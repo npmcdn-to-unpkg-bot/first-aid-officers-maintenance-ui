@@ -9,7 +9,9 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
 	$scope.today = new Date();
 
 	Promise.all([dataSvc.getSites(), dataSvc.getEmployees()]).then(function (results) {
-		$scope.globalIndex = _.values(results[0]).concat(_.values(results[1]));
+		$scope.employeesIndex = _.values(results[1]);
+		$scope.sitesIndex = _.values(results[0]);
+		$scope.globalIndex = $scope.sitesIndex.concat($scope.employeesIndex);
 	});
 
 	$rootScope.$watch('currentUser.info', function (userInfo) {

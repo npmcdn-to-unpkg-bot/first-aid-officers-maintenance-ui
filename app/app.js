@@ -48,6 +48,7 @@ angular.module('faomaintenanceApp', [
 	require('angular-route'),
 	require('angular-sanitize'),
 	require('./filters/customFilters'),
+	require('./busy/busy.js'),
 	require('ng-dialog'),
 	'ui.bootstrap',
 	'smart-table'
@@ -96,14 +97,14 @@ angular.module('faomaintenanceApp', [
 	.factory('AuthenticationSvc', ['$http', '$cookies', '$rootScope', '$timeout', 'ApiSvc', require('./services/AuthenticationSvc.js')])
 	.factory('DataSvc', ['$http', '$q', '$rootScope', 'ApiSvc', '$filter', require('./services/DataSvc.js')])
 	.controller('AccountCtrl', ['$scope', '$rootScope', 'AdminSvc', 'ngDialog', require('./account/AccountCtrl.js')])
-	.controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', require('./employees/EmployeesCtrl.js')])
-	.controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', require('./employees/EmployeeCtrl.js')])
+	.controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', require('./employees/EmployeesCtrl.js')])
+	.controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', require('./employees/EmployeeCtrl.js')])
 	.controller('HomeCtrl', ['$scope', 'ngDialog', require('./home/HomeCtrl.js')])
 	.controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./index/IndexCtrl.js')])
 	.controller('LoginCtrl', ['$rootScope', '$location', 'AuthenticationSvc', 'ngDialog', '$window', require('./index/LoginCtrl.js')])
 	.controller('RolesEditCtrl', ['$rootScope', '$scope', 'AdminSvc', 'ngDialog', require('./dialogs/roles_edit/RolesEditCtrl.js')])
-	.controller('SiteCtrl', ['$scope', '$routeParams', '$location', 'DataSvc', require('./sites/SiteCtrl.js')])
-	.controller('SitesCtrl', ['$scope', '$location', 'DataSvc', require('./sites/SitesCtrl.js')])
+	.controller('SiteCtrl', ['$scope', '$routeParams', '$location', 'DataSvc', 'BusySvc', require('./sites/SiteCtrl.js')])
+	.controller('SitesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', require('./sites/SitesCtrl.js')])
 	.run(['$rootScope', '$location', '$cookies', '$http', 'ngDialog', 'AuthenticationSvc', function ($rootScope, $location, $cookies, $http, ngDialog, authenticationSvc) {
 		// keep user logged in after page refresh
 		$rootScope.currentUser = $cookies.getObject('currentUser');

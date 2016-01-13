@@ -4,7 +4,7 @@
 	<div class="form-group is-empty">
 		<div class="input-group">
 			<span class="input-group-addon">Consulter un autre site</span>
-			<input type="text" class="form-control"	ng-model="viewSite" placeholder="Rechercher..." class="form-control" uib-typeahead="viewSite as viewSite.site_name for viewSite in sites | filterSite:$viewValue | limitTo:8" />
+			<input type="text" class="form-control"	ng-model="viewSite" placeholder="Rechercher..." class="form-control" uib-typeahead="viewSite as viewSite.site_name for viewSite in sitesIndex | filterSite:$viewValue | limitTo:8" />
 			<span class="input-group-btn">
 				<button class="btn btn-primary" type="submit" ng-disabled="viewSite.site_pk === undefined" ng-click="select(viewSite.site_pk)">GO</button>
 			</span>
@@ -61,10 +61,6 @@
 			<label for="pageSize">Agents par page :&nbsp;</label>
 			<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 25, 50, 100]"></select>
 		</div>
-		<!-- <div class="col-md-8 form-group text-right">
-			<label for="filter" class="control-label">Rechercher agent&nbsp;:&nbsp;</label>
-			<input st-search="search" st-delay="0" ng-model="filter" placeholder="Nom, pr&eacute;nom, matricule..." class="form-control" id="filter" type="text"/>
-		</div> -->
 	</form>
 
 	<div class="panel panel-primary">
@@ -122,7 +118,6 @@
 			</tbody>
 		</table>
 		<div class="panel-footer text-center">
-			<img ng-show="stats === 'loading'" src="img/tail-spin.svg" />
 			<td colspan="5" class="text-center">
 				<div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
 			</td>

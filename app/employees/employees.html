@@ -28,7 +28,7 @@
 				</div>
 			</div>
 		</div>
-		<table class="table table table-striped table-hover" ng-if="stats !== 'loading'">
+		<table class="table table table-striped table-hover">
 			<thead>
 				<tr>
 					<th></th>
@@ -75,7 +75,6 @@
 			</tbody>
 		</table>
 		<div class="panel-footer text-center">
-			<img ng-show="stats === 'loading'" src="img/tail-spin.svg" />
 			<td colspan="5" class="text-center">
 				<div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
 			</td>

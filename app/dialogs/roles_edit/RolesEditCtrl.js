@@ -9,8 +9,7 @@ module.exports = function ($rootScope, $scope, adminSvc, ngDialog) {
 	};
 
 	$scope.roleClicked = function (role) {
-		$scope.rolesUpdated = true;
-		if(role.checked && role.role_name === 'user') {
+		if(!role.checked && role.role_name === 'user') {
 			_.each($scope.roles, function (other) {
 				if(other.role_name !== 'user') {
 					other.checked = false;

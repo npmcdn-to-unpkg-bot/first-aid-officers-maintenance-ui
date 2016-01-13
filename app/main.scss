@@ -1,11 +1,12 @@
 @import url('http://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 $brand-primary: #337ab7 !default;
 $brand-warning:	#ff9800 !default;
 $brand-danger:	#e51c23 !default;
 
-//@import 'bower_components/bootstrap/dist/css/bootstrap';
+@import 'busy/busy';
+
+/* the CDN also includes the Glyphicons */
 @import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
 @import 'bower_components/bootstrap-material-design/sass/bootstrap-material-design';
 @import 'bower_components/bootstrap-material-design/sass/ripples';

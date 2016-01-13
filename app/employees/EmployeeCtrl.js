@@ -3,21 +3,23 @@
 
 var _ = require('underscore');
 
-module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, $location, ngDialog, $route) {
-	Promise.all([dataSvc.getEmployees(), dataSvc.getEmployee($routeParams.empl_pk), dataSvc.getEmployeeTrainings($routeParams.empl_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function (results) {
-		$scope.employees = _.values(results[0]);
-		$scope.empl = results[1];
-		$scope.source = _.values(results[2]);
+module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, $location, ngDialog, $route, busySvc) {
+	busySvc.busy();
+
+	Promise.all([dataSvc.getEmployee($routeParams.empl_pk), dataSvc.getEmployeeTrainings($routeParams.empl_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function (results) {
+		$scope.empl = results[0];
+		$scope.source = _.values(results[1]);
 		_.each($scope.source, function (training) {
-			training.type = results[3][training.trng_trty_fk];
+			training.type = results[2][training.trng_trty_fk];
 		});
-		$scope.certificates = _.values(results[4]);
+		$scope.certificates = _.values(results[3]);
 		if($scope.empl.empl_pk !== $rootScope.currentUser.info.empl_pk) {
 			adminSvc.getUserInfo($scope.empl.empl_pk).then(function (info) {
 				$scope.canResetPassword = _.contains(info.roles, 'user');
 			});
 		}
 
+		busySvc.done();
 		$scope.$apply();
 	});
 

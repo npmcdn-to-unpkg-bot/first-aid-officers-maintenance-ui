@@ -14,7 +14,7 @@
 	<table class="table table-striped table-hover">
 		<tbody>
 			<tr ng-repeat="role in roles" ng-class="{'text-primary': role.checked}">
-				<td class="text-right"><button type="button" style="width: 100%" uib-btn-checkbox class="btn btn-raised btn-default" ng-class="{'btn-primary': role.checked}" ng-model="role.checked" ng-click="roleClicked(role); rolesUpdated = true;" ng-disabled="isDisabled(role)">{{role.role_display}}</button></td>
+				<td class="text-right"><button type="button" style="width: 100%" uib-btn-checkbox class="btn btn-raised btn-default" ng-class="{'btn-primary': role.checked}" ng-model="role.checked" ng-click="$parent.rolesUpdated = true; roleClicked(role)" ng-disabled="isDisabled(role)">{{role.role_display}}</button></td>
 				<td>{{role.role_description}}</td>
 			</tr>
 		</tbody>

@@ -14,6 +14,13 @@ module.exports = function ($scope, $routeParams, $location, dataSvc, busySvc) {
 		$scope.$apply();
 	});
 
+	$scope.$watch('viewSite', function (viewSite) {
+		if(viewSite !== undefined && viewSite.site_pk) {
+			$scope.select(viewSite.site_pk);
+			delete($scope.viewSite);
+		}
+	});
+
 	$scope.selectEmployee = function (empl_pk) {
 		$location.path('/employees/' + empl_pk);
 	};

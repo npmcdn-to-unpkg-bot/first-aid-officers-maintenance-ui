@@ -16,9 +16,12 @@ module.exports = function ($scope, $location, dataSvc, busySvc) {
 		$scope.$apply();
 	});
 
-	$scope.search = function (site) {
-		return site.site_name.contains($scope.filter) || site.dept.dept_name.contains($scope.filter);
-	};
+	$scope.$watch('viewSite', function (viewSite) {
+		if(viewSite !== undefined && viewSite.site_pk) {
+			$scope.select(viewSite.site_pk);
+			delete($scope.viewSite);
+		}
+	});
 
 	$scope.select = function (site_pk) {
 		$location.path('/sites/' + site_pk);

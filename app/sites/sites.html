@@ -9,9 +9,6 @@
 				<div class="input-group">
 					<span class="input-group-addon">Consulter la fiche d'un site</span>
 					<input type="text" class="form-control"	ng-model="viewSite" placeholder="Rechercher..." class="form-control" uib-typeahead="viewSite as viewSite.site_name for viewSite in sitesIndex | filterSite:$viewValue | limitTo:8" />
-					<span class="input-group-btn">
-						<button class="btn btn-primary" type="submit" ng-disabled="viewSite.site_pk === undefined" ng-click="select(viewSite.site_pk)">GO</button>
-					</span>
 				</div>
 			</div>
 		</div>

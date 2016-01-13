@@ -31,6 +31,15 @@ h3.pull-left {
   clear: both;
 }
 
+.navbar .uib-typeahead .dropdown-menu li>a {
+  padding: 3px 20px;
+  font-size: 14px;
+
+  &:hover {
+    background: $brand-primary;
+  }
+}
+
 .side-panel-container {
   position: fixed;
   right: 0px;

@@ -17,6 +17,13 @@ module.exports = function ($scope, $location, dataSvc, busySvc) {
 		$scope.$apply();
 	});
 
+	$scope.$watch('viewEmpl', function (viewEmpl) {
+		if(viewEmpl !== undefined && viewEmpl.empl_pk) {
+			$scope.select(viewEmpl.empl_pk);
+			delete($scope.viewEmpl);
+		}
+	});
+
 	$scope.select = function (empl_pk) {
 		$location.path('/employees/' + empl_pk);
 	};

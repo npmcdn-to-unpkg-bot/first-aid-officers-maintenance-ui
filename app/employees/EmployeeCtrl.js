@@ -23,6 +23,13 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
 		$scope.$apply();
 	});
 
+	$scope.$watch('viewEmpl', function (viewEmpl) {
+		if(viewEmpl !== undefined && viewEmpl.empl_pk) {
+			$scope.select(viewEmpl.empl_pk);
+			delete($scope.viewEmpl);
+		}
+	});
+
 	$scope.editRoles = function () {
 		adminSvc.getUserRoles($scope.empl.empl_pk).then(function (roles) {
 			var dialogScope = $scope.$new(false);

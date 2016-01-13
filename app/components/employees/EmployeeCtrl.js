@@ -39,7 +39,7 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
 				if(empl.empl_pk === $rootScope.currentUser.info.empl_pk) {
 					adminSvc.getInfo().then(null, function () {
 						ngDialog.openConfirm({
-							template: 'dialogs/locked_out.html'
+							template: 'components/dialogs/locked_out.html'
 						}).then(function () {
 							$rootScope.disconnect();
 						});
@@ -48,7 +48,7 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
 			};
 
 			ngDialog.open({
-				template: 'dialogs/roles_edit/roles_edit.html',
+				template: 'components/dialogs/roles_edit/roles_edit.html',
 				scope: dialogScope,
 				controller: 'RolesEditCtrl'
 			});
@@ -59,7 +59,7 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
 		var dialogScope = $scope.$new(true);
 		dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">r&eacute;initialiser le mot de passe</span> de cet agent&nbsp;? Cette modification est irr&eacute;versible et prend effet imm&eacute;diatement.';
 		ngDialog.openConfirm({
-			template: 'dialogs/warning.html',
+			template: 'components/dialogs/warning.html',
 			scope: dialogScope
 		}).then(function () {
 			adminSvc.resetUserPassword($scope.empl.empl_pk).then(function (password) {

@@ -38,7 +38,7 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
 		dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">vous d&eacute;connecter</span>&nbsp;?';
 		ngDialog.closeAll();
 		ngDialog.openConfirm({
-			template: 'dialogs/warning.html',
+			template: 'components/dialogs/warning.html',
 			scope: dialogScope
 		}).then(function () {
 			$rootScope.disconnect();

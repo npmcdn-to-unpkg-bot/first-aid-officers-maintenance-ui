@@ -23,7 +23,7 @@ module.exports = function ($scope, $rootScope, adminSvc, ngDialog) {
 
 	$scope.changePassword = function () {
 		ngDialog.openConfirm({
-			template: 'partials/warning.html',
+			template: 'components/dialogs/warning.html',
 			scope: $scope.$new(),
 			controller: ['$rootScope', '$scope', 'AdminSvc', 'AuthenticationSvc', '$location', function ($rootScope, $scope, adminSvc, auth, $location) {
 				$scope.innerHtml = '<div class="text-center">' +

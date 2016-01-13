@@ -51,7 +51,7 @@ angular.module('faomaintenanceApp', [
 	require('./busy/busy.js'),
 	require('ng-dialog'),
 	'ui.bootstrap',
-	'smart-table'
+	'smart-table',
 ]).config(['$routeProvider', 'ngDialogProvider', 'uibButtonConfig', function ($routeProvider, ngDialogProvider, uibButtonConfig) {
 	uibButtonConfig.activeClass = 'btn-primary';
 
@@ -84,6 +84,10 @@ angular.module('faomaintenanceApp', [
 			templateUrl: 'components/sites/site.html',
 			controller: 'SiteCtrl'
 		})
+		.when('/trainings', {
+			templateUrl: 'components/trainings/trainings.html',
+			controller: 'TrainingsCtrl'
+		})
 		.when('/trainings/:trng_pk', {
 			templateUrl: 'components/trainings/training.html',
 			controller: 'TrainingCtrl'
@@ -96,11 +100,14 @@ angular.module('faomaintenanceApp', [
 	.directive('ifRole', ['$rootScope', 'ngIfDirective', require('./directives/ifRole.js')])
 	.directive('loading', [require('./directives/loading.js')])
 	.directive('stateSustain', ['$rootScope', '$cookies', require('./directives/stateSustain.js')])
+	.directive('stSelectDistinct', ['$parse', require('./directives/stSelectDistinct.js')])
+
 	.factory('ApiSvc', ['$http', '$q', require('./services/ApiSvc.js')])
 	.factory('AdminSvc', ['$http', '$q', '$rootScope', 'ApiSvc', require('./services/AdminSvc.js')])
 	.factory('AuthenticationSvc', ['$http', '$cookies', '$rootScope', '$timeout', 'ApiSvc', require('./services/AuthenticationSvc.js')])
 	.factory('DataSvc', ['$http', '$q', '$rootScope', 'ApiSvc', '$filter', require('./services/DataSvc.js')])
 	.factory('TrainingsSvc', ['$http', '$q', 'ApiSvc', require('./services/TrainingsSvc.js')])
+
 	.controller('AccountCtrl', ['$scope', '$rootScope', 'AdminSvc', 'ngDialog', require('./components/account/AccountCtrl.js')])
 	.controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', require('./components/employees/EmployeesCtrl.js')])
 	.controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', require('./components/employees/EmployeeCtrl.js')])
@@ -110,7 +117,9 @@ angular.module('faomaintenanceApp', [
 	.controller('RolesEditCtrl', ['$rootScope', '$scope', 'AdminSvc', 'ngDialog', require('./components/dialogs/roles_edit/RolesEditCtrl.js')])
 	.controller('SiteCtrl', ['$scope', '$routeParams', '$location', 'DataSvc', 'BusySvc', require('./components/sites/SiteCtrl.js')])
 	.controller('SitesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', require('./components/sites/SitesCtrl.js')])
-	.controller('TrainingCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', require('./components/trainings/TrainingCtrl.js')])
+	.controller('TrainingCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'BusySvc', require('./components/trainings/TrainingCtrl.js')])
+	.controller('TrainingsCtrl', ['$scope', 'DataSvc', '$location', 'BusySvc', require('./components/trainings/TrainingsCtrl.js')])
+
 	.run(['$rootScope', '$location', '$cookies', '$http', 'ngDialog', 'AuthenticationSvc', function ($rootScope, $location, $cookies, $http, ngDialog, authenticationSvc) {
 		// keep user logged in after page refresh
 		$rootScope.currentUser = $cookies.getObject('currentUser');
@@ -132,7 +141,7 @@ angular.module('faomaintenanceApp', [
 			if (restrictedPage && !loggedIn) {
 				ngDialog.closeAll();
 				ngDialog.openConfirm({
-					template: 'index/login.html',
+					template: 'components/index/login.html',
 					controller: 'LoginCtrl',
 					controllerAs: 'vm'
 				});

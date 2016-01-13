@@ -49,7 +49,10 @@ function bundlejs() {
     })
     .pipe(source('bundle.js'))
 		.pipe(buffer())
-		.pipe(gulpif(prod, uglify()))
+		.pipe(gulpif(prod, uglify().on('error', function(err){
+      console.log(err.message);
+      this.emit('end');
+    })))
 		.pipe(gulp.dest('./build'));
 }
 

@@ -3,14 +3,15 @@
 var moduleName = 'ccjmne-busy';
 require('angular').module(moduleName, [])
   .run(['$templateCache', function ($templateCache) {
+    /*jshint multistr: true*/
     $templateCache.put('ccjmne-busy_tmpl.html',
-      `<div class="sk-folding-cube" ng-show="busy">
-        <div class="sk-cube1 sk-cube"></div>
-        <div class="sk-cube2 sk-cube"></div>
-        <div class="sk-cube4 sk-cube"></div>
-        <div class="sk-cube3 sk-cube"></div>
-      </div>
-      <div ng-transclude ng-show="!busy"></div>`);
+      '<div class="sk-folding-cube" ng-show="busy"> \
+        <div class="sk-cube1 sk-cube"></div> \
+        <div class="sk-cube2 sk-cube"></div> \
+        <div class="sk-cube4 sk-cube"></div> \
+        <div class="sk-cube3 sk-cube"></div> \
+      </div> \
+      <div ng-transclude ng-show="!busy"></div>');
   }])
   .factory('BusySvc', function () {
     var state = {global: 0};

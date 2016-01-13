@@ -7,7 +7,7 @@ table.table {
     vertical-align: middle;
   }
 
-  thead th{
+  thead th {
     .form-group {
       padding: 0;
 
@@ -16,7 +16,7 @@ table.table {
       }
     }
 
-    .st-sort {
+    &.st-sort, .st-sort {
       cursor: pointer;
 
       &:before {
@@ -30,7 +30,7 @@ table.table {
       }
     }
 
-    .st-sort-descent:before {
+    &.st-sort-descent:before, .st-sort-descent:before {
       font-family: 'Glyphicons Halflings';
       opacity: 0.5;
       content: "\e156";
@@ -40,7 +40,7 @@ table.table {
       top: 4px;
     }
 
-    .st-sort-ascent:before {
+    &.st-sort-ascent:before, .st-sort-ascent:before {
       font-family: 'Glyphicons Halflings';
       opacity: 0.5;
       content: "\e155";

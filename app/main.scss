@@ -16,9 +16,10 @@ $brand-danger:	#e51c23 !default;
 
 @import 'busy/busy';
 
-@import 'index/index';
 @import 'styles/tables';
 @import 'styles/side_panel';
+
+@import 'components/index/index';
 
 body {
 	color: #777;

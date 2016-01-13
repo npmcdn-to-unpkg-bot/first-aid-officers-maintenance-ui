@@ -1,0 +1,29 @@
+.side-panel-container {
+  position: fixed;
+  right: 0px;
+  top: 100px;
+  z-index: 1002;
+  width: 250px;
+  pointer-events: none;
+
+  button.side-panel-item {
+    text-align: left;
+    padding-left: 10px;
+    margin: 0;
+    position: relative;
+    transition: all 200ms;
+    right: -217px;
+    width: 100%;
+    z-index: 1003;
+    pointer-events: all;
+
+    &:hover {
+      right: 0px;
+      z-index: 1004;
+    }
+
+    .glyphicon {
+      margin-right: 5px;
+    }
+  }
+}

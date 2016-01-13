@@ -2,7 +2,7 @@
 
 var moduleName = 'ccjmne-busy';
 require('angular').module(moduleName, [])
-	.run(function ($templateCache) {
+	.run(['$templateCache', function ($templateCache) {
   	$templateCache.put('ccjmne-busy_tmpl.html',
   		`<div class="sk-folding-cube" ng-show="busy">
   			<div class="sk-cube1 sk-cube"></div>
@@ -11,7 +11,7 @@ require('angular').module(moduleName, [])
   			<div class="sk-cube3 sk-cube"></div>
 			</div>
 			<div ng-transclude ng-show="!busy"></div>`);
-  })
+  }])
 	.factory('BusySvc', function () {
   	var busy = 0;
     var listeners = [];

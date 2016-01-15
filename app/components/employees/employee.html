@@ -18,22 +18,21 @@
 			
 			<div class="panel-body">
 				<div class="row">
-					<div class="col-xs-4 text-right">Site</div>
-					<div class="col-xs-8">
-						<a href="#/sites/{{site.site_pk}}">{{site.site_name}}</a>
-					</div>
-				</div>
-				<hr>
-				<div class="row">
 					<div class="col-xs-4 text-right">Type de contrat</div>
 					<div class="col-xs-8">
 						<span ng-if="empl.empl_permanent" class="label label-success">CDI</span><span ng-if="!empl.empl_permanent" class="label label-warning">CDD</span>
 					</div>
 				</div>
 				<div class="row">
+					<div class="col-xs-4 text-right">Affectation</div>
+					<div class="col-xs-8">
+						<a href="#/sites/{{site.site_pk}}">{{site.site_name}}</a>
+					</div>
+				</div>
+				<div class="row">
 					<div class="col-xs-4 text-right">Date de naissance</div>
 					<div class="col-xs-8">
-						<strong>{{empl.empl_dob | date: 'shortDate'}}</strong>
+						<strong>{{empl.empl_dob | date: 'fullDate'}}</strong>
 					</div>
 				</div>
 				<div class="row">
@@ -47,9 +46,9 @@
 			<table class="table" ng-show="(checkedCertificates = (certificates | filter: {'checked': true})).length > 0" >
 				<thead>
 					<tr>
-						<th>Aptitudes</th>
-						<th class="shrinkable">Valide jusqu'au</th>
-						<th class="shrinkable">Renouvellement &agrave; pr&eacute;voir</th>
+						<th width="40%">Aptitudes</th>
+						<th width="30%" class="shrinkable">Valide jusqu'au</th>
+						<th width="30%" class="shrinkable">Renouvellement &agrave; pr&eacute;voir</th>
 					</tr>
 				</thead>
 				<tbody>

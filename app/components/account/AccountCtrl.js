@@ -3,13 +3,16 @@
 
 var _ = require('underscore');
 
-module.exports = function ($scope, $rootScope, adminSvc, ngDialog) {
+module.exports = function ($scope, $rootScope, adminSvc, ngDialog, busySvc) {
+	busySvc.busy();
 	$scope.empl = $rootScope.currentUser.info;
 	adminSvc.getAvailableRoles().then(function (roles) {
 		$scope.availableRoles = roles;
 		$scope.userRoles = _.each(roles, function (role) {
 			return role.checked = _.contains($rootScope.currentUser.info.roles, role.role_name), role;
 		});
+
+		busySvc.done();
 	});
 
 	$scope.check = function (input) {

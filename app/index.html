@@ -58,13 +58,13 @@
               </form>
               <ul class="nav navbar-nav navbar-right">
                 <li ng-class="{ active: isActive('/account')}" if-role="user"><a href="#/account">Mon compte</a></li>
-                <li class="dropdown" ng-class="{ active: isActive('/admin')}" if-role="admin">
+                <li class="dropdown" ng-class="{ active: isActive('/administration')}" if-role="admin">
                   <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Administration
                     <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li><a href="#/admin">Gestion des sites</a></li>
-                    <li><a href="#/admin">Administration utilisateurs</a></li>
-                    <li><a href="#/admin">Mise &agrave; jour</a></li>
+                    <li><a href="#/administration/sites">Gestion des sites</a></li>
+                    <li><a href="#/administration">Administration utilisateurs</a></li>
+                    <li><a href="#/administration">Mise &agrave; jour</a></li>
                   </ul>
                 </li>
               </ul>

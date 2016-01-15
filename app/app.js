@@ -122,6 +122,10 @@ angular.module('faomaintenanceApp', [
 		.when('/administration/sites', {
 			templateUrl: 'components/administration/sites/sites_administration.html',
 			controller: 'SitesAdministrationCtrl'
+		})
+		.when('/administration/users', {
+			templateUrl: 'components/administration/users/users_administration.html',
+			controller: 'UsersAdministrationCtrl'
 		});
 }])
 	.directive('bswitch', ['$parse', require('./directives/bSwitch.js')])
@@ -154,6 +158,7 @@ angular.module('faomaintenanceApp', [
 	.controller('TrainingsCtrl', ['$scope', 'DataSvc', '$location', 'BusySvc', require('./components/trainings/TrainingsCtrl.js')])
 	.controller('TrainingCompletionCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', '$location', 'ngDialog', 'TrainingsSvc', 'BusySvc', require('./components/trainings/TrainingCompletionCtrl.js')])
 	.controller('TrainingEditCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'dateFilter', 'BusySvc', require('./components/trainings/TrainingEditCtrl.js')])
+	.controller('UsersAdministrationCtrl', ['$scope', '$rootScope', 'DataSvc', 'AdminSvc', 'ngDialog', '$route', '$location', 'BusySvc', require('./components/administration/users/UsersAdministrationCtrl.js')])
 
 	.run(['$rootScope', '$location', '$cookies', '$http', 'ngDialog', 'AuthenticationSvc', function ($rootScope, $location, $cookies, $http, ngDialog, authenticationSvc) {
 		// keep user logged in after page refresh

@@ -26,6 +26,20 @@ function summariseTrng (trng) {
   return trng.type.trty_name + ' - ' + trng.trng_displayDate;
 }
 
+customFilters.filter('filterEmpl', function () {
+  return function (employees, inputString) {
+    inputString = inputString.toUpperCase();
+    return _.map(_.filter(employees, function (empl) {
+      var empl_summary = summariseEmpl(empl).toUpperCase();
+      return _.every(inputString.split(' '), function(split) {
+        return empl_summary.indexOf(split) !== -1;
+      });
+    }), function (entry) {
+      return entry.summary = (entry.site_pk) ? summariseSite(entry) : summariseEmpl(entry), entry;
+    });
+  };
+});
+
 customFilters.filter('filterGlobal', function () {
   return function (entries, inputString) {
     inputString = inputString.toUpperCase();

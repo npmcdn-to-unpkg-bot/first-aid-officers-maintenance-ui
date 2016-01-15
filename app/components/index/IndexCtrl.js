@@ -8,10 +8,16 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
 	$scope.title = $document[0].title;
 	$scope.today = new Date();
 
-	Promise.all([dataSvc.getSites(), dataSvc.getEmployees()]).then(function (results) {
-		$scope.employeesIndex = _.values(results[1]);
+	Promise.all([dataSvc.getSites(), dataSvc.getEmployees(), dataSvc.getTrainings(), dataSvc.getTrainingTypes()]).then(function (results) {
 		$scope.sitesIndex = _.values(results[0]);
-		$scope.globalIndex = $scope.sitesIndex.concat($scope.employeesIndex);
+		$scope.employeesIndex = _.values(results[1]);
+		$scope.trainingsIndex = _.sortBy(_.each(_.values(results[2]), function (training) {
+			training.type = results[3][training.trng_trty_fk];
+		}), function (training) {
+			return training.trng_date;
+		}).reverse();
+
+		$scope.globalIndex = $scope.sitesIndex.concat($scope.employeesIndex).concat($scope.trainingsIndex);
 	});
 
 	$rootScope.$watch('currentUser.info', function (userInfo) {
@@ -24,6 +30,9 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
 				delete($scope.select);
 			} else if(select.empl_pk) {
 				$location.path('/employees/' + select.empl_pk);
+				delete($scope.select);
+			} else if(select.trng_pk) {
+				$location.path('/trainings/' + select.trng_pk);
 				delete($scope.select);
 			}
 		}

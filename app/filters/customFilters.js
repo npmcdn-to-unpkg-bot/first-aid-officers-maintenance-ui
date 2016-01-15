@@ -22,51 +22,36 @@ function summariseEmpl (empl) {
   return empl.empl_pk + ' - ' + empl.empl_firstname + ' ' + empl.empl_surname;
 }
 
-customFilters.filter('filterSite', function () {
-  return function (sites, inputString) {
-    inputString = inputString.toUpperCase();
-    return _.map(_.filter(sites, function (site) {
-      var siteSummary = summariseSite(site).toUpperCase();
-      return _.every(inputString.split(' '), function(split) {
-        return siteSummary.indexOf(split) !== -1;
-      });
-    }), function (entry) {
-      return entry.summary = (entry.site_pk) ? summariseSite(entry) : summariseEmpl(entry), entry;
-    });
-  };
-});
-
-customFilters.filter('filterEmpl', function () {
-  return function (employees, inputString) {
-    inputString = inputString.toUpperCase();
-    return _.map(_.filter(employees, function (empl) {
-      var empl_summary = summariseEmpl(empl).toUpperCase();
-      return _.every(inputString.split(' '), function(split) {
-        return empl_summary.indexOf(split) !== -1;
-      });
-    }), function (entry) {
-      return entry.summary = (entry.site_pk) ? summariseSite(entry) : summariseEmpl(entry), entry;
-    });
-  };
-});
+function summariseTrng (trng) {
+  return trng.type.trty_name + ' - ' + trng.trng_displayDate;
+}
 
 customFilters.filter('filterGlobal', function () {
   return function (entries, inputString) {
     inputString = inputString.toUpperCase();
     return _.map(_.filter(entries, function (entry) {
+      var summary;
       if (entry.site_pk) {
-        var siteSummary = summariseSite(entry).toUpperCase();
-        return _.every(inputString.split(' '), function(split) {
-          return siteSummary.indexOf(split) !== -1;
-        });
+        summary = summariseSite(entry).toUpperCase();
+      } else if (entry.empl_pk) {
+        summary = summariseEmpl(entry).toUpperCase();
       } else {
-        var empl_summary = summariseEmpl(entry).toUpperCase();
-        return _.every(inputString.split(' '), function(split) {
-          return empl_summary.indexOf(split) !== -1;
-        });
+        summary = summariseTrng(entry).toUpperCase();
       }
+
+      return _.every(inputString.split(' '), function(split) {
+        return summary.indexOf(split) !== -1;
+      });
     }), function (entry) {
-      return entry.summary = (entry.site_pk) ? summariseSite(entry) : summariseEmpl(entry), entry;
+      if (entry.site_pk) {
+        entry.summary = summariseSite(entry);
+      } else if (entry.empl_pk) {
+        entry.summary = summariseEmpl(entry);
+      } else {
+        entry.summary = summariseTrng(entry);
+      }
+
+      return entry;
     });
   };
 });

@@ -1,12 +1,12 @@
-<h3 class="pull-left">{{empl.empl_firstname + ' ' + empl.empl_surname}}<small> - {{empl.empl_pk}}</small></h3>
+<h3>{{empl.empl_firstname + ' ' + empl.empl_surname}}<small> - {{empl.empl_pk}}</small></h3>
 
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<div class="row">
-					<div class="col-md-6">Tableau de bord</div>
-					<div class="col-md-6 text-right">
+					<div class="col-sm-4 col-xs-12">Tableau de bord</div>
+					<div class="col-sm-8 col-xs-12 text-right">
 						<state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
 							<div class="btn-group">
 							    <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
@@ -17,21 +17,30 @@
 			</div>
 			
 			<div class="panel-body">
-				<div class="col-md-4 text-right">Site</div>
-				<div class="col-md-8">
-					<a href="#/sites/{{site.site_pk}}">{{site.site_name}}</a><br />
+				<div class="row">
+					<div class="col-xs-4 text-right">Site</div>
+					<div class="col-xs-8">
+						<a href="#/sites/{{site.site_pk}}">{{site.site_name}}</a>
+					</div>
 				</div>
-				<div class="col-md-4 text-right">Type de contrat</div>
-				<div class="col-md-8">
-					<span ng-if="empl.empl_permanent" class="label label-success">CDI</span><span ng-if="!empl.empl_permanent" class="label label-warning">CDD</span>
+				<hr>
+				<div class="row">
+					<div class="col-xs-4 text-right">Type de contrat</div>
+					<div class="col-xs-8">
+						<span ng-if="empl.empl_permanent" class="label label-success">CDI</span><span ng-if="!empl.empl_permanent" class="label label-warning">CDD</span>
+					</div>
 				</div>
-				<div class="col-md-4 text-right">Date de naissance</div>
-				<div class="col-md-8">
-					<strong>{{empl.empl_dob | date: 'shortDate'}}</strong><br />
+				<div class="row">
+					<div class="col-xs-4 text-right">Date de naissance</div>
+					<div class="col-xs-8">
+						<strong>{{empl.empl_dob | date: 'shortDate'}}</strong>
+					</div>
 				</div>
-				<div class="col-md-4 text-right">Adresse e-mail</div>
-				<div class="col-md-8">
-					<a href="mailto:{{empl.empl_addr}}" ng-if="empl.empl_addr">{{empl.empl_addr}}</a><span ng-if="!empl.empl_addr" class="text-muted">non renseign&eacute;e</span>
+				<div class="row">
+					<div class="col-xs-4 text-right">Adresse e-mail</div>
+					<div class="col-xs-8">
+						<a href="mailto:{{empl.empl_addr}}" ng-if="empl.empl_addr">{{empl.empl_addr}}</a><span ng-if="!empl.empl_addr" class="text-muted">non renseign&eacute;e</span>
+					</div>
 				</div>
 			</div>
 
@@ -39,16 +48,16 @@
 				<thead>
 					<tr>
 						<th>Aptitudes</th>
-						<th>Valide jusqu'au</th>
-						<th>Renouvellement &agrave; pr&eacute;voir</th>
+						<th class="shrinkable">Valide jusqu'au</th>
+						<th class="shrinkable">Renouvellement &agrave; pr&eacute;voir</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="cert in checkedCertificates" ng-class="'text-' + certStats.validityStatus" ng-init="certStats = empl.stats.certificates[cert.cert_pk]">
-						<td>
+						<td class="shrinkable">
 							<span class="label label-default" ng-class="'label-' + certStats.validityStatus">{{cert.cert_short}}</span>&nbsp;{{cert.cert_name}}
 						</td>
-						<td>{{empl.stats.certificates[cert.cert_pk].expiryDate | date: 'fullDate'}}</td>
+						<td class="shrinkable">{{empl.stats.certificates[cert.cert_pk].expiryDate | date: 'fullDate'}}</td>
 						<td>{{empl.stats.certificates[cert.cert_pk].expiryDate | fromNow}}</td>
 					</tr>
 				</tbody>
@@ -60,8 +69,8 @@
 <div st-table="shown" st-safe-src="source" ng-if="source.length > 0">
 	<form class="form-horizontal">
 		<div class="form-group">
-			<label for="pageSize" class="control-label col-md-2">Formations par page</label>
-			<div class="col-md-2">
+			<label for="pageSize" class="control-label col-xs-4 col-md-2">Formations par page</label>
+			<div class="col-xs-8 col-md-2">
 				<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
 			</div>
 		</div>
@@ -78,7 +87,7 @@
 				<tr>
 					<th></th>
 					<th class="st-sort" width="30%" st-sort="trng_date" st-skip-natural="true" st-sort-default="reverse">Date</th>
-					<th class="st-sort" width="30%" st-sort="type.trty_name" st-skip-natural="true">Type de formation</th>
+					<th class="st-sort shrinkable" width="30%" st-sort="type.trty_name" st-skip-natural="true">Type de formation</th>
 					<th class="st-sort" width="30%" st-sort="trem_comment" st-skip-natural="true">Commentaire</th>
 					<th class="st-sort" class="last text-right" width="15%" st-sort="trem_valid" st-skip-natural="true">R&eacute;sultat</th>
 				</tr>

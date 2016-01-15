@@ -1,8 +1,8 @@
 <div st-persist="sites" st-table="shown" st-safe-src="sites">
 	<form class="form-horizontal">
 		<div class="form-group">
-			<label for="pageSize" class="control-label col-md-2">Sites par page</label>
-			<div class="col-md-2">
+			<label for="pageSize" class="control-label col-xs-4 col-md-2">Sites par page</label>
+			<div class="col-xs-8 col-md-2">
 				<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
 			</div>
 		</div>
@@ -11,8 +11,8 @@
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			<div class="row">
-				<div class="col-md-2">Sites</div>
-				<div class="col-md-10 text-right">
+				<div class="col-xs-2">Sites</div>
+				<div class="col-xs-10 text-right">
 					<state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
 						<div class="btn-group">
 						    <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
@@ -54,15 +54,6 @@
 			<td colspan="5" class="text-center">
 				<div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
 			</td>
-			<!-- <nav>
-				<ul class="pagination">
-					<li ng-click="offset = 0" ng-class="{'disabled': offset == 0}"><span>&laquo;</span></li>
-					<li ng-click="decrementOffset()" ng-class="{'disabled': offset == 0}"><span>&lsaquo;</span></li>
-					<li ng-repeat="offset in shownOffsets" ng-class="{'active': offset == $parent.offset}" ng-click="$parent.offset = offset;"><span>{{offset/pageSize}}</span></li>
-					<li ng-click="incrementOffset()" ng-class="{'disabled': offset == lastOffset}"><span>&rsaquo;</span></li>
-					<li ng-click="offset = lastOffset" ng-class="{'disabled': offset == lastOffset}"><span>&raquo;</span></li>
-				</ul>
-			</nav> -->
 		</div>
 	</div>
 </div>

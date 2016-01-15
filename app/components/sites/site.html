@@ -1,12 +1,12 @@
-<h3 class="pull-left">{{site.site_name}}</h3>
+<h3>{{site.site_name}}</h3>
 
 <div class="row">
 	<div class="col-md-offset-2 col-md-8">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<div class="row">
-					<div class="col-md-6">Tableau de bord</div>
-					<div class="col-md-6 text-right">
+					<div class="col-sm-4">Tableau de bord</div>
+					<div class="col-sm-8 text-right">
 						<state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
 							<div class="btn-group">
 							    <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
@@ -23,18 +23,18 @@
 				<thead>
 					<tr>
 						<th>Aptitude</th>
-						<th>Cible &agrave; atteindre</th>
+						<th class="shrinkable">Cible &agrave; atteindre</th>
 						<th>Form&eacute;s</th>
-						<th>Reste &agrave; former</th>
+						<th class="shrinkable">Reste &agrave; former</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="cert in checkedCertificates" ng-class="'text-' + certStats.targetStatus" ng-init="certStats = site.stats.certificates[cert.cert_pk]">
-						<td>
+						<td class="shrinkable">
 							<span class="label" ng-class="'label-' + certStats.targetStatus">{{cert.cert_short}}</span>&nbsp;{{cert.cert_name}}
 						</td>
-						<td>{{certStats.target}} ({{cert.cert_target}}%)</td>
-						<td>{{certStats.count}} ({{certStats.countPercentage}}%)</td>
+						<td>{{certStats.target}}&nbsp;({{cert.cert_target}}%)</td>
+						<td>{{certStats.count}}&nbsp;({{certStats.countPercentage}}%)</td>
 						<td>{{(certStats.target - certStats.count) > 0 ? (certStats.target - certStats.count) : 0}}</td>
 					</tr>
 				</tbody>
@@ -46,8 +46,8 @@
 <div st-persist="siteEmployees-{{site.site_pk}}" st-table="shown" st-safe-src="employees">
 	<form class="form-horizontal">
 		<div class="form-group">
-			<label for="pageSize" class="control-label col-md-2">Agents par page</label>
-			<div class="col-md-2">
+			<label for="pageSize" class="control-label col-xs-4 col-md-2">Agents par page</label>
+			<div class="col-xs-8 col-md-2">
 				<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
 			</div>
 		</div>
@@ -56,8 +56,8 @@
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			<div class="row">
-				<div class="col-md-2">Agents</div>
-				<div class="col-md-10 text-right">
+				<div class="col-xs-2">Agents</div>
+				<div class="col-xs-10 text-right">
 					<state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
 						<div class="btn-group">
 						    <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>

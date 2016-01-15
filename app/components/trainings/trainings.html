@@ -1,8 +1,8 @@
 <div st-persist="trainings" st-table="shown" st-safe-src="trainings">
   <form class="form-horizontal">
     <div class="form-group">
-      <label for="pageSize" class="control-label col-md-2">Formations par page</label>
-      <div class="col-md-2">
+      <label for="pageSize" class="control-label col-xs-4 col-md-2">Formations par page</label>
+      <div class="col-xs-8 col-md-2">
         <select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
       </div>
     </div>
@@ -12,9 +12,7 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
       <div class="panel panel-primary">
-        <div class="panel-heading">
-          Formations
-        </div>
+        <div class="panel-heading">Formations</div>
         <table class="table table table-striped table-hover">
           <thead>
             <tr>

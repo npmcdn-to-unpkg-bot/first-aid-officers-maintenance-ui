@@ -1,8 +1,8 @@
 <div st-persist="employees" st-table="shown" st-safe-src="employees">
 	<form class="form-horizontal">
 		<div class="form-group">
-			<label for="pageSize" class="control-label col-md-2">Agents par page</label>
-			<div class="col-md-2">
+			<label for="pageSize" class="control-label col-xs-4 col-md-2">Agents par page</label>
+			<div class="col-xs-8 col-md-2">
 				<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
 			</div>
 		</div>
@@ -11,8 +11,8 @@
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			<div class="row">
-				<div class="col-md-2">Agents</div>
-				<div class="col-md-10 text-right">
+				<div class="col-xs-2">Agents</div>
+				<div class="col-xs-10 text-right">
 					<state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
 						<div class="btn-group">
 						    <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>

@@ -5,6 +5,8 @@ $brand-danger:	#e51c23 !default;
 $brand-warning:	#ff9800 !default;
 $brand-info:		$brand-primary !default;
 
+$screen-xs:			480px;
+
 /* the CDN also includes the Glyphicons */
 @import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
 @import 'bower_components/bootstrap-material-design/sass/bootstrap-material-design';
@@ -21,6 +23,13 @@ $brand-info:		$brand-primary !default;
 @import 'styles/side_panel';
 
 @import 'components/index/index';
+
+
+@media (min-width : $screen-xs) {
+	.form-group:not(.label-floating) label.control-label {
+		padding-top: 8px;
+	}
+}
 
 body {
 	//color: #777;

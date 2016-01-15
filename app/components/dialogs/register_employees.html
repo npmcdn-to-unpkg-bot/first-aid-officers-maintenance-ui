@@ -7,13 +7,13 @@
 		<div class="form-group" ng-show="!mode">
 			<label for="inputSite" class="control-label col-md-2 col-sm-2">Site</label>
 			<div class="col-md-10 col-sm-10">
-				<input id="inputSite" type="text" class="form-control" ng-model="site" placeholder="Rechercher..." uib-typeahead="site as site.site_name for site in sites | filterSite:$viewValue | limitTo:8" />
+				<input id="inputSite" type="text" class="form-control" ng-model="site" placeholder="Rechercher..." uib-typeahead="site as site.summary for site in sites | filterSite:$viewValue | limitTo:8" />
 			</div>
 		</div>
 		<div class="form-group" ng-show="mode">
 			<label for="inputEmpl" class="control-label col-md-2 col-sm-2">Agent</label>
 			<div class="col-md-10 col-sm-10">
-				<input id="inputEmpl" type="text" class="form-control"	ng-model="empl" placeholder="Rechercher..." class="form-control" uib-typeahead="empl as empl.empl_firstname + ' ' + empl.empl_surname + ' - ' + empl.empl_pk for empl in employees | filterEmpl:$viewValue | limitTo:8" />
+				<input id="inputEmpl" type="text" class="form-control"	ng-model="empl" placeholder="Rechercher..." class="form-control" uib-typeahead="empl as empl.summary for empl in employees | filterEmpl:$viewValue | limitTo:8" />
 			</div>
 		</div>
 		<strong class="text-primary">{{trainees.length}}</strong> agent(s) inscrit(s).

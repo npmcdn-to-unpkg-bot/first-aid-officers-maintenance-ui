@@ -40,6 +40,20 @@ customFilters.filter('filterEmpl', function () {
   };
 });
 
+customFilters.filter('filterSite', function () {
+  return function (sites, inputString) {
+    inputString = inputString.toUpperCase();
+    return _.map(_.filter(sites, function (site) {
+      var siteSummary = summariseSite(site).toUpperCase();
+      return _.every(inputString.split(' '), function(split) {
+        return siteSummary.indexOf(split) !== -1;
+      });
+    }), function (entry) {
+      return entry.summary = (entry.site_pk) ? summariseSite(entry) : summariseEmpl(entry), entry;
+    });
+  };
+});
+
 customFilters.filter('filterGlobal', function () {
   return function (entries, inputString) {
     inputString = inputString.toUpperCase();

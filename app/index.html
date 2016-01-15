@@ -18,11 +18,10 @@
     <div class="container">
       <header>
         <div class="row top-panel" id="top-panel">
-          <div class="col-md-4 col-sm-4"></div>
-          <div class="col-md-4 col-sm-4">
+          <div class="col-md-4 col-md-offset-4 col-sm-6">
             <a href="#/home" class="logo"><img src="./img/logo.png" alt="Pole emploi" /></a>
           </div>
-          <div class="col-md-4 col-sm-4 connection-status">
+          <div class="col-md-4 col-sm-6 connection-status">
             <div if-role="user">Connect&eacute;(e) en tant que <span class="text-primary">{{userInfo.empl_firstname | capitalise}} {{userInfo.empl_surname}}</span><br /><button type="button" class="btn btn-danger btn-sm" ng-click="disconnect()">Se d&eacute;connecter</button></div>
           </div>
         </div>

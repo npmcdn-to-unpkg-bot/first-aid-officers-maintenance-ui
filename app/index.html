@@ -52,7 +52,7 @@
               </ul>
               <form class="navbar-form navbar-left" ng-show="currentUser.info">
                 <div class="form-group uib-typeahead">
-                  <input type="text" class="form-control col-md-8" placeholder="Recherche globale..." uib-typeahead="select as select.summary for select in globalIndex | filterGlobal:$viewValue | limitTo:8" ng-model="select" />
+                  <input type="text" class="form-control col-md-8" placeholder="Recherche globale..." uib-typeahead="select as select.summary for select in globalIndex | filterGlobal:$viewValue | limitTo:8" ng-model="select" ng-focus="refreshIndex()" />
                 </div>
               </form>
               <ul class="nav navbar-nav navbar-right">

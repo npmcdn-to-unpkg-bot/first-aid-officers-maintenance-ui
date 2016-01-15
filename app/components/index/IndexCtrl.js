@@ -11,14 +11,27 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
 	Promise.all([dataSvc.getSites(), dataSvc.getEmployees(), dataSvc.getTrainings(), dataSvc.getTrainingTypes()]).then(function (results) {
 		$scope.sitesIndex = _.values(results[0]);
 		$scope.employeesIndex = _.values(results[1]);
+		$scope.trainingTypes = results[3];
 		$scope.trainingsIndex = _.sortBy(_.each(_.values(results[2]), function (training) {
-			training.type = results[3][training.trng_trty_fk];
+			training.type = $scope.trainingTypes[training.trng_trty_fk];
 		}), function (training) {
 			return training.trng_date;
 		}).reverse();
 
 		$scope.globalIndex = $scope.sitesIndex.concat($scope.employeesIndex).concat($scope.trainingsIndex);
 	});
+
+	$scope.refreshIndex = function () {
+		dataSvc.getTrainings().then(function (trainings) {
+			$scope.trainingsIndex = _.sortBy(_.each(_.values(trainings), function (training) {
+				training.type = $scope.trainingTypes[training.trng_trty_fk];
+			}), function (training) {
+				return training.trng_date;
+			}).reverse();
+
+			$scope.globalIndex = $scope.sitesIndex.concat($scope.employeesIndex).concat($scope.trainingsIndex);
+		});
+	};
 
 	$rootScope.$watch('currentUser.info', function (userInfo) {
 		$scope.userInfo = userInfo;

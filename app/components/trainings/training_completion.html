@@ -42,7 +42,7 @@
 				<td class="text-center"><span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span></td>
 				<td class="shrinkable"><input type="text" class="form-control" ng-model="empl.trem_comment" /></td>
 				<td ng-init="(trng.trng_outcome === 'COMPLETED' && empl.trem_outcome !== 'SCHEDULED') ? empl.validated = empl.trem_outcome === 'VALIDATED' : null">
-					<input bswitch="empl.validated" type="checkbox" name="my-checkbox" data-indeterminate="true" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)" data-label-width="0" />
+					<input bswitch="empl.validated" type="checkbox" name="my-checkbox" data-indeterminate="true" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)" data-label-width="0" ng-init="empl.validated=empl.validated || false"/>
 				</td>
 			</tr>
 		</tbody>

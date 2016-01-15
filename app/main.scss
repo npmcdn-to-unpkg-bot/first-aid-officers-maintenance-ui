@@ -39,6 +39,10 @@ h3.pull-left {
 	margin: 0;
 }
 
+.no-events {
+  pointer-events: none;
+}
+
 .navbar .uib-typeahead .dropdown-menu li>a {
   padding: 3px 20px;
   font-size: 14px;

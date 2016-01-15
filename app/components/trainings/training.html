@@ -42,12 +42,10 @@
 					<div class="col-md-4 text-right"><span class="label label-success">{{cert.cert_short}}</span></div>
 					<div class="col-md-8">{{cert.cert_name}}</div>
 				</div>
-				
+
 				<hr />
 				<div class="row">
-					<div class="col-md-4 text-right">
-						Nombre d'agents inscrits
-					</div>
+					<div class="col-md-4 text-right">Nombre d'agents inscrits</div>
 					<div class="col-md-8">
 						<strong class="text-primary">{{trainees.length}}</strong>
 						<div class="pull-right" ng-if="trng.trng_outcome === 'COMPLETED'">
@@ -117,7 +115,7 @@
 					<td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_firstname}}&nbsp;</td>
 					<td class="text-center"><span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span></td>
 					<td class="shrinkable">{{empl.trem_comment}}</td>
-					<td ng-init="(trng.trng_outcome === 'COMPLETED' && empl.trem_outcome !== 'SCHEDULED') ? empl.validated = empl.trem_outcome === 'VALIDATED' : null">
+					<td ng-init="(trng.trng_outcome === 'COMPLETED' && empl.trem_outcome !== 'SCHEDULED') ? empl.validated = empl.trem_outcome === 'VALIDATED' : null" class="no-events">
 						<input bswitch="empl.validated" data-indeterminate="true" type="checkbox" name="my-checkbox" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)" data-label-width="0" readonly />
 					</td>
 				</tr>

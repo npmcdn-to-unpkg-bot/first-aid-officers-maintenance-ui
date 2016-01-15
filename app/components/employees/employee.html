@@ -15,12 +15,26 @@
 					</div>
 				</div>
 			</div>
+			
 			<div class="panel-body">
-				Site&nbsp;: <a href="#/sites/{{site.site_pk}}">{{site.site_name}}</a><br />
-				Type de contrat&nbsp;: <span ng-if="empl.empl_permanent" class="label label-success">CDI</span><span ng-if="!empl.empl_permanent" class="label label-warning">CDD</span><br />
-				Date de naissance&nbsp;: <strong>{{empl.empl_dob | date: 'shortDate'}}</strong><br />
-				Adresse e-mail&nbsp;: <a href="mailto:{{empl.empl_addr}}" ng-if="empl.empl_addr">{{empl.empl_addr}}</a><span ng-if="!empl.empl_addr" class="text-muted">non renseign&eacute;e</span>
+				<div class="col-md-4 text-right">Site</div>
+				<div class="col-md-8">
+					<a href="#/sites/{{site.site_pk}}">{{site.site_name}}</a><br />
+				</div>
+				<div class="col-md-4 text-right">Type de contrat</div>
+				<div class="col-md-8">
+					<span ng-if="empl.empl_permanent" class="label label-success">CDI</span><span ng-if="!empl.empl_permanent" class="label label-warning">CDD</span>
+				</div>
+				<div class="col-md-4 text-right">Date de naissance</div>
+				<div class="col-md-8">
+					<strong>{{empl.empl_dob | date: 'shortDate'}}</strong><br />
+				</div>
+				<div class="col-md-4 text-right">Adresse e-mail</div>
+				<div class="col-md-8">
+					<a href="mailto:{{empl.empl_addr}}" ng-if="empl.empl_addr">{{empl.empl_addr}}</a><span ng-if="!empl.empl_addr" class="text-muted">non renseign&eacute;e</span>
+				</div>
 			</div>
+
 			<table class="table" ng-show="(checkedCertificates = (certificates | filter: {'checked': true})).length > 0" >
 				<thead>
 					<tr>

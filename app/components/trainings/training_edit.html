@@ -17,52 +17,55 @@
         </div>
       </div>
       <div class="panel-body">
-	      <form class="form-horizontal">
-	        <div class="form-group">
-	          <label for="date" class="col-md-3 control-label">Date de formation</label>
-	          <div class="col-md-9">
-	            <input type="text" ng-model="trng.trng_date" class="form-control" ng-click="datepicker=true"
-	              uib-datepicker-popup="fullDate" is-open="datepicker" show-button-bar="false" starting-day="1" date-disabled="disabled(date, mode)" show-weeks="false">
-	          </div>
-	        </div>
-	        <div class="form-group">
-	          <label for="type" class="col-md-3 control-label">Type de formation</label>
-	          <div class="col-md-9">
-	            <select id="type" class="form-control" ng-model="trng.type" ng-options="type as type.trty_name for type in trainingTypes"></select>
-	          </div>
-	        </div>
-	      </form>
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="type" class="col-md-4 control-label">Type de formation</label>
+            <div class="col-md-8">
+              <select id="type" class="form-control" ng-model="trng.type" ng-options="type as type.trty_name for type in trainingTypes"></select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="date" class="col-md-4 control-label">Dernier jour de formation</label>
+            <div class="col-md-8">
+              <input type="text" ng-model="trng.trng_date" class="form-control" ng-click="datepicker=true"
+                uib-datepicker-popup="fullDate" is-open="datepicker" show-button-bar="false" starting-day="1" date-disabled="disabled(date, mode)" show-weeks="false">
+            </div>
+          </div>
+        </form>
 
         <hr ng-if="trng.type" />
         <div class="row" ng-if="trng.type">
-          <div class="col-md-12">
-            Aptitude(s) acquise(s) jusqu'au&nbsp;: <strong>{{trng.expirationDate | date: 'fullDate'}}</strong> (<span class="text-primary">{{trng.expirationDate | fromNow}}</span>)
-            <span class="pull-right">valide <strong>{{trng.type.trty_validity}}</strong>&nbsp;mois (<span class="text-primary">{{trng.validity}} ans</span>)</span>
+          <div class="col-md-4 text-right">Aptitude(s) acquise(s)<span ng-if="trng.trng_date"> jusqu'au</span></div>
+          <div class="col-md-8">
+            <span ng-if="trng.trng_date"><strong>{{trng.expirationDate | date: 'fullDate'}}</strong> (<span class="text-primary">{{trng.expirationDate | fromNow}}</span>)</span>
+            <span ng-class="{'pull-right': trng.trng_date}">valide <strong>{{trng.type.trty_validity}}</strong>&nbsp;mois (<span class="text-primary">{{trng.validity}} ans</span>)</span>
           </div>
         </div>
-        <ul ng-if="trng.type">
-          <li ng-repeat="cert in trng.type.certificates"><span class="label label-success">{{cert.cert_short}}</span> {{cert.cert_name}}</li>
-        </ul>
-
+        <div class="row" ng-repeat="cert in trng.type.certificates" ng-if="trng.type">
+          <div class="col-md-4 text-right"><span class="label label-success">{{cert.cert_short}}</span></div>
+          <div class="col-md-8">{{cert.cert_name}}</div>
+        </div>
+        
         <hr />
         <div class="row">
-          <div class="col-md-6 col-sm-6">
-            Nombre d'agents inscrits&nbsp;: <strong class="text-primary">{{trainees.length}}</strong>
-          </div>
-          <div class="col-md-6 col-sm-6 text-right" ng-if="trng.trng_outcome === 'COMPLETED'">
-            <strong>{{(trainees | filter: {trem_outcome: "VALIDATED"}).length}}</strong> <span class="text-success">valid&eacute;(s)</span> et <strong>{{(trainees | filter: {trem_outcome: "!VALIDATED"}).length}}</strong> <span class="text-danger">recal&eacute;(s)/absent(s)</span>
-          </div>
-          <div class="col-md-6 col-sm-6 text-right" ng-if="trng.trng_outcome === 'SCHEDULED'">
-            <span class="text-warning"><abbr title="Procès Verbal">PV</abbr> de fin de session non dress&eacute;</span>
-          </div>
-          <div class="col-md-6 col-sm-6 text-right" ng-if="trng.trng_outcome === 'CANCELLED'">
-            <span class="text-danger">Formation annul&eacute;e</span>
-          </div>
-          <div class="col-md-6 col-sm-6 text-right" ng-if="trng.trng_outcome === undefined">
-            <button class="btn btn-primary no-margin" ng-click="registerAgents()"><span class="glyphicon glyphicon-plus"/>&nbsp;Inscrire agents</button>
+          <div class="col-md-4 text-right">Nombre d'agents inscrits</div>
+          <div class="col-md-8">
+            <strong class="text-primary">{{trainees.length}}</strong>
+            <div class="pull-right" ng-if="!trng.trng_pk">
+              <button type="button" class="btn btn-primary no-margin" ng-click="registerAgents()">Inscrire agent(s)</button>
+            </div>
+            <div class="pull-right" ng-if="trng.trng_outcome === 'COMPLETED'">
+              <strong>{{(trainees | filter: {trem_outcome: "VALIDATED"}).length}}</strong> <span class="text-success">valid&eacute;(s)</span> et <strong>{{(trainees | filter: {trem_outcome: "!VALIDATED"}).length}}</strong> <span class="text-danger">recal&eacute;(s)/absent(s)</span>
+            </div>
+            <div class="pull-right" ng-if="trng.trng_outcome === 'SCHEDULED'">
+              <span class="text-warning"><abbr title="Procès Verbal">PV</abbr> de fin de session non dress&eacute;</span>
+            </div>
+            <div class="pull-right" ng-if="trng.trng_outcome === 'CANCELLED'">
+              <span class="text-danger">Formation annul&eacute;e</span>
+            </div>
           </div>
         </div>
-      </div>
+     </div>
 
     </div>
   </div>
@@ -114,6 +117,6 @@
 
 <div class="side-panel-container text-right">
   <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="save()"><span class="glyphicon glyphicon-ok"></span>&nbsp;Enregistrer</button><br />
-  <button type="button" class="btn btn-raised btn-raised btn-danger side-panel-item" ng-click="cancel()"><span class="glyphicon glyphicon-remove"></span>&nbsp;Annuler</button>
   <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="registerAgents()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Inscrire agent(s)</button>
+  <button type="button" class="btn btn-raised btn-raised btn-danger side-panel-item" ng-click="cancel()"><span class="glyphicon glyphicon-remove"></span>&nbsp;Annuler</button>
 </div>

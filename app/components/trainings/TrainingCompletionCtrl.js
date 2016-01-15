@@ -9,6 +9,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location,
 
 	Promise.all([dataSvc.getTraining($routeParams.trng_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function(results) {
 		$scope.trng = results[0];
+		$scope.firstTime = ($scope.trng.trng_outcome === 'SCHEDULED');
 		$scope.trng.type = results[1][results[0].trng_trty_fk];
 		$scope.trainees = _.values(results[0].trainees);
 		$scope.certificates = _.values(results[2]);
@@ -26,7 +27,8 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location,
 
 	$scope.save = function () {
 		var dialogScope = $scope.$new(true);
-		dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">sauvegarder les modifications apport&eacute;es au Proc&egrave;s Verbal</span> de cette formation&nbsp?';
+		var highlighted = $scope.firstTime ? '&eacute;diter le' : 'enregistrer les modifications apport&eacute;es au';
+		dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning"> ' + highlighted + ' Proc&egrave;s&nbsp;Verbal</span> de cette formation&nbsp?';
 		ngDialog.openConfirm({
 			template: 'components/dialogs/warning.html',
 			scope: dialogScope
@@ -47,7 +49,8 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location,
 
 	$scope.cancel = function () {
 		var dialogScope = $scope.$new(true);
-		dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">annuler la modification du Proc&egrave;s Verbal</span> de cette formation&nbsp?<hr />En confirmant, toutes les modifications qui n\'ont pas &eacute;t&eacute; sauvegard&eacute;es seront perdues.';
+		var highlighted = $scope.firstTime ? 'l\'&eacute;dition' : 'la modification';
+		dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">annuler ' + highlighted + ' du Proc&egrave;s&nbsp;Verbal</span> de cette formation&nbsp?<hr />En confirmant, toutes les modifications qui n\'ont pas &eacute;t&eacute; sauvegard&eacute;es seront perdues.';
 		ngDialog.openConfirm({
 			template: 'components/dialogs/warning.html',
 			scope: dialogScope

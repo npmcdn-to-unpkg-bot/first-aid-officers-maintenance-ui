@@ -68,6 +68,9 @@ angular.module('faomaintenanceApp', [
 			templateUrl: 'components/account/account.html',
 			controller: 'AccountCtrl'
 		})
+
+
+		// Employees
 		.when('/employees', {
 			templateUrl: 'components/employees/employees.html',
 			controller: 'EmployeesCtrl'
@@ -76,6 +79,9 @@ angular.module('faomaintenanceApp', [
 			templateUrl: 'components/employees/employee.html',
 			controller: 'EmployeeCtrl'
 		})
+
+
+		// Sites
 		.when('/sites', {
 			templateUrl: 'components/sites/sites.html',
 			controller: 'SitesCtrl'
@@ -88,10 +94,27 @@ angular.module('faomaintenanceApp', [
 			templateUrl: 'components/trainings/trainings.html',
 			controller: 'TrainingsCtrl'
 		})
+
+
+		// Trainings
+		.when('/trainings/create', {
+			templateUrl: 'components/trainings/training_edit.html',
+			controller: 'TrainingEditCtrl'
+		})
 		.when('/trainings/:trng_pk', {
 			templateUrl: 'components/trainings/training.html',
 			controller: 'TrainingCtrl'
 		})
+		.when('/trainings/:trng_pk/edit', {
+			templateUrl: 'components/trainings/training_edit.html',
+			controller: 'TrainingEditCtrl'
+		})
+		.when('/trainings/:trng_pk/complete', {
+			templateUrl: 'components/trainings/training_completion.html',
+			controller: 'TrainingCompletionCtrl'
+		})
+
+
 		.otherwise({
 			redirectTo : '/home'
 		});
@@ -119,6 +142,8 @@ angular.module('faomaintenanceApp', [
 	.controller('SitesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', require('./components/sites/SitesCtrl.js')])
 	.controller('TrainingCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'BusySvc', require('./components/trainings/TrainingCtrl.js')])
 	.controller('TrainingsCtrl', ['$scope', 'DataSvc', '$location', 'BusySvc', require('./components/trainings/TrainingsCtrl.js')])
+	.controller('TrainingCompletionCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', '$location', 'ngDialog', 'TrainingsSvc', 'BusySvc', require('./components/trainings/TrainingCompletionCtrl.js')])
+	.controller('TrainingEditCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'dateFilter', 'BusySvc', require('./components/trainings/TrainingEditCtrl.js')])
 
 	.run(['$rootScope', '$location', '$cookies', '$http', 'ngDialog', 'AuthenticationSvc', function ($rootScope, $location, $cookies, $http, ngDialog, authenticationSvc) {
 		// keep user logged in after page refresh

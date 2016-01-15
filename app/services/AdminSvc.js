@@ -21,7 +21,7 @@ module.exports = function ($http, $q, $rootScope, apiSvc) {
 	adminSvc.setPassword = function (pwd_current, pwd_new) {
 		var deferred = $q.defer();
 		$http.put(apiSvc.accountEndpoint + 'password', JSON.stringify({ pwd_current: pwd_current, pwd_new: pwd_new })).success(function (data) {
-			deferred.resozve(data);
+			deferred.resolve(data);
 		}).error(function (data, status) {
 			deferred.reject('Error: request returned status ' + status); 
 		});

@@ -4,7 +4,7 @@
 var _ = require('underscore');
 var moment = require('moment');
 
-module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $location, dialog, busySvc) {
+module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $location, ngDialog, busySvc) {
 	busySvc.busy();
 
 	Promise.all([dataSvc.getTraining($routeParams.trng_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function(results) {
@@ -23,7 +23,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
 	};
 
 	$scope.edit = function () {
-		$location.path('/management/trainings/edit/' + $scope.trng.trng_pk);
+		$location.path('/trainings/' + $scope.trng.trng_pk + '/edit');
 	};
 
 	$scope.complete = function () {
@@ -33,7 +33,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
 	$scope.delete = function () {
 		var dialogScope = $scope.$new(true);
 		dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">supprimer d&eacute;finitivement</span> cette formation&nbsp? Cette op&eacute;ration est irr&eacute;versible et prend effet imm&eacute;diatement.';
-		dialog.openConfirm({
+		ngDialog.openConfirm({
 			template: 'components/dialogs/warning.html',
 			scope: dialogScope
 		}).then(function () {

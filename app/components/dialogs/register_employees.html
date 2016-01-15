@@ -1,0 +1,33 @@
+<form class="panel panel-primary form form-horizontal" ng-submit="register()" autocomplete="off" ng-init="mode = true;">
+	<div class="panel-heading">
+		Inscrire&nbsp;&nbsp;<div style="display: inline-table;"><input bswitch="mode" type="checkbox" data-on-color="primary" data-off-color="primary" data-on-text="Agents" data-off-text="Site" data-label-width="0" /></div>
+		<span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
+	</div>
+	<div class="panel-body">
+		<div class="form-group" ng-show="!mode">
+			<label for="inputSite" class="control-label col-md-2 col-sm-2">Site</label>
+			<div class="col-md-10 col-sm-10">
+				<input id="inputSite" type="text" class="form-control" ng-model="site" placeholder="Rechercher..." uib-typeahead="site as site.site_name for site in sites | filterSite:$viewValue | limitTo:8" />
+			</div>
+		</div>
+		<div class="form-group" ng-show="mode">
+			<label for="inputEmpl" class="control-label col-md-2 col-sm-2">Agent</label>
+			<div class="col-md-10 col-sm-10">
+				<input id="inputEmpl" type="text" class="form-control"	ng-model="empl" placeholder="Rechercher..." class="form-control" uib-typeahead="empl as empl.empl_firstname + ' ' + empl.empl_surname + ' - ' + empl.empl_pk for empl in employees | filterEmpl:$viewValue | limitTo:8" />
+			</div>
+		</div>
+		<strong class="text-primary">{{trainees.length}}</strong> agent(s) inscrit(s).
+	</div>
+	<div class="panel-footer text-center" ng-switch="mode">
+		<button type="submit" class="btn btn-primary" ng-disabled="alreadyRegistered || loading || (!mode && !site.site_pk || mode && !empl.empl_pk)">
+			<span ng-if="mode">
+				<span ng-if="!alreadyRegistered">Inscrire agent</span>
+				<span ng-if="alreadyRegistered">D&eacute;j&agrave; enregistr&eacute;(e)</span>
+			</span>
+			<span ng-if="!mode">
+				<span ng-if="!loading">Inscrire tout le site</span>
+				<span ng-if="loading">Inscription...</span>
+			</span>
+		</button>
+	</div>
+</form>

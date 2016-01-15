@@ -20,7 +20,6 @@ $spinkit-spinner-color: $brand-primary !default;
     width: 50%;
     height: 50%;
     position: relative;
-    transform: scale(1.1);
 
     &:before {
       content: '';
@@ -37,7 +36,7 @@ $spinkit-spinner-color: $brand-primary !default;
 
   @for $i from 2 through $cubeCount {
     .sk-cube#{$i} {
-      transform: scale(1.1) rotateZ(90deg * ($i - 1));
+      transform: rotateZ(90deg * ($i - 1));
 
       &:before {
         animation-delay: $delayRange / $cubeCount * ($i - 1);
@@ -49,14 +48,13 @@ $spinkit-spinner-color: $brand-primary !default;
 
 @keyframes sk-foldCubeAngle {
   0%, 10% {
-    transform: perspective(140px) rotateX(-180deg);
+    transform: rotateX(-180deg);
     opacity: 0;
   } 25%, 75% {
-    transform: perspective(140px) rotateX(0deg);
+    transform: rotateX(0deg);
     opacity: 1;
   } 90%, 100% {
-    transform: perspective(140px) rotateY(180deg);
+    transform: rotateY(180deg);
     opacity: 0;
   }
 }
-

@@ -7,19 +7,19 @@ table.table {
     vertical-align: middle;
   }
 
+  .input-group {
+    width: 100%;
+  }
+  
+  .form-group {
+    padding: 0;
+
+    input.form-control {
+      margin: 0;
+    }
+  }
+
   thead th {
-    .input-group {
-      width: 100%;
-    }
-    
-    .form-group {
-      padding: 0;
-
-      input.form-control {
-        margin: 0;
-      }
-    }
-
     &.st-sort, .st-sort {
       cursor: pointer;
 

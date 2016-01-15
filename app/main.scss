@@ -1,8 +1,9 @@
 @import url('http://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
 
 $brand-primary: #337ab7 !default;
-$brand-warning:	#ff9800 !default;
 $brand-danger:	#e51c23 !default;
+$brand-warning:	#ff9800 !default;
+$brand-info:		$brand-primary !default;
 
 /* the CDN also includes the Glyphicons */
 @import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
@@ -22,7 +23,7 @@ $brand-danger:	#e51c23 !default;
 @import 'components/index/index';
 
 body {
-	color: #777;
+	//color: #777;
 	font-weight: 400;
 }
 
@@ -32,6 +33,10 @@ h3.pull-left {
 
 .clear {
   clear: both;
+}
+
+.no-margin {
+	margin: 0;
 }
 
 .navbar .uib-typeahead .dropdown-menu li>a {
@@ -58,12 +63,22 @@ h3.pull-left {
 	}
 }
 
+.form-group:not(.label-floating) label.control-label {
+	margin-top: 8px;
+}
+
 .label {
 	border-radius: 2px;
 }
 
 .clickme {
   cursor: pointer;
+}
+
+.uib-datepicker .btn, .uib-datepicker-popup .btn {
+	margin: 0;
+	padding: 5px 10px;
+	background: transparent;
 }
 
 .form-group {

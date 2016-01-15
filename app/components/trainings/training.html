@@ -8,7 +8,7 @@
 <br />
 
 <div class="row">
-	<div class="col-md-8 col-md-offset-2">
+	<div class="col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
 		<div class="panel panel-primary">
 			<div class="panel-heading">Tableau de bord</div>
 			<div class="panel-body">
@@ -27,10 +27,11 @@
 
 				<hr />
 				<div class="row">
-					<div class="col-xs-4 text-right">Aptitude(s) acquise(s) jusqu'au</div>
+					<div class="hidden-xs col-sm-4 text-right">Aptitude(s) acquise(s) jusqu'au</div>
+					<div class="visible-xs-inline col-xs-4 text-right">Valide jusqu'au</div>
 					<div class="col-xs-8">
 						<strong>{{trng.expirationDate | date: 'fullDate'}}</strong> (<span class="text-primary">{{trng.expirationDate | fromNow}}</span>)
-						<span class="pull-right">valide <strong>{{trng.type.trty_validity}}</strong>&nbsp;mois (<span class="text-primary">{{trng.validity}} ans</span>)</span>
+						<span class="hidden-xs pull-right">valide <strong>{{trng.type.trty_validity}}</strong>&nbsp;mois (<span class="text-primary">{{trng.validity}} ans</span>)</span>
 					</div>
 				</div>
 				<div class="row" ng-repeat="cert in trng.type.certificates">

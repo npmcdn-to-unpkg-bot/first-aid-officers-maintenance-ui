@@ -1,6 +1,6 @@
 <h3 ng-if="trng.type">{{trng.type.trty_name}}<span ng-if="trng.trng_date"> - {{trng.trng_date | date: 'fullDate'}}</span>
   <small ng-if="trng.trng_outcome"> - 
-    <span ng-if="trng.trng_outcome === 'SCHEDULED'" class="text-default">Pr&eacute;vue</span>
+    <span ng-if="trng.trng_outcome === 'SCHEDULED'" class="text-primary">Pr&eacute;vue</span>
     <span ng-if="trng.trng_outcome === 'COMPLETED'" class="text-success">R&eacute;alis&eacute;e</span>
     <span ng-if="trng.trng_outcome === 'CANCELLED'" class="text-danger">Annul&eacute;e</span>
   </small>
@@ -8,14 +8,9 @@
 <h3 ng-if="!trng.type">Nouvelle formation</h3>
 <br />
 <div class="row">
-  <div class="col-md-2"></div>
-  <div class="col-md-8">
+  <div class="col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
     <div class="panel panel-primary">
-      <div class="panel-heading">
-        <div class="row">
-          <div class="col-md-6">Tableau de bord</div>
-        </div>
-      </div>
+      <div class="panel-heading">Tableau de bord</div>
       <div class="panel-body">
         <form class="form-horizontal">
           <div class="form-group">
@@ -35,10 +30,13 @@
 
         <hr ng-if="trng.type" />
         <div class="row" ng-if="trng.type">
-          <div class="col-xs-4 text-right">Aptitude(s) acquise(s)<span ng-if="trng.trng_date"> jusqu'au</span></div>
+          <div class="hidden-xs col-sm-4 text-right">Aptitude(s) acquise(s)<span ng-if="trng.trng_date"> jusqu'au</span></div>
+          <div class="visible-xs-inline col-xs-4 text-right">Valide<span ng-if="trng.trng_date"> jusqu'au</span></div>
           <div class="col-xs-8">
             <span ng-if="trng.trng_date"><strong>{{trng.expirationDate | date: 'fullDate'}}</strong> (<span class="text-primary">{{trng.expirationDate | fromNow}}</span>)</span>
-            <span ng-class="{'pull-right': trng.trng_date}">valide <strong>{{trng.type.trty_validity}}</strong>&nbsp;mois (<span class="text-primary">{{trng.validity}} ans</span>)</span>
+            <span class="hidden-xs" ng-class="{'pull-right': trng.trng_date}">
+              valide <strong>{{trng.type.trty_validity}}</strong>&nbsp;mois (<span class="text-primary">{{trng.validity}} ans</span>)
+            </span>
           </div>
         </div>
         <div class="row" ng-repeat="cert in trng.type.certificates" ng-if="trng.type">
@@ -65,15 +63,12 @@
             </div>
           </div>
         </div>
-     </div>
-
+      </div>
     </div>
   </div>
-  <div class="col-md-2"></div>
 </div>
 <div class="row">
-  <div class="col-md-10 col-md-offset-1">
-    
+  <div class="col-lg-10 col-lg-offset-1">
     <div class="panel panel-primary" st-table="shown" st-safe-src="trainees" ng-if="trainees.length > 0">
       <div class="panel-heading">Agents inscrits</div>
       <table class="table table table-striped table-hover">

@@ -16,6 +16,7 @@
 				</div>
 			</div>
 			<div class="panel-body">
+				Site&nbsp;: <a href="#/sites/{{site.site_pk}}">{{site.site_name}}</a><br />
 				Type de contrat&nbsp;: <span ng-if="empl.empl_permanent" class="label label-success">CDI</span><span ng-if="!empl.empl_permanent" class="label label-warning">CDD</span><br />
 				Date de naissance&nbsp;: <strong>{{empl.empl_dob | date: 'shortDate'}}</strong><br />
 				Adresse e-mail&nbsp;: <a href="mailto:{{empl.empl_addr}}" ng-if="empl.empl_addr">{{empl.empl_addr}}</a><span ng-if="!empl.empl_addr" class="text-muted">non renseign&eacute;e</span>
@@ -23,7 +24,7 @@
 			<table class="table" ng-show="(checkedCertificates = (certificates | filter: {'checked': true})).length > 0" >
 				<thead>
 					<tr>
-						<th>Aptitude</th>
+						<th>Aptitudes</th>
 						<th>Valide jusqu'au</th>
 						<th>Renouvellement &agrave; pr&eacute;voir</th>
 					</tr>
@@ -75,7 +76,7 @@
 					<td ng-class="{'text-primary': hover}">{{trng.type.trty_name}}<span class="pull-right"><span ng-repeat="cert in trng.type.certificates">&nbsp;<label class="label" ng-class="{'label-success': trng.trem_outcome === 'VALIDATED', 'label-danger': trng.trem_outcome === 'FLUNKED'}">{{cert.cert_short}}</label></span></span></td>
 					<td>{{trng.trem_comment}}</td>
 					<td ng-init="(trng.trem_outcome !== 'SCHEDULED') ? trng.validated = trng.trem_outcome === 'VALIDATED' : null">
-						<input bswitch="trng.validated" data-indeterminate="true" type="checkbox" name="my-checkbox" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Recal&eacute;(e)" data-label-width="0" readonly />
+						<input bswitch="trng.validated" data-indeterminate="true" type="checkbox" name="my-checkbox" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)" data-label-width="0" readonly />
 					</td>
 				</tr>
 			</tbody>

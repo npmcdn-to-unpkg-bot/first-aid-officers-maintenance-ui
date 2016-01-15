@@ -27,6 +27,15 @@ module.exports = function ($http, $q, $rootScope, apiSvc, $filter) {
 		return apiSvc.get(apiSvc.resourcesEndpoint + 'sites/' + site_pk);
 	};
 
+	dataSvc.getEmployeeSite = function(empl_pk) {
+		var deferred = $q.defer();
+		apiSvc.get(apiSvc.resourcesEndpoint + 'sites?employee=' + empl_pk).then(function (sites) {
+			deferred.resolve(_.first(sites));
+		});
+		
+		return deferred.promise;
+	};
+
 	dataSvc.getSiteWithStats = function(site_pk) {
 		var deferred = $q.defer();
 		Promise.all([apiSvc.get(apiSvc.resourcesEndpoint + 'sites/' + site_pk), apiSvc.get(apiSvc.statisticsEndpoint + 'sites/' + site_pk)]).then(function (results) {

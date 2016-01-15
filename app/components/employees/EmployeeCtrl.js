@@ -6,13 +6,14 @@ var _ = require('underscore');
 module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, $location, ngDialog, $route, busySvc) {
 	busySvc.busy();
 
-	Promise.all([dataSvc.getEmployee($routeParams.empl_pk), dataSvc.getEmployeeTrainings($routeParams.empl_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function (results) {
+	Promise.all([dataSvc.getEmployee($routeParams.empl_pk), dataSvc.getEmployeeTrainings($routeParams.empl_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates(), dataSvc.getEmployeeSite($routeParams.empl_pk)]).then(function (results) {
 		$scope.empl = results[0];
 		$scope.source = _.values(results[1]);
 		_.each($scope.source, function (training) {
 			training.type = results[2][training.trng_trty_fk];
 		});
 		$scope.certificates = _.values(results[3]);
+		$scope.site = results[4];
 		if($scope.empl.empl_pk !== $rootScope.currentUser.info.empl_pk) {
 			adminSvc.getUserInfo($scope.empl.empl_pk).then(function (info) {
 				$scope.canResetPassword = _.contains(info.roles, 'user');

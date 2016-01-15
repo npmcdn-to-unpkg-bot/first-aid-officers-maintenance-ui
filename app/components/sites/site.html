@@ -1,15 +1,6 @@
 <h3 class="pull-left">{{site.site_name}}</h3>
 
-<form class="form-inline pull-right">
-	<div class="form-group is-empty">
-		<div class="input-group">
-			<span class="input-group-addon">Consulter un autre site</span>
-			<input type="text" class="form-control"	ng-model="viewSite" placeholder="Rechercher..." class="form-control" uib-typeahead="viewSite as viewSite.site_name for viewSite in sitesIndex | filterSite:$viewValue | limitTo:8" />
-		</div>
-	</div>
-</form>
-
-<div class="row clear">
+<div class="row">
 	<div class="col-md-offset-2 col-md-8">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
@@ -53,10 +44,12 @@
 </div>
 
 <div st-persist="siteEmployees-{{site.site_pk}}" st-table="shown" st-safe-src="employees">
-	<form class="form-inline row">
-		<div class="form-group col-md-4">
-			<label for="pageSize">Agents par page :&nbsp;</label>
-			<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 25, 50, 100]"></select>
+	<form class="form-horizontal">
+		<div class="form-group">
+			<label for="pageSize" class="control-label col-md-2">Agents par page</label>
+			<div class="col-md-2">
+				<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
+			</div>
 		</div>
 	</form>
 

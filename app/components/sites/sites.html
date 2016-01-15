@@ -1,15 +1,9 @@
 <div st-persist="sites" st-table="shown" st-safe-src="sites">
-	<form class="form-inline row">
-		<div class="form-group col-md-4">
-			<label for="pageSize">Sites par page :&nbsp;</label>
-			<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
-		</div>
-		<div class="col-md-6 col-md-offset-2 text-right">
-			<div class="form-group is-empty">
-				<div class="input-group">
-					<span class="input-group-addon">Consulter la fiche d'un site</span>
-					<input type="text" class="form-control"	ng-model="viewSite" placeholder="Rechercher..." class="form-control" uib-typeahead="viewSite as viewSite.site_name for viewSite in sitesIndex | filterSite:$viewValue | limitTo:8" />
-				</div>
+	<form class="form-horizontal">
+		<div class="form-group">
+			<label for="pageSize" class="control-label col-md-2">Sites par page</label>
+			<div class="col-md-2">
+				<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
 			</div>
 		</div>
 	</form>

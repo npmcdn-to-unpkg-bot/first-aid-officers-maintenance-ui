@@ -1,62 +1,64 @@
 <div st-persist="trainings" st-table="shown" st-safe-src="trainings">
-    <form class="form-inline row">
-        <div class="form-group col-md-4">
-            <label for="pageSize">Formations par page :&nbsp;</label>
-            <select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
-        </div>
-    </form>
-
-    <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    Formations
-                </div>
-                <table class="table table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th width="50%" colspan="2">
-                                <div class="st-sort" st-sort="type.trty_name" st-skip-natural="true">Type</div>
-                                <st-select-distinct collection="trainings" predicate="type.trty_name"></st-select-distinct>
-                            </th>
-                            <th width="50%">
-                                <div class="st-sort" st-sort="trng_date" st-skip-natural="true" st-sort-default="reverse">Date</div>
-                                <input st-search="trng_displayDate" placeholder="Rechercher..." class="form-control" type="text" />
-                            </th>
-                            <th class="vtop">
-                                <div class="st-sort" st-sort="trng_outcome" st-skip-natural="true">&Eacute;tat</div>
-                                <!-- <st-select-distinct collection="trainings" predicate="trng_outcome" /> -->
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="trng in shown track by trng.trng_pk" ng-mouseenter="hover=true" ng-mouseleave="hover = false" ng-class="{'text-primary': hover}" class="clickme" ng-click="select(trng.trng_pk)">
-                            <td><button type="button" class="btn btn-xs" ng-class="{'btn-primary': hover}">VOIR</button></td>
-                            <td>{{trng.type.trty_name}}</td>
-                            <td width="1%" class="text-right">
-                                <span ng-repeat="cert in trng.type.certificates"><label class="label label-primary">{{cert.cert_short}}</label>&nbsp;</span>
-                            </td>
-                            <td>{{trng.trng_displayDate}}</td>
-                            <td>
-                                <span ng-if="trng.trng_outcome === 'SCHEDULED'" class="label label-primary">Pr&eacute;vue</span>
-                                <span ng-if="trng.trng_outcome === 'COMPLETED'" class="label label-success">R&eacute;alis&eacute;e</span>&nbsp;
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="panel-footer text-center">
-                    <td colspan="5" class="text-center">
-                        <div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
-                    </td>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2"></div>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label for="pageSize" class="control-label col-md-2">Formations par page</label>
+      <div class="col-md-2">
+        <select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
+      </div>
     </div>
+  </form>
+
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          Formations
+        </div>
+        <table class="table table table-striped table-hover">
+          <thead>
+            <tr>
+              <th></th>
+              <th width="50%" colspan="2">
+                <div class="st-sort" st-sort="type.trty_name" st-skip-natural="true">Type</div>
+                <st-select-distinct collection="trainings" predicate="type.trty_name"></st-select-distinct>
+              </th>
+              <th width="50%">
+                <div class="st-sort" st-sort="trng_date" st-skip-natural="true" st-sort-default="reverse">Date</div>
+                <input st-search="trng_displayDate" placeholder="Rechercher..." class="form-control" type="text" />
+              </th>
+              <th class="vtop">
+                <div class="st-sort" st-sort="trng_outcome" st-skip-natural="true">&Eacute;tat</div>
+                <!-- <st-select-distinct collection="trainings" predicate="trng_outcome" /> -->
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="trng in shown track by trng.trng_pk" ng-mouseenter="hover=true" ng-mouseleave="hover = false" ng-class="{'text-primary': hover}" class="clickme" ng-click="select(trng.trng_pk)">
+              <td><button type="button" class="btn btn-xs" ng-class="{'btn-primary': hover}">VOIR</button></td>
+              <td>{{trng.type.trty_name}}</td>
+              <td width="1%" class="text-right">
+                <span ng-repeat="cert in trng.type.certificates"><label class="label label-primary">{{cert.cert_short}}</label>&nbsp;</span>
+              </td>
+              <td>{{trng.trng_displayDate}}</td>
+              <td>
+                <span ng-if="trng.trng_outcome === 'SCHEDULED'" class="label label-primary">Pr&eacute;vue</span>
+                <span ng-if="trng.trng_outcome === 'COMPLETED'" class="label label-success">R&eacute;alis&eacute;e</span>&nbsp;
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="panel-footer text-center">
+          <td colspan="5" class="text-center">
+            <div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
+          </td>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
 </div>
 
 <div class="side-panel-container text-right" if-role="trainer">
-    <button type="button" class="btn btn-success btn-raised side-panel-item" ng-click="create()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Cr&eacute;er formation</button>
+  <button type="button" class="btn btn-success btn-raised side-panel-item" ng-click="create()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Cr&eacute;er formation</button>
 </div>

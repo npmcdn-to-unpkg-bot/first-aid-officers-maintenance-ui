@@ -1,17 +1,6 @@
 <h3 class="pull-left">{{empl.empl_firstname + ' ' + empl.empl_surname}}<small> - {{empl.empl_pk}}</small></h3>
 
-<div class="pull-right">
-	<form class="form-inline">
-		<div class="form-group is-empty">
-			<div class="input-group">
-				<span class="input-group-addon">Consulter un autre agent</span>
-				<input type="text" class="form-control"	ng-model="viewEmpl" placeholder="Rechercher..." class="form-control" uib-typeahead="viewEmpl as viewEmpl.summary for viewEmpl in employeesIndex | filterEmpl:$viewValue | limitTo:8" />
-			</div>
-		</div>
-	</form>
-</div>
-
-<div class="row clear">
+<div class="row">
 	<div class="col-md-8 col-md-offset-2">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
@@ -54,10 +43,12 @@
 </div>
 
 <div st-table="shown" st-safe-src="source" ng-if="source.length > 0">
-	<form class="form-inline row">
-		<div class="form-group col-md-4">
-			<label for="pageSize">Formations par page :&nbsp;</label>
-			<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size as size for size in [5, 10, 25, 100]"></select>
+	<form class="form-horizontal">
+		<div class="form-group">
+			<label for="pageSize" class="control-label col-md-2">Formations par page</label>
+			<div class="col-md-2">
+				<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
+			</div>
 		</div>
 	</form>
 

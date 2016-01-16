@@ -26,9 +26,13 @@ $(function() {
 
 	  document.body.style['background-image'] = 'url(' + pattern.png() + ')';
 	}
-	trianglify();
-  document.body.style['background-attachment'] = 'fixed';
-	window.onresize = trianglify;
+
+  if(screen.width > 640) {
+		trianglify();
+	  document.body.style['background-attachment'] = 'fixed';
+		window.onresize = trianglify;
+  }
+
 });
 angular.module('smart-table').run(['$templateCache', function ($templateCache) {
     $templateCache.put('template/smart-table/pagination.html',
@@ -135,28 +139,11 @@ angular.module('faomaintenanceApp', [
 }])
 	.directive('bswitch', ['$parse', require('./directives/bSwitch.js')])
 	.directive('fileread', [require('./directives/fileread.js')])
+	.directive('formValidity', [require('./directives/formValidity.js')])
 	.directive('ifRole', ['$rootScope', 'ngIfDirective', require('./directives/ifRole.js')])
 	.directive('loading', [require('./directives/loading.js')])
 	.directive('stateSustain', ['$rootScope', '$cookies', require('./directives/stateSustain.js')])
 	.directive('stSelectDistinct', ['$parse', require('./directives/stSelectDistinct.js')])
-.directive('formValidity', [function () {
-      return {
-          require: 'ngModel',
-          restrict: 'A',
-          scope: {
-              condition: '=formValidity'
-          },
-          link: function (scope, element, attrs, ngModel) {
-              scope.$watch('condition', function (validity) {
-                  if(attrs.required) {
-                      validity = validity || false;
-                  }
-
-                  ngModel.$setValidity('formValidity', validity);
-              });
-          }
-      };
-  }])
 	.factory('ApiSvc', ['$http', '$q', require('./services/ApiSvc.js')])
 	.factory('AdminSvc', ['$http', '$q', '$rootScope', 'ApiSvc', require('./services/AdminSvc.js')])
 	.factory('AuthenticationSvc', ['$http', '$cookies', '$rootScope', '$timeout', 'ApiSvc', require('./services/AuthenticationSvc.js')])

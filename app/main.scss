@@ -24,11 +24,40 @@ $screen-xs:			480px;
 
 @import 'components/index/index';
 
-
 @media (min-width : $screen-xs) {
 	.form-group:not(.label-floating) label.control-label {
 		padding-top: 8px;
 	}
+}
+
+.form-group:not(.label-floating) label.control-label {
+	margin-top: 8px;
+}
+
+.form-group:not(.label-floating) {
+	margin: 0;
+
+	label.control-label {
+		font-size: 14px;
+	}
+}
+
+.form-group.extra-padding {
+	padding-bottom: 30px;
+}
+
+.help-block.force-show {
+	display: block;
+}
+
+.breadcrumb > li + li:before {
+	padding: 0 5px 0 13px;
+}
+
+a[disabled], a[disabled]:hover {
+	text-decoration: none;
+	cursor: not-allowed;
+	color: #777;
 }
 
 ul {
@@ -80,10 +109,6 @@ h3.pull-left {
 	}
 }
 
-.form-group:not(.label-floating) label.control-label {
-	margin-top: 8px;
-}
-
 .label {
 	border-radius: 2px;
 }
@@ -96,14 +121,6 @@ h3.pull-left {
 	margin: 0;
 	padding: 5px 10px;
 	background: transparent;
-}
-
-.form-group {
-	margin: 0;
-
-	label.control-label {
-		font-size: 14px;
-	}
 }
 
 .vtop {

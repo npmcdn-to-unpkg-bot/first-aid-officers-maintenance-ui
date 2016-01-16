@@ -12,7 +12,9 @@ require('moment-fr');
 var Trianglify = require('trianglify');
 
 $(function() {
-  $.material.init();
+  $.material.init({
+  	validate: false
+  });
 
 	function trianglify()	{
 		/*jshint camelcase: false*/
@@ -26,7 +28,6 @@ $(function() {
 	}
 	trianglify();
   document.body.style['background-attachment'] = 'fixed';
-
 	window.onresize = trianglify;
 });
 angular.module('smart-table').run(['$templateCache', function ($templateCache) {
@@ -126,14 +127,36 @@ angular.module('faomaintenanceApp', [
 		.when('/administration/users', {
 			templateUrl: 'components/administration/users/users_administration.html',
 			controller: 'UsersAdministrationCtrl'
+		})
+		.when('/administration/update', {
+			templateUrl: 'components/administration/update/update.html',
+			controller: 'UpdateCtrl'
 		});
 }])
 	.directive('bswitch', ['$parse', require('./directives/bSwitch.js')])
+	.directive('fileread', [require('./directives/fileread.js')])
 	.directive('ifRole', ['$rootScope', 'ngIfDirective', require('./directives/ifRole.js')])
 	.directive('loading', [require('./directives/loading.js')])
 	.directive('stateSustain', ['$rootScope', '$cookies', require('./directives/stateSustain.js')])
 	.directive('stSelectDistinct', ['$parse', require('./directives/stSelectDistinct.js')])
+.directive('formValidity', [function () {
+      return {
+          require: 'ngModel',
+          restrict: 'A',
+          scope: {
+              condition: '=formValidity'
+          },
+          link: function (scope, element, attrs, ngModel) {
+              scope.$watch('condition', function (validity) {
+                  if(attrs.required) {
+                      validity = validity || false;
+                  }
 
+                  ngModel.$setValidity('formValidity', validity);
+              });
+          }
+      };
+  }])
 	.factory('ApiSvc', ['$http', '$q', require('./services/ApiSvc.js')])
 	.factory('AdminSvc', ['$http', '$q', '$rootScope', 'ApiSvc', require('./services/AdminSvc.js')])
 	.factory('AuthenticationSvc', ['$http', '$cookies', '$rootScope', '$timeout', 'ApiSvc', require('./services/AuthenticationSvc.js')])
@@ -158,6 +181,7 @@ angular.module('faomaintenanceApp', [
 	.controller('TrainingsCtrl', ['$scope', 'DataSvc', '$location', 'BusySvc', require('./components/trainings/TrainingsCtrl.js')])
 	.controller('TrainingCompletionCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', '$location', 'ngDialog', 'TrainingsSvc', 'BusySvc', require('./components/trainings/TrainingCompletionCtrl.js')])
 	.controller('TrainingEditCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'dateFilter', 'BusySvc', require('./components/trainings/TrainingEditCtrl.js')])
+	.controller('UpdateCtrl', ['$scope', '$rootScope', 'UpdateSvc', 'DataSvc', 'ngDialog', 'BusySvc', require('./components/administration/update/UpdateCtrl.js')])
 	.controller('UsersAdministrationCtrl', ['$scope', '$rootScope', 'DataSvc', 'AdminSvc', 'ngDialog', '$route', '$location', 'BusySvc', require('./components/administration/users/UsersAdministrationCtrl.js')])
 
 	.run(['$rootScope', '$location', '$cookies', '$http', 'ngDialog', 'AuthenticationSvc', function ($rootScope, $location, $cookies, $http, ngDialog, authenticationSvc) {

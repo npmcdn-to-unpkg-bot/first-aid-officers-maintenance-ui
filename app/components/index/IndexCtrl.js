@@ -8,19 +8,6 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
 	$scope.title = $document[0].title;
 	$scope.today = new Date();
 
-	Promise.all([dataSvc.getSites(), dataSvc.getEmployees(), dataSvc.getTrainings(), dataSvc.getTrainingTypes()]).then(function (results) {
-		$scope.sitesIndex = _.values(results[0]);
-		$scope.employeesIndex = _.values(results[1]);
-		$scope.trainingTypes = results[3];
-		$scope.trainingsIndex = _.sortBy(_.each(_.values(results[2]), function (training) {
-			training.type = $scope.trainingTypes[training.trng_trty_fk];
-		}), function (training) {
-			return training.trng_date;
-		}).reverse();
-
-		$scope.globalIndex = $scope.sitesIndex.concat($scope.employeesIndex).concat($scope.trainingsIndex);
-	});
-
 	$scope.refreshIndex = function () {
 		dataSvc.getTrainings().then(function (trainings) {
 			$scope.trainingsIndex = _.sortBy(_.each(_.values(trainings), function (training) {
@@ -32,6 +19,17 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
 			$scope.globalIndex = $scope.sitesIndex.concat($scope.employeesIndex).concat($scope.trainingsIndex);
 		});
 	};
+
+	$scope.refreshEntireIndex = function () {
+		Promise.all([dataSvc.getSites(), dataSvc.getEmployees(), dataSvc.getTrainingTypes()]).then(function (results) {
+			$scope.sitesIndex = _.values(results[0]);
+			$scope.employeesIndex = _.values(results[1]);
+			$scope.trainingTypes = results[2];
+			$scope.refreshIndex();
+		});
+	};
+	$scope.refreshEntireIndex();
+	$rootScope.$on('update', $scope.refreshEntireIndex);
 
 	$rootScope.$watch('currentUser.info', function (userInfo) {
 		$scope.userInfo = userInfo;

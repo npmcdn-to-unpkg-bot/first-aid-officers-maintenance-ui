@@ -3,8 +3,7 @@
 module.exports = function ($http, $q) {
 	var apiSvc = {};
 	
-	apiSvc.apiBaseUrl = 'http://192.168.0.15:8080/api/';
-	//apiSvc.apiBaseUrl = 'http://nclsdevelopment.duckdns.org/api/';
+	apiSvc.apiBaseUrl = 'http://localhost:8080/api/';
 
 	apiSvc.authEndpoint = apiSvc.apiBaseUrl + 'auth/';
 	apiSvc.adminEndpoint = apiSvc.apiBaseUrl + 'admin/';

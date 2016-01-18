@@ -16,10 +16,6 @@ module.exports = function ($scope, dataSvc, $location, busySvc) {
 		$scope.$apply();
 	});
 
-	$scope.create = function() {
-		$location.path('/management/trainings/edit');
-	};
-
 	$scope.select = function(trng_pk) {
 		$location.path('/trainings/' + trng_pk);
 	};

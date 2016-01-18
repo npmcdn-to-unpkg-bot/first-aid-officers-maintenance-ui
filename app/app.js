@@ -2,7 +2,6 @@
 
 var $ = window.jQuery = require('jquery');
 var angular = require('angular');
-require('angular-bootstrap');
 require('angular-bootstrap-templates');
 require('angular-i18n-fr');
 require('angular-smart-table');

@@ -26,7 +26,7 @@ $(function() {
 	  document.body.style['background-image'] = 'url(' + pattern.png() + ')';
 	}
 
-  if(screen.width > 640) {
+  if(screen.width > 480) {
 		trianglify();
 	  document.body.style['background-attachment'] = 'fixed';
 		window.onresize = trianglify;

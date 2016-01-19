@@ -39,9 +39,9 @@
                 <span ng-repeat="cert in trng.type.certificates"><label class="label label-primary">{{cert.cert_short}}</label>&nbsp;</span>
               </td>
               <td>{{trng.trng_displayDate}}</td>
-              <td>
+              <td class="text-right">
                 <span ng-if="trng.trng_outcome === 'SCHEDULED'" class="label label-primary">Pr&eacute;vue</span>
-                <span ng-if="trng.trng_outcome === 'COMPLETED'" class="label label-success">R&eacute;alis&eacute;e</span>&nbsp;
+                <span ng-if="trng.trng_outcome === 'COMPLETED'" class="label label-success">R&eacute;alis&eacute;e</span>
               </td>
             </tr>
           </tbody>

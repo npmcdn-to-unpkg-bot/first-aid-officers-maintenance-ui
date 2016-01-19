@@ -30,6 +30,10 @@ $screen-xs:			480px;
 	}
 }
 
+.contact-us, .contact-us:focus, .contact-us:hover {
+	color: darken(white, 10%);
+}
+
 .uib-datepicker .text-info {
 	color: black;
 }
@@ -69,7 +73,7 @@ ul {
 }
 
 body {
-	background-color: lighten(#337ab7, 20%);
+	background-color: $brand-primary;
 	font-weight: 400;
 }
 

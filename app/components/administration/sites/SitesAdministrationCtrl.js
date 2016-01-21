@@ -4,7 +4,7 @@
 var _ = require('underscore');
 var clone = require('lodash/cloneDeep');
 
-module.exports = function ($scope, dataSvc, dialog, $route, busySvc) {
+module.exports = function ($scope, dataSvc, ngDialog, $route, busySvc) {
 	busySvc.busy();
 	Promise.all([dataSvc.getAllSites(), dataSvc.getDepartments()]).then(function (results) {
 		$scope.departments = results[1];
@@ -21,7 +21,7 @@ module.exports = function ($scope, dataSvc, dialog, $route, busySvc) {
 		dialogScope.departments = $scope.departments;
 		dialogScope.edit = false;
 
-		dialog.open({
+		ngDialog.open({
 			template: 'components/dialogs/site_edit/site_edit.html',
 			scope: dialogScope,
 			controller: 'SiteCreationCtrl'
@@ -35,7 +35,7 @@ module.exports = function ($scope, dataSvc, dialog, $route, busySvc) {
 		dialogScope.site.new_pk = dialogScope.site.site_pk;
 		dialogScope.edit = true;
 
-		dialog.open({
+		ngDialog.open({
 			template: 'components/dialogs/site_edit/site_edit.html',
 			scope: dialogScope,
 			controller: 'SiteEditCtrl'
@@ -46,7 +46,7 @@ module.exports = function ($scope, dataSvc, dialog, $route, busySvc) {
 		var dialogScope = $scope.$new(true);
 		dialogScope.dept = clone($scope.departments[dept_pk]);
 
-		dialog.open({
+		ngDialog.open({
 			template: 'components/dialogs/department_edit/department_edit.html',
 			scope: dialogScope,
 			controller: 'DepartmentEditCtrl'

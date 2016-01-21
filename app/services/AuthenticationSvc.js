@@ -2,7 +2,7 @@
 
 /*jshint bitwise: false */
 
-module.exports = function ($http, $cookies, $rootScope, $timeout, apiSvc) {
+module.exports = function ($http, $cookies, $rootScope, apiSvc) {
   var service = {};
 
 	// Base64 encoding service used by AuthenticationService

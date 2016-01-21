@@ -3,7 +3,7 @@
 
 var _ = require('underscore');
 
-module.exports = function ($http, $q, $rootScope, apiSvc, $filter) {
+module.exports = function ($http, $q, apiSvc, $filter) {
 
 	var dataSvc = {};
 	var dateFilter = $filter('date');

@@ -2,8 +2,14 @@
 
 module.exports = function ($http, $q) {
 	var apiSvc = {};
+
+	var requestOptions = {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	};
 	
-	apiSvc.apiBaseUrl = 'http://localhost:8080/api/';
+	apiSvc.apiBaseUrl = 'http://dev.formationssecurite.fr/api/';
 
 	apiSvc.authEndpoint = apiSvc.apiBaseUrl + 'auth/';
 	apiSvc.adminEndpoint = apiSvc.apiBaseUrl + 'admin/';
@@ -17,6 +23,39 @@ module.exports = function ($http, $q) {
 	apiSvc.get = function (url) {
 		var deferred = $q.defer();
 		$http.get(encodeURI(url)).success(function (data) {
+			deferred.resolve(data);
+		}).error(function (data, status) {
+			deferred.reject('Error: request returned status ' + status); 
+		});
+		
+		return deferred.promise;
+	};
+
+	apiSvc.post = function (url, data) {
+		var deferred = $q.defer();
+		$http.post(encodeURI(url), JSON.stringify(data), requestOptions).success(function (data) {
+			deferred.resolve(data);
+		}).error(function (data, status) {
+			deferred.reject('Error: request returned status ' + status); 
+		});
+		
+		return deferred.promise;
+	};
+
+	apiSvc.put = function (url, data) {
+		var deferred = $q.defer();
+		$http.put(encodeURI(url), JSON.stringify(data), requestOptions).success(function (data) {
+			deferred.resolve(data);
+		}).error(function (data, status) {
+			deferred.reject('Error: request returned status ' + status); 
+		});
+		
+		return deferred.promise;
+	};
+
+	apiSvc.delete = function (url) {
+		var deferred = $q.defer();
+		$http.delete(encodeURI(url)).success(function (data) {
 			deferred.resolve(data);
 		}).error(function (data, status) {
 			deferred.reject('Error: request returned status ' + status); 

@@ -3,30 +3,19 @@
 
 var _ = require('underscore');
 
-module.exports = function ($http, $q, $rootScope, apiSvc) {
+module.exports = function ($http, $q, apiSvc) {
 
 	var adminSvc = {};
 
 	adminSvc.resetUserPassword = function (empl_pk) {
-		var deferred = $q.defer();
-		$http.delete(apiSvc.adminEndpoint + 'users/' + empl_pk + '/password').success(function (data) {
-			deferred.resolve(data);
-		}).error(function (data, status) {
-			deferred.reject('Error: request returned status ' + status); 
-		});
-		
-		return deferred.promise;
+		return apiSvc.delete(apiSvc.adminEndpoint + 'users/' + empl_pk + '/password');
 	};
 
 	adminSvc.setPassword = function (pwd_current, pwd_new) {
-		var deferred = $q.defer();
-		$http.put(apiSvc.accountEndpoint + 'password', JSON.stringify({ pwd_current: pwd_current, pwd_new: pwd_new })).success(function (data) {
-			deferred.resolve(data);
-		}).error(function (data, status) {
-			deferred.reject('Error: request returned status ' + status); 
+		return apiSvc.put(apiSvc.accountEndpoint + 'password', {
+			pwd_current: pwd_current,
+			pwd_new: pwd_new
 		});
-		
-		return deferred.promise;
 	};
 
 	adminSvc.getInfo = function () {

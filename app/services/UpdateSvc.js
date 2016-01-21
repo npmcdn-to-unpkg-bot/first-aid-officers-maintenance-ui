@@ -79,7 +79,7 @@ module.exports = function ($http, $q, apiSvc) {
 		return deferred.promise;
 	};
 
-	updateSvc.createDept = function (dept_pk, dept_name, dept_id) {
+	updateSvc.updateDept = function (dept_pk, dept_name, dept_id) {
 		var deferred = $q.defer();
 		$http.put(apiSvc.updateEndpoint + 'departments/' + dept_pk, JSON.stringify({
 			dept_name: dept_name,

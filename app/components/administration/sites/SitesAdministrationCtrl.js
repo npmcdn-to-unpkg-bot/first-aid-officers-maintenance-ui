@@ -2,6 +2,7 @@
 /*jshint camelcase: false*/
 
 var _ = require('underscore');
+var clone = require('lodash/cloneDeep');
 
 module.exports = function ($scope, dataSvc, dialog, $route, busySvc) {
 	busySvc.busy();
@@ -30,7 +31,7 @@ module.exports = function ($scope, dataSvc, dialog, $route, busySvc) {
 	$scope.editSite = function (site_pk) {
 		var dialogScope = $scope.$new(true);
 		dialogScope.departments = $scope.departments;
-		dialogScope.site = _.find($scope.sites, {site_pk: site_pk});
+		dialogScope.site = clone(_.find($scope.sites, {site_pk: site_pk}));
 		dialogScope.site.new_pk = dialogScope.site.site_pk;
 		dialogScope.edit = true;
 
@@ -43,7 +44,7 @@ module.exports = function ($scope, dataSvc, dialog, $route, busySvc) {
 
 	$scope.editDept = function (dept_pk) {
 		var dialogScope = $scope.$new(true);
-		dialogScope.dept = $scope.departments[dept_pk];
+		dialogScope.dept = clone($scope.departments[dept_pk]);
 
 		dialog.open({
 			template: 'components/dialogs/department_edit/department_edit.html',

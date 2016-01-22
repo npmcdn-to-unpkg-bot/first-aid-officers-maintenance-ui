@@ -1,4 +1,4 @@
-@import url('http://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
+@import url('//fonts.googleapis.com/css?family=Roboto:300,400,500,700');
 
 $brand-primary: #337ab7 !default;
 $brand-danger:	#e51c23 !default;
@@ -8,7 +8,7 @@ $brand-info:		$brand-primary !default;
 $screen-xs:			480px;
 
 /* the CDN also includes the Glyphicons */
-@import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
+@import url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
 @import 'bower_components/bootstrap-material-design/sass/bootstrap-material-design';
 @import 'bower_components/bootstrap-material-design/sass/ripples';
 

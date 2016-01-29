@@ -61,7 +61,7 @@ angular.module('faomaintenanceApp', [
   $httpProvider.interceptors.push(['$q', '$rootScope', function ($q, $rootScope) {
     return {
       request: function (config) {
-        if(($rootScope.currentUser === undefined || $rootScope.currentUser.info === undefined) && /[^:]+:\/\/[^:\/]+(?::\d+)?\/api\/(?!auth\/)/.test(config.url)) {
+        if(($rootScope.currentUser === undefined || $rootScope.currentUser.info === undefined) && /(?:[^:]+:)?\/\/[^:\/]+(?::\d+)?\/api\/(?!auth\/)/.test(config.url)) {
           return $q.reject('Unauthentified API call');
         }
 

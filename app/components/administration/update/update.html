@@ -1,4 +1,4 @@
-<h3>Mise-&agrave;-jour de la base de donn&eacute;es - <span class="text-primary">&eacute;tape&nbsp;{{currentStep.step}}</span></h3>
+<h3>Mise &agrave; jour de la base de donn&eacute;es - <span class="text-primary">&eacute;tape&nbsp;{{currentStep.step}}</span></h3>
 <ul class="breadcrumb">
 	<li ng-repeat="step in steps | limitTo: currentStep.step" ng-class="{'': $last}">
 		<a href="javascript:void(0)" ng-click="$parent.$parent.currentStep = step" ng-bind-html="step.title" ng-if="!$last"></a>

@@ -1,21 +1,21 @@
 <div class="col-md-8 col-md-offset-2">
 	<div class="panel panel-success" ng-if="invalidEmployees.length === 0">
-		<div class="panel-heading">Mise-&agrave;-jour pr&ecirc;</div>
+		<div class="panel-heading">Mise &agrave; jour pr&ecirc;te</div>
 		<div class="panel-body">
 			<strong class="text-primary" ng-bind="employees.length" />&nbsp;employ&eacute;s sont inclus dans ce recensement des effectifs.
 			<hr />
-			Touyes les informations comprises dans ce fichier ont &eacute;t&eacute; <strong class="text-success">analys&eacute;es</strong> et <strong class="text-success">valid&eacute;es</strong>&nbsp;: la mise-&agrave;-jour peut &ecirc;tre effectu&eacute;e.
+			Touyes les informations comprises dans ce fichier ont &eacute;t&eacute; <strong class="text-success">analys&eacute;es</strong> et <strong class="text-success">valid&eacute;es</strong>&nbsp;: la mise &agrave; jour peut &ecirc;tre effectu&eacute;e.
 		</div>
 		<div class="panel-footer text-center">
-			<button type="button" class="btn btn-primary" ng-click="step3.update()" loading="busy" loading-text="Mise-&agrave;-jour...">Mettre &agrave; jour</button>
+			<button type="button" class="btn btn-primary" ng-click="step3.update()" loading="busy" loading-text="Mise &agrave; jour...">Mettre &agrave; jour</button>
 		</div>
 	</div>
 
 	<div class="panel panel-danger" ng-if="invalidEmployees.length > 0">
-		<div class="panel-heading">Mise-&agrave;-jour impossible</div>
+		<div class="panel-heading">Mise &agrave; jour impossible</div>
 		<div class="panel-body">
 			<strong class="text-primary" ng-bind="employees.length" />&nbsp;employ&eacute;s sont inclus dans ce recensement, dont <strong class="text-danger" ng-bind="invalidEmployees.length" /> pr&eacute;sentant une ou plusieurs erreur(s).<hr />
-			<span class="text-danger">Les informations comprises dans ce fichier n'ont pas toutes &eacute;t&eacute; valid&eacute;es&nbsp;: la mise-&agrave;-jour ne peut pas &ecirc;tre effectu&eacute;e.</span><br /><br />
+			<span class="text-danger">Les informations comprises dans ce fichier n'ont pas toutes &eacute;t&eacute; valid&eacute;es&nbsp;: la mise &agrave; jour ne peut pas &ecirc;tre effectu&eacute;e.</span><br /><br />
 		</div>
 	</div>
 </div>

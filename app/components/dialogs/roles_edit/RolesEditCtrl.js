@@ -20,7 +20,7 @@ module.exports = function ($rootScope, $scope, adminSvc, ngDialog) {
 		
 	$scope.updateRoles = function () {
 		var dialogScope = $scope.$new(true);
-		dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">modifier les privil&egrave;ges</span> de cet utilisateur&nbsp;? En confirmant, cette mise-&agrave;-jour prendra effet imm&eacute;diatement.';
+		dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">modifier les privil&egrave;ges</span> de cet utilisateur&nbsp;? En confirmant, cette mise &agrave; jour prendra effet imm&eacute;diatement.';
 		ngDialog.openConfirm({
 			template: 'components/dialogs/warning.html',
 			scope: dialogScope

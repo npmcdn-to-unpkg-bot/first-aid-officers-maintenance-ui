@@ -25,7 +25,7 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, ngDialog, bus
 			template: 'components/administration/update/step2.html'
 		},{
 			step: 3,
-			title: 'Import de la mise-&agrave;-jour',
+			title: 'Import de la mise &agrave; jour',
 			template: 'components/administration/update/step3.html'
 		}
 	];
@@ -141,7 +141,7 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, ngDialog, bus
 		update: function () {
 			busySvc.busy();
 			updateSvc.update($scope.employees).then(function () {
-				$rootScope.alerts.push({type: 'success', msg: 'Mise-&agrave;-jour effectu&eacute;e avec succ&egrave;s.'});
+				$rootScope.alerts.push({type: 'success', msg: 'Mise &agrave; jour effectu&eacute;e avec succ&egrave;s.'});
 				$rootScope.emit('update');
 				busySvc.done();
 				window.history.back();

@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function ($rootScope, $location, AuthenticationSvc, ngDialog, $window) {
+module.exports = function ($rootScope, $location, AuthenticationSvc, ngDialog) {
 	var vm = this;
 
 	(function initController() {
@@ -12,7 +12,6 @@ module.exports = function ($rootScope, $location, AuthenticationSvc, ngDialog, $
 		AuthenticationSvc.Login(vm.username, vm.password, function (data) {
 			vm.busy = false;
 			AuthenticationSvc.SetCredentials(vm.username, vm.password, data);
-			$window.location.reload();
 			ngDialog.closeAll();
 		}, function () {
 			vm.busy = false;

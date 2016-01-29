@@ -55,8 +55,23 @@ angular.module('faomaintenanceApp', [
   require('ng-dialog'),
   'ui.bootstrap',
   'smart-table',
-]).config(['$routeProvider', 'ngDialogProvider', 'uibButtonConfig', function ($routeProvider, ngDialogProvider, uibButtonConfig) {
+]).config(['$routeProvider', 'ngDialogProvider', 'uibButtonConfig', '$httpProvider', function ($routeProvider, ngDialogProvider, uibButtonConfig, $httpProvider) {
   uibButtonConfig.activeClass = 'btn-primary';
+
+  $httpProvider.interceptors.push(['$q', '$rootScope', function ($q, $rootScope) {
+    return {
+      request: function (config) {
+        if(($rootScope.currentUser === undefined || $rootScope.currentUser.info === undefined) && /[^:]+:\/\/[^:\/]+(?::\d+)?\/api\/(?!auth\/)/.test(config.url)) {
+          return $q.reject('Unauthentified API call');
+        }
+
+        return config;
+      },
+      responseError: function (response) {
+        return $q.reject(response);
+      }
+    };
+  }]);
 
   ngDialogProvider.setDefaults({
     showClose: false
@@ -155,7 +170,7 @@ angular.module('faomaintenanceApp', [
   .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', require('./components/employees/EmployeeCtrl.js')])
   .controller('HomeCtrl', ['$scope', 'ngDialog', require('./components/home/HomeCtrl.js')])
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
-  .controller('LoginCtrl', ['$rootScope', '$location', 'AuthenticationSvc', 'ngDialog', '$window', require('./components/index/LoginCtrl.js')])
+  .controller('LoginCtrl', ['$rootScope', '$location', 'AuthenticationSvc', 'ngDialog', require('./components/index/LoginCtrl.js')])
   .controller('RolesEditCtrl', ['$rootScope', '$scope', 'AdminSvc', 'ngDialog', require('./components/dialogs/roles_edit/RolesEditCtrl.js')])
   .controller('SiteCtrl', ['$scope', '$routeParams', '$location', 'DataSvc', 'BusySvc', require('./components/sites/SiteCtrl.js')])
   .controller('SitesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', require('./components/sites/SitesCtrl.js')])

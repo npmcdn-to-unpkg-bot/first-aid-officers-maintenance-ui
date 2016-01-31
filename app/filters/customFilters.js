@@ -10,7 +10,7 @@ function summariseSite (site) {
 }
 
 function summariseEmpl (empl) {
-  return empl.empl_pk + ' - ' + empl.empl_firstname + ' ' + empl.empl_surname;
+  return empl.empl_pk + ' - ' + empl.empl_surname + ' ' + empl.empl_firstname;
 }
 
 function summariseTrng (trng) {
@@ -20,13 +20,21 @@ function summariseTrng (trng) {
 customFilters.filter('filterEmpl', function () {
   return function (employees, inputString) {
     inputString = inputString.toUpperCase();
-    return _.map(_.filter(employees, function (empl) {
+    return _.sortBy(_.map(_.filter(employees, function (empl) {
       var empl_summary = summariseEmpl(empl).toUpperCase();
       return _.every(inputString.split(' '), function(split) {
         return empl_summary.indexOf(split) !== -1;
       });
     }), function (entry) {
       return entry.summary = (entry.site_pk) ? summariseSite(entry) : summariseEmpl(entry), entry;
+    }), function (entry) {
+      if(_.any(inputString.split(' '), function(split) {
+        return entry.empl_surname.indexOf(split) !== -1;
+      })) {
+        return '0' + entry.empl_surname;
+      } else {
+        return '1' + entry.empl_surname;
+      }
     });
   };
 });
@@ -48,14 +56,17 @@ customFilters.filter('filterSite', function () {
 customFilters.filter('filterGlobal', function () {
   return function (entries, inputString) {
     inputString = inputString.toUpperCase();
-    return _.map(_.filter(entries, function (entry) {
+    var res = _.groupBy(_.map(_.filter(entries, function (entry) {
       var summary;
       if (entry.site_pk) {
         summary = summariseSite(entry).toUpperCase();
+        entry.__type = 'site';
       } else if (entry.empl_pk) {
         summary = summariseEmpl(entry).toUpperCase();
+        entry.__type = 'empl';
       } else {
         summary = summariseTrng(entry).toUpperCase();
+        entry.__type = 'trng';
       }
 
       return _.every(inputString.split(' '), function(split) {
@@ -71,7 +82,21 @@ customFilters.filter('filterGlobal', function () {
       }
 
       return entry;
+    }), '__type');
+
+    var sites = _.sortBy(res.site, 'summary');
+    var trngs = _.sortBy(res.trng, 'trng_date').reverse();
+    var empls = _.sortBy(res.empl, function (entry) {
+      if(_.any(inputString.split(' '), function(split) {
+        return entry.empl_surname.indexOf(split) !== -1;
+      })) {
+        return '0' + entry.empl_surname;
+      } else {
+        return '1' + entry.empl_surname;
+      }
     });
+
+    return sites.concat(empls).concat(trngs);
   };
 });
 

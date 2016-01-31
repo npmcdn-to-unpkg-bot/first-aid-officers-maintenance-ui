@@ -36,11 +36,11 @@ angular.module('smart-table').run(['$templateCache', function ($templateCache) {
     $templateCache.put('template/smart-table/pagination.html',
 '    <nav ng-if="numPages && pages.length > 1">' +
 '        <ul class="pagination">' +
-'            <li ng-click="selectPage(1)" ng-class="{\'disabled\': currentPage == 1}"><span>&laquo;</span></li>' +
-'            <li ng-click="selectPage(currentPage - 1)" ng-class="{\'disabled\': currentPage == 1}"><span>&lsaquo;</span></li>' +
-'            <li ng-repeat="page in pages" ng-class="{\'active\': page == currentPage}" ng-click="selectPage(page)"><span>{{page}}</span></li>' +
-'            <li ng-click="selectPage(currentPage + 1)" ng-class="{\'disabled\': currentPage == numPages}"><span>&rsaquo;</span></li>' +
-'            <li ng-click="selectPage(numPages)" ng-class="{\'disabled\': currentPage == numPages}"><span>&raquo;</span></li>' +
+'            <li ng-click="selectPage(1)" ng-class="{\'disabled\': currentPage == 1}"><a href="javascript:void(0)">&laquo;</a></li>' +
+'            <li ng-click="selectPage(currentPage - 1)" ng-class="{\'disabled\': currentPage == 1}"><a href="javascript:void(0)">&lsaquo;</a></li>' +
+'            <li ng-repeat="page in pages" ng-class="{\'active\': page == currentPage}" ng-click="selectPage(page)"><a href="javascript:void(0)">{{page}}</a></li>' +
+'            <li ng-click="selectPage(currentPage + 1)" ng-class="{\'disabled\': currentPage == numPages}"><a href="javascript:void(0)">&rsaquo;</a></li>' +
+'            <li ng-click="selectPage(numPages)" ng-class="{\'disabled\': currentPage == numPages}"><a href="javascript:void(0)">&raquo;</a></li>' +
 '        </ul>' +
 '    </nav>');
 }]);

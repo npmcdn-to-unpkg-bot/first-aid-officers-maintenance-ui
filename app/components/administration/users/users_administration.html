@@ -26,8 +26,8 @@
 					<tr>
 						<th class="shrinkable" width="0%"></th>
 						<th class="st-sort shrinkable" width="20%" st-sort="empl_pk" st-skip-natural="true">Matricule</th>
-						<th class="st-sort shrinkable" width="35%" st-sort="empl_firstname" st-skip-natural="true">Pr&eacute;nom</th>
 						<th class="st-sort shrinkable" width="35%" st-sort="empl_surname" st-skip-natural="true">Nom</th>
+						<th class="st-sort shrinkable" width="35%" st-sort="empl_firstname" st-skip-natural="true">Pr&eacute;nom</th>
 						<th class="shrinkable" width="10%">R&ocirc;les</th>
 						<th></th>
 					</tr>
@@ -36,8 +36,8 @@
 					<tr ng-repeat="user in shown" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
 						<td class="clickme" ng-click="edit(user)"><button type="button" class="btn btn-xs" ng-class="{'btn-primary': hover}">Modifier</button></td>
 						<td class="clickme" ng-click="edit(user)">{{user.empl_pk}}</td>
-						<td class="shrinkable clickme" ng-click="edit(user)" ng-class="{'text-primary': hover}">{{user.empl_firstname}}</td>
 						<td class="shrinkable clickme" ng-click="edit(user)" ng-class="{'text-primary': hover}">{{user.empl_surname}}</td>
+						<td class="shrinkable clickme" ng-click="edit(user)" ng-class="{'text-primary': hover}">{{user.empl_firstname}}</td>
 						<td>
 							<span ng-repeat="roleName in ['user', 'trainer', 'admin']">
 								<span ng-if="user.roles.indexOf(roleName) !== -1" class="glyphicon glyphicon-user" ng-class="{'text-primary': roleName === 'trainer', 'text-success': roleName === 'admin'}" uib-tooltip="{{roles[roleName].role_display}}">

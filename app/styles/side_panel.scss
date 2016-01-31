@@ -7,6 +7,11 @@
   pointer-events: none;
 
   .side-panel-item {
+    &:disabled {
+      background-color: #ddd !important;
+      opacity: 1;
+    }
+
     text-align: left;
     padding-left: 10px;
     margin: 0;

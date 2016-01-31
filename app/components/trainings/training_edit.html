@@ -109,7 +109,7 @@
 </div>
 
 <div class="side-panel-container text-right">
-  <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="save()"><span class="glyphicon glyphicon-ok"></span>&nbsp;Enregistrer</button><br />
+  <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="save()" ng-disabled="!(trng.type && trng.trng_date)"><span class="glyphicon glyphicon-ok"></span>&nbsp;Enregistrer</button><br />
   <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="registerAgents()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Inscrire agent(s)</button>
   <button type="button" class="btn btn-raised btn-raised btn-danger side-panel-item" ng-click="cancel()"><span class="glyphicon glyphicon-remove"></span>&nbsp;Annuler</button>
 </div>

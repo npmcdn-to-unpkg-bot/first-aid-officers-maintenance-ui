@@ -94,7 +94,7 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="trng in shown track by trng.trng_pk" class="clickme" ng-click="selectTraining(trng.trng_pk);" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
-					<td><button type="button" class="btn btn-xs" ng-class="{'btn-primary': hover}">VOIR</button></td>
+					<td><button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button></td>
 					<td ng-class="{'text-primary': hover}">{{trng.trng_date | date: 'fullDate'}}</td>
 					<td ng-class="{'text-primary': hover}">{{trng.type.trty_name}}<span class="pull-right"><span ng-repeat="cert in trng.type.certificates">&nbsp;<label class="label" ng-class="{'label-success': trng.trem_outcome === 'VALIDATED', 'label-danger': trng.trem_outcome === 'FLUNKED'}">{{cert.cert_short}}</label></span></span></td>
 					<td>{{trng.trem_comment}}</td>

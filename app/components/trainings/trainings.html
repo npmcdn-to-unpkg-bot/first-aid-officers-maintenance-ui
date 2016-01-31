@@ -33,7 +33,7 @@
           </thead>
           <tbody>
             <tr ng-repeat="trng in shown track by trng.trng_pk" ng-mouseenter="hover=true" ng-mouseleave="hover = false" ng-class="{'text-primary': hover}" class="clickme" ng-click="select(trng.trng_pk)">
-              <td><button type="button" class="btn btn-xs" ng-class="{'btn-primary': hover}">VOIR</button></td>
+              <td><button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button></td>
               <td>{{trng.type.trty_name}}</td>
               <td width="1%" class="text-right">
                 <span ng-repeat="cert in trng.type.certificates"><label class="label label-primary">{{cert.cert_short}}</label>&nbsp;</span>

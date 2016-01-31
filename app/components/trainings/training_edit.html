@@ -99,7 +99,7 @@
             <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_firstname}}</td>
             <td class="text-center"><span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span></td>
             <td>
-              <button type="button" class="btn btn-sm" ng-class="{'btn-danger': hover}" ng-click="unregister(empl)">D&eacute;sinscrire</button>
+              <button type="button" class="btn btn-danger btn-sm" ng-disabled="!hover" ng-click="unregister(empl)">D&eacute;sinscrire</button>
             </td>
           </tr>
         </tbody>

@@ -31,10 +31,10 @@
 					<tbody>
 						<tr ng-repeat="site in shown" class="clickme" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
 							<td class="shrinkable" ng-class="{'text-primary': hover && !deptHover}" ng-click="editSite(site.site_pk)">
-								<button type="button" class="btn btn-xs" ng-class="{'btn-primary': hover && !deptHover}">MODIFIER</button>&nbsp;&nbsp;{{::site.site_name}}
+								<button type="button" class="btn btn-primary btn-xs" ng-disabled="!(hover && !deptHover)">MODIFIER</button>&nbsp;&nbsp;{{::site.site_name}}
 								</td>
 							<td class="shrinkable" ng-mouseenter="deptHover=true" ng-mouseleave="deptHover = false" ng-class="{'text-primary': deptHover}" ng-click="editDept(site.dept.dept_pk)">
-								<button type="button" class="btn btn-xs" ng-class="{'btn-primary': deptHover}">MODIFIER</button>&nbsp;&nbsp;{{::site.dept.dept_name}}
+								<button type="button" class="btn btn-primary btn-xs" ng-disabled="!deptHover">MODIFIER</button>&nbsp;&nbsp;{{::site.dept.dept_name}}
 							</td>
 						</tr>
 					</tbody>

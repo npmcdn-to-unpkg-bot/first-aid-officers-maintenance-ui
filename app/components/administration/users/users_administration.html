@@ -34,7 +34,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="user in shown" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
-						<td class="clickme" ng-click="edit(user)"><button type="button" class="btn btn-xs" ng-class="{'btn-primary': hover}">Modifier</button></td>
+						<td class="clickme" ng-click="edit(user)"><button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">Modifier</button></td>
 						<td class="clickme" ng-click="edit(user)">{{user.empl_pk}}</td>
 						<td class="shrinkable clickme" ng-click="edit(user)" ng-class="{'text-primary': hover}">{{user.empl_surname}}</td>
 						<td class="shrinkable clickme" ng-click="edit(user)" ng-class="{'text-primary': hover}">{{user.empl_firstname}}</td>
@@ -44,7 +44,7 @@
 								</span>
 							</span>
 						</td>
-						<td><button type="button" class="btn btn-sm" ng-class="{'btn-warning': hover}" ng-click="resetPassword(user)">R&eacute;init. mdp.</button></td>
+						<td><button type="button" class="btn btn-warning btn-sm" ng-disabled="!hover" ng-click="resetPassword(user)">R&eacute;init. mdp.</button></td>
 					</tr>
 				</tbody>
 			</table>

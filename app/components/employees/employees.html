@@ -54,11 +54,11 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="empl in shown track by empl.empl_pk" class="clickme" ng-click="(siteHover)?selectSite(empl.site.site_pk):select(empl.empl_pk)" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
-					<td><button type="button" class="btn btn-xs" ng-class="{'btn-primary': hover && !siteHover}">VOIR</button></td>
+					<td><button type="button" class="btn btn-primary btn-xs" ng-disabled="!(hover && !siteHover)">VOIR</button></td>
 					<td>{{empl.empl_pk}}</td>
 					<td class="shrinkable" ng-class="{'text-primary': hover && !siteHover}">{{empl.empl_surname}}&nbsp;</td>
 					<td class="shrinkable" ng-class="{'text-primary': hover && !siteHover}">{{empl.empl_firstname}}&nbsp;</td>
-					<td class="shrinkable" ng-mouseenter="siteHover=true" ng-mouseleave="siteHover=false"><button type="button" class="btn btn-xs" ng-class="{'btn-primary': siteHover}">VOIR</button>&nbsp;&nbsp;<span ng-class="{'text-primary': siteHover}">{{empl.site.site_name}}</span></td>
+					<td class="shrinkable" ng-mouseenter="siteHover=true" ng-mouseleave="siteHover=false"><button type="button" class="btn btn-primary btn-xs" ng-disabled="!siteHover">VOIR</button>&nbsp;&nbsp;<span ng-class="{'text-primary': siteHover}">{{empl.site.site_name}}</span></td>
 					<!-- <td>{{empl.empl_dob | date: 'shortDate'}}</td> -->
 					<td class="text-center"><span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span></td>
 					<td ng-repeat="cert in certificates | filter: {'checked': true}" ng-init="certStats = empl.stats.certificates[cert.cert_pk]" class="text-center">

@@ -37,6 +37,7 @@
 						<div class="st-sort" st-sort="empl_firstname" st-skip-natural="true">Pr&eacute;nom</div>
 						<input st-search="empl_firstname" placeholder="Rechercher..." class="form-control" type="text"/>
 					</th>
+					<th></th>
 					<th class="shrinkable" width="40%">
 						<div class="st-sort" st-sort="site.site_name" st-skip-natural="true">Affectation</div>
 						<input st-search="site.site_name" placeholder="Rechercher..." class="form-control" type="text"/>
@@ -58,7 +59,8 @@
 					<td>{{empl.empl_pk}}</td>
 					<td class="shrinkable" ng-class="{'text-primary': hover && !siteHover}">{{empl.empl_surname}}&nbsp;</td>
 					<td class="shrinkable" ng-class="{'text-primary': hover && !siteHover}">{{empl.empl_firstname}}&nbsp;</td>
-					<td class="shrinkable" ng-mouseenter="siteHover=true" ng-mouseleave="siteHover=false"><button type="button" class="btn btn-primary btn-xs" ng-disabled="!siteHover">VOIR</button>&nbsp;&nbsp;<span ng-class="{'text-primary': siteHover}">{{empl.site.site_name}}</span></td>
+					<td ng-mouseenter="siteHover=true" ng-mouseleave="siteHover=false"><button type="button" class="btn btn-primary btn-xs" ng-disabled="!siteHover">VOIR</button></td>
+					<td class="shrinkable" ng-mouseenter="siteHover=true" ng-mouseleave="siteHover=false"><span ng-class="{'text-primary': siteHover}">{{empl.site.site_name}}</span></td>
 					<!-- <td>{{empl.empl_dob | date: 'shortDate'}}</td> -->
 					<td class="text-center"><span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span></td>
 					<td ng-repeat="cert in certificates | filter: {'checked': true}" ng-init="certStats = empl.stats.certificates[cert.cert_pk]" class="text-center">

@@ -28,9 +28,7 @@ customFilters.filter('filterEmpl', function () {
     }), function (entry) {
       return entry.summary = (entry.site_pk) ? summariseSite(entry) : summariseEmpl(entry), entry;
     }), function (entry) {
-      if(_.any(inputString.split(' '), function(split) {
-        return entry.empl_surname.indexOf(split) !== -1;
-      })) {
+      if (entry.empl_surname.indexOf(inputString.split(' ')[0]) !== -1) {
         return '0' + entry.empl_surname;
       } else {
         return '1' + entry.empl_surname;
@@ -87,9 +85,7 @@ customFilters.filter('filterGlobal', function () {
     var sites = _.sortBy(res.site, 'summary');
     var trngs = _.sortBy(res.trng, 'trng_date').reverse();
     var empls = _.sortBy(res.empl, function (entry) {
-      if(_.any(inputString.split(' '), function(split) {
-        return entry.empl_surname.indexOf(split) !== -1;
-      })) {
+      if (entry.empl_surname.indexOf(inputString.split(' ')[0]) !== -1) {
         return '0' + entry.empl_surname;
       } else {
         return '1' + entry.empl_surname;
@@ -102,7 +98,7 @@ customFilters.filter('filterGlobal', function () {
 
 customFilters.filter('fromNow', function () {
   return function (input) {
-    if(input !== undefined) {
+    if (input !== undefined) {
       return moment(input).from(moment().set({'hour': 0, 'minute': 0, 'second': 0, 'millisecond': 0}));
     }
   };

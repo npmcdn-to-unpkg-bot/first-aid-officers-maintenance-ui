@@ -5,8 +5,16 @@
     "start": "gulp dev build serve watch"
   },
   "browser": {
-    "angular": "./bower_components/angular/angular.min.js",
-    "ng-dialog": "./bower_components/ng-dialog/js/ngDialog.min.js"
+    "arrive": "./bower_components/arrive/minified/arrive.min.js",
+    "angular-bootstrap": "./bower_components/angular-bootstrap/ui-bootstrap.min.js",
+    "angular-bootstrap-templates": "./bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js",
+    "angular-i18n-fr": "./node_modules/angular-i18n/fr-fr.js",
+    "bootstrap": "./bower_components/bootstrap/dist/js/bootstrap.js",
+    "bootstrap_material_design": "./bower_components/bootstrap-material-design/dist/js/material.min.js",
+    "jquery": "./bower_components/jquery/dist/jquery.min.js",
+    "moment-fr": "./node_modules/moment/locale/fr.js",
+    "ripples": "./bower_components/bootstrap-material-design/dist/js/ripples.min.js",
+    "trianglify": "./bower_components/trianglify/dist/trianglify.min.js"
   },
   "browserify": {
     "transform": [
@@ -14,8 +22,31 @@
     ]
   },
   "browserify-shim": {
-    "angular": {
-      "exports": "angular"
+    "arrive": {
+      "exports": "arrive",
+      "depends": [
+        "jquery"
+      ]
+    },
+    "bootstrap_material_design": {
+      "exports": "bootstrap_material_design",
+      "depends": [
+        "jquery",
+        "arrive",
+        "bootstrap",
+        "ripples"
+      ]
+    },
+    "ripples": {
+      "exports": "ripples",
+      "depends": [
+        "jquery"
+      ]
+    },
+    "jquery": {
+      "exports": {
+        "jquery": "$"
+      }
     }
   },
   "devDependencies": {
@@ -26,10 +57,24 @@
     "gulp-jshint": "^2.0.0",
     "gulp-sass": "^2.1.1",
     "gulp-uglify": "^1.5.1",
-    "gulp-util": "^3.0.7",
     "gulp-webserver": "^0.9.1",
     "jshint": "^2.9.1-rc2",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "angular": "^1.4.8",
+    "angular-animate": "^1.4.8",
+    "angular-cookies": "^1.4.8",
+    "angular-i18n": "^1.4.8",
+    "angular-route": "^1.4.8",
+    "angular-sanitize": "^1.4.8",
+    "angular-smart-table": "^2.1.6",
+    "bootstrap-switch": "^3.3.2",
+    "jshint": "^2.9.1-rc2",
+    "lodash": "^4.0.0",
+    "moment": "^2.11.1",
+    "ng-dialog": "^0.5.6",
+    "underscore": "^1.8.3"
   }
 }

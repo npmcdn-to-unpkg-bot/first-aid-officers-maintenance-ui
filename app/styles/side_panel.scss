@@ -1,0 +1,46 @@
+.side-panel-container {
+  position: fixed;
+  right: 0px;
+  top: 100px;
+  z-index: 1002;
+  width: 280px;
+  pointer-events: none;
+
+  .side-panel-item {
+    &:disabled {
+      background-color: #ddd !important;
+      opacity: 1;
+    }
+
+    text-align: left;
+    padding-left: 10px;
+    margin: 0;
+    position: relative;
+    transition: all 200ms;
+    right: -247px;
+    width: 100%;
+    z-index: 1003;
+    pointer-events: all;
+
+    &:hover {
+      right: -30px;
+      z-index: 1004;
+      animation: active 1s infinite ease-in-out;
+
+      @keyframes active {
+        0% {
+          transform: translate(0px);
+        } 50% {
+          transform: translate(4px);
+        } 100% {
+          transform: translate(0px);
+        }
+      }
+    }
+
+    .glyphicon {
+      margin-right: 7px;
+      top: 3px;
+    }
+  }
+}

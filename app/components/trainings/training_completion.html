@@ -1,0 +1,56 @@
+<h3>{{trng.type.trty_name}} - {{trng.trng_date | date: 'fullDate'}}</h3>
+<br />
+
+<div class="panel panel-primary" st-table="shown" st-safe-src="trainees" ng-if="trainees.length > 0">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-6">Agents inscrits</div>
+		</div>
+	</div>
+	<table class="table table table-striped table-hover" ng-if="stats !== 'loading'">
+		<thead>
+			<tr>
+				<th width="10%">
+					<span class="st-sort" st-sort="empl_pk">Matricule</span>
+					<input st-search="empl_pk" placeholder="Rechercher..." class="form-control" type="text" />
+				</th>
+				<th class="shrinkable" width="20%">
+					<span class="st-sort" st-sort="empl_surname" st-skip-natural="true">Nom</span>
+					<input st-search="empl_surname" placeholder="Rechercher..." class="form-control" type="text" />
+				</th>
+				<th class="shrinkable" width="20%">
+					<span class="st-sort" st-sort="empl_firstname" st-skip-natural="true">Pr&eacute;nom</span>
+					<input st-search="empl_firstname" placeholder="Rechercher..." class="form-control" type="text" />
+				</th>
+				<th class="vtop">
+					<span class="st-sort" st-sort="empl_permanent" st-skip-natural="true">Statut</span>
+				</th>
+				<th class="shrinkable" width="40%">
+					<span class="st-sort" st-sort="trem_comment" st-skip-natural="true">Commentaire</span>
+					<input st-search="trem_comment" placeholder="Rechercher..." class="form-control" type="text" />
+				</th>
+				<th class="vtop">
+					<span class="st-sort" st-sort="trem_valid" st-skip-natural="true">R&eacute;sultat</span>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="empl in shown track by empl.empl_pk" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
+				<td class="shrinkable">{{empl.empl_pk}}</td>
+				<td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_surname}}&nbsp;</td>
+				<td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_firstname}}&nbsp;</td>
+				<td class="text-center"><span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span></td>
+				<td class="shrinkable"><input type="text" class="form-control" ng-model="empl.trem_comment" /></td>
+				<td ng-init="(trng.trng_outcome === 'COMPLETED' && empl.trem_outcome !== 'SCHEDULED') ? empl.validated = empl.trem_outcome === 'VALIDATED' : null">
+					<input bswitch="empl.validated" type="checkbox" name="my-checkbox" data-indeterminate="true" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)" data-label-width="0" ng-init="empl.validated=empl.validated || false"/>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="side-panel-container text-right">
+	<button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="save()"><span class="glyphicon glyphicon-ok"></span>&nbsp;Enregistrer</button>
+	<button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="validateAll()"><span class="glyphicon glyphicon-education"></span>&nbsp;Valider tous les agents</button>
+	<button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="cancel()"><span class="glyphicon glyphicon-remove"></span>&nbsp;Annuler</button>
+</div>

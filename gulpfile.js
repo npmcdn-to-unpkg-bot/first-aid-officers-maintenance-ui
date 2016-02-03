@@ -49,7 +49,10 @@ function bundlejs() {
     })
     .pipe(source('bundle.js'))
 		.pipe(buffer())
-		.pipe(gulpif(prod, uglify()))
+		.pipe(gulpif(prod, uglify().on('error', function(err){
+      console.log(err.message);
+      this.emit('end');
+    })))
 		.pipe(gulp.dest('./build'));
 }
 
@@ -70,7 +73,7 @@ function styles() {
 	gulp.src(['app/main.scss'])
 		.pipe(sass({
 			outputStyle: 'compressed',
-			follow: true
+			includePaths: ['bower_components/bootstrap-sass/assets/stylesheets']
 		}).on('error', sass.logError))
 		.pipe(gulp.dest('./build'));
 }

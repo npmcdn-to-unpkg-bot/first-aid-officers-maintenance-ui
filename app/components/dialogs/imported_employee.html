@@ -1,0 +1,18 @@
+<form class="panel panel-danger" ng-submit="closeThisDialog()" autocomplete="off">
+	<div class="panel-heading">
+		{{empl.empl_firstname}} {{empl.empl_surname}}
+		<span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
+	</div>
+
+	<div class="panel-body form">
+		<div class="form-group label-floating" ng-repeat="(name, field) in template" ng-class="{'has-error is-focused extra-padding': empl.error.indexOf(name) !== -1}">
+		  <label for="{{name}}" class="control-label">{{field.display}}</label>
+			<input id="{{name}}" type="text" class="form-control" ng-model="empl[name]" disabled="disabled" />
+		  <p class="help-block" ng-class="{'force-show': empl.error.indexOf(name) !== -1}">{{field.rule}}</p>
+		</div>
+	</div>
+
+	<div class="panel-footer text-center">
+		<button type="button" class="btn btn-danger" ng-click="closeThisDialog()">Ok</button>
+	</div>
+</form>

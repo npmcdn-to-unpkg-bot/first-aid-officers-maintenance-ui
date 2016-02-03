@@ -5,7 +5,7 @@
 			<div class="form-group" ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }">
 				<label for="username" class="col-md-4 col-sm-4 control-label">Matricule</label>
 				<div class="col-md-8 col-sm-8">
-					<input type="text" name="username" id="username" class="form-control" ng-model="vm.username" placeholder="e.g.: 00009408" required />
+					<input type="text" name="username" id="username" class="form-control" ng-model="vm.username" required />
 					<span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Matricule requis</span>
 				</div>
 			</div>

@@ -142,7 +142,7 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, ngDialog, bus
 			busySvc.busy();
 			updateSvc.update($scope.employees).then(function () {
 				$rootScope.alerts.push({type: 'success', msg: 'Mise &agrave; jour effectu&eacute;e avec succ&egrave;s.'});
-				$rootScope.emit('update');
+				$rootScope.$emit('update');
 				busySvc.done();
 				window.history.back();
 			});

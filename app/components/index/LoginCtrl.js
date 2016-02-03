@@ -13,6 +13,7 @@ module.exports = function ($rootScope, $location, AuthenticationSvc, ngDialog) {
 			vm.busy = false;
 			AuthenticationSvc.SetCredentials(vm.username, vm.password, data);
 			ngDialog.closeAll();
+			$rootScope.$emit('update');
 		}, function () {
 			vm.busy = false;
 			$rootScope.alerts.push({ type: 'danger', msg: '<strong>&Eacute;chec d\'authentification</strong>&nbsp;: ' +

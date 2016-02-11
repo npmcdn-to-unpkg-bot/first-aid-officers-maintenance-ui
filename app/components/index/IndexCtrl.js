@@ -68,14 +68,4 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
 	$scope.closeAlert = function(index) {
 		$scope.alerts.splice(index, 1);
 	};
-
-	$scope.onLocation = function (location) {
-		if(location instanceof Array) {
-			return _.some(location, function (current) {
-				return $location.path() === current;
-			});
-		}
-
-		return $location.path() === location;
-	};
 };

@@ -48,9 +48,10 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="panel-footer text-center">
-				<button class="btn btn-primary" ng-click="create()">Cre&eacute;er/Modifier compte utilisateur</button>
-			</div>
 		</div>
 	</div>
+</div>
+
+<div class="side-panel-container text-right" if-role="admin">
+	<button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="create()"><span class="glyphicon glyphicon-wrench"></span>Cre&eacute;er/Modifier compte</button>
 </div>

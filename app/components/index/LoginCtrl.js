@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function ($rootScope, $location, AuthenticationSvc, ngDialog) {
+module.exports = function ($rootScope, $location, AuthenticationSvc, ngDialog, $window) {
 	var vm = this;
 
 	(function initController() {
@@ -13,7 +13,7 @@ module.exports = function ($rootScope, $location, AuthenticationSvc, ngDialog) {
 			vm.busy = false;
 			AuthenticationSvc.SetCredentials(vm.username, vm.password, data);
 			ngDialog.closeAll();
-			$rootScope.$emit('update');
+			$window.location.reload();
 		}, function () {
 			vm.busy = false;
 			$rootScope.alerts.push({ type: 'danger', msg: '<strong>&Eacute;chec d\'authentification</strong>&nbsp;: ' +

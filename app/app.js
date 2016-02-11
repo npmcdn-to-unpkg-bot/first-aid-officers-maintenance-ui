@@ -198,7 +198,7 @@ angular.module('faomaintenanceApp', [
 
     $rootScope.alerts = [];
 
-    $rootScope.$on('$locationChangeStart', function () {
+    $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
       // redirect to login page if not logged in and trying to access a restricted page
       var restrictedPage = $.inArray($location.path(), ['/login', '/home']) === -1;
       var loggedIn = $rootScope.currentUser;
@@ -210,6 +210,22 @@ angular.module('faomaintenanceApp', [
           controllerAs: 'vm'
         });
       }
+
+      if(newUrl !== oldUrl && /\/trainings\/([^\/]+\/)?(create|edit|complete)/.test(oldUrl) && !($location.search().force)) {
+        event.preventDefault();
+        var dialogScope = $rootScope.$new(true);
+        dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">abandonner l\'op&eacute;ration en cours</span>&nbsp;?';
+        ngDialog.openConfirm({
+          template: 'components/dialogs/warning.html',
+          scope: dialogScope
+        }).then(function () {
+          $location.path(newUrl.substring($location.absUrl().length - $location.url().length)).search('force', true);
+        });
+      }
+    });
+
+    $rootScope.$on('$locationChangeSuccess', function () {
+      $location.search('force', null).replace();
     });
   }
 ]);

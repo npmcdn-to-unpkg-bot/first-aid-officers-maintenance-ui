@@ -42,7 +42,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location,
 				})
 			}).then(function () {
 				$rootScope.alerts.push({type: 'success', msg: 'Proc&egrave;s verbal de fin de session &eacute;dit&eacute;.'});
-				$location.path('/trainings/' + $scope.trng.trng_pk);
+				$location.path('/trainings/' + $scope.trng.trng_pk).search('force', true);
 			});
 		});
 	};
@@ -55,7 +55,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location,
 			template: 'components/dialogs/warning.html',
 			scope: dialogScope
 		}).then(function () {
-			window.history.back();
+			$location.path('/trainings/' + $scope.trng.trng_pk).search('force', true);
 		});
 	};
 };

@@ -118,7 +118,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
 
 			promise.then(function (trng_pk) {
 				$rootScope.alerts.push({type: 'success', msg: $scope.trng.trng_pk ? 'Formation mise &agrave; jour.' : 'Formation cr&eacute;&eacute;e.'});
-				$location.path('/trainings/' + ($scope.trng.trng_pk || trng_pk));
+				$location.path('/trainings/' + ($scope.trng.trng_pk || trng_pk)).search('force', true);
 			});
 		});
 	};
@@ -130,7 +130,11 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
 			template: 'components/dialogs/warning.html',
 			scope: dialogScope
 		}).then(function () {
-			window.history.back();
+			if($scope.trng.trng_pk) {
+				$location.path('/trainings/' + $scope.trng.trng_pk).search('force', true);
+			} else {
+				$location.path('/home').search('force', true);
+			}
 		});
 	};
 };

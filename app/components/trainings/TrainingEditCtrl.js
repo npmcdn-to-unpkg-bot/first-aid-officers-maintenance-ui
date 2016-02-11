@@ -130,7 +130,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
 			template: 'components/dialogs/warning.html',
 			scope: dialogScope
 		}).then(function () {
-			if($scope.trng) {
+			if($scope.trng && $scope.trng.trng_pk) {
 				$location.path('/trainings/' + $scope.trng.trng_pk).search('force', true);
 			} else {
 				$location.path('/home').search('force', true);

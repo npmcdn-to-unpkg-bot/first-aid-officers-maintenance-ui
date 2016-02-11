@@ -1,11 +1,11 @@
 @import url('//fonts.googleapis.com/css?family=Roboto:300,400,500,700');
 
 $brand-primary: #337ab7 !default;
-$brand-danger:	#e51c23 !default;
-$brand-warning:	#ff9800 !default;
-$brand-info:		$brand-primary !default;
+$brand-danger:  #e51c23 !default;
+$brand-warning: #ff9800 !default;
+$brand-info:    $brand-primary !default;
 
-$screen-xs:			480px;
+$screen-xs:     768px;
 
 /* the CDN also includes the Glyphicons */
 @import url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
@@ -24,57 +24,64 @@ $screen-xs:			480px;
 
 @import 'components/index/index';
 
-@media (min-width : $screen-xs) {
-	.form-group:not(.label-floating) label.control-label {
-		padding-top: 8px;
-	}
+@media (min-width: $screen-xs) {
+  .form-group:not(.label-floating) label.control-label {
+    padding-top: 8px;
+  }
+}
+
+@media (max-width: $screen-xs) {
+  .container {
+    width: 100%;
+    padding: 0;
+  }
 }
 
 .contact-us, .contact-us:focus, .contact-us:hover {
-	color: darken(white, 10%);
+  color: darken(white, 10%);
 }
 
 .uib-datepicker .text-info {
-	color: rgba(0,0,0, 0.87);
+  color: rgba(0,0,0, 0.87);
 }
 
 .form-group:not(.label-floating) label.control-label {
-	margin-top: 8px;
+  margin-top: 8px;
 }
 
 .form-group:not(.label-floating) {
-	margin: 0;
+  margin: 0;
 
-	label.control-label {
-		font-size: 14px;
-	}
+  label.control-label {
+    font-size: 14px;
+  }
 }
 
 .form-group.extra-padding {
-	padding-bottom: 30px;
+  padding-bottom: 30px;
 }
 
 .help-block.force-show {
-	display: block;
+  display: block;
 }
 
 .breadcrumb > li + li:before {
-	padding: 0 5px 0 13px;
+  padding: 0 5px 0 13px;
 }
 
 a[disabled], a[disabled]:hover {
-	text-decoration: none;
-	cursor: not-allowed;
-	color: #777;
+  text-decoration: none;
+  cursor: not-allowed;
+  color: #777;
 }
 
 ul {
-	margin: 0;
+  margin: 0;
 }
 
 body {
-	background-color: $brand-primary;
-	font-weight: 400;
+  background-color: $brand-primary;
+  font-weight: 400;
 }
 
 h3.pull-left {
@@ -86,7 +93,7 @@ h3.pull-left {
 }
 
 .no-margin {
-	margin: 0;
+  margin: 0;
 }
 
 .no-events {
@@ -110,15 +117,15 @@ h3.pull-left {
 }
 
 .ngdialog.ngdialog-theme-default .ngdialog-content {
-	padding: 0;
+  padding: 0;
 
-	.panel {
-		border-radius: 4px;
-	}
+  .panel {
+    border-radius: 4px;
+  }
 }
 
 .label {
-	border-radius: 2px;
+  border-radius: 2px;
 }
 
 .clickme {
@@ -126,9 +133,9 @@ h3.pull-left {
 }
 
 .uib-datepicker .btn, .uib-datepicker-popup .btn {
-	margin: 0;
-	padding: 5px 10px;
-	background: transparent;
+  margin: 0;
+  padding: 5px 10px;
+  background: transparent;
 }
 
 .vtop {
@@ -136,7 +143,7 @@ h3.pull-left {
 }
 
 .panel-heading {
-	.btn-group {
-		margin: 0;
-	}
+  .btn-group {
+    margin: 0;
+  }
 }

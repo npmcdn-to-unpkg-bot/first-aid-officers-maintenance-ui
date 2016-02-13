@@ -35,12 +35,13 @@ module.exports = function($scope, $rootScope, $routeParams, dataSvc, trngSvc, $l
                 image: imgs64.logo,
                 width: 200
               }, {
-                text: [
-                  $scope.trng.type.trty_name + ' - ' + moment($scope.trng.trng_date).format('dddd Do MMMM YYYY'), {
-                    text: '\nFiche d\'émargement',
-                    style: 'em'
-                  }
-                ],
+                text: [{
+                  text: $scope.trng.type.trty_name + ' - ' + moment($scope.trng.trng_date).format('dddd Do MMMM YYYY'),
+                  style: 'red'
+                }, {
+                  text: '\nFiche d\'émargement',
+                  style: 'em'
+                }],
                 margin: [0, 20, 0, 0],
                 alignment: 'center'
               }]
@@ -147,6 +148,9 @@ module.exports = function($scope, $rootScope, $routeParams, dataSvc, trngSvc, $l
       styles: {
         'em': {
           color: '#1B559B'
+        },
+        'red': {
+          color: '#e51c23'
         },
         'name': {
           bold: true,

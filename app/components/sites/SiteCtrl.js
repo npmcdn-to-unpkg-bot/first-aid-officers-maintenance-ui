@@ -176,12 +176,13 @@ module.exports = function($scope, $routeParams, $location, dataSvc, busySvc) {
                 width: 200,
                 alignment: 'right'
               }, {
-                text: [
-                  $scope.site.site_name, {
-                    text: '\nTableau de bord',
-                    style: 'em'
-                  }
-                ],
+                text: [{
+                  text: $scope.site.site_name,
+                  style: 'danger'
+                }, {
+                  text: '\nTableau de bord',
+                  style: 'em'
+                }],
                 margin: [0, 20, 0, 0]
               }]
             ]

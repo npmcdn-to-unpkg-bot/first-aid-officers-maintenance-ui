@@ -6,7 +6,7 @@ var moment = require('moment');
 var pdfMake = require('pdfmake');
 var imgs64 = require('../../img/imgs64.js');
 
-module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $location, ngDialog, busySvc) {
+module.exports = function($scope, $rootScope, $routeParams, dataSvc, trngSvc, $location, ngDialog, busySvc) {
   busySvc.busy();
 
   Promise.all([dataSvc.getTraining($routeParams.trng_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function(results) {
@@ -20,7 +20,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
     $scope.$apply();
   });
 
-  $scope.generateSignInSheet = function () {
+  $scope.generateSignInSheet = function() {
     pdfMake.createPdf({
       info: {
         title: $scope.trng.type.trty_name + ' - ' + moment($scope.trng.trng_date).format('dddd Do MMMM YYYY'),
@@ -31,96 +31,118 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
           table: {
             widths: [200, '*'],
             body: [
-              [
-                {
-                  image: imgs64.logo,
-                  width: 200
-                }, {
-                  text: [
-                    'Sensibilisation défibrillation - jeudi 17 décembre 2015',
-                    {text: '\nFiche d\'émargement', style: 'em'}
-                  ],
-                  margin: [0, 20, 0, 0],
-                  alignment: 'center'
-                }
-              ]
+              [{
+                image: imgs64.logo,
+                width: 200
+              }, {
+                text: [
+                  $scope.trng.type.trty_name + ' - ' + moment($scope.trng.trng_date).format('dddd Do MMMM YYYY'), {
+                    text: '\nFiche d\'émargement',
+                    style: 'em'
+                  }
+                ],
+                margin: [0, 20, 0, 0],
+                alignment: 'center'
+              }]
             ]
           },
-          layout: 'noBorders', margin: [30,20]
+          layout: 'noBorders',
+          margin: [30, 20]
         };
       },
-      footer: function (currentPage, pageCount) {
+      footer: function(currentPage, pageCount) {
         return {
-          columns: [
-            {
-              width: '*',
-              text: [
-                'Fiche formation : ',
-                {text: $location.absUrl(), link: $location.absUrl(), style: 'link'}
-              ]
-            }, {
-              width: 'auto',
-              text: [
-                'page ',
-                {text: currentPage.toString(), style: 'page'},
-                ' sur ',
-                {text: pageCount.toString(), style: 'page'}
-              ],
-              alignment: 'right'
-            }
-          ],
+          columns: [{
+            width: '*',
+            text: [
+              'Fiche formation : ', {
+                text: $location.absUrl(),
+                link: $location.absUrl(),
+                style: 'link'
+              }
+            ]
+          }, {
+            width: 'auto',
+            text: [
+              'page ', {
+                text: currentPage.toString(),
+                style: 'page'
+              },
+              ' sur ', {
+                text: pageCount.toString(),
+                style: 'page'
+              }
+            ],
+            alignment: 'right'
+          }],
           margin: [20, 20, 20, 0]
         };
       },
-      content: [
-        {
-          text: $scope.trng.type.trty_name + ' - ' + moment($scope.trng.trng_date).format('dddd Do MMMM YYYY') + '\n\n\n',
-          style: 'title',
-          alignment: 'center'
-        }, {
-          style: 'tableExample',
-          table: {
-            headerRows: 1,
-            widths: ['auto', 'auto', 'auto', '*'],
-            body: [
-              [
-                { text: 'Matricule', style: 'table-header'},
-                { text: 'Nom', style: 'table-header'},
-                { text: 'Prénom', style: 'table-header'},
-                { text: 'Émargement', style: 'table-header', alignment: 'center'}
-              ]
-            ].concat(_.map(_.sortBy($scope.trainees, 'empl_surname'), function (empl) {
-              return [empl.empl_pk, {text: empl.empl_surname, style: 'name'}, {text: empl.empl_firstname, style: 'name'}, ''];
-            }))
-          },
-          layout: {
-            hLineWidth: function (i, node) {
-              if (i === 0 || i === node.table.body.length) {
-                return 0;
-              }
-
-              return (i === 1) ? 2 : 1;
-            },
-            vLineWidth: function () {
+      content: [{
+        text: $scope.trng.type.trty_name + ' - ' + moment($scope.trng.trng_date).format('dddd Do MMMM YYYY') + '\n\n\n',
+        style: 'title',
+        alignment: 'center'
+      }, {
+        style: 'tableExample',
+        table: {
+          headerRows: 1,
+          widths: ['auto', 'auto', 'auto', '*'],
+          body: [
+            [{
+              text: 'Matricule',
+              style: 'table-header'
+            }, {
+              text: 'Nom',
+              style: 'table-header'
+            }, {
+              text: 'Prénom',
+              style: 'table-header'
+            }, {
+              text: 'Émargement',
+              style: 'table-header',
+              alignment: 'center'
+            }]
+          ].concat(_.map(_.sortBy($scope.trainees, 'empl_surname'), function(empl) {
+            return [empl.empl_pk, {
+              text: empl.empl_surname,
+              style: 'name'
+            }, {
+              text: empl.empl_firstname,
+              style: 'name'
+            }, ''];
+          }))
+        },
+        layout: {
+          hLineWidth: function(i, node) {
+            if (i === 0 || i === node.table.body.length) {
               return 0;
-            },
-            hLineColor: function (i) {
-              return (i === 1) ? 'black' : 'grey';
-            },
-            vLineColor: function () {
-              return 'grey';
-            },
-            paddingTop: function (i) {
-              return i === 0 ? 4 : 20;
-            },
-            paddingBottom: function (i) {
-              return i === 0 ? 4 : 20;
-            },
-            paddingLeft: function (i) { return i === 0 ? 0 : 6; },
-            paddingRight: function (i, node) { return i === node.table.widths.length - 1 ? 0 : 6; }
+            }
+
+            return (i === 1) ? 2 : 1;
+          },
+          vLineWidth: function() {
+            return 0;
+          },
+          hLineColor: function(i) {
+            return (i === 1) ? 'black' : 'grey';
+          },
+          vLineColor: function() {
+            return 'grey';
+          },
+          paddingTop: function(i) {
+            return i === 0 ? 4 : 20;
+          },
+          paddingBottom: function(i) {
+            return i === 0 ? 4 : 20;
+          },
+          paddingLeft: function(i) {
+            return i === 0 ? 0 : 6;
+          },
+          paddingRight: function(i, node) {
+            return i === node.table.widths.length - 1 ? 0 : 6;
           }
         }
-      ],
+      }],
       pageMargins: [40, 130, 40, 60],
       styles: {
         'em': {
@@ -152,27 +174,30 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
     }).open();
   };
 
-  $scope.selectEmployee = function (empl_pk) {
+  $scope.selectEmployee = function(empl_pk) {
     $location.path('/employees/' + empl_pk);
   };
 
-  $scope.edit = function () {
+  $scope.edit = function() {
     $location.path('/trainings/' + $scope.trng.trng_pk + '/edit');
   };
 
-  $scope.complete = function () {
+  $scope.complete = function() {
     $location.path('/trainings/' + $scope.trng.trng_pk + '/complete');
   };
 
-  $scope.delete = function () {
+  $scope.delete = function() {
     var dialogScope = $scope.$new(true);
     dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">supprimer d&eacute;finitivement</span> cette formation&nbsp? Cette op&eacute;ration est irr&eacute;versible et prend effet imm&eacute;diatement.';
     ngDialog.openConfirm({
       template: 'components/dialogs/warning.html',
       scope: dialogScope
-    }).then(function () {
-      trngSvc.deleteTraining($scope.trng.trng_pk).then(function () {
-        $rootScope.alerts.push({type: 'success', msg: 'Formation effac&eacute;e.'});
+    }).then(function() {
+      trngSvc.deleteTraining($scope.trng.trng_pk).then(function() {
+        $rootScope.alerts.push({
+          type: 'success',
+          msg: 'Formation effac&eacute;e.'
+        });
         $location.path('/trainings');
       });
     });

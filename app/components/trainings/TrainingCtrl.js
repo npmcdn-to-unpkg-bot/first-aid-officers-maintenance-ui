@@ -36,8 +36,7 @@ module.exports = function($scope, $rootScope, $routeParams, dataSvc, trngSvc, $l
                 width: 200
               }, {
                 text: [{
-                  text: $scope.trng.type.trty_name + ' - ' + moment($scope.trng.trng_date).format('dddd Do MMMM YYYY'),
-                  style: 'red'
+                  text: $scope.trng.type.trty_name + ' - ' + moment($scope.trng.trng_date).format('dddd Do MMMM YYYY')
                 }, {
                   text: '\nFiche d\'émargement',
                   style: 'em'
@@ -106,10 +105,10 @@ module.exports = function($scope, $rootScope, $routeParams, dataSvc, trngSvc, $l
           ].concat(_.map(_.sortBy($scope.trainees, 'empl_surname'), function(empl) {
             return [empl.empl_pk, {
               text: empl.empl_surname,
-              style: 'name'
+              style: 'em'
             }, {
               text: empl.empl_firstname,
-              style: 'name'
+              style: 'em'
             }, ''];
           }))
         },
@@ -131,10 +130,10 @@ module.exports = function($scope, $rootScope, $routeParams, dataSvc, trngSvc, $l
             return 'grey';
           },
           paddingTop: function(i) {
-            return i === 0 ? 4 : 20;
+            return i === 0 ? 4 : 10;
           },
           paddingBottom: function(i) {
-            return i === 0 ? 4 : 20;
+            return i === 0 ? 4 : 10;
           },
           paddingLeft: function(i) {
             return i === 0 ? 0 : 6;
@@ -147,18 +146,11 @@ module.exports = function($scope, $rootScope, $routeParams, dataSvc, trngSvc, $l
       pageMargins: [40, 130, 40, 60],
       styles: {
         'em': {
-          color: '#1B559B'
-        },
-        'red': {
-          color: '#e51c23'
-        },
-        'name': {
-          bold: true,
-          color: '#1B559B'
+          color: 'black'
         },
         'page': {
           fontSize: 16,
-          color: '#1B559B'
+          color: 'black'
         },
         'link': {
           decoration: 'underline',

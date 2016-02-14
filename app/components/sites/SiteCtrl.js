@@ -177,8 +177,7 @@ module.exports = function($scope, $routeParams, $location, dataSvc, busySvc) {
                 alignment: 'right'
               }, {
                 text: [{
-                  text: $scope.site.site_name,
-                  style: 'danger'
+                  text: $scope.site.site_name
                 }, {
                   text: '\nTableau de bord',
                   style: 'em'
@@ -224,7 +223,7 @@ module.exports = function($scope, $routeParams, $location, dataSvc, busySvc) {
           fontSize: 18
         },
         'em': {
-          color: '#1B559B'
+          color: 'black'
         },
         'table-header': {
           bold: true,
@@ -232,7 +231,7 @@ module.exports = function($scope, $routeParams, $location, dataSvc, busySvc) {
         },
         'page': {
           fontSize: 16,
-          color: '#1B559B'
+          color: 'black'
         },
         'link': {
           decoration: 'underline',

@@ -1,149 +1,141 @@
 @import url('//fonts.googleapis.com/css?family=Roboto:300,400,500,700');
-
 $brand-primary: #337ab7 !default;
-$brand-danger:  #e51c23 !default;
+$brand-danger: #e51c23 !default;
 $brand-warning: #ff9800 !default;
-$brand-info:    $brand-primary !default;
-
-$screen-xs:     768px;
-
-/* the CDN also includes the Glyphicons */
+$brand-info: $brand-primary !default;
+$screen-xs: 768px;
+// Bootstrap's CDN also includes relevant Glyphicons
 @import url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
 @import 'bower_components/bootstrap-material-design/sass/bootstrap-material-design';
 @import 'bower_components/bootstrap-material-design/sass/ripples';
-
 @import 'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min';
-
 @import 'node_modules/ng-dialog/css/ngDialog-theme-default.min';
 @import 'node_modules/ng-dialog/css/ngDialog.min';
-
 @import 'busy/busy';
-
 @import 'styles/tables';
 @import 'styles/side_panel';
-
 @import 'components/index/index';
-
 @media (min-width: $screen-xs) {
-  .form-group:not(.label-floating) label.control-label {
-    padding-top: 8px;
-  }
+    .form-group:not(.label-floating) label.control-label {
+        padding-top: 8px;
+    }
 }
 
 @media (max-width: $screen-xs) {
-  .container {
-    width: 100%;
-    padding: 0;
-  }
+    .container {
+        width: 100%;
+        padding: 0;
+    }
 }
 
-.contact-us, .contact-us:focus, .contact-us:hover {
-  color: darken(white, 10%);
+.contact-us,
+.contact-us:focus,
+.contact-us:hover {
+    color: darken(white, 10%);
 }
 
 .uib-datepicker .text-info {
-  color: rgba(0,0,0, 0.87);
+    color: rgba(0, 0, 0, 0.87);
 }
 
 .form-group:not(.label-floating) label.control-label {
-  margin-top: 8px;
+    margin-top: 8px;
 }
 
 .form-group:not(.label-floating) {
-  margin: 0;
-
-  label.control-label {
-    font-size: 14px;
-  }
+    margin: 0;
+    label.control-label {
+        font-size: 14px;
+    }
 }
 
 .form-group.extra-padding {
-  padding-bottom: 30px;
+    padding-bottom: 30px;
 }
 
 .help-block.force-show {
-  display: block;
+    display: block;
 }
 
 .breadcrumb > li + li:before {
-  padding: 0 5px 0 13px;
+    padding: 0 5px 0 13px;
 }
 
-a[disabled], a[disabled]:hover {
-  text-decoration: none;
-  cursor: not-allowed;
-  color: #777;
+a[disabled],
+a[disabled]:hover {
+    text-decoration: none;
+    cursor: not-allowed;
+    color: #777;
 }
 
 ul {
-  margin: 0;
+    margin: 0;
 }
 
 body {
-  background-color: $brand-primary;
-  font-weight: 400;
+    background-color: $brand-primary;
+    font-weight: 400;
 }
 
 h3.pull-left {
-  margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 .clear {
-  clear: both;
+    clear: both;
 }
 
 .no-margin {
-  margin: 0;
+    margin: 0;
 }
 
 .no-events {
-  pointer-events: none;
+    pointer-events: none;
 }
 
 .navbar .uib-typeahead .dropdown-menu li>a {
-  padding: 3px 20px;
-  font-size: 14px;
-
-  &:hover {
-    background: $brand-primary;
-  }
+    padding: 3px 20px;
+    font-size: 14px;
+    &:hover {
+        background: $brand-primary;
+    }
 }
 
 .shrinkable {
-  max-width: 40px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    max-width: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .ngdialog.ngdialog-theme-default .ngdialog-content {
-  padding: 0;
-
-  .panel {
-    border-radius: 4px;
-  }
+    padding: 0;
+    .panel {
+        border-radius: 4px;
+    }
 }
 
 .label {
-  border-radius: 2px;
+    border-radius: 2px;
 }
 
 .clickme {
-  cursor: pointer;
+    cursor: pointer;
 }
 
-.uib-datepicker .btn, .uib-datepicker-popup .btn {
-  margin: 0;
-  padding: 5px 10px;
-  background: transparent;
+.uib-datepicker .btn,
+.uib-datepicker-popup .btn {
+    margin: 0;
+    padding: 5px 10px;
+    background: transparent;
 }
 
 .vtop {
-  vertical-align: top!important;
+    vertical-align: top!important;
 }
 
 .panel-heading {
-  .btn-group {
-    margin: 0;
-  }
+    .btn-group {
+        margin: 0;
+    }
 }

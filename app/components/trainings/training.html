@@ -1,136 +1,149 @@
 <h3>{{trng.type.trty_name}} - {{trng.trng_date | date: 'fullDate'}}
-	<small> - 
-		<span ng-if="trng.trng_outcome === 'SCHEDULED'" class="text-primary">Pr&eacute;vue</span>
-		<span ng-if="trng.trng_outcome === 'COMPLETED'" class="text-success">R&eacute;alis&eacute;e</span>
-		<span ng-if="trng.trng_outcome === 'CANCELLED'" class="text-danger">Annul&eacute;e</span>
-	</small>
+    <small> -
+        <span ng-if="trng.trng_outcome === 'SCHEDULED'" class="text-primary">Pr&eacute;vue</span>
+        <span ng-if="trng.trng_outcome === 'COMPLETED'" class="text-success">R&eacute;alis&eacute;e</span>
+        <span ng-if="trng.trng_outcome === 'CANCELLED'" class="text-danger">Annul&eacute;e</span>
+    </small>
 </h3>
 <br />
-
 <div class="row">
-	<div class="col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
-		<div class="panel panel-primary">
-			<div class="panel-heading">Tableau de bord</div>
-			<div class="panel-body">
-				<div class="row">
-					<div class="col-xs-4 text-right">Type de formation</div>
-					<div class="col-xs-8">
-						<strong>{{trng.type.trty_name}}</strong>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-4 text-right">Dernier jour de formation</div>
-					<div class="col-xs-8">
-						<strong>{{trng.trng_date | date: 'fullDate'}}</strong>
-					</div>
-				</div>
-
-				<hr />
-				<div class="row">
-					<div class="hidden-xs col-sm-4 text-right">Aptitude(s) acquise(s) jusqu'au</div>
-					<div class="visible-xs-inline col-xs-4 text-right">Valide jusqu'au</div>
-					<div class="col-xs-8">
-						<strong>{{trng.expirationDate | date: 'fullDate'}}</strong> (<span class="text-primary">{{trng.expirationDate | fromNow}}</span>)
-						<span class="hidden-xs pull-right">valide <strong>{{trng.type.trty_validity}}</strong>&nbsp;mois (<span class="text-primary">{{trng.validity}} ans</span>)</span>
-					</div>
-				</div>
-				<div class="row" ng-repeat="cert in trng.type.certificates">
-					<div class="col-xs-4 text-right"><span class="label label-success">{{cert.cert_short}}</span></div>
-					<div class="col-xs-8">{{cert.cert_name}}</div>
-				</div>
-
-				<hr />
-				<div class="row">
-					<div class="col-xs-4 text-right">Nombre d'agents inscrits</div>
-					<div class="col-xs-8">
-						<strong class="text-primary">{{trainees.length}}</strong>
-						<div class="pull-right" ng-if="trng.trng_outcome === 'COMPLETED'">
-							<strong>{{(trainees | filter: {trem_outcome: "VALIDATED"}).length}}</strong> <span class="text-success">valid&eacute;(s)</span> et <strong>{{(trainees | filter: {trem_outcome: "!VALIDATED"}).length}}</strong> <span class="text-danger">recal&eacute;(s)/absent(s)</span>
-						</div>
-						<div class="pull-right" ng-if="trng.trng_outcome === 'SCHEDULED'">
-							<span class="text-warning"><abbr title="Procès Verbal">PV</abbr> de fin de session non dress&eacute;</span>
-						</div>
-						<div class="pull-right" ng-if="trng.trng_outcome === 'CANCELLED'">
-							<span class="text-danger">Formation annul&eacute;e</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-2"></div>
+    <div class="col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Tableau de bord</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-4 text-right">Type de formation</div>
+                    <div class="col-xs-8">
+                        <strong>{{trng.type.trty_name}}</strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 text-right">Dernier jour de formation</div>
+                    <div class="col-xs-8">
+                        <strong>{{trng.trng_date | date: 'fullDate'}}</strong>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="hidden-xs col-sm-4 text-right">Aptitude(s) acquise(s) jusqu'au</div>
+                    <div class="visible-xs-inline col-xs-4 text-right">Valide jusqu'au</div>
+                    <div class="col-xs-8">
+                        <strong>{{trng.expirationDate | date: 'fullDate'}}</strong> (
+                        <span class="text-primary">{{trng.expirationDate | fromNow}}</span>)
+                        <span class="hidden-xs pull-right">valide
+                            <strong>{{trng.type.trty_validity}}</strong>&nbsp;mois (
+                            <span class="text-primary">{{trng.validity}} ans</span>)
+                        </span>
+                    </div>
+                </div>
+                <div class="row" ng-repeat="cert in trng.type.certificates">
+                    <div class="col-xs-4 text-right">
+                        <span class="label label-success">{{cert.cert_short}}</span>
+                    </div>
+                    <div class="col-xs-8">{{cert.cert_name}}</div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-xs-4 text-right">Nombre d'agents inscrits</div>
+                    <div class="col-xs-8">
+                        <strong class="text-primary">{{trainees.length}}</strong>
+                        <div class="pull-right" ng-if="trng.trng_outcome === 'COMPLETED'">
+                            <strong>{{(trainees | filter: {trem_outcome: "VALIDATED"}).length}}</strong>
+                            <span class="text-success">valid&eacute;(s)</span> et
+                            <strong>{{(trainees | filter: {trem_outcome: "!VALIDATED"}).length}}</strong>
+                            <span class="text-danger">recal&eacute;(s)/absent(s)</span>
+                        </div>
+                        <div class="pull-right" ng-if="trng.trng_outcome === 'SCHEDULED'">
+                            <span class="text-warning">
+                                <abbr title="Procès Verbal">PV</abbr> de fin de session non dress&eacute;</span>
+                        </div>
+                        <div class="pull-right" ng-if="trng.trng_outcome === 'CANCELLED'">
+                            <span class="text-danger">Formation annul&eacute;e</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
 </div>
-
 <div st-persist="trainingEmployees" st-table="shown" st-safe-src="trainees">
-	<form class="form-horizontal">
-		<div class="form-group">
-			<label for="pageSize" class="control-label col-xs-4 col-md-2">Agents par page</label>
-			<div class="col-xs-8 col-md-2">
-				<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size as size for size in [5, 10, 25, 100]"></select>
-			</div>
-		</div>
-	</form>
-
-	<div class="panel panel-primary">
-		<div class="panel-heading">
-			<div class="row">
-				<div class="col-md-2">Agents inscrits</div>
-			</div>
-		</div>
-		<table class="table table table-striped table-hover" ng-if="stats !== 'loading'">
-			<thead>
-				<tr>
-					<th></th>
-					<th width="10%">
-						<div class="st-sort" st-sort="empl_pk">Matricule</div>
-						<input st-search="empl_pk" placeholder="Rechercher..." class="form-control" type="text" />
-					</th>
-					<th class="shrinkable" width="20%">
-						<div class="st-sort" st-sort="empl_surname" st-skip-natural="true">Nom</div>
-						<input st-search="empl_surname" placeholder="Rechercher..." class="form-control" type="text" />
-					</th>
-					<th class="shrinkable" width="20%">
-						<div class="st-sort" st-sort="empl_firstname" st-skip-natural="true">Pr&eacute;nom</div>
-						<input st-search="empl_firstname" placeholder="Rechercher..." class="form-control" type="text" />
-					</th>
-					<th class="vtop">
-						<div class="st-sort" st-sort="empl_permanent" st-skip-natural="true">Statut</div>
-					</th>
-					<th class="shrinkable" width="40%">
-						<div class="st-sort" st-sort="trem_comment" st-skip-natural="true">Commentaire</div>
-						<input st-search="trem_comment" placeholder="Rechercher..." class="form-control" type="text" />
-					</th>
-					<th class="vtop">
-						<div class="st-sort" st-sort="trem_valid" st-skip-natural="true">R&eacute;sultat</div>
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="empl in shown track by empl.empl_pk" class="clickme" ng-click="selectEmployee(empl.empl_pk)" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
-					<td><button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button></td>
-					<td class="shrinkable">{{empl.empl_pk}}</td>
-					<td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_surname}}&nbsp;</td>
-					<td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_firstname}}&nbsp;</td>
-					<td class="text-center"><span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span></td>
-					<td class="shrinkable">{{empl.trem_comment}}</td>
-					<td ng-init="(trng.trng_outcome === 'COMPLETED' && empl.trem_outcome !== 'SCHEDULED') ? empl.validated = empl.trem_outcome === 'VALIDATED' : null" class="no-events">
-						<input bswitch="empl.validated" data-indeterminate="true" type="checkbox" name="my-checkbox" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)" data-label-width="0" readonly />
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="panel-footer text-center">
-			<td colspan="5" class="text-center">
-				<div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
-			</td>
-		</div>
-	</div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="pageSize" class="control-label col-xs-4 col-md-2">Agents par page</label>
+            <div class="col-xs-8 col-md-2">
+                <select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size as size for size in [5, 10, 25, 100]"></select>
+            </div>
+        </div>
+    </form>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-2">Agents inscrits</div>
+            </div>
+        </div>
+        <table class="table table table-striped table-hover" ng-if="stats !== 'loading'">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th width="10%">
+                        <div class="st-sort" st-sort="empl_pk">Matricule</div>
+                        <input st-search="empl_pk" placeholder="Rechercher..." class="form-control" type="text" />
+                    </th>
+                    <th class="shrinkable" width="20%">
+                        <div class="st-sort" st-sort="empl_surname" st-skip-natural="true">Nom</div>
+                        <input st-search="empl_surname" placeholder="Rechercher..." class="form-control" type="text" />
+                    </th>
+                    <th class="shrinkable" width="20%">
+                        <div class="st-sort" st-sort="empl_firstname" st-skip-natural="true">Pr&eacute;nom</div>
+                        <input st-search="empl_firstname" placeholder="Rechercher..." class="form-control" type="text" />
+                    </th>
+                    <th class="vtop">
+                        <div class="st-sort" st-sort="empl_permanent" st-skip-natural="true">Statut</div>
+                    </th>
+                    <th class="shrinkable" width="40%">
+                        <div class="st-sort" st-sort="trem_comment" st-skip-natural="true">Commentaire</div>
+                        <input st-search="trem_comment" placeholder="Rechercher..." class="form-control" type="text" />
+                    </th>
+                    <th class="vtop">
+                        <div class="st-sort" st-sort="trem_valid" st-skip-natural="true">R&eacute;sultat</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="empl in shown track by empl.empl_pk" class="clickme" ng-click="selectEmployee(empl.empl_pk)" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
+                    <td>
+                        <button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button>
+                    </td>
+                    <td class="shrinkable">{{empl.empl_pk}}</td>
+                    <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_surname}}&nbsp;</td>
+                    <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_firstname}}&nbsp;</td>
+                    <td class="text-center">
+                        <span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span>
+                    </td>
+                    <td class="shrinkable">{{empl.trem_comment}}</td>
+                    <td ng-init="(trng.trng_outcome === 'COMPLETED' && empl.trem_outcome !== 'SCHEDULED') ? empl.validated = empl.trem_outcome === 'VALIDATED' : null" class="no-events">
+                        <input bswitch="empl.validated" data-indeterminate="true" type="checkbox" name="my-checkbox" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)" data-label-width="0" readonly />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="panel-footer text-center">
+            <td colspan="5" class="text-center">
+                <div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
+            </td>
+        </div>
+    </div>
 </div>
-
 <div class="side-panel-container text-right" if-role="trainer">
-	<button ng-if="trng.trng_outcome === 'SCHEDULED'" type="button" class="btn btn-raised btn-success side-panel-item" ng-click="complete()"><span class="glyphicon glyphicon-check"></span>&nbsp;Dresser le Proc&egrave;s Verbal</button>
-	<button ng-if="trng.trng_outcome === 'COMPLETED'" type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="complete()"><span class="glyphicon glyphicon-check"></span>&nbsp;Modifier le Proc&egrave;s Verbal</button>
-	<button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="edit()"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Modifier</button>
-	<button type="button" class="btn btn-raised btn-default side-panel-item" ng-click="generateSignInSheet()"><span class="glyphicon glyphicon-download-alt"></span>&nbsp;G&eacute;n&eacute;rer fiche d'&eacute;margement</button>
-	<button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="delete()"><span class="glyphicon glyphicon-remove"></span>&nbsp;Supprimer</button>
+    <button ng-if="trng.trng_outcome === 'SCHEDULED'" type="button" class="btn btn-raised btn-success side-panel-item" ng-click="complete()">
+        <span class="glyphicon glyphicon-check"></span>&nbsp;Dresser le Proc&egrave;s Verbal</button>
+    <button ng-if="trng.trng_outcome === 'COMPLETED'" type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="complete()">
+        <span class="glyphicon glyphicon-check"></span>&nbsp;Modifier le Proc&egrave;s Verbal</button>
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="edit()">
+        <span class="glyphicon glyphicon-wrench"></span>&nbsp;Modifier</button>
+    <button type="button" class="btn btn-raised btn-default side-panel-item" ng-click="generateSignInSheet()">
+        <span class="glyphicon glyphicon-download-alt"></span>&nbsp;G&eacute;n&eacute;rer fiche d'&eacute;margement</button>
+    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="delete()">
+        <span class="glyphicon glyphicon-remove"></span>&nbsp;Supprimer</button>
 </div>

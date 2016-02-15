@@ -29,20 +29,24 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
       header: function () {
         return {
           table: {
-            widths: [200, '*'],
+            widths: ['*', '*', '*'],
             body: [
               [{
+                text: $scope.trng.type.trty_name,
+                style: 'title'
+              }, {
                 image: imgs64.logo,
-                width: 200
+                alignment: 'center',
+                width: 150,
+                margin: [0, -10, 0, 0]
               }, {
                 text: [{
-                  text: $scope.trng.type.trty_name + ' - ' + moment($scope.trng.trng_date).format('dddd Do MMMM YYYY')
-                }, {
-                  text: '\nFiche d\'émargement',
+                  text: moment($scope.trng.trng_date).format('dddd Do MMMM YYYY'),
                   style: 'em'
+                }, {
+                  text: '\nFiche d\'émargement'
                 }],
-                margin: [0, 20, 0, 0],
-                alignment: 'center'
+                alignment: 'right'
               }]
             ]
           },
@@ -75,15 +79,23 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
             ],
             alignment: 'right'
           }],
-          margin: [20, 20, 20, 0]
+          margin: [30, 20]
         };
       },
       content: [{
-        text: $scope.trng.type.trty_name + ' - ' + moment($scope.trng.trng_date).format('dddd Do MMMM YYYY') + '\n\n\n',
-        style: 'title',
-        alignment: 'center'
+        columns: [
+          { width: '*', text: 'Formateur(s) :\n\nLieu de formation :' }, {
+            width: '*',
+            table: {
+              widths: ['*'],
+              body: [
+                [{ text: 'Signature du/des formateur(s)', alignment: 'center', margin: [0, 0, 0, 50] }]
+              ]
+            }
+          }
+        ],
+        margin: [0, 0, 0, 20]
       }, {
-        style: 'tableExample',
         table: {
           headerRows: 1,
           widths: ['auto', 'auto', 'auto', '*'],
@@ -143,7 +155,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
           }
         }
       }],
-      pageMargins: [40, 130, 40, 60],
+      pageMargins: [40, 85, 40, 60],
       styles: {
         'em': {
           color: 'black'
@@ -157,7 +169,8 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
           color: 'black'
         },
         'title': {
-          fontSize: 18
+          fontSize: 16,
+          color: 'black'
         },
         'table-header': {
           bold: true,

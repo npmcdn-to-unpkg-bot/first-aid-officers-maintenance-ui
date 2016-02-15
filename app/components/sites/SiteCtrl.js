@@ -21,8 +21,9 @@ module.exports = function ($scope, $routeParams, $location, dataSvc, busySvc, ng
     ngDialog.open({
       template: './components/dialogs/dashboard_options.html',
       scope: $scope.$new(false),
-      controller: ['$scope', function ($scope) {
+      controller: ['$scope', 'ngDialog', function ($scope, ngDialog) {
         $scope.generateDashboardDocument = function () {
+          ngDialog.closeAll();
           pdfMake.createPdf({
             info: {
               title: $scope.site.site_name,
@@ -30,13 +31,8 @@ module.exports = function ($scope, $routeParams, $location, dataSvc, busySvc, ng
             },
             pageSize: $scope.format,
             pageOrientation: $scope.orientation,
-            pageMargins: [40, 120, 40, 60],
+            pageMargins: [40, 90, 40, 60],
             content: [{
-              text: $scope.site.site_name,
-              style: 'title',
-              alignment: 'center',
-              margin: [0, 0, 0, 30]
-            }, {
               columns: [{
                 width: '*',
                 text: ''
@@ -148,14 +144,14 @@ module.exports = function ($scope, $routeParams, $location, dataSvc, busySvc, ng
                     }))
                   },
                   layout: {
-                    hLineWidth: function (i, node) {
-                      if (i === 0 || i === 1 || i === node.table.body.length) {
-                        return 0;
-                      }
-
+                    hLineWidth: function () {
                       return 1;
                     },
-                    vLineWidth: function () {
+                    vLineWidth: function (i, node) {
+                      if (i === 0 || i === node.table.widths.length) {
+                        return 1;
+                      }
+
                       return 0;
                     },
                     hLineColor: function (i) {
@@ -174,20 +170,24 @@ module.exports = function ($scope, $routeParams, $location, dataSvc, busySvc, ng
             header: function () {
               return {
                 table: {
-                  widths: ['*', '*'],
+                  widths: ['*', '*', '*'],
                   body: [
                     [{
+                      text: $scope.site.site_name,
+                      style: 'title'
+                    }, {
                       image: imgs64.logo,
-                      width: 200,
-                      alignment: 'right'
+                      alignment: 'center',
+                      width: 150,
+                      margin: [0, -10, 0, 0]
                     }, {
                       text: [{
-                        text: $scope.site.site_name
-                      }, {
-                        text: '\nTableau de bord',
+                        text: moment(new Date()).format('dddd Do MMMM YYYY'),
                         style: 'em'
+                      }, {
+                        text: '\nTableau de bord'
                       }],
-                      margin: [0, 20, 0, 0]
+                      alignment: 'right'
                     }]
                   ]
                 },
@@ -211,11 +211,11 @@ module.exports = function ($scope, $routeParams, $location, dataSvc, busySvc, ng
                   text: [
                     'page ', {
                       text: currentPage.toString(),
-                      style: 'page'
+                      style: 'em'
                     },
                     ' sur ', {
                       text: pageCount.toString(),
-                      style: 'page'
+                      style: 'em'
                     }
                   ],
                   alignment: 'right'
@@ -225,7 +225,8 @@ module.exports = function ($scope, $routeParams, $location, dataSvc, busySvc, ng
             },
             styles: {
               'title': {
-                fontSize: 18
+                fontSize: 16,
+                color: 'black'
               },
               'em': {
                 color: 'black'
@@ -233,10 +234,6 @@ module.exports = function ($scope, $routeParams, $location, dataSvc, busySvc, ng
               'table-header': {
                 bold: true,
                 fontSize: 13
-              },
-              'page': {
-                fontSize: 16,
-                color: 'black'
               },
               'link': {
                 decoration: 'underline',

@@ -70,11 +70,11 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
             text: [
               'page ', {
                 text: currentPage.toString(),
-                style: 'page'
+                style: 'em'
               },
               ' sur ', {
                 text: pageCount.toString(),
-                style: 'page'
+                style: 'em'
               }
             ],
             alignment: 'right'
@@ -158,10 +158,6 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
       pageMargins: [40, 85, 40, 60],
       styles: {
         'em': {
-          color: 'black'
-        },
-        'page': {
-          fontSize: 16,
           color: 'black'
         },
         'link': {

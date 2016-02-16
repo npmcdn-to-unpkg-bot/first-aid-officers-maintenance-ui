@@ -14,45 +14,45 @@ require('angular').module(moduleName, [])
       <div ng-transclude ng-show="!busy"></div>');
   }])
   .factory('BusySvc', function () {
-    var state = {global: 0};
+    var state = { global: 0 };
     var listeners = {};
 
-    function notify (task) {
+    function notify(task) {
       (listeners[task] || []).forEach(function (callback) {
         callback(state[task] > 0);
       });
     }
-    
+
     return {
       register: function (callback, task) {
         task = task ? task : 'global';
-        if(listeners[task]) {
+        if (listeners[task]) {
           listeners[task].push(callback);
         } else {
-           listeners[task] = [callback];
+          listeners[task] = [callback];
         }
-        
+
         callback(state[task] > 0);
       },
       busy: function (task) {
-        if(task && task !== 'global') {
-          if(1 === (state[task] = state[task] ? state[task] + 1 : 1)) {
+        if (task && task !== 'global') {
+          if (1 === (state[task] = state[task] ? state[task] + 1 : 1)) {
             notify(task);
           }
         }
-        
-        if(1 === (state.global = state.global + 1)) {
+
+        if (1 === (state.global = state.global + 1)) {
           notify('global');
         }
       },
       done: function (task) {
-        if(task && task !== 'global') {
-          if(!(state[task] = state[task] ? state[task] - 1 : 0)) {
+        if (task && task !== 'global') {
+          if (!(state[task] = state[task] ? state[task] - 1 : 0)) {
             notify(task);
           }
         }
-        
-        if(!(state.global = state.global ? state.global - 1 : 0)) {
+
+        if (!(state.global = state.global ? state.global - 1 : 0)) {
           notify('global');
         }
       }
@@ -71,6 +71,7 @@ require('angular').module(moduleName, [])
       link: function (scope) {
         busySvc.register(function (busy) {
           scope.busy = busy;
+          setTimeout(function () { scope.$apply(); }, 0);
         }, scope.task);
       }
     };

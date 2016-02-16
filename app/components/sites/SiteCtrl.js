@@ -15,6 +15,8 @@ module.exports = function ($scope, $routeParams, $location, dataSvc, busySvc, ng
     $scope.certificates = _.values(results[2]);
     busySvc.done();
     $scope.$apply();
+  }, function () {
+    busySvc.done();
   });
 
   $scope.openDashboardOptions = function () {

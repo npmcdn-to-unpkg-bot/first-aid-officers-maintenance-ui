@@ -18,6 +18,8 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
     $scope.trng.validity = moment.duration($scope.trng.type.trty_validity, 'months').asYears();
     busySvc.done();
     $scope.$apply();
+  }, function () {
+    busySvc.done();
   });
 
   $scope.generateSignInSheet = function () {

@@ -9,7 +9,7 @@ module.exports = function ($http, $q) {
 		}
 	};
 	
-	apiSvc.apiBaseUrl = 'http://localhost:8080/api/';
+	apiSvc.apiBaseUrl = '//peidf.formationssecurite.fr/api/';
 
 	apiSvc.authEndpoint = apiSvc.apiBaseUrl + 'auth/';
 	apiSvc.adminEndpoint = apiSvc.apiBaseUrl + 'admin/';

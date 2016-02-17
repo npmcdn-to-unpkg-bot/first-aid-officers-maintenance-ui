@@ -21,7 +21,7 @@ $screen-xs: 768px;
     }
 }
 
-@media (max-width: $screen-xs) {
+@media (min-resolution: 192dpi) {
     .container {
         width: 100%;
         padding: 0;

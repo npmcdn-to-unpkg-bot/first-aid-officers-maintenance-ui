@@ -1,117 +1,121 @@
 <h3>{{site.site_name}}</h3>
 <br />
-
 <div class="row">
-	<div class="col-md-offset-2 col-md-8">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<div class="row">
-					<div class="col-sm-4">Tableau de bord</div>
-					<div class="col-sm-8 text-right">
-						<state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
-							<div class="btn-group">
-							    <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
-							</div>
-						</state-sustain>
-					</div>
-				</div>
-			</div>
-
-			<div class="panel-body">
-				Nombre d'agents&nbsp;: <strong class="text-primary">{{site.stats.employeesCount}}</strong> (<strong>{{site.stats.permanentsCount}}</strong> <span class="label label-success">CDI</span> + <strong>{{site.stats.employeesCount - site.stats.permanentsCount}}</strong> <span class="label label-warning">CDD</span>)
-			</div>
-			<table class="table" ng-show="(checkedCertificates = (certificates | filter: {'checked': true})).length > 0" >
-				<thead>
-					<tr>
-						<th>Aptitude</th>
-						<th class="shrinkable">Cible &agrave; atteindre</th>
-						<th>Form&eacute;s</th>
-						<th class="shrinkable">Reste &agrave; former</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="cert in checkedCertificates" ng-class="'text-' + certStats.targetStatus" ng-init="certStats = site.stats.certificates[cert.cert_pk]">
-						<td class="shrinkable">
-							<span class="label" ng-class="'label-' + certStats.targetStatus">{{cert.cert_short}}</span>&nbsp;{{cert.cert_name}}
-						</td>
-						<td>{{certStats.target}}&nbsp;({{cert.cert_target}}%)</td>
-						<td>{{certStats.count}}&nbsp;({{certStats.countPercentage}}%)</td>
-						<td>{{(certStats.target - certStats.count) > 0 ? (certStats.target - certStats.count) : 0}}</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
+    <div class="col-md-offset-2 col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-4">Tableau de bord</div>
+                    <div class="col-sm-8 text-right">
+                        <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
+                            <div class="btn-group">
+                                <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
+                            </div>
+                        </state-sustain>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                Nombre d'agents&nbsp;:
+                <strong class="text-primary">{{site.stats.employeesCount}}</strong> (<strong>{{site.stats.permanentsCount}}</strong>
+                <span class="label label-success">CDI</span> +
+                <strong>{{site.stats.employeesCount - site.stats.permanentsCount}}</strong>
+                <span class="label label-warning">CDD</span>)
+            </div>
+            <table class="table" ng-show="(checkedCertificates = (certificates | filter: {'checked': true})).length > 0">
+                <thead>
+                    <tr>
+                        <th>Aptitude</th>
+                        <th class="shrinkable">Cible &agrave; atteindre</th>
+                        <th>Form&eacute;s</th>
+                        <th class="shrinkable">Reste &agrave; former</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="cert in checkedCertificates" ng-class="'text-' + certStats.targetStatus" ng-init="certStats = site.stats.certificates[cert.cert_pk]">
+                        <td class="shrinkable">
+                            <span class="label" ng-class="'label-' + certStats.targetStatus">{{cert.cert_short}}</span>&nbsp;{{cert.cert_name}}
+                        </td>
+                        <td>{{certStats.target}}&nbsp;({{cert.cert_target}}%)</td>
+                        <td>{{certStats.count}}&nbsp;({{certStats.countPercentage}}%)</td>
+                        <td>{{(certStats.target - certStats.count) > 0 ? (certStats.target - certStats.count) : 0}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-
 <div st-persist="siteEmployees-{{site.site_pk}}" st-table="shown" st-safe-src="employees">
-	<form class="form-horizontal">
-		<div class="form-group">
-			<label for="pageSize" class="control-label col-xs-4 col-md-2">Agents par page</label>
-			<div class="col-xs-8 col-md-2">
-				<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
-			</div>
-		</div>
-	</form>
-
-	<div class="panel panel-primary">
-		<div class="panel-heading">
-			<div class="row">
-				<div class="col-xs-2">Agents</div>
-				<div class="col-xs-10 text-right">
-					<state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
-						<div class="btn-group">
-						    <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
-						</div>
-					</state-sustain>
-				</div>
-			</div>
-		</div>
-		<table class="table table table-striped table-hover" ng-if="stats !== 'loading'">
-			<thead>
-				<tr>
-					<th></th>
-					<th width="10%">
-						<div class="st-sort" st-sort="empl_pk">Matricule</div>
-						<input st-search="empl_pk" placeholder="Rechercher..." class="form-control" type="text" />
-					</th>
-					<th class="shrinkable" width="35%">
-						<div class="st-sort" st-sort="empl_surname" st-skip-natural="true">Nom</div>
-						<input st-search="empl_surname" placeholder="Rechercher..." class="form-control" type="text" />
-					</th>
-					<th class="shrinkable" width="35%">
-						<div class="st-sort" st-sort="empl_firstname" st-skip-natural="true">Pr&eacute;nom</div>
-						<input st-search="empl_firstname" placeholder="Rechercher..." class="form-control" type="text" />
-					</th>
-					<!-- <th class="shrinkable vtop" width="30%">
-						<div class="st-sort" st-sort="empl_dob" st-skip-natural="true">Naissance</div>
-					</th> -->
-					<th class="vtop">
-						<div class="st-sort" st-sort="empl_permanent" st-skip-natural="true">Statut</div>
-					</th>
-					<th class="last vtop" ng-repeat="cert in certificates | filter: {'checked': true}">
-						<div class="st-sort" st-sort="stats.certificates[{{cert.cert_pk}}].expiryDate" st-skip-natural="true">{{cert.cert_short}}</div>
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="empl in shown track by empl.empl_pk" class="clickme" ng-click="selectEmployee(empl.empl_pk)" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
-					<td><button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button></td>
-					<td class="shrinkable">{{empl.empl_pk}}</td>
-					<td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_surname}}&nbsp;</td>
-					<td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_firstname}}&nbsp;</td>
-					<!-- <td class="shrinkable">{{empl.empl_dob | date}}</td> -->
-					<td class="text-center"><span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span></td>
-					<td ng-repeat="cert in certificates | filter: {'checked': true}" ng-init="certStats = empl.stats.certificates[cert.cert_pk]" class="text-center">
-						<span class="label" ng-class="'label-' + certStats.validityStatus">{{certStats.expiryDate | date: 'MMM yyyy'}}</span>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="panel-footer text-center">
-			<td colspan="5" class="text-center">
-				<div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
-			</td>
-		</div>
-	</div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="pageSize" class="control-label col-xs-4 col-md-2">Agents par page</label>
+            <div class="col-xs-8 col-md-2">
+                <select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
+            </div>
+        </div>
+    </form>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-2">Agents</div>
+                <div class="col-xs-10 text-right">
+                    <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
+                        <div class="btn-group">
+                            <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
+                        </div>
+                    </state-sustain>
+                </div>
+            </div>
+        </div>
+        <table class="table table table-striped table-hover" ng-if="stats !== 'loading'">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th width="10%">
+                        <div class="st-sort" st-sort="empl_pk">Matricule</div>
+                        <input st-search="empl_pk" placeholder="Rechercher..." class="form-control" type="text" />
+                    </th>
+                    <th class="shrinkable" width="35%">
+                        <div class="st-sort" st-sort="empl_surname" st-skip-natural="true">Nom</div>
+                        <input st-search="empl_surname" placeholder="Rechercher..." class="form-control" type="text" />
+                    </th>
+                    <th class="shrinkable" width="35%">
+                        <div class="st-sort" st-sort="empl_firstname" st-skip-natural="true">Pr&eacute;nom</div>
+                        <input st-search="empl_firstname" placeholder="Rechercher..." class="form-control" type="text" />
+                    </th>
+                    <th class="vtop">
+                        <div class="st-sort" st-sort="empl_permanent" st-skip-natural="true">Statut</div>
+                    </th>
+                    <th class="last vtop" ng-repeat="cert in certificates | filter: {'checked': true}">
+                        <div class="st-sort" st-sort="stats.certificates[{{cert.cert_pk}}].expiryDate" st-skip-natural="true">{{cert.cert_short}}</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="empl in shown track by empl.empl_pk" class="clickme" ng-click="selectEmployee(empl.empl_pk)" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
+                    <td>
+                        <button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button>
+                    </td>
+                    <td class="shrinkable">{{empl.empl_pk}}</td>
+                    <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_surname}}&nbsp;</td>
+                    <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_firstname}}&nbsp;</td>
+                    <td class="text-center">
+                        <span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span>
+                    </td>
+                    <td ng-repeat="cert in certificates | filter: {'checked': true}" ng-init="certStats = empl.stats.certificates[cert.cert_pk]" class="text-center">
+                        <span class="label" ng-class="'label-' + certStats.validityStatus">{{certStats.expiryDate | date: 'MMM yyyy'}}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="panel-footer text-center">
+            <td colspan="5" class="text-center">
+                <div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
+            </td>
+        </div>
+    </div>
+</div>
+<div class="side-panel-container text-right" if-role="trainer">
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="openDashboardOptions()">
+        <span class="glyphicon glyphicon-download-alt"></span>&nbsp;G&eacute;n&eacute;rer tableau de bord</button>
 </div>

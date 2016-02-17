@@ -13,6 +13,8 @@
     "bootstrap_material_design": "./bower_components/bootstrap-material-design/dist/js/material.min.js",
     "jquery": "./bower_components/jquery/dist/jquery.min.js",
     "moment-fr": "./node_modules/moment/locale/fr.js",
+    "pdfmakeLib": "./bower_components/pdfmake/build/pdfmake.js",
+    "pdfmake": "./bower_components/pdfmake/build/vfs_fonts.js",
     "ripples": "./bower_components/bootstrap-material-design/dist/js/ripples.min.js",
     "trianglify": "./bower_components/trianglify/dist/trianglify.min.js"
   },
@@ -36,6 +38,17 @@
         "bootstrap",
         "ripples"
       ]
+    },
+    "pdfmake": {
+      "exports": "pdfMake",
+      "depends": [
+        "pdfmakeLib"
+      ]
+    },
+    "pdfmakeLib": {
+      "exports": {
+        "pdfMake": "pdfMake"
+      }
     },
     "ripples": {
       "exports": "ripples",

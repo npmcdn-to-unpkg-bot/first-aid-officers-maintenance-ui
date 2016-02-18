@@ -32,8 +32,8 @@ module.exports = function ($scope, $rootScope, dataSvc, adminSvc, ngDialog, $rou
       });
     });
   }
-
   busySvc.busy();
+
   Promise.all([dataSvc.getEmployees(), adminSvc.getAvailableRoles(), adminSvc.getUsers()]).then(function (results) {
     $scope.employees = _.values(results[0]);
     $scope.roles = _.object(_.pluck(results[1], 'role_name'), results[1]);

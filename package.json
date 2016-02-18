@@ -9,6 +9,7 @@
     "angular-bootstrap": "./bower_components/angular-bootstrap/ui-bootstrap.min.js",
     "angular-bootstrap-templates": "./bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js",
     "angular-i18n-fr": "./node_modules/angular-i18n/fr-fr.js",
+    "intro": "./bower_components/intro.js/minified/intro.min.js",
     "bootstrap": "./bower_components/bootstrap/dist/js/bootstrap.js",
     "bootstrap_material_design": "./bower_components/bootstrap-material-design/dist/js/material.min.js",
     "jquery": "./bower_components/jquery/dist/jquery.min.js",

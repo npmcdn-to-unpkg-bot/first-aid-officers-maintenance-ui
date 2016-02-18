@@ -11,6 +11,7 @@ $screen-xs: 768px;
 @import 'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min';
 @import 'node_modules/ng-dialog/css/ngDialog-theme-default.min';
 @import 'node_modules/ng-dialog/css/ngDialog.min';
+@import 'bower_components/intro.js/minified/introjs.min';
 @import 'busy/busy';
 @import 'styles/tables';
 @import 'styles/side_panel';
@@ -26,6 +27,10 @@ $screen-xs: 768px;
         width: 100%;
         padding: 0;
     }
+}
+
+.introjs-helperNumberLayer {
+    visibility: hidden;
 }
 
 .contact-us,

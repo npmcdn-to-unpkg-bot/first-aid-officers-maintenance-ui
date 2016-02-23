@@ -5,153 +5,158 @@ var _ = require('underscore');
 
 module.exports = function ($http, $q, apiSvc, $filter) {
 
-	var dataSvc = {};
-	var dateFilter = $filter('date');
+  var dataSvc = {};
+  var dateFilter = $filter('date');
 
-	dataSvc.getDepartments = function() {
-		return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'departments');
-	};
+  dataSvc.getDepartments = function () {
+    return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'departments');
+  };
 
-	dataSvc.getEmployee = function(empl_pk) {
-		var deferred = $q.defer();
-		Promise.all([apiSvc.get(apiSvc.resourcesEndpoint + 'employees/' + empl_pk), apiSvc.get(apiSvc.statisticsEndpoint + 'employees/' + empl_pk)]).then(function (results) {
-			var res = results[0];
-			res.stats = _.first(_.values(results[1]));
-			deferred.resolve(res);
-		});
+  dataSvc.getEmployee = function (empl_pk) {
+    var deferred = $q.defer();
+    Promise.all([apiSvc.get(apiSvc.resourcesEndpoint + 'employees/' + empl_pk), apiSvc.get(apiSvc.statisticsEndpoint + 'employees/' + empl_pk)]).then(function (results) {
+      var res = results[0];
+      res.stats = _.first(_.values(results[1]));
+      deferred.resolve(res);
+    });
 
-		return deferred.promise;
-	};
+    return deferred.promise;
+  };
 
-	dataSvc.getSite = function(site_pk) {
-		return apiSvc.get(apiSvc.resourcesEndpoint + 'sites/' + site_pk);
-	};
+  dataSvc.getSite = function (site_pk) {
+    return apiSvc.get(apiSvc.resourcesEndpoint + 'sites/' + site_pk);
+  };
 
-	dataSvc.getEmployeeSite = function(empl_pk) {
-		var deferred = $q.defer();
-		apiSvc.get(apiSvc.resourcesEndpoint + 'sites?employee=' + empl_pk).then(function (sites) {
-			deferred.resolve(_.first(sites));
-		});
-		
-		return deferred.promise;
-	};
+  dataSvc.getEmployeeSite = function (empl_pk) {
+    var deferred = $q.defer();
+    apiSvc.get(apiSvc.resourcesEndpoint + 'sites?employee=' + empl_pk).then(function (sites) {
+      deferred.resolve(_.first(sites));
+    });
 
-	dataSvc.getSiteWithStats = function(site_pk) {
-		var deferred = $q.defer();
-		Promise.all([apiSvc.get(apiSvc.resourcesEndpoint + 'sites/' + site_pk), apiSvc.get(apiSvc.statisticsEndpoint + 'sites/' + site_pk)]).then(function (results) {
-			var res = results[0];
-			res.stats = _.first(_.values(results[1]));
-			deferred.resolve(res);
-		});
+    return deferred.promise;
+  };
 
-		return deferred.promise;
-	};
+  dataSvc.getSiteWithStats = function (site_pk) {
+    var deferred = $q.defer();
+    Promise.all([apiSvc.get(apiSvc.resourcesEndpoint + 'sites/' + site_pk), apiSvc.get(apiSvc.statisticsEndpoint + 'sites/' + site_pk)]).then(function (results) {
+      var res = results[0];
+      res.stats = _.first(_.values(results[1]));
+      deferred.resolve(res);
+    });
 
-	dataSvc.getSiteEmployees = function(site_pk) {
-		return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees?site=' + site_pk);
-	};
+    return deferred.promise;
+  };
 
-	dataSvc.getSiteEmployeesWithStats = function(site_pk) {
-		var deferred = $q.defer();
-		Promise.all([apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees?site=' + site_pk), apiSvc.get(apiSvc.statisticsEndpoint + 'employees?site=' + site_pk)]).then(function (results) {
-			var res = results[0];
-			_.each(_.first(_.values(results[1])), function (stats, empl_pk) {
-				res[empl_pk].stats = stats;
-			});
+  dataSvc.getSiteEmployees = function (site_pk) {
+    return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees?site=' + site_pk);
+  };
 
-			deferred.resolve(res);
-		});
+  dataSvc.getSiteEmployeesWithStats = function (site_pk) {
+    var deferred = $q.defer();
+    Promise.all([apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees?site=' + site_pk), apiSvc.get(apiSvc.statisticsEndpoint + 'employees?site=' + site_pk)]).then(function (results) {
+      var res = results[0];
+      _.each(_.first(_.values(results[1])), function (stats, empl_pk) {
+        res[empl_pk].stats = stats;
+      });
 
-		return deferred.promise;
-	};
+      deferred.resolve(res);
+    });
 
-	dataSvc.getSites = function() {
-		return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'sites');
-	};
+    return deferred.promise;
+  };
 
-	dataSvc.getAllSites = function() {
-		return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'sites?unlisted=true');
-	};
+  dataSvc.getSites = function () {
+    return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'sites');
+  };
 
-	dataSvc.getSitesWithStats = function() {
-		var deferred = $q.defer();
-		Promise.all([dataSvc.getSites(), apiSvc.get(apiSvc.statisticsEndpoint + 'sites')]).then(function (results) {
-			var res = results[0];
-			_.each(_.first(_.values(results[1])), function (stats, site_pk) {
-				res[site_pk].stats = stats;
-			});
+  dataSvc.getAllSites = function () {
+    return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'sites?unlisted=true');
+  };
 
-			deferred.resolve(res);
-		});
+  dataSvc.getSitesWithStats = function () {
+    var deferred = $q.defer();
+    Promise.all([dataSvc.getSites(), apiSvc.get(apiSvc.statisticsEndpoint + 'sites')]).then(function (results) {
+      var res = results[0];
+      _.each(_.first(_.values(results[1])), function (stats, site_pk) {
+        res[site_pk].stats = stats;
+      });
 
-		return deferred.promise;
-	};
+      deferred.resolve(res);
+    });
 
-	dataSvc.getEmployees = function() {
-		return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees');
-	};
+    return deferred.promise;
+  };
 
-	dataSvc.getEmployeesWithStats = function() {
-		var deferred = $q.defer();
-		Promise.all([dataSvc.getEmployees(), apiSvc.get(apiSvc.statisticsEndpoint + 'employees')]).then(function (results) {
-			var res = results[0];
-			_.each(_.first(_.values(results[1])), function (stats, empl_pk) {
-				res[empl_pk].stats = stats;
-			});
+  dataSvc.getEmployees = function () {
+    return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees');
+  };
 
-			deferred.resolve(res);
-		});
+  dataSvc.getEmployeesWithStats = function () {
+    var deferred = $q.defer();
+    Promise.all([dataSvc.getEmployees(), apiSvc.get(apiSvc.statisticsEndpoint + 'employees')]).then(function (results) {
+      var res = results[0];
+      _.each(_.first(_.values(results[1])), function (stats, empl_pk) {
+        res[empl_pk].stats = stats;
+      });
 
-		return deferred.promise;
-	};
+      deferred.resolve(res);
+    });
 
-	dataSvc.getEmployeeTrainings = function(empl_pk) {
-		return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainings?employee=' + empl_pk, 'employees[\'' + empl_pk + '\'].trainings');
-	};
+    return deferred.promise;
+  };
 
-	dataSvc.getCertificates = function() {
-		return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'certificates');
-	};
+  dataSvc.getEmployeeTrainings = function (empl_pk) {
+    return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainings?employee=' + empl_pk, 'employees[\'' + empl_pk + '\'].trainings');
+  };
 
-	dataSvc.getTrainingTypes = function() {
-		var deferred = $q.defer();
-		Promise.all([apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainingtypes'), apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainingtypes_certificates'), dataSvc.getCertificates()]).then(function (results) {
-			var res = results[0];
-			_.each(results[1], function (certificates, trty_pk) {
-				res[trty_pk].certificates = _.map(certificates, function (cert_pk) {
-					return results[2][cert_pk];
-				});
-			});
+  dataSvc.getCertificates = function () {
+    return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'certificates');
+  };
 
-			deferred.resolve(res);
-		});
+  dataSvc.getTrainingTypes = function () {
+    var deferred = $q.defer();
+    Promise.all([apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainingtypes'), apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainingtypes_certificates'), dataSvc.getCertificates()]).then(function (results) {
+      var res = results[0];
+      _.each(results[1], function (certificates, trty_pk) {
+        res[trty_pk].certificates = _.map(certificates, function (cert_pk) {
+          return results[2][cert_pk];
+        });
+      });
 
-		return deferred.promise;
-	};
+      deferred.resolve(res);
+    });
 
-	dataSvc.getTrainings = function() {
-		var deferred = $q.defer();
-		apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainings').then(function (trainings) {
-			_.each(_.values(trainings), function (training) {
-				training.trng_displayDate = dateFilter(training.trng_date, 'fullDate');
-			});
+    return deferred.promise;
+  };
 
-			deferred.resolve(trainings);
-		});
+  dataSvc.getTrainings = function () {
+    var deferred = $q.defer();
+    apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainings').then(function (trainings) {
+      _.each(_.values(trainings), function (training) {
+        training.trng_displayDate = dateFilter(training.trng_date, 'fullDate');
+      });
 
-		return deferred.promise;
-	};
+      deferred.resolve(trainings);
+    });
 
-	dataSvc.getTraining = function(trng_pk) {
-		var deferred = $q.defer();
-		Promise.all([apiSvc.get(apiSvc.resourcesEndpoint + 'trainings/' + trng_pk), apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees?training=' + trng_pk)]).then(function(results) {
-			var res = results[0];
-			res.trainees = results[1];
-			deferred.resolve(res);
-		});
+    return deferred.promise;
+  };
 
-		return deferred.promise;
-	};
+  dataSvc.getTraining = function (trng_pk) {
+    var deferred = $q.defer();
+    Promise.all([apiSvc.get(apiSvc.resourcesEndpoint + 'trainings/' + trng_pk), apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees?training=' + trng_pk)]).then(function (results) {
+      var res = results[0];
+      res.trainees = results[1];
+      Promise.all(_.map(res.trainers, function (empl_pk) {
+        return apiSvc.get(apiSvc.resourcesEndpoint + 'employees/' + empl_pk);
+      })).then(function (results) {
+        res.trainers = results;
+        deferred.resolve(res);
+      });
+    });
 
-	return dataSvc;
+    return deferred.promise;
+  };
+
+  return dataSvc;
 };

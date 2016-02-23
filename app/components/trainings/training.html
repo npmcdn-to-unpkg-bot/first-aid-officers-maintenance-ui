@@ -1,4 +1,4 @@
-<h3>{{trng.type.trty_name}} - {{trng.trng_date | date: 'fullDate'}}
+<h3>{{trng.type.trty_name}} - {{trng && getDisplayDate()}}
     <small> -
         <span ng-if="trng.trng_outcome === 'SCHEDULED'" class="text-primary">Pr&eacute;vue</span>
         <span ng-if="trng.trng_outcome === 'COMPLETED'" class="text-success">R&eacute;alis&eacute;e</span>
@@ -17,8 +17,14 @@
                         <strong>{{trng.type.trty_name}}</strong>
                     </div>
                 </div>
+                <div class="row" ng-if="trng.trng_start">
+                    <div class="col-xs-4 text-right">Premier de formation</div>
+                    <div class="col-xs-8">
+                        <strong>{{trng.trng_start | date: 'fullDate'}}</strong>
+                    </div>
+                </div>
                 <div class="row">
-                    <div class="col-xs-4 text-right">Dernier jour de formation</div>
+                    <div class="col-xs-4 text-right">{{trng.trng_start ? 'Dernier jour' : 'Date'}} de formation</div>
                     <div class="col-xs-8">
                         <strong>{{trng.trng_date | date: 'fullDate'}}</strong>
                     </div>

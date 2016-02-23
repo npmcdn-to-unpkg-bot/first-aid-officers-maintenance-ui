@@ -92,7 +92,7 @@
                     <td>
                         <button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button>
                     </td>
-                    <td ng-class="{'text-primary': hover}">{{trng.trng_date | date: 'fullDate'}}</td>
+                    <td ng-class="{'text-primary': hover}">{{trng.trng_displayDate}}</td>
                     <td ng-class="{'text-primary': hover}">
                         {{trng.type.trty_name}}<span class="pull-right"><span ng-repeat="cert in trng.type.certificates">&nbsp;<label class="label" ng-class="{'label-success': trng.trem_outcome === 'VALIDATED', 'label-danger': trng.trem_outcome === 'FLUNKED'}">{{cert.cert_short}}</label></span></span>
                     </td>

@@ -4,7 +4,7 @@
 var _ = require('underscore');
 var moment = require('moment');
 
-module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location, ngDialog, trainingsSvc, busySvc) {
+module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location, ngDialog, trainingsSvc, busySvc, dateFilter) {
   busySvc.busy();
 
   Promise.all([dataSvc.getTraining($routeParams.trng_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function (results) {
@@ -20,6 +20,21 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location,
   }, function () {
     busySvc.done();
   });
+
+  $scope.getDisplayDate = function () {
+    if ($scope.trng.trng_start) {
+      var dateFromFormat;
+      if (dateFilter($scope.trng.trng_start, 'yyyy') !== dateFilter($scope.trng.trng_date, 'yyyy')) {
+        dateFromFormat = 'longDate';
+      } else {
+        dateFromFormat = dateFilter($scope.trng.trng_start, 'M') === dateFilter($scope.trng.trng_date, 'M') ? 'd' : 'd MMMM';
+      }
+
+      return 'du ' + dateFilter($scope.trng.trng_start, dateFromFormat) + ' au ' + dateFilter($scope.trng.trng_date, 'longDate');
+    }
+
+    return dateFilter($scope.trng.trng_date, 'fullDate');
+  };
 
   $scope.validateAll = function () {
     _.each($scope.trainees, function (trainee) {
@@ -37,8 +52,11 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location,
     }).then(function () {
       trainingsSvc.updateTraining($scope.trng.trng_pk, {
         trng_trty_fk: $scope.trng.type.trty_pk,
+        trng_start: $scope.trng.trng_start,
         trng_date: $scope.trng.trng_date,
         trng_outcome: 'COMPLETED',
+        trng_comment: $scope.trng.trng_comment && $scope.trng.trng_comment.length > 0 ? $scope.trng.trng_comment : null,
+        trainers: _.pluck($scope.trng.trainers, 'empl_pk'),
         trainees: _.each($scope.trng.trainees, function (trainee) {
           trainee.trem_outcome = trainee.validated ? 'VALIDATED' : 'FLUNKED';
         })

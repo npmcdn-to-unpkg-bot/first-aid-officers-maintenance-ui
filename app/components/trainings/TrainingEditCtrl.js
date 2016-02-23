@@ -14,6 +14,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
     $scope.trainees = [];
     if ($routeParams.trng_pk) {
       dataSvc.getTraining($routeParams.trng_pk).then(function (training) {
+        $scope.dateRange = training.trng_start !== null;
         training.type = results[2][training.trng_trty_fk];
         $scope.trng = training;
         $scope.trainees = _.values(training.trainees);
@@ -29,6 +30,21 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
   }, function () {
     busySvc.done();
   });
+
+  $scope.getDisplayDate = function () {
+    if ($scope.dateRange && $scope.trng.trng_start) {
+      var dateFromFormat;
+      if (dateFilter($scope.trng.trng_start, 'yyyy') !== dateFilter($scope.trng.trng_date, 'yyyy')) {
+        dateFromFormat = 'longDate';
+      } else {
+        dateFromFormat = dateFilter($scope.trng.trng_start, 'M') === dateFilter($scope.trng.trng_date, 'M') ? 'd' : 'd MMMM';
+      }
+
+      return 'du ' + dateFilter($scope.trng.trng_start, dateFromFormat) + ' au ' + dateFilter($scope.trng.trng_date, 'longDate');
+    }
+
+    return dateFilter($scope.trng.trng_date, 'fullDate');
+  };
 
   $scope.$watch('trng.trng_date', function (date) {
     if ($scope.trng && $scope.trng.type) {
@@ -115,10 +131,10 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
     }).then(function () {
       var training = {
         trng_trty_fk: $scope.trng.type.trty_pk,
-        trng_start: dateFilter($scope.trng.trng_start, 'yyyy-MM-dd'),
+        trng_start: $scope.dateRange ? dateFilter($scope.trng.trng_start, 'yyyy-MM-dd') : null,
         trng_date: dateFilter($scope.trng.trng_date, 'yyyy-MM-dd'),
         trng_outcome: $scope.trng.trng_outcome || 'SCHEDULED',
-        trng_comment: $scope.trng.trng_comment.length > 0 ? $scope.trng.trng_comment : null,
+        trng_comment: $scope.trng.trng_comment && $scope.trng.trng_comment.length > 0 ? $scope.trng.trng_comment : null,
         trainers: _.pluck($scope.trng.trainers, 'empl_pk'),
         trainees: _.object(_.pluck($scope.trainees, 'empl_pk'), _.map($scope.trainees, function (trainee) {
           return _.defaults(trainee, { trem_outcome: 'SCHEDULED', trem_comment: '' });

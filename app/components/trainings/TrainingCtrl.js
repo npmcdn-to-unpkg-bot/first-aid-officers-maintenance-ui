@@ -6,7 +6,7 @@ var moment = require('moment');
 var pdfMake = require('pdfmake');
 var imgs64 = require('../../img/imgs64.js');
 
-module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $location, ngDialog, busySvc) {
+module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $location, ngDialog, busySvc, dateFilter) {
   busySvc.busy();
 
   Promise.all([dataSvc.getTraining($routeParams.trng_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function (results) {
@@ -21,6 +21,21 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
   }, function () {
     busySvc.done();
   });
+
+  $scope.getDisplayDate = function () {
+    if ($scope.trng.trng_start) {
+      var dateFromFormat;
+      if (dateFilter($scope.trng.trng_start, 'yyyy') !== dateFilter($scope.trng.trng_date, 'yyyy')) {
+        dateFromFormat = 'longDate';
+      } else {
+        dateFromFormat = dateFilter($scope.trng.trng_start, 'M') === dateFilter($scope.trng.trng_date, 'M') ? 'd' : 'd MMMM';
+      }
+
+      return 'du ' + dateFilter($scope.trng.trng_start, dateFromFormat) + ' au ' + dateFilter($scope.trng.trng_date, 'longDate');
+    }
+
+    return dateFilter($scope.trng.trng_date, 'fullDate');
+  };
 
   $scope.generateSignInSheet = function () {
     pdfMake.createPdf({

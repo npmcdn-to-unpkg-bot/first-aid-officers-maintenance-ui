@@ -106,7 +106,26 @@ module.exports = function ($http, $q, apiSvc, $filter) {
   };
 
   dataSvc.getEmployeeTrainings = function (empl_pk) {
-    return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainings?employee=' + empl_pk, 'employees[\'' + empl_pk + '\'].trainings');
+    var deferred = $q.defer();
+    apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainings?employee=' + empl_pk, 'employees[\'' + empl_pk + '\'].trainings').then(function (trainings) {
+      _.each(trainings, function (training) {
+        if (training.trng_start) {
+          var dateFromFormat;
+          if (dateFilter(training.trng_start, 'yyyy') !== dateFilter(training.trng_date, 'yyyy')) {
+            dateFromFormat = 'longDate';
+          } else {
+            dateFromFormat = dateFilter(training.trng_start, 'M') === dateFilter(training.trng_date, 'M') ? 'd' : 'd MMMM';
+          }
+          training.trng_displayDate = 'du ' + dateFilter(training.trng_start, dateFromFormat) + ' au ' + dateFilter(training.trng_date, 'longDate');
+        } else {
+          training.trng_displayDate = dateFilter(training.trng_date, 'fullDate');
+        }
+      });
+
+      deferred.resolve(trainings);
+    });
+
+    return deferred.promise;
   };
 
   dataSvc.getCertificates = function () {
@@ -133,7 +152,17 @@ module.exports = function ($http, $q, apiSvc, $filter) {
     var deferred = $q.defer();
     apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainings').then(function (trainings) {
       _.each(_.values(trainings), function (training) {
-        training.trng_displayDate = dateFilter(training.trng_date, 'fullDate');
+        if (training.trng_start) {
+          var dateFromFormat;
+          if (dateFilter(training.trng_start, 'yyyy') !== dateFilter(training.trng_date, 'yyyy')) {
+            dateFromFormat = 'longDate';
+          } else {
+            dateFromFormat = dateFilter(training.trng_start, 'M') === dateFilter(training.trng_date, 'M') ? 'd' : 'd MMMM';
+          }
+          training.trng_displayDate = 'du ' + dateFilter(training.trng_start, dateFromFormat) + ' au ' + dateFilter(training.trng_date, 'longDate');
+        } else {
+          training.trng_displayDate = dateFilter(training.trng_date, 'fullDate');
+        }
       });
 
       deferred.resolve(trainings);

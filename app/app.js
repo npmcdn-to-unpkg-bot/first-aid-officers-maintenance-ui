@@ -153,6 +153,7 @@ angular.module('faomaintenanceApp', [
   .directive('loading', [require('./directives/loading.js')])
   .directive('stateSustain', ['$rootScope', '$cookies', require('./directives/stateSustain.js')])
   .directive('stSelectDistinct', ['$parse', require('./directives/stSelectDistinct.js')])
+  .directive('stSelectDate', ['dateFilter', require('./directives/stSelectDate.js')])
   .factory('ApiSvc', ['$http', '$q', require('./services/ApiSvc.js')])
   .factory('AdminSvc', ['$http', '$q', 'ApiSvc', require('./services/AdminSvc.js')])
   .factory('AuthenticationSvc', ['$http', '$cookies', '$rootScope', 'ApiSvc', require('./services/AuthenticationSvc.js')])

@@ -62,7 +62,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
   });
 
   $scope.$watch('empl', function (empl) {
-    if (empl && empl.empl_pk && $scope.trng.trainers.indexOf(empl) === -1) {
+    if (empl && empl.empl_pk && _.findWhere($scope.trng.trainers, { empl_pk: empl.empl_pk }) === undefined) {
       $scope.trng.trainers.push(empl);
       delete $scope.empl;
     }

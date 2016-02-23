@@ -45,6 +45,13 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
     }
   });
 
+  $scope.$watch('empl', function (empl) {
+    if (empl && empl.empl_pk && $scope.trng.trainers.indexOf(empl) === -1) {
+      $scope.trng.trainers.push(empl);
+      delete $scope.empl;
+    }
+  });
+
   $scope.unregister = function (empl) {
     var dialogScope = $scope.$new(true);
     dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">d&eacute;sinscrire<br />' + empl.empl_firstname + ' ' + empl.empl_surname + '</span> de cette formation&nbsp?';
@@ -108,8 +115,11 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
     }).then(function () {
       var training = {
         trng_trty_fk: $scope.trng.type.trty_pk,
+        trng_start: dateFilter($scope.trng.trng_start, 'yyyy-MM-dd'),
         trng_date: dateFilter($scope.trng.trng_date, 'yyyy-MM-dd'),
         trng_outcome: $scope.trng.trng_outcome || 'SCHEDULED',
+        trng_comment: $scope.trng.trng_comment.length > 0 ? $scope.trng.trng_comment : null,
+        trainers: _.pluck($scope.trng.trainers, 'empl_pk'),
         trainees: _.object(_.pluck($scope.trainees, 'empl_pk'), _.map($scope.trainees, function (trainee) {
           return _.defaults(trainee, { trem_outcome: 'SCHEDULED', trem_comment: '' });
         })) || _.object(_.pluck($scope.trainees, 'empl_pk'), _.map($scope.trainees, function () {

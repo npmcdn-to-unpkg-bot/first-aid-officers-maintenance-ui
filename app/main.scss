@@ -28,6 +28,35 @@ $screen-xs: 768px;
     }
 }
 
+textarea.vresize {
+    resize: vertical;
+}
+
+.preserve-whitespace {
+    white-space: pre;
+}
+
+.pill {
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #D2D2D2;
+    padding: 5px 8px;
+    & + & {
+        margin-top: 8px;
+    }
+    &:hover {
+        background-color: #eee;
+        color: $brand-danger;
+        border: 1px solid $brand-danger;
+    }
+    .pill-delete {
+        float: right;
+    }
+    &:not(:hover) .pill-delete {
+        visibility: hidden;
+    }
+}
+
 .contact-us,
 .contact-us:focus,
 .contact-us:hover {

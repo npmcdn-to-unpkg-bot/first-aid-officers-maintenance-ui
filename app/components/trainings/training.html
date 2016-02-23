@@ -23,6 +23,17 @@
                         <strong>{{trng.trng_date | date: 'fullDate'}}</strong>
                     </div>
                 </div>
+                <div class="row" ng-if="trng.trng_comment">
+                    <div class="col-xs-4 text-right">M&eacute;morandum</div>
+                    <div class="col-xs-8 preserve-whitespace">{{trng.trng_comment}}</div>
+                </div>
+                <hr ng-if="trng.trainers.length > 0" />
+                <div class="row" ng-repeat="trainer in trng.trainers">
+                    <div class="col-xs-4 text-right"><span ng-if="$first">Formateur(s)</span></div>
+                    <div class="col-xs-8">
+                        <a href="#/employees/{{trainer.empl_pk}}">{{trainer.empl_surname + ' ' + trainer.empl_firstname}}</a>
+                    </div>
+                </div>
                 <hr />
                 <div class="row">
                     <div class="hidden-xs col-sm-4 text-right">Aptitude(s) acquise(s) jusqu'au</div>
@@ -65,7 +76,7 @@
     </div>
     <div class="col-md-2"></div>
 </div>
-<div st-persist="trainingEmployees" st-table="shown" st-safe-src="trainees">
+<div st-persist="trainingEmployees" st-table="shown" st-safe-src="trainees" ng-if="trainees.length > 0">
     <form class="form-horizontal">
         <div class="form-group">
             <label for="pageSize" class="control-label col-xs-4 col-md-2">Agents par page</label>
@@ -133,14 +144,14 @@
         </div>
     </div>
 </div>
-<div class="side-panel-container text-right" if-role="trainer" data-intro="Diverses actions sont disponibles ici" data-step="1">
-    <button ng-if="trng.trng_outcome === 'SCHEDULED'" type="button" class="btn btn-raised btn-success side-panel-item" ng-click="complete()">
+<div class="side-panel-container text-right" if-role="trainer">
+    <button ng-if="trng.trng_outcome === 'SCHEDULED'" type="button" class="btn btn-raised btn-success side-panel-item" ng-click="complete()" ng-disabled="trainees.length === 0">
         <span class="glyphicon glyphicon-check"></span>&nbsp;Dresser le Proc&egrave;s Verbal</button>
     <button ng-if="trng.trng_outcome === 'COMPLETED'" type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="complete()">
         <span class="glyphicon glyphicon-check"></span>&nbsp;Modifier le Proc&egrave;s Verbal</button>
     <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="edit()">
         <span class="glyphicon glyphicon-wrench"></span>&nbsp;Modifier</button>
-    <button type="button" class="btn btn-raised btn-default side-panel-item" ng-click="generateSignInSheet()">
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="generateSignInSheet()">
         <span class="glyphicon glyphicon-download-alt"></span>&nbsp;G&eacute;n&eacute;rer fiche d'&eacute;margement</button>
     <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="delete()">
         <span class="glyphicon glyphicon-remove"></span>&nbsp;Supprimer</button>

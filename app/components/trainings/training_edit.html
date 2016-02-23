@@ -28,13 +28,13 @@
                     <div class="form-group" ng-show="dateRange">
                         <label for="start" class="col-xs-4 control-label">Premier jour de formation</label>
                         <div class="col-xs-8">
-                            <input id="start" type="text" ng-model="trng.trng_start" class="form-control" ng-click="startpicker=true" uib-datepicker-popup="fullDate" datepicker-mode="'month'" is-open="startpicker" show-button-bar="false" starting-day="1" date-disabled="disabled(date, mode)" show-weeks="false">
+                            <input id="start" type="text" max-date="trng.trng_date" ng-model="trng.trng_start" class="form-control" ng-click="startpicker=true" uib-datepicker-popup="fullDate" datepicker-mode="'month'" is-open="startpicker" show-button-bar="false" starting-day="1" date-disabled="disabled(date, mode)" show-weeks="false">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="date" class="col-xs-4 control-label">{{dateRange ? 'Dernier jour' : 'Date'}} de formation</label>
                         <div class="col-xs-8">
-                            <input id="date" type="text" ng-model="trng.trng_date" class="form-control" ng-click="datepicker=true" uib-datepicker-popup="fullDate" datepicker-mode="'month'" is-open="datepicker" show-button-bar="false" starting-day="1" date-disabled="disabled(date, mode)" show-weeks="false">
+                            <input id="date" type="text" min-date="dateRange ? trng.trng_start || null : null" ng-model="trng.trng_date" class="form-control" ng-click="datepicker=true" uib-datepicker-popup="fullDate" datepicker-mode="'month'" is-open="datepicker" show-button-bar="false" starting-day="1" date-disabled="disabled(date, mode)" show-weeks="false">
                         </div>
                     </div>
                     <div class="form-group">

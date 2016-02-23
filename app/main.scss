@@ -71,6 +71,10 @@ textarea.vresize {
     color: rgba(0, 0, 0, 0.87);
 }
 
+.uib-datepicker button[disabled] .text-info {
+    color: rgba(0, 0, 0, 0.26);
+}
+
 .form-group:not(.label-floating) label.control-label {
     margin-top: 8px;
 }

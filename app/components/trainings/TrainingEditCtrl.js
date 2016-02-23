@@ -25,6 +25,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
         busySvc.done();
       });
     } else {
+      $scope.trng = { trainers: [] };
       busySvc.done();
     }
 

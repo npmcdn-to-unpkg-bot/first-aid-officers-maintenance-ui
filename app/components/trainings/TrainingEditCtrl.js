@@ -17,7 +17,9 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
         $scope.dateRange = training.trng_start !== null;
         training.type = results[2][training.trng_trty_fk];
         $scope.trng = training;
-        $scope.trng.trng_start = new Date($scope.trng.trng_start);
+        if ($scope.trng_start) {
+          $scope.trng.trng_start = new Date($scope.trng.trng_start);
+        }
         $scope.trng.trng_date = new Date($scope.trng.trng_date);
         $scope.trainees = _.values(training.trainees);
         busySvc.done();

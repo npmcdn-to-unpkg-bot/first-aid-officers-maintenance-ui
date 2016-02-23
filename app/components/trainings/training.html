@@ -144,15 +144,13 @@
         </div>
     </div>
 </div>
-<div class="side-panel-container text-right" if-role="trainer">
-    <button ng-if="trng.trng_outcome === 'SCHEDULED'" type="button" class="btn btn-raised btn-success side-panel-item" ng-click="complete()" ng-disabled="trainees.length === 0">
-        <span class="glyphicon glyphicon-check"></span>&nbsp;Dresser le Proc&egrave;s Verbal</button>
-    <button ng-if="trng.trng_outcome === 'COMPLETED'" type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="complete()">
-        <span class="glyphicon glyphicon-check"></span>&nbsp;Modifier le Proc&egrave;s Verbal</button>
-    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="edit()">
+<div class="side-panel-container text-right">
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-class="{'btn-warning': trng.trng_outcome === 'COMPLETED'}" ng-click="complete()" ng-disabled="trainees.length === 0" if-role="trainer">
+        <span class="glyphicon glyphicon-check"></span>&nbsp;{{trng.trng_outcome === 'SCHEDULED' ? 'Dresser' : 'Modifier'}} le Proc&egrave;s Verbal</button>
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="edit()" if-role="trainer">
         <span class="glyphicon glyphicon-wrench"></span>&nbsp;Modifier</button>
     <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="generateSignInSheet()">
         <span class="glyphicon glyphicon-download-alt"></span>&nbsp;G&eacute;n&eacute;rer fiche d'&eacute;margement</button>
-    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="delete()">
+    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="delete()" if-role="trainer">
         <span class="glyphicon glyphicon-remove"></span>&nbsp;Supprimer</button>
 </div>

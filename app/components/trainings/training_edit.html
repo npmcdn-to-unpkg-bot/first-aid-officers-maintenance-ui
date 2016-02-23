@@ -53,7 +53,7 @@
                     <div class="form-group">
                         <div class="col-xs-4"></div>
                         <div class="col-xs-8">
-                            <div ng-repeat="trainer in trng.trainers" class="pill clickme" ng-click="trng.trainers.splice($index, 1)">{{trainer.empl_surname + ' ' + trainer.empl_firstname}}<span class="pill-delete">&times;</span>
+                            <div ng-repeat="trainer in trng.trainers" class="pill clickme" ng-click="trng.trainers.splice($index, 1)"><small>{{trainer.empl_pk + ' - '}}</small>{{trainer.empl_surname + ' ' + trainer.empl_firstname}}<span class="pill-delete">&times;</span>
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-<h3>{{empl.empl_surname + ' ' + empl.empl_firstname}}<small> - {{empl.empl_pk}}</small></h3>
+<h3>{{empl.empl_gender ? 'M.' : 'Mme'}} {{empl.empl_surname + ' ' + empl.empl_firstname}}<small> - {{empl.empl_pk}}</small></h3>
 <br />
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
@@ -30,15 +30,22 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-4 text-right">Date de naissance</div>
-                    <div class="col-xs-8">
-                        {{empl.empl_dob | date: 'fullDate'}}
-                    </div>
+                    <div class="col-xs-8"> {{empl.empl_dob | date: 'fullDate'}} </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-4 text-right">Adresse e-mail</div>
                     <div class="col-xs-8">
                         <a href="mailto:{{empl.empl_addr}}" ng-if="empl.empl_addr">{{empl.empl_addr}}</a><span ng-if="!empl.empl_addr" class="text-muted">non renseign&eacute;e</span>
                     </div>
+                </div>
+                <hr ng-if="empl.empl_notes || empl.sst_optout" />
+                <div class="row" ng-if="empl.empl_sst_optout">
+                    <div class="col-xs-4 text-right">Dispositif SST</div>
+                    <div class="col-xs-8 text-danger">Sorti(e) depuis le {{empl.empl_sst_optout | date: 'fullDate'}} </div>
+                </div>
+                <div class="row" ng-if="empl.empl_notes">
+                    <div class="col-xs-4 text-right">Notes</div>
+                    <div class="col-xs-8 preserve-whitespace text-muted">{{empl.empl_notes}}</div>
                 </div>
             </div>
             <table class="table" ng-show="(checkedCertificates = (certificates | filter: {'checked': true})).length > 0">
@@ -110,7 +117,9 @@
         </div>
     </div>
 </div>
-<div class="side-panel-container text-right" if-role="admin">
-    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="editRoles()"><span class="glyphicon glyphicon-wrench"></span>&nbsp;&Eacute;diter privil&egrave;ges</button>
-    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="resetPassword()" ng-if="canResetPassword"><span class="glyphicon glyphicon-repeat"></span>&nbsp;R&eacute;initialiser mot de passe</button>
+<div class="side-panel-container text-right">
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="editNotes()" if-role="trainer"><span class="glyphicon glyphicon-pencil"></span>&nbsp;{{empl.empl_notes ? 'Modifier' : 'Prendre'}} notes</button>
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="editRoles()" if-role="admin"><span class="glyphicon glyphicon-wrench"></span>&nbsp;D&eacute;finir privil&egrave;ges</button>
+    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="resetPassword()" ng-show="canResetPassword" if-role="admin"><span class="glyphicon glyphicon-repeat"></span>&nbsp;R&eacute;initialiser mot de passe</button>
+    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="sstOptOut()" if-role="trainer"><span class="glyphicon glyphicon-lock"></span>&nbsp;{{empl.empl_sst_optout ? 'R&eacute;int&eacute;grer le' : 'Sortir du'}} dispositif SST</button>
 </div>

@@ -3,7 +3,7 @@
 
 var _ = require('underscore');
 
-module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, $location, ngDialog, $route, busySvc) {
+module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, $location, ngDialog, $route, busySvc, EmployeesNotesSvc) {
   busySvc.busy();
 
   Promise.all([dataSvc.getEmployee($routeParams.empl_pk), dataSvc.getEmployeeTrainings($routeParams.empl_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates(), dataSvc.getEmployeeSite($routeParams.empl_pk)]).then(function (results) {
@@ -25,6 +25,50 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
   }, function () {
     busySvc.done();
   });
+
+  $scope.editNotes = function () {
+    var dialogScope = $scope.$new(false);
+    dialogScope.callback = function (notes, closeThisDialog) {
+      EmployeesNotesSvc.setNotes($scope.empl.empl_pk, notes).then(function () {
+        closeThisDialog();
+        $route.reload();
+        $rootScope.alerts.push({ type: 'success', msg: 'Notes mises &agrave; jour.' });
+      });
+    };
+    ngDialog.open({
+      scope: dialogScope,
+      template: 'components/dialogs/edit_notes.html'
+    });
+  };
+
+  $scope.sstOptOut = function () {
+    var dialogScope = $scope.$new();
+    var empl_display = ($scope.empl.empl_gender ? 'M.' : 'Mme') + ' ' + $scope.empl.empl_surname + ' ' + $scope.empl.empl_firstname;
+    var highlighted = $scope.empl.empl_sst_optout ? 'r&eacute;int&eacute;grer ' + empl_display + '</span> dans le' : 'sortir ' + empl_display + '</span> du';
+    dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">' + highlighted + ' dispositif SST ?';
+    ngDialog.openConfirm({
+      template: 'components/dialogs/warning.html',
+      scope: dialogScope
+    }).then(function () {
+      if ($scope.empl.empl_sst_optout) {
+        EmployeesNotesSvc.sstOptIn($scope.empl.empl_pk).then(function () {
+          $route.reload();
+          $rootScope.alerts.push({
+            type: 'success',
+            msg: empl_display + ' a r&eacute;int&eacute;gr&eacute; le dispositif SST.'
+          });
+        });
+      } else {
+        EmployeesNotesSvc.sstOptOut($scope.empl.empl_pk).then(function () {
+          $route.reload();
+          $rootScope.alerts.push({
+            type: 'success',
+            msg: empl_display + ' ne fait dor&eacute;navant plus partie du dispositif SST.'
+          });
+        });
+      }
+    });
+  };
 
   $scope.editRoles = function () {
     adminSvc.getUserRoles($scope.empl.empl_pk).then(function (roles) {

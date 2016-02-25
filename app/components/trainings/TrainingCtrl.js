@@ -100,25 +100,49 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
         };
       },
       content: [{
-        columns: [
-          { width: '*', text: 'Formateur(s) :\n\nLieu de formation :' }, {
-            width: '*',
-            table: {
-              widths: ['*'],
-              body: [
-                [{ text: 'Signature du/des formateur(s)', alignment: 'center', margin: [0, 0, 0, 50] }]
-              ]
-            }
-          }
-        ],
-        margin: [0, 0, 0, 20]
+        layout: 'noBorders',
+        table: {
+          widths: ['*', '*'],
+          body: [
+            [{
+              text: [
+                'Formateur(s) :\n'
+              ].concat(
+                _.map($scope.trng.trainers, function (trainer) {
+                  return {
+                    text: trainer.empl_surname + ' ' + trainer.empl_firstname + '\n',
+                    style: 'em'
+                  };
+                }))
+            }, {
+              table: {
+                widths: ['*'],
+                body: [
+                  [{ text: 'Signature du/des formateur(s)', alignment: 'center', margin: [0, 0, 0, 50] }]
+                ]
+              }
+            }],
+            [{ text: 'Lieu de formation :', colSpan: 2, margin: [0, 0, 0, 20] }, {}],
+            [{
+              text: [{ text: 'Mémorandum :\n' }, {
+                text: $scope.trng.trng_comment || '\n',
+                style: 'em'
+              }],
+              colSpan: 2,
+              margin: [0, 0, 0, 20]
+            }, {}]
+          ]
+        },
       }, {
         table: {
           headerRows: 1,
-          widths: ['auto', 'auto', 'auto', '*'],
+          widths: ['auto', 'auto', 'auto', 'auto', '*'],
           body: [
             [{
               text: 'Matricule',
+              style: 'table-header'
+            }, {
+              text: 'Titre',
               style: 'table-header'
             }, {
               text: 'Nom',
@@ -133,6 +157,10 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
             }]
           ].concat(_.map(_.sortBy($scope.trainees, 'empl_surname'), function (empl) {
             return [empl.empl_pk, {
+              text: empl.empl_gender ? 'M.' : 'Mme',
+              style: 'em',
+              alignment: 'right'
+            }, {
               text: empl.empl_surname,
               style: 'em'
             }, {

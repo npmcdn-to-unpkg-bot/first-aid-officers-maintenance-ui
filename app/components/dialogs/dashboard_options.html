@@ -7,19 +7,22 @@
         <div class="form-group">
             <label for="format" class="control-label col-md-4 col-sm-4">Format</label>
             <div class="col-md-8 col-sm-8">
-                <select id="format" class="form-control" ng-options="format for format in ['A3', 'A4']" ng-model="format" ng-init="format = 'A3'">
+                <select id="format" class="form-control" ng-options="format for format in ['A3', 'A4']" ng-model="format">
+                    <option value="" disabled selected>S&eacute;lectionner format...</option>
                 </select>
             </div>
         </div>
         <div class="form-group">
             <label for="orientation" class="control-label col-md-4 col-sm-4">Orientation</label>
             <div class="col-md-8 col-sm-8">
-                <select id="orientation" class="form-control" ng-options="orientation.value as orientation.name for orientation in [{value: 'landscape', name: 'Paysage'}, {value: 'portrait', name: 'Portrait'}]" ng-model="orientation" ng-init="orientation = 'landscape'"></select>
+                <select id="orientation" class="form-control" ng-options="orientation.value as orientation.name for orientation in [{value: 'landscape', name: 'Paysage'}, {value: 'portrait', name: 'Portrait'}]" ng-model="orientation">
+                    <option value="" disabled selected>S&eacute;lectionner orientation...</option>
+                </select>
             </div>
         </div>
     </div>
     <div class="panel-footer text-center">
-        <button type="submit" class="btn btn-primary" ng-click="generateDashboardDocument()">G&eacute;n&eacute;rer</button>
+        <button type="submit" class="btn btn-primary" ng-click="generateDashboardDocument()" ng-disabled="!(format && orientation)">G&eacute;n&eacute;rer</button>
         <button type="button" class="btn btn-default" ng-click="closeThisDialog()">Annuler</button>
     </div>
 </form>

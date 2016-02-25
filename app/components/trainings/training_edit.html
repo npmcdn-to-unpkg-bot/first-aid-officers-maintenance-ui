@@ -107,6 +107,9 @@
                             <span class="st-sort" st-sort="empl_pk">Matricule</span>
                             <input st-search="empl_pk" placeholder="Rechercher..." class="form-control" type="text" />
                         </th>
+                        <th class="vtop">
+                            <span class="st-sort" st-sort="empl_gender" st-skip-natural="true">Titre</span>
+                        </th>
                         <th class="shrinkable" width="30%">
                             <span class="st-sort" st-sort="empl_surname" st-skip-natural="true">Nom</span>
                             <input st-search="empl_surname" placeholder="Rechercher..." class="form-control" type="text" />
@@ -124,6 +127,7 @@
                 <tbody>
                     <tr ng-repeat="empl in shown track by empl.empl_pk" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
                         <td class="shrinkable">{{empl.empl_pk}}</td>
+                        <td class="text-right" ng-class="{'text-primary': hover}">{{empl.empl_gender ? 'M.' : 'Mme'}}</td>
                         <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_surname}}</td>
                         <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_firstname}}</td>
                         <td class="text-center"><span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span></td>

@@ -29,7 +29,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location,
       scope: dialogScope
     }).then(function () {
       $scope.trainees.splice($scope.trainees.indexOf(empl), 1);
-    })
+    });
   };
 
   $scope.getDisplayDate = function () {

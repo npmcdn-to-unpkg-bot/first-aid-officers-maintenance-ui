@@ -51,7 +51,17 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
     return dateFilter($scope.trng.trng_date, 'fullDate');
   };
 
+  $scope.$watch('trng.trng_start', function () {
+    if ($scope.trng.trng_start === null) {
+      delete $scope.trng.trng_start;
+    }
+  });
+
   $scope.$watch('trng.trng_date', function (date) {
+    if ($scope.trng.trng_date === null) {
+      delete $scope.trng.trng_date;
+    }
+
     if ($scope.trng && $scope.trng.type) {
       $scope.trng.expirationDate = moment(date).add($scope.trng.type.trty_validity, 'months').format('YYYY-MM-DD');
     }

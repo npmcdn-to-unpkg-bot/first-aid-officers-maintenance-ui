@@ -38,7 +38,7 @@
                         <a href="mailto:{{empl.empl_addr}}" ng-if="empl.empl_addr">{{empl.empl_addr}}</a><span ng-if="!empl.empl_addr" class="text-muted">non renseign&eacute;e</span>
                     </div>
                 </div>
-                <hr ng-if="empl.empl_notes || empl.sst_optout" />
+                <hr ng-if="empl.empl_notes || empl.empl_sst_optout" />
                 <div class="row" ng-if="empl.empl_sst_optout">
                     <div class="col-xs-4 text-right">Dispositif SST</div>
                     <div class="col-xs-8 text-danger">Sorti(e) depuis le {{empl.empl_sst_optout | date: 'fullDate'}} </div>

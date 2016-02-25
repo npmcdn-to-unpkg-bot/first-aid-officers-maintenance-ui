@@ -1,4 +1,4 @@
-<h3 ng-if="trng.type">{{trng.type.trty_name}} - {{trng && getDisplayDate()}}
+<h3 ng-if="trng.type">{{trng.type.trty_name}}<span ng-if="(dateRange && trng.trng_start && trng.trng_date) || (!dateRange && trng.trng_date)"> - {{trng && getDisplayDate()}}</span>
     <small ng-if="trng.trng_outcome"> - 
         <span ng-if="trng.trng_outcome === 'SCHEDULED'" class="text-primary">Pr&eacute;vue</span>
         <span ng-if="trng.trng_outcome === 'COMPLETED'" class="text-success">R&eacute;alis&eacute;e</span>

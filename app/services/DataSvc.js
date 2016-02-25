@@ -12,6 +12,10 @@ module.exports = function ($http, $q, apiSvc, $filter) {
     return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'departments');
   };
 
+  dataSvc.getLatestUpdate = function () {
+    return apiSvc.get(apiSvc.resourcesEndpoint + 'update');
+  };
+
   dataSvc.getEmployee = function (empl_pk) {
     var deferred = $q.defer();
     Promise.all([apiSvc.get(apiSvc.resourcesEndpoint + 'employees/' + empl_pk), apiSvc.get(apiSvc.statisticsEndpoint + 'employees/' + empl_pk)]).then(function (results) {

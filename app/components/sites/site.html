@@ -16,11 +16,18 @@
                 </div>
             </div>
             <div class="panel-body">
-                Nombre d'agents&nbsp;:
-                <strong class="text-primary">{{site.stats.employeesCount}}</strong> (<strong>{{site.stats.permanentsCount}}</strong>
-                <span class="label label-success">CDI</span> +
-                <strong>{{site.stats.employeesCount - site.stats.permanentsCount}}</strong>
-                <span class="label label-warning">CDD</span>)
+                <div class="row">
+                    <div class="col-xs-4 text-right">Nombre d'agents</div>
+                    <div class="col-xs-8">
+                        <strong>{{site.stats.employeesCount}}</strong> ({{site.stats.permanentsCount}}
+                        <span class="label label-success">CDI</span> + {{site.stats.employeesCount - site.stats.permanentsCount}}
+                        <span class="label label-warning">CDD</span>)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 text-right">Derni&egrave;re mise &agrave; jour</div>
+                    <div class="col-xs-8"><strong>{{update.updt_date | date: 'fullDate'}}</strong></div>
+                </div>
             </div>
             <table class="table" ng-show="(checkedCertificates = (certificates | filter: {'checked': true})).length > 0">
                 <thead>

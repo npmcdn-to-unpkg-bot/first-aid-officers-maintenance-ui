@@ -21,6 +21,17 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location,
     busySvc.done();
   });
 
+  $scope.unregister = function (empl) {
+    var dialogScope = $scope.$new();
+    dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">d&eacute;sinscrire ' + (empl.empl_gender ? 'M.' : 'Mme') + ' ' + empl.empl_surname + ' ' + empl.empl_firstname + '</span> de cette formation&nbsp;?';
+    ngDialog.openConfirm({
+      template: 'components/dialogs/warning.html',
+      scope: dialogScope
+    }).then(function () {
+      $scope.trainees.splice($scope.trainees.indexOf(empl), 1);
+    })
+  };
+
   $scope.getDisplayDate = function () {
     if ($scope.trng.trng_start) {
       var dateFromFormat;

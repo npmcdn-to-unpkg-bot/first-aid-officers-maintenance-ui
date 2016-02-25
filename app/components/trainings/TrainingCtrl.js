@@ -58,7 +58,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
                 margin: [0, -10, 0, 0]
               }, {
                 text: [{
-                  text: moment($scope.trng.trng_date).format('dddd Do MMMM YYYY'),
+                  text: $scope.getDisplayDate(),
                   style: 'em'
                 }, {
                   text: '\nFiche d\'émargement'

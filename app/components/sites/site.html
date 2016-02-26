@@ -82,6 +82,9 @@
                         <div class="st-sort" st-sort="empl_pk">Matricule</div>
                         <input st-search="empl_pk" placeholder="Rechercher..." class="form-control" type="text" />
                     </th>
+                    <th class="vtop">
+                        <div class="st-sort" st-sort="empl_gender" st-skip-natural="true">Titre</div>
+                    </th>
                     <th class="shrinkable" width="35%">
                         <div class="st-sort" st-sort="empl_surname" st-skip-natural="true">Nom</div>
                         <input st-search="empl_surname" placeholder="Rechercher..." class="form-control" type="text" />
@@ -104,6 +107,7 @@
                         <button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button>
                     </td>
                     <td class="shrinkable">{{empl.empl_pk}}</td>
+                    <td class="text-right" ng-class="{'text-primary': hover}">{{empl.empl_gender ? 'M.' : 'Mme'}}</td>
                     <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_surname}}&nbsp;</td>
                     <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_firstname}}&nbsp;</td>
                     <td class="text-center">

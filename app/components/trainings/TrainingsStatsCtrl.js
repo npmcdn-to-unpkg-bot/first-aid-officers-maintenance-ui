@@ -26,7 +26,7 @@ module.exports = function ($scope, $rootScope, dataSvc, dateFilter, busySvc) {
       case 3:
         return 'trimestre';
       default:
-        return 'mois'
+        return 'mois';
     }
   };
 
@@ -34,15 +34,15 @@ module.exports = function ($scope, $rootScope, dataSvc, dateFilter, busySvc) {
     var _beginning = moment(beginning);
     var _dateFilter;
     if (interval === 0) {
-      _dateFilter = _.partialRight(dateFilter, 'fullDate')
+      _dateFilter = _.partialRight(dateFilter, 'fullDate');
     } else if (interval === 12 && _beginning.dayOfYear() === 1) {
       return dateFilter(beginning, 'yyyy');
     } else if (interval === 1 && _beginning.date() === 1) {
       return dateFilter(beginning, 'MMMM');
     } else if (interval < 6) {
-      _dateFilter = _.partialRight(dateFilter, 'MMM')
+      _dateFilter = _.partialRight(dateFilter, 'MMM');
     } else {
-      _dateFilter = _.partialRight(dateFilter, 'MMM yyyy')
+      _dateFilter = _.partialRight(dateFilter, 'MMM yyyy');
     }
 
     return _dateFilter(beginning) + ' - ' + _dateFilter(end);

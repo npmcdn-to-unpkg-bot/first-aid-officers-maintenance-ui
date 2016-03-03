@@ -7,20 +7,28 @@ var moment = require('moment');
 module.exports = function ($scope, $rootScope, dataSvc, dateFilter, busySvc) {
   $scope.intervals = [];
 
+  busySvc.busy();
+  dataSvc.getCertificates().then(function (results) {
+    $scope.certificates = results;
+    busySvc.done();
+  }, function () {
+    busySvc.done();
+  });
+
   $scope.generate = function () {
     busySvc.busy();
-    Promise.all([dataSvc.getTrainingsStats(dateFilter($scope.beginning, 'yyyy-MM-dd'), dateFilter($scope.end, 'yyyy-MM-dd'), [0].concat($scope.intervals)), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function (results) {
-      $scope.globalStats = results[0][0];
-      $scope.stats = _(results[0]).map(function (stats, interval) {
+    dataSvc.getTrainingsStats(dateFilter($scope.beginning, 'yyyy-MM-dd'), dateFilter($scope.end, 'yyyy-MM-dd'), [0].concat($scope.intervals)).then(function (results) {
+      var stats = _(results).map(function (stats, interval) {
         return { stats: stats, interval: parseInt(interval) };
       }).orderBy('interval', 'desc').value();
-      $scope.stats = [_.last($scope.stats)].concat(_.take($scope.stats, $scope.stats.length - 1));
-      $scope.columns = _.last($scope.stats).stats.length;
-      var smallestInterval = _.last($scope.stats).interval;
-      $scope.stats = _.map($scope.stats, function (stats) {
+
+      stats = [_.last(stats)].concat(_.take(stats, stats.length - 1));
+      $scope.columns = _.last(stats).stats.length;
+      var smallestInterval = _.last(stats).interval;
+      $scope.stats = _.map(stats, function (stats) {
         return _.extend({ colSpan: stats.interval / smallestInterval }, stats);
       });
-      $scope.certificates = results[2];
+
       busySvc.done();
     }, function () {
       busySvc.done();

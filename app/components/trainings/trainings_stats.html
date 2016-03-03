@@ -22,7 +22,7 @@
         <tbody ng-repeat="intervalStats in stats">
             <tr>
                 <th class="text-center">{{intervalStats.interval !== 0 ? 'par' : 'sur la'}} {{getIntervalDisplay(intervalStats.interval)}}</th>
-                <th class="text-center" ng-repeat="col in intervalStats.stats" colspan="{{$last && columns % intervalStats.colSpan ? 1 : intervalStats.colSpan || columns}}">
+                <th class="text-center" ng-repeat="col in intervalStats.stats" colspan="{{$last && columns / intervalStats.colSpan > 1 && columns % intervalStats.colSpan ? columns - 1 : intervalStats.colSpan || columns}}">
                     {{getDatesRangeDisplay(intervalStats.interval, col.beginning, col.end)}}
                 </th>
             </tr>
@@ -30,7 +30,7 @@
                 <td class="text-center">
                     <abbr title="{{cert.cert_name}}" class="initialism">{{cert.cert_short}}</abbr>
                 </td>
-                <td class="text-center" ng-repeat="col in intervalStats.stats" colspan="{{$last && columns % intervalStats.colSpan ? 1 : intervalStats.colSpan || columns}}">
+                <td class="text-center" ng-repeat="col in intervalStats.stats" colspan="{{$last && columns / intervalStats.colSpan > 1 && columns % intervalStats.colSpan ? columns - 1 : intervalStats.colSpan || columns}}">
                     <abbr title="{{col.certificates[certPk].employeesRegistered || 0}} {{cert.cert_short}} form&eacute;(s) sur cette p&eacute;riode" class="text-success">+&nbsp;{{col.certificates[certPk].employeesRegistered || 0}}</abbr> /
                     <abbr title="{{col.certificates[certPk].employeesExpired || 0}} {{cert.cert_short}} &agrave; renouveller sur cette p&eacute;riode" class="text-danger">-&nbsp;{{col.certificates[certPk].employeesExpired || 0}}</abbr>
                 </td>

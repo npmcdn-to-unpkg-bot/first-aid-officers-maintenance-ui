@@ -4,8 +4,13 @@
 var _ = require('lodash');
 var moment = require('moment');
 
-module.exports = function ($scope, $rootScope, dataSvc, dateFilter, busySvc) {
-  $scope.intervals = [];
+module.exports = function ($scope, $rootScope, dataSvc, dateFilter, busySvc, ngDialog) {
+  $scope.params = {
+    beginning: undefined,
+    end: undefined,
+    intervals: [],
+    availableIntervals: []
+  };
 
   busySvc.busy();
   dataSvc.getCertificates().then(function (results) {
@@ -48,9 +53,14 @@ module.exports = function ($scope, $rootScope, dataSvc, dateFilter, busySvc) {
     return _dateFilter(beginning) + ' - ' + _dateFilter(end);
   };
 
+  $scope.edit = function () {
+    ngDialog.open({ scope: $scope, template: './components/dialogs/trainings_statistics.html' });
+  };
+
   $scope.generate = function () {
+    ngDialog.closeAll();
     busySvc.busy();
-    dataSvc.getTrainingsStats(dateFilter($scope.beginning, 'yyyy-MM-dd'), dateFilter($scope.end, 'yyyy-MM-dd'), [0].concat($scope.intervals)).then(function (results) {
+    dataSvc.getTrainingsStats(dateFilter($scope.params.beginning, 'yyyy-MM-dd'), dateFilter($scope.params.end, 'yyyy-MM-dd'), [0].concat($scope.params.intervals)).then(function (results) {
       var stats = _(results).map(function (stats, interval) {
         return { stats: stats, interval: parseInt(interval) };
       }).orderBy('interval', 'desc').value();
@@ -68,7 +78,7 @@ module.exports = function ($scope, $rootScope, dataSvc, dateFilter, busySvc) {
     });
   };
 
-  $scope.$watchCollection('intervals', function (intervals) {
-    $scope.availableIntervals = _.difference([1, 3, 6, 12], intervals);
+  $scope.$watchCollection('params.intervals', function (intervals) {
+    $scope.params.availableIntervals = _.difference([1, 3, 6, 12], intervals);
   });
 };

@@ -19,10 +19,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="interval" class="col-xs-4 control-label">Bilans interm&eacute;diaires sur</label>
+                        <label for="interval" class="col-xs-4 control-label">Bilans interm&eacute;diaires</label>
                         <div class="col-xs-8">
-                            <select id="interval" class="form-control" ng-model="interval" ng-options="interval as 'chaque ' + (interval !== 1 ? 'plage de ' + interval : '') + ' mois' for interval in availableIntervals" ng-change="interval ? intervals.push(interval) : ''">
-                                <option value="" disabled selected="true">S&eacute;lectionner plages de dates...</option>
+                            <select id="interval" class="form-control" ng-model="interval" ng-options="interval as 'sur chaque ' + getIntervalDisplay(interval) for interval in availableIntervals" ng-change="interval ? intervals.push(interval) : ''">
+                                <option value="" disabled selected="true">Ajouter bilans interm&eacute;diaires...</option>
                             </select>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                         <div class="col-xs-4"></div>
                         <div class="col-xs-8">
                             <div ng-repeat="interval in intervals | orderBy" class="pill clickme" ng-click="intervals.splice(intervals.indexOf(interval), 1)">
-                                <small>chaque {{interval !== 1 ? 'plage de ' + interval : '' }} mois<span class="pill-delete">&times;</span></small>
+                                <small>sur chaque {{getIntervalDisplay(interval)}}<span class="pill-delete">&times;</span></small>
                             </div>
                         </div>
                     </div>
@@ -58,10 +58,9 @@
     <table class="table table-striped table-hover trainings-stats">
         <tbody ng-repeat="intervalStats in stats">
             <tr>
-                <th class="text-center" ng-if="intervalStats.interval === 0">p&eacute;riode enti&egrave;re</th>
-                <th class="text-center" ng-if="intervalStats.interval !== 0">sur {{intervalStats.interval}} mois</th>
+                <th class="text-center">{{intervalStats.interval !== 0 ? 'par' : 'sur la'}} {{getIntervalDisplay(intervalStats.interval)}}</th>
                 <th class="text-center" ng-repeat="col in intervalStats.stats" colspan="{{$last && columns % intervalStats.colSpan ? 1 : intervalStats.colSpan || columns}}">
-                    {{getIntervalDisplay(intervalStats.interval, col.beginning, col.end)}}
+                    {{getDatesRangeDisplay(intervalStats.interval, col.beginning, col.end)}}
                 </th>
             </tr>
             <tr ng-repeat="(certPk, cert) in certificates" ng-if="cert.checked">

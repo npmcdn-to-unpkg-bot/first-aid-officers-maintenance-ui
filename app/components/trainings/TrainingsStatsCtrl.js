@@ -15,7 +15,22 @@ module.exports = function ($scope, $rootScope, dataSvc, dateFilter, busySvc) {
     busySvc.done();
   });
 
-  $scope.getIntervalDisplay = function (interval, beginning, end) {
+  $scope.getIntervalDisplay = function (interval) {
+    switch (interval) {
+      case 0:
+        return 'période entière';
+      case 12:
+        return 'année';
+      case 6:
+        return 'semestre';
+      case 3:
+        return 'trimestre';
+      default:
+        return 'mois'
+    }
+  };
+
+  $scope.getDatesRangeDisplay = function (interval, beginning, end) {
     var _beginning = moment(beginning);
     var _dateFilter;
     if (interval === 0) {

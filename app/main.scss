@@ -15,6 +15,7 @@ $screen-xs: 768px;
 @import 'styles/tables';
 @import 'styles/side_panel';
 @import 'components/index/index';
+@import 'components/trainings/trainings_stats';
 @media (min-width: $screen-xs) {
     .form-group:not(.label-floating) label.control-label {
         padding-top: 8px;

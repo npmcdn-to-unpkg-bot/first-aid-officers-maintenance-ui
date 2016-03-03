@@ -191,5 +191,9 @@ module.exports = function ($http, $q, apiSvc, $filter) {
     return deferred.promise;
   };
 
+  dataSvc.getTrainingsStats = function (from, to) {
+    return apiSvc.get(apiSvc.statisticsEndpoint + 'trainings?from=' + from + '&to=' + to + '&interval=0&interval=12&interval=6');
+  };
+
   return dataSvc;
 };

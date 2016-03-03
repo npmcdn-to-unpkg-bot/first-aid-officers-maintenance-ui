@@ -1,0 +1,8 @@
+table.table.trainings-stats tr {
+    td,
+    th {
+        &:nth-child(n+2) {
+            border-left: 1px solid #ddd;
+        }
+    }
+}

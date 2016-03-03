@@ -18,14 +18,15 @@
             <table class="table table-striped table-hover trainings-stats">
                 <tbody ng-repeat="intervalStats in stats">
                     <tr>
-                        <th class="text-center">sur {{intervalStats.interval}} mois</th>
-                        <th class="text-center" ng-repeat="col in intervalStats.stats" colspan="{{$last && columns.length % intervalStats.colSpan ? 1 : intervalStats.colSpan}}">
+                        <th class="text-center" ng-if="intervalStats.interval === 0">p&eacute;riode enti&egrave;re</th>
+                        <th class="text-center" ng-if="intervalStats.interval !== 0">sur {{intervalStats.interval}} mois</th>
+                        <th class="text-center" ng-repeat="col in intervalStats.stats" colspan="{{$last && columns % intervalStats.colSpan ? 1 : intervalStats.colSpan || columns}}">
                             {{col.beginning | date: 'MMM yyyy'}} - {{col.end | date: 'MMM yyyy'}}
                         </th>
                     </tr>
                     <tr ng-repeat="(certPk, cert) in certificates" ng-if="cert.checked">
                         <td class="text-right">{{cert.cert_name}}</td>
-                        <td class="text-center" ng-repeat="col in intervalStats.stats" colspan="{{$last && columns.length % intervalStats.colSpan ? 1 : intervalStats.colSpan}}">
+                        <td class="text-center" ng-repeat="col in intervalStats.stats" colspan="{{$last && columns % intervalStats.colSpan ? 1 : intervalStats.colSpan || columns}}">
                             <abbr title="{{col.certificates[certPk].employeesRegistered || 0}} {{cert.cert_short}} form&eacute;(s) sur cette p&eacute;riode" class="text-success">+ {{col.certificates[certPk].employeesRegistered || 0}}</abbr> &nbsp;/&nbsp;
                             <abbr title="{{col.certificates[certPk].employeesExpired || 0}} {{cert.cert_short}} &agrave; renouveller sur cette p&eacute;riode" class="text-danger">- {{col.certificates[certPk].employeesExpired || 0}}</abbr>
                         </td>

@@ -61,7 +61,7 @@
                 <th class="text-center" ng-if="intervalStats.interval === 0">p&eacute;riode enti&egrave;re</th>
                 <th class="text-center" ng-if="intervalStats.interval !== 0">sur {{intervalStats.interval}} mois</th>
                 <th class="text-center" ng-repeat="col in intervalStats.stats" colspan="{{$last && columns % intervalStats.colSpan ? 1 : intervalStats.colSpan || columns}}">
-                    {{col.beginning | date: 'MMM yyyy'}} - {{col.end | date: 'MMM yyyy'}}
+                    {{getIntervalDisplay(intervalStats.interval, col.beginning, col.end)}}
                 </th>
             </tr>
             <tr ng-repeat="(certPk, cert) in certificates" ng-if="cert.checked">

@@ -118,8 +118,8 @@
     </div>
 </div>
 <div class="side-panel-container text-right">
-    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="editNotes()" if-role="trainer"><span class="glyphicon glyphicon-pencil"></span>&nbsp;{{empl.empl_notes ? 'Modifier' : 'Prendre'}} notes</button>
-    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="editRoles()" if-role="admin"><span class="glyphicon glyphicon-wrench"></span>&nbsp;D&eacute;finir privil&egrave;ges</button>
-    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="resetPassword()" ng-show="canResetPassword" if-role="admin"><span class="glyphicon glyphicon-repeat"></span>&nbsp;R&eacute;initialiser mot de passe</button>
-    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="sstOptOut()" if-role="trainer"><span class="glyphicon glyphicon-lock"></span>&nbsp;{{empl.empl_sst_optout ? 'R&eacute;int&eacute;grer le' : 'Sortir du'}} dispositif SST</button>
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="editNotes()" if-role="'trainer'"><span class="glyphicon glyphicon-pencil"></span>&nbsp;{{empl.empl_notes ? 'Modifier' : 'Prendre'}} notes</button>
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="editRoles()" if-role="'admin'"><span class="glyphicon glyphicon-wrench"></span>&nbsp;D&eacute;finir privil&egrave;ges</button>
+    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="resetPassword()" ng-show="canResetPassword" if-role="'admin'"><span class="glyphicon glyphicon-repeat"></span>&nbsp;R&eacute;initialiser mot de passe</button>
+    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="sstOptOut()" if-role="'trainer'"><span class="glyphicon glyphicon-lock"></span>&nbsp;{{empl.empl_sst_optout ? 'R&eacute;int&eacute;grer le' : 'Sortir du'}} dispositif SST</button>
 </div>

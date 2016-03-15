@@ -22,7 +22,7 @@
                         <a href="#/home" class="logo"><img src="./img/logo.png" alt="Pole emploi" /></a>
                     </div>
                     <div class="col-md-4 col-sm-6 connection-status">
-                        <div if-role="user">Connect&eacute;(e) en tant que <span class="text-primary">{{userInfo.empl_firstname}} {{userInfo.empl_surname}}</span>
+                        <div if-role="'user'">Connect&eacute;(e) en tant que <span class="text-primary">{{userInfo.empl_firstname}} {{userInfo.empl_surname}}</span>
                             <br />
                             <button type="button" class="btn btn-danger btn-sm" ng-click="disconnect()">Se d&eacute;connecter</button>
                         </div>
@@ -40,10 +40,10 @@
                         </div>
                         <div class="navbar-collapse collapse navbar-responsive-collapse">
                             <ul class="nav navbar-nav">
-                                <li ng-class="{ active: isActive('/sites')}" if-role="user"><a href="#/sites">Sites</a></li>
-                                <li ng-class="{ active: isActive('/employees')}" if-role="user"><a href="#/employees">Agents</a></li>
-                                <li ng-class="{ active: isActive('/trainings')}" if-role="user"><a href="#/trainings" if-role="!trainer">Formations</a></li>
-                                <li class="dropdown" ng-class="{ active: isActive('/trainings')}" if-role="trainer">
+                                <li ng-class="{ active: isActive('/sites')}" if-role="'user'"><a href="#/sites">Sites</a></li>
+                                <li ng-class="{ active: isActive('/employees')}" if-role="'user'"><a href="#/employees">Agents</a></li>
+                                <li ng-class="{ active: isActive('/trainings')}" if-role="'user'"><a href="#/trainings" if-role="'!trainer'">Formations</a></li>
+                                <li class="dropdown" ng-class="{ active: isActive('/trainings')}" if-role="'trainer'">
                                     <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Formations<b class="caret"></b></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#/trainings">Consulter formations</a></li>
@@ -58,8 +58,8 @@
                                 </div>
                             </form>
                             <ul class="nav navbar-nav navbar-right">
-                                <li ng-class="{ active: isActive('/account')}" if-role="user"><a href="#/account">Mon compte</a></li>
-                                <li class="dropdown" ng-class="{ active: isActive('/administration')}" if-role="admin">
+                                <li ng-class="{ active: isActive('/account')}" if-role="'user'"><a href="#/account">Mon compte</a></li>
+                                <li class="dropdown" ng-class="{ active: isActive('/administration')}" if-role="'admin'">
                                     <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Administration<b class="caret"></b></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#/administration/users">Administration utilisateurs</a></li>

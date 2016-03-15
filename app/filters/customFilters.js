@@ -5,15 +5,15 @@ var customFilters = require('angular').module('customFilters', []);
 var moment = require('moment');
 var _ = require('underscore');
 
-function summariseSite (site) {
+function summariseSite(site) {
   return site.site_name;
 }
 
-function summariseEmpl (empl) {
-  return empl.empl_pk + ' - ' + empl.empl_surname + ' ' + empl.empl_firstname;
+function summariseEmpl(empl) {
+  return empl.empl_pk + ' - ' + empl.empl_surname + ' ' + empl.empl_firstname + ' - ' + empl.site.site_name;
 }
 
-function summariseTrng (trng) {
+function summariseTrng(trng) {
   return trng.type.trty_name + ' - ' + trng.trng_displayDate;
 }
 
@@ -22,11 +22,11 @@ customFilters.filter('filterEmpl', function () {
     inputString = inputString.toUpperCase();
     return _.sortBy(_.map(_.filter(employees, function (empl) {
       var empl_summary = summariseEmpl(empl).toUpperCase();
-      return _.every(inputString.split(' '), function(split) {
+      return _.every(inputString.split(' '), function (split) {
         return empl_summary.indexOf(split) !== -1;
       });
     }), function (entry) {
-      return entry.summary = (entry.site_pk) ? summariseSite(entry) : summariseEmpl(entry), entry;
+      return entry.summary = summariseEmpl(entry), entry;
     }), function (entry) {
       if (entry.empl_surname.indexOf(inputString.split(' ')[0]) !== -1) {
         return '0' + entry.empl_surname;
@@ -42,11 +42,11 @@ customFilters.filter('filterSite', function () {
     inputString = inputString.toUpperCase();
     return _.map(_.filter(sites, function (site) {
       var siteSummary = summariseSite(site).toUpperCase();
-      return _.every(inputString.split(' '), function(split) {
+      return _.every(inputString.split(' '), function (split) {
         return siteSummary.indexOf(split) !== -1;
       });
     }), function (entry) {
-      return entry.summary = (entry.site_pk) ? summariseSite(entry) : summariseEmpl(entry), entry;
+      return entry.summary = summariseSite(entry), entry;
     });
   };
 });
@@ -67,7 +67,7 @@ customFilters.filter('filterGlobal', function () {
         entry.__type = 'trng';
       }
 
-      return _.every(inputString.split(' '), function(split) {
+      return _.every(inputString.split(' '), function (split) {
         return summary.indexOf(split) !== -1;
       });
     }), function (entry) {
@@ -99,7 +99,7 @@ customFilters.filter('filterGlobal', function () {
 customFilters.filter('fromNow', function () {
   return function (input) {
     if (input !== undefined) {
-      return moment(input).from(moment().set({'hour': 0, 'minute': 0, 'second': 0, 'millisecond': 0}));
+      return moment(input).from(moment().set({ 'hour': 0, 'minute': 0, 'second': 0, 'millisecond': 0 }));
     }
   };
 });

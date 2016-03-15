@@ -74,6 +74,7 @@ angular.module('faomaintenanceApp', [
     }]);
 
     ngDialogProvider.setDefaults({
+      className: 'ngdialog-theme-gfs',
       showClose: false
     });
 
@@ -109,15 +110,19 @@ angular.module('faomaintenanceApp', [
         templateUrl: 'components/sites/site.html',
         controller: 'SiteCtrl'
       })
-      .when('/trainings', {
+
+    // Trainings
+    .when('/trainings', {
         templateUrl: 'components/trainings/trainings.html',
         controller: 'TrainingsCtrl'
       })
-
-    // Trainings
-    .when('/trainings/create', {
+      .when('/trainings/create', {
         templateUrl: 'components/trainings/training_edit.html',
         controller: 'TrainingEditCtrl'
+      })
+      .when('/trainings/stats', {
+        templateUrl: 'components/trainings/trainings_stats.html',
+        controller: 'TrainingsStatsCtrl'
       })
       .when('/trainings/:trng_pk', {
         templateUrl: 'components/trainings/training.html',
@@ -179,6 +184,7 @@ angular.module('faomaintenanceApp', [
   .controller('TrainingsCtrl', ['$scope', 'DataSvc', '$location', 'BusySvc', require('./components/trainings/TrainingsCtrl.js')])
   .controller('TrainingCompletionCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', '$location', 'ngDialog', 'TrainingsSvc', 'BusySvc', 'dateFilter', require('./components/trainings/TrainingCompletionCtrl.js')])
   .controller('TrainingEditCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'dateFilter', 'BusySvc', require('./components/trainings/TrainingEditCtrl.js')])
+  .controller('TrainingsStatsCtrl', ['$scope', '$rootScope', 'DataSvc', 'dateFilter', 'BusySvc', 'ngDialog', require('./components/trainings/TrainingsStatsCtrl')])
   .controller('UpdateCtrl', ['$scope', '$rootScope', 'UpdateSvc', 'DataSvc', 'ngDialog', 'BusySvc', require('./components/administration/update/UpdateCtrl.js')])
   .controller('UsersAdministrationCtrl', ['$scope', '$rootScope', 'DataSvc', 'AdminSvc', 'ngDialog', '$route', '$location', 'BusySvc', require('./components/administration/users/UsersAdministrationCtrl.js')])
 

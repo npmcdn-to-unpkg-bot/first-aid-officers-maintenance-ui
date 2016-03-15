@@ -7,13 +7,19 @@
         <div class="form-group">
             <label for="format" class="control-label col-md-4 col-sm-4">Format</label>
             <div class="col-md-8 col-sm-8">
-                <select id="format" class="form-control" ng-options="format for format in ['A3', 'A4']" ng-model="format"></select>
+                <select id="format" class="form-control" ng-model="format" ng-init="format = 'A4'">
+                    <option value='A3'>A3</option>
+                    <option value='A4'>A4</option>
+                </select>
             </div>
         </div>
         <div class="form-group">
             <label for="orientation" class="control-label col-md-4 col-sm-4">Orientation</label>
             <div class="col-md-8 col-sm-8">
-                <select id="orientation" class="form-control" ng-options="orientation.value as orientation.name for orientation in [{value: 'landscape', name: 'Paysage'}, {value: 'portrait', name: 'Portrait'}]" ng-model="orientation"></select>
+                <select id="orientation" class="form-control" ng-model="orientation" ng-init="orientation = 'portrait'">
+                    <option value="landscape">Paysage</option>
+                    <option value="portrait">Portrait</option>
+                </select>
             </div>
         </div>
     </div>

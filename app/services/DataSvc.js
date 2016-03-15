@@ -92,7 +92,14 @@ module.exports = function ($http, $q, apiSvc, $filter) {
   };
 
   dataSvc.getEmployees = function () {
-    return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees');
+    var deferred = $q.defer();
+    Promise.all([dataSvc.getSites(), apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees')]).then(function (results) {
+      deferred.resolve(_.each(results[1], function (empl) {
+        empl.site = results[0][empl.siem_site_fk];
+      }));
+    });
+
+    return deferred.promise;
   };
 
   dataSvc.getEmployeesWithStats = function () {

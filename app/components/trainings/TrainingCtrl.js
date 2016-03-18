@@ -124,7 +124,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
             }],
             [{ text: 'Lieu de formation :', colSpan: 2, margin: [0, 0, 0, 20] }, {}],
             [{
-              text: [{ text: 'Mémorandum :\n' }, {
+              text: [{ text: 'Notes :\n' }, {
                 text: $scope.trng.trng_comment || '\n',
                 style: 'em'
               }],

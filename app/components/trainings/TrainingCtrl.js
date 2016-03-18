@@ -156,7 +156,8 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
               alignment: 'center'
             }, {
               text: $scope.trng.trng_outcome === 'COMPLETED' ? 'Validation' : '',
-              style: 'table-header'
+              style: 'table-header',
+              alignment: 'right'
             }]
           ].concat(_.map(_.sortBy($scope.trainees, 'empl_surname'), function (empl) {
             return [empl.empl_pk, {

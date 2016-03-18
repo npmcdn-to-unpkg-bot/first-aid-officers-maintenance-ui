@@ -15,6 +15,7 @@ $screen-xs: 768px;
 @import 'styles/tables';
 @import 'styles/side_panel';
 @import 'components/index/index';
+@import 'components/home/home';
 @import 'components/trainings/trainings_stats';
 @import 'components/dialogs/ngdialog-theme-gfs';
 @media (min-width: $screen-xs) {

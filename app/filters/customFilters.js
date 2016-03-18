@@ -28,11 +28,12 @@ customFilters.filter('filterEmpl', function () {
     }), function (entry) {
       return entry.summary = summariseEmpl(entry), entry;
     }), function (entry) {
-      if (entry.empl_surname.indexOf(inputString.split(' ')[0]) !== -1) {
-        return '0' + entry.empl_surname;
-      } else {
-        return '1' + entry.empl_surname;
+      var surnameMatchIdx = entry.empl_surname.indexOf(inputString.split(' ')[0]);
+      if (surnameMatchIdx !== -1) {
+        return '0' + surnameMatchIdx + entry.empl_surname + entry.empl_firstname;
       }
+
+      return '1' + entry.empl_surname;
     });
   };
 });
@@ -85,11 +86,12 @@ customFilters.filter('filterGlobal', function () {
     var sites = _.sortBy(res.site, 'summary');
     var trngs = _.sortBy(res.trng, 'trng_date').reverse();
     var empls = _.sortBy(res.empl, function (entry) {
-      if (entry.empl_surname.indexOf(inputString.split(' ')[0]) !== -1) {
-        return '0' + entry.empl_surname;
-      } else {
-        return '1' + entry.empl_surname;
+      var surnameMatchIdx = entry.empl_surname.indexOf(inputString.split(' ')[0]);
+      if (surnameMatchIdx !== -1) {
+        return '0' + surnameMatchIdx + entry.empl_surname + entry.empl_firstname;
       }
+
+      return '1' + entry.empl_surname;
     });
 
     return sites.concat(empls).concat(trngs);

@@ -1,0 +1,13 @@
+table.table.trainings-stats tr {
+    td,
+    th {
+        &:nth-child(n+2) {
+            border-left: 1px solid #ddd;
+        }
+    }
+}
+
+.pseudo-control-label {
+    margin-top: 8px;
+    padding-top: 8px;
+}

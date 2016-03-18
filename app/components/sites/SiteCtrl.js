@@ -9,10 +9,11 @@ var imgs64 = require('../../img/imgs64.js');
 module.exports = function ($scope, $routeParams, $location, dataSvc, busySvc, ngDialog) {
   busySvc.busy();
 
-  Promise.all([dataSvc.getSiteEmployeesWithStats($routeParams.site_pk), dataSvc.getSiteWithStats($routeParams.site_pk), dataSvc.getCertificates()]).then(function (results) {
+  Promise.all([dataSvc.getSiteEmployeesWithStats($routeParams.site_pk), dataSvc.getSiteWithStats($routeParams.site_pk), dataSvc.getCertificates(), dataSvc.getLatestUpdate()]).then(function (results) {
     $scope.employees = _.values(results[0]);
     $scope.site = results[1];
     $scope.certificates = _.values(results[2]);
+    $scope.update = results[3];
     busySvc.done();
     $scope.$apply();
   }, function () {

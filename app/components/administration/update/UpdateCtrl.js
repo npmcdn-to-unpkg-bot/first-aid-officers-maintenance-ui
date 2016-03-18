@@ -111,13 +111,17 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, ngDialog, bus
         display: 'Matricule',
         rule: 'Doit être renseigné'
       },
+      'empl_surname': {
+        display: 'Nom de famille',
+        rule: 'Doit être renseigné'
+      },
       'empl_firstname': {
         display: 'Prénom',
         rule: 'Doit être renseigné'
       },
-      'empl_surname': {
-        display: 'Nom de famille',
-        rule: 'Doit être renseigné'
+      'empl_gender': {
+        display: 'Sexe',
+        rule: 'Doit être soit \'masculin\' soit \'féminin\''
       },
       'empl_addr': {
         display: 'Adresse e-mail',
@@ -162,6 +166,8 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, ngDialog, bus
           return moment(value, 'YYYY-MM-DD', true).isValid();
         case 'empl_permanent':
           return value.toUpperCase() === 'CDI' || value.toUpperCase() === 'CDD';
+        case 'empl_gender':
+          return value.toUpperCase() === 'MASCULIN' || value.toUpperCase() === 'FÉMININ';
         case 'siem_site_fk':
           return $scope.sites[value] !== undefined;
         default:

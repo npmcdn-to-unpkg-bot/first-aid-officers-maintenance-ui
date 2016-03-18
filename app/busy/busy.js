@@ -19,7 +19,11 @@ require('angular').module(moduleName, [])
 
     function notify(task) {
       (listeners[task] || []).forEach(function (callback) {
-        callback(state[task] > 0);
+        callback(state[task] > 0, function () {
+          if (listeners[task].indexOf(callback) > 0) {
+            listeners[task].splice(listeners[task].indexOf(callback), 1);
+          }
+        });
       });
     }
 
@@ -32,7 +36,11 @@ require('angular').module(moduleName, [])
           listeners[task] = [callback];
         }
 
-        callback(state[task] > 0);
+        callback(state[task] > 0, function () {
+          if (listeners[task].indexOf(callback) > 0) {
+            listeners[task].splice(listeners[task].indexOf(callback), 1);
+          }
+        });
       },
       busy: function (task) {
         if (task && task !== 'global') {

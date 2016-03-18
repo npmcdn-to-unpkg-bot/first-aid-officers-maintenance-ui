@@ -16,11 +16,18 @@
                 </div>
             </div>
             <div class="panel-body">
-                Nombre d'agents&nbsp;:
-                <strong class="text-primary">{{site.stats.employeesCount}}</strong> (<strong>{{site.stats.permanentsCount}}</strong>
-                <span class="label label-success">CDI</span> +
-                <strong>{{site.stats.employeesCount - site.stats.permanentsCount}}</strong>
-                <span class="label label-warning">CDD</span>)
+                <div class="row">
+                    <div class="col-xs-4 text-right">Nombre d'agents</div>
+                    <div class="col-xs-8">
+                        <strong>{{site.stats.employeesCount}}</strong> ({{site.stats.permanentsCount}}
+                        <span class="label label-success">CDI</span> + {{site.stats.employeesCount - site.stats.permanentsCount}}
+                        <span class="label label-warning">CDD</span>)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 text-right">Derni&egrave;re mise &agrave; jour</div>
+                    <div class="col-xs-8"><strong>{{update.updt_date | date: 'fullDate'}}</strong></div>
+                </div>
             </div>
             <table class="table" ng-show="(checkedCertificates = (certificates | filter: {'checked': true})).length > 0">
                 <thead>
@@ -75,6 +82,9 @@
                         <div class="st-sort" st-sort="empl_pk">Matricule</div>
                         <input st-search="empl_pk" placeholder="Rechercher..." class="form-control" type="text" />
                     </th>
+                    <th class="vtop">
+                        <div class="st-sort" st-sort="empl_gender" st-skip-natural="true">Titre</div>
+                    </th>
                     <th class="shrinkable" width="35%">
                         <div class="st-sort" st-sort="empl_surname" st-skip-natural="true">Nom</div>
                         <input st-search="empl_surname" placeholder="Rechercher..." class="form-control" type="text" />
@@ -97,6 +107,7 @@
                         <button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button>
                     </td>
                     <td class="shrinkable">{{empl.empl_pk}}</td>
+                    <td class="text-right" ng-class="{'text-primary': hover}">{{empl.empl_gender ? 'M.' : 'Mme'}}</td>
                     <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_surname}}&nbsp;</td>
                     <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_firstname}}&nbsp;</td>
                     <td class="text-center">
@@ -115,7 +126,7 @@
         </div>
     </div>
 </div>
-<div class="side-panel-container text-right" if-role="trainer">
+<div class="side-panel-container text-right">
     <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="openDashboardOptions()">
         <span class="glyphicon glyphicon-download-alt"></span>&nbsp;G&eacute;n&eacute;rer tableau de bord</button>
 </div>

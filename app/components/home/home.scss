@@ -1,0 +1,37 @@
+.jumbotron {
+    margin: 0 !important;
+    ul > li {
+        font-size: 16px;
+        color: #555;
+    }
+}
+
+uib-accordion > .panel-group > .panel > .panel-heading {
+    cursor: pointer;
+}
+
+small {
+    font-size: 80%;
+    color: #555;
+}
+
+blockquote {
+    p {
+        font-size: 18px !important;
+    }
+    .comment {
+        &:before {
+            content: '[';
+        }
+        &:after {
+            content: ']';
+        }
+        color: #888;
+    }
+    small {
+        color: #aaa;
+        cite {
+            color: #555;
+        }
+    }
+}

@@ -1,0 +1,38 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">Param&egrave;tres<span class="clickme pull-right" ng-click="closeThisDialog()" ng-if="closeThisDialog">&nbsp;<span class="glyphicon glyphicon-remove"></span></div>
+    <div class="panel-body">
+        <form class="form-horizontal" autocomplete="off">
+            <div class="form-group">
+                <label for="beginning" class="col-xs-4 control-label">D&eacute;but de p&eacute;riode</label>
+                <div class="col-xs-8">
+                    <input id="beginning" type="text" max-date="params.end" ng-model="params.beginning" class="form-control" ng-click="startpicker=true" uib-datepicker-popup="fullDate" datepicker-mode="'year'" is-open="startpicker" show-button-bar="false" starting-day="1" date-disabled="disabled(date, mode)" show-weeks="false">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="end" class="col-xs-4 control-label">Fin de p&eacute;riode</label>
+                <div class="col-xs-8">
+                    <input id="end" type="text" min-date="params.beginning || null" ng-model="params.end" class="form-control" ng-click="datepicker=true" uib-datepicker-popup="fullDate" datepicker-mode="'year'" is-open="datepicker" show-button-bar="false" starting-day="1" date-disabled="disabled(date, mode)" show-weeks="false">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="interval" class="col-xs-4 control-label">Bilans interm&eacute;diaires</label>
+                <div class="col-xs-8">
+                    <select id="interval" class="form-control" ng-model="interval" ng-options="interval as 'sur chaque ' + getIntervalDisplay(interval) for interval in params.availableIntervals" ng-change="interval ? params.intervals.push(interval) : ''">
+                        <option value="" disabled selected="true">Ajouter bilans interm&eacute;diaires...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-8">
+                    <div ng-repeat="interval in params.intervals | orderBy" class="pill clickme" ng-click="params.intervals.splice(params.intervals.indexOf(interval), 1)">
+                        sur chaque {{getIntervalDisplay(interval)}}<span class="pill-delete">&times;</span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="panel-footer text-center">
+        <button type="button" class="btn btn-primary" ng-click="generate()" ng-disabled="!params.beginning || !params.end">Dresser statistiques</button>
+    </div>
+</div>

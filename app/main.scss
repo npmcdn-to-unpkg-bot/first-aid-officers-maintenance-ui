@@ -15,16 +15,48 @@ $screen-xs: 768px;
 @import 'styles/tables';
 @import 'styles/side_panel';
 @import 'components/index/index';
+@import 'components/home/home';
+@import 'components/trainings/trainings_stats';
+@import 'components/dialogs/ngdialog-theme-gfs';
 @media (min-width: $screen-xs) {
     .form-group:not(.label-floating) label.control-label {
         padding-top: 8px;
     }
 }
 
-@media (max-width: $screen-xs) {
+@media (min-resolution: 192dpi) {
     .container {
         width: 100%;
         padding: 0;
+    }
+}
+
+textarea.vresize {
+    resize: vertical;
+}
+
+.preserve-whitespace {
+    white-space: pre-wrap;
+}
+
+.pill {
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #D2D2D2;
+    padding: 5px 8px;
+    & + & {
+        margin-top: 8px;
+    }
+    &:hover {
+        background-color: #eee;
+        color: $brand-danger;
+        border: 1px solid $brand-danger;
+    }
+    .pill-delete {
+        float: right;
+    }
+    &:not(:hover) .pill-delete {
+        visibility: hidden;
     }
 }
 
@@ -34,8 +66,16 @@ $screen-xs: 768px;
     color: darken(white, 10%);
 }
 
+.bswitch-label {
+    padding-top: 2px !important;
+}
+
 .uib-datepicker .text-info {
     color: rgba(0, 0, 0, 0.87);
+}
+
+.uib-datepicker button[disabled] .text-info {
+    color: rgba(0, 0, 0, 0.26);
 }
 
 .form-group:not(.label-floating) label.control-label {
@@ -106,13 +146,6 @@ h3.pull-left {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-.ngdialog.ngdialog-theme-default .ngdialog-content {
-    padding: 0;
-    .panel {
-        border-radius: 4px;
-    }
 }
 
 .label {

@@ -14,14 +14,20 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
     $scope.trainees = [];
     if ($routeParams.trng_pk) {
       dataSvc.getTraining($routeParams.trng_pk).then(function (training) {
+        $scope.dateRange = training.trng_start !== null;
         training.type = results[2][training.trng_trty_fk];
         $scope.trng = training;
+        if ($scope.trng_start) {
+          $scope.trng.trng_start = new Date($scope.trng.trng_start);
+        }
+        $scope.trng.trng_date = new Date($scope.trng.trng_date);
         $scope.trainees = _.values(training.trainees);
         busySvc.done();
       }, function () {
         busySvc.done();
       });
     } else {
+      $scope.trng = { trainers: [] };
       busySvc.done();
     }
 
@@ -30,7 +36,32 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
     busySvc.done();
   });
 
+  $scope.getDisplayDate = function () {
+    if ($scope.dateRange && $scope.trng.trng_start) {
+      var dateFromFormat;
+      if (dateFilter($scope.trng.trng_start, 'yyyy') !== dateFilter($scope.trng.trng_date, 'yyyy')) {
+        dateFromFormat = 'longDate';
+      } else {
+        dateFromFormat = dateFilter($scope.trng.trng_start, 'M') === dateFilter($scope.trng.trng_date, 'M') ? 'd' : 'd MMMM';
+      }
+
+      return 'du ' + dateFilter($scope.trng.trng_start, dateFromFormat) + ' au ' + dateFilter($scope.trng.trng_date, 'longDate');
+    }
+
+    return dateFilter($scope.trng.trng_date, 'fullDate');
+  };
+
+  $scope.$watch('trng.trng_start', function () {
+    if ($scope.trng.trng_start === null) {
+      delete $scope.trng.trng_start;
+    }
+  });
+
   $scope.$watch('trng.trng_date', function (date) {
+    if ($scope.trng.trng_date === null) {
+      delete $scope.trng.trng_date;
+    }
+
     if ($scope.trng && $scope.trng.type) {
       $scope.trng.expirationDate = moment(date).add($scope.trng.type.trty_validity, 'months').format('YYYY-MM-DD');
     }
@@ -42,6 +73,13 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
       if ($scope.trng.trng_date) {
         $scope.trng.expirationDate = moment($scope.trng.trng_date).add(validity, 'months').format('YYYY-MM-DD');
       }
+    }
+  });
+
+  $scope.$watch('empl', function (empl) {
+    if (empl && empl.empl_pk && _.findWhere($scope.trng.trainers, { empl_pk: empl.empl_pk }) === undefined) {
+      $scope.trng.trainers.push(empl);
+      delete $scope.empl;
     }
   });
 
@@ -108,8 +146,11 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
     }).then(function () {
       var training = {
         trng_trty_fk: $scope.trng.type.trty_pk,
+        trng_start: $scope.dateRange ? dateFilter($scope.trng.trng_start, 'yyyy-MM-dd') : null,
         trng_date: dateFilter($scope.trng.trng_date, 'yyyy-MM-dd'),
         trng_outcome: $scope.trng.trng_outcome || 'SCHEDULED',
+        trng_comment: $scope.trng.trng_comment && $scope.trng.trng_comment.length > 0 ? $scope.trng.trng_comment : null,
+        trainers: _.pluck($scope.trng.trainers, 'empl_pk'),
         trainees: _.object(_.pluck($scope.trainees, 'empl_pk'), _.map($scope.trainees, function (trainee) {
           return _.defaults(trainee, { trem_outcome: 'SCHEDULED', trem_comment: '' });
         })) || _.object(_.pluck($scope.trainees, 'empl_pk'), _.map($scope.trainees, function () {

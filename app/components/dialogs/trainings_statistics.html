@@ -26,7 +26,7 @@
                 <div class="col-xs-4"></div>
                 <div class="col-xs-8">
                     <div ng-repeat="interval in params.intervals | orderBy" class="pill clickme" ng-click="params.intervals.splice(params.intervals.indexOf(interval), 1)">
-                        <small>sur chaque {{getIntervalDisplay(interval)}}<span class="pill-delete">&times;</span></small>
+                        sur chaque {{getIntervalDisplay(interval)}}<span class="pill-delete">&times;</span>
                     </div>
                 </div>
             </div>

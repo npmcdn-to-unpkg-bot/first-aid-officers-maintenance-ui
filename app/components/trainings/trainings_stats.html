@@ -5,14 +5,15 @@
         <div ng-include="'./components/dialogs/trainings_statistics.html'"></div>
     </div>
 </div>
-<div class="panel panel-primary" ng-if="stats">
+<div class="panel panel-primary" ng-show="stats">
     <div class="panel-heading">
         <div class="row">
             <div class="col-sm-4 col-xs-12">Statistiques</div>
             <div class="col-sm-8 col-xs-12 text-right">
                 <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
                     <div class="btn-group">
-                        <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
+                        <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates"
+                            tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
                     </div>
                 </state-sustain>
             </div>
@@ -50,12 +51,13 @@
                 <td class="text-center">
                     <abbr title="{{cert.cert_name}}" class="initialism">{{cert.cert_short}}</abbr>
                 </td>
-                <td class="text-center" ng-repeat="col in intervalStats.stats" colspan="{{$last && columns / intervalStats.colSpan > 1 && columns % intervalStats.colSpan ? columns - 1 : intervalStats.colSpan || columns}}">
-                    <span class="text-success" ng-if="infos.trained.checked">{{col.certificates[certPk].employeesTrained || 0}}</span>
+                <td class="text-center" ng-repeat="col in intervalStats.stats" ng-click="openDetails(getDatesRangeDisplay(intervalStats.interval, col.beginning, col.end), cert, col.certificates[certPk])"
+                    colspan="{{$last && columns / intervalStats.colSpan > 1 && columns % intervalStats.colSpan ? columns - 1 : intervalStats.colSpan || columns}}">
+                    <span class="text-success" ng-if="infos.trained.checked">{{col.certificates[certPk].statistics.employeesTrained || 0}}</span>
                     <span ng-if="infos.registered.checked && infos.trained.checked">/</span>
-                    <span class="text-primary" ng-if="infos.registered.checked">{{col.certificates[certPk].employeesRegistered || 0}}</span>
+                    <span class="text-primary" ng-if="infos.registered.checked">{{col.certificates[certPk].statistics.employeesRegistered || 0}}</span>
                     <span ng-if="(infos.registered.checked || infos.trained.checked) && infos.expired.checked"> - </span>
-                    <span class="text-danger" ng-if="infos.expired.checked">{{col.certificates[certPk].employeesExpired || 0}}</span>
+                    <span class="text-danger" ng-if="infos.expired.checked">{{col.certificates[certPk].statistics.employeesExpired || 0}}</span>
                 </td>
             </tr>
         </tbody>

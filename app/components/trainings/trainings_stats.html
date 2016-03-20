@@ -22,7 +22,7 @@
         <div class="row">
             <div for="infos" class="col-xs-4 text-right pseudo-control-label">Donn&eacute;es affich&eacute;es</div>
             <div class="col-xs-8">
-                <div id="infos" class="btn-group" ng-init="infos = {trained: {checked: true, display: 'form&eacute;s'}, registered: {checked: true, display: 'inscrits'}, expired: {display: '&agrave; renouveler'}}">
+                <div id="infos" class="btn-group" ng-init="infos = {trained: {checked: true, display: 'valid&eacute;s'}, registered: {checked: true, display: 'inscrits'}, expired: {display: '&agrave; renouveler'}}">
                     <label class="btn btn-raised btn-sm btn-default" ng-model="info.checked" uib-btn-checkbox ng-repeat="info in infos">{{info.display}}</label>
                 </div>
             </div>
@@ -30,7 +30,7 @@
         <div class="row">
             <div for="format" class="col-xs-4 text-right">Format</div>
             <div class="col-xs-8" id="format">
-                <abbr title="agents form&eacute;s sur une p&eacute;riode" class="text-success" ng-if="infos.trained.checked">{{infos.trained.display}}</abbr>
+                <abbr title="agents valid&eacute;s sur une p&eacute;riode" class="text-success" ng-if="infos.trained.checked">{{infos.trained.display}}</abbr>
                 <span ng-if="infos.registered.checked && infos.trained.checked">/</span>
                 <abbr title="agents inscrits sur une p&eacute;riode" class="text-primary" ng-if="infos.registered.checked">{{infos.registered.display}}</abbr>
                 <span ng-if="(infos.registered.checked || infos.trained.checked) && infos.expired.checked"> - </span>

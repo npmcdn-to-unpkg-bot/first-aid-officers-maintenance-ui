@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="utf-8">
-        <script type="text/javascript" src="bundle.js"></script>
+        <script type="text/javascript" src="bundle.js" async></script>
         <link rel="stylesheet" type="text/css" href="main.css" />
         <title>Gestion des Formations Sécurité</title>
         <link rel="shortcut icon" href="./img/favicon.ico" />
@@ -54,7 +54,8 @@
                             </ul>
                             <form class="navbar-form navbar-left" ng-show="currentUser.info">
                                 <div class="form-group uib-typeahead">
-                                    <input type="text" class="form-control col-md-8" placeholder="Recherche globale..." uib-typeahead="select as select.summary for select in globalIndex | filterGlobal:$viewValue | limitTo:8" ng-model="select" ng-focus="refreshIndex()" />
+                                    <input type="text" class="form-control col-md-8" placeholder="Recherche globale..." uib-typeahead="select as select.summary for select in globalIndex | filterGlobal:$viewValue | limitTo:8"
+                                        ng-model="select" ng-focus="refreshIndex()" />
                                 </div>
                             </form>
                             <ul class="nav navbar-nav navbar-right">
@@ -79,7 +80,12 @@
             </div>
             <footer>
                 <br />
-                <p>&copy; 2014-{{today | date: 'yyyy'}} NCLS&nbsp;Development<span class="text-danger">&nbsp;|&nbsp;</span><a href="mailto:nclsdevelopment@gmail.com?subject=Enquiry about {{title}} at {{whereami}}" class="contact-us">nous contacter</a></p>
+                <p>
+                    Gestion des formations s&eacute;curit&eacute; - <span class="version">version 1.2</span> - P&ocirc;le emploi IDF
+                    <span class="pull-right">&copy; 2014-{{today | date: 'yyyy'}} NCLS&nbsp;Development<span class="text-danger">&nbsp;|&nbsp;</span>
+                    <a href="mailto:nclsdevelopment@gmail.com?subject=Enquiry about {{title}} at {{whereami}}" class="contact-us">nous contacter</a>
+                    </span>
+                </p>
             </footer>
         </div>
     </body>

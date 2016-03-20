@@ -5,6 +5,19 @@ table.table.trainings-stats tr {
             border-left: 1px solid #ddd;
         }
     }
+    td + td {
+        cursor: pointer;
+        &:hover {
+            background: #eee;
+        }
+    }
+}
+
+table.table.trainings-stats-details {
+    th,
+    td {
+        padding: 8px 15px;
+    }
 }
 
 .pseudo-control-label {

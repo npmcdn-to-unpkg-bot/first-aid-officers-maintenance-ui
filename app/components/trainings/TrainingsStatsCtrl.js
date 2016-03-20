@@ -13,8 +13,9 @@ module.exports = function ($scope, $rootScope, dataSvc, dateFilter, busySvc, ngD
   };
 
   busySvc.busy();
-  dataSvc.getCertificates().then(function (results) {
-    $scope.certificates = results;
+  Promise.all([dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function (results) {
+    $scope.trainingTypes = results[0];
+    $scope.certificates = results[1];
     busySvc.done();
   }, function () {
     busySvc.done();
@@ -35,11 +36,25 @@ module.exports = function ($scope, $rootScope, dataSvc, dateFilter, busySvc, ngD
     }
   };
 
+  $scope.openDetails = function (period, certificate, statistics) {
+    var dialogScope = $scope.$new();
+    dialogScope.period = period;
+    dialogScope.certificate = certificate;
+    dialogScope.statistics = statistics;
+    dialogScope.hasMultipleTypes = statistics && _.keys(statistics.trainingTypesStatistics).length > 0 && _.filter($scope.trainingTypes, function (trainingType) {
+      return _.find(trainingType.certificates, { cert_pk: certificate.cert_pk });
+    }).length > 1;
+    ngDialog.open({
+      template: './components/dialogs/trainings_certificate_statistics.html',
+      scope: dialogScope
+    });
+  };
+
   $scope.getDatesRangeDisplay = function (interval, beginning, end) {
     var _beginning = moment(beginning);
     var _dateFilter;
     if (interval === 0) {
-      _dateFilter = _.partialRight(dateFilter, 'fullDate');
+      _dateFilter = _.partialRight(dateFilter, 'longDate');
     } else if (interval === 12 && _beginning.dayOfYear() === 1) {
       return dateFilter(beginning, 'yyyy');
     } else if (interval === 1 && _beginning.date() === 1) {

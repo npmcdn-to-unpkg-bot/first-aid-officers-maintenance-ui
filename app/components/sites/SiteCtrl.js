@@ -129,7 +129,7 @@ module.exports = function ($scope, $routeParams, $location, dataSvc, busySvc, ng
                         text: 'Prénom',
                         style: 'table-header'
                       }, {
-                        text: cert.cert_short + ' à renouveller en',
+                        text: cert.cert_short + ' à renouveler en',
                         alignment: 'center',
                         style: 'table-header'
                       }]

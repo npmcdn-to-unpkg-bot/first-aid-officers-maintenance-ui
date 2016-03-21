@@ -14,12 +14,12 @@ require('angular').module(moduleName, [])
       <div ng-transclude ng-show="!busy"></div>');
   }])
   .factory('BusySvc', function () {
-    var state = { global: 0 };
+    var state = { global: { count: 0, detached: false } };
     var listeners = {};
 
     function notify(task) {
       (listeners[task] || []).forEach(function (callback) {
-        callback(state[task] > 0, function () {
+        callback(state[task].count > 0, function () {
           if (listeners[task].indexOf(callback) > 0) {
             listeners[task].splice(listeners[task].indexOf(callback), 1);
           }
@@ -36,31 +36,42 @@ require('angular').module(moduleName, [])
           listeners[task] = [callback];
         }
 
-        callback(state[task] > 0, function () {
+        callback(state[task].count > 0, function () {
           if (listeners[task].indexOf(callback) > 0) {
             listeners[task].splice(listeners[task].indexOf(callback), 1);
           }
         });
       },
-      busy: function (task) {
+      busy: function (task, detach) {
+        task = task ? task : 'global';
+        detach = detach ? true : false;
+        if (state[task] && (state[task].count > 0) || task === 'global' && state[task].detached !== detach) {
+          throw 'Unable to alter detachment status of ongoing task \'' + task + '\', was previously \'' + (state[task].detached ? 'detached' : 'attached') + '\'.';
+        }
+
         if (task && task !== 'global') {
-          if (1 === (state[task] = state[task] ? state[task] + 1 : 1)) {
+          if (!state[task]) {
+            state[task] = { count: 0, detached: detach };
+          }
+
+          if (1 === (state[task].count += 1)) {
             notify(task);
           }
         }
 
-        if (1 === (state.global = state.global + 1)) {
+        if (!state[task].detached && 1 === (state.global.count = state.global.count + 1)) {
           notify('global');
         }
       },
       done: function (task) {
+        task = task ? task : 'global';
         if (task && task !== 'global') {
-          if (!(state[task] = state[task] ? state[task] - 1 : 0)) {
+          if (!(state[task].count = state[task].count ? state[task].count - 1 : 0)) {
             notify(task);
           }
         }
 
-        if (!(state.global = state.global ? state.global - 1 : 0)) {
+        if (!state[task].detached && !(state.global.count = state.global.count ? state.global.count - 1 : 0)) {
           notify('global');
         }
       }
@@ -68,7 +79,7 @@ require('angular').module(moduleName, [])
   })
   .directive('busy', ['BusySvc', function (busySvc) {
     return {
-      restrict: 'EA',
+      restrict: 'E',
       transclude: true,
       templateUrl: function (elem, attr) {
         return attr.busyTemplate ? attr.busyTemplate : 'ccjmne-busy_tmpl.html';

@@ -57,11 +57,11 @@ function getClosestEntry(data, scale, pos) {
 module.exports = function ($scope, $routeParams, dataSvc, busySvc) {
   var xAxis, yAxis, areaAboveCount, areaAboveTarget, areaBelowCount, areaBelowTarget, certLegend, x, y, svg, width, height, targetLine, countLine;
   var certData;
-  busySvc.busy('siteStats');
 
   // ---------------------------------------------------------
   // SVG CREATION
   // ---------------------------------------------------------
+
   $scope.initSvg = function () {
     var margin = {
       top: 20,
@@ -264,6 +264,7 @@ module.exports = function ($scope, $routeParams, dataSvc, busySvc) {
       });
   };
 
+  busySvc.busy('siteStats', true);
   $scope.from = new Date();
   $scope.from.setFullYear($scope.from.getFullYear() - 1);
   $scope.from.setMonth(0);
@@ -278,13 +279,15 @@ module.exports = function ($scope, $routeParams, dataSvc, busySvc) {
   });
 
   $scope.recompute = function () {
+    busySvc.busy('siteStats', true);
     dataSvc.getSiteStatsHistory($routeParams.site_pk, $scope.from).then(function (data) {
       $scope.data = data;
-      $scope.displayData($scope.cert.cert_pk);
+      $scope.displayData($scope.cert.cert_pk, true);
+      busySvc.done('siteStats');
     });
   };
 
-  $scope.displayData = function (cert_pk) {
+  $scope.displayData = function (cert_pk, skipTransitions) {
     $scope.cert = $scope.certificates[cert_pk];
     certData = _($scope.data).map(function (entry, date) {
       return {
@@ -304,19 +307,21 @@ module.exports = function ($scope, $routeParams, dataSvc, busySvc) {
     xAxis.scale(x);
     yAxis.scale(y);
 
-    svg.select('.x.axis').transition().duration(1000).call(xAxis.tickSize(6, 0).tickFormat(axisTimeFormat));
-    svg.select('.y.axis').transition().duration(1000).call(yAxis.tickSize(6, 0).tickFormat(d3.format('d')));
+    var transitionDuration = skipTransitions ? 0 : 1000;
 
-    svg.select('.grid.x').transition().duration(1000).call(xAxis.tickSize(-height, 0).tickFormat(''));
-    svg.select('.grid.y').transition().duration(1000).call(yAxis.tickSize(-width, 0).tickFormat(''));
+    svg.select('.x.axis').transition().duration(transitionDuration).call(xAxis.tickSize(6, 0).tickFormat(axisTimeFormat));
+    svg.select('.y.axis').transition().duration(transitionDuration).call(yAxis.tickSize(6, 0).tickFormat(d3.format('d')));
 
-    svg.select('#clip-count path').transition().duration(1000).attr('d', areaAboveCount(certData));
-    svg.select('#clip-target path').transition().duration(1000).attr('d', areaAboveTarget(certData));
-    svg.select('.count.area').transition().duration(1000).attr('d', areaBelowCount(certData));
-    svg.select('.target.area').transition().duration(1000).attr('d', areaBelowTarget(certData));
+    svg.select('.grid.x').transition().duration(transitionDuration).call(xAxis.tickSize(-height, 0).tickFormat(''));
+    svg.select('.grid.y').transition().duration(transitionDuration).call(yAxis.tickSize(-width, 0).tickFormat(''));
 
-    svg.select('.target.line').transition().duration(1000).attr('d', targetLine(certData));
-    svg.select('.count.line').transition().duration(1000).attr('d', countLine(certData));
+    svg.select('#clip-count path').transition().duration(transitionDuration).attr('d', areaAboveCount(certData));
+    svg.select('#clip-target path').transition().duration(transitionDuration).attr('d', areaAboveTarget(certData));
+    svg.select('.count.area').transition().duration(transitionDuration).attr('d', areaBelowCount(certData));
+    svg.select('.target.area').transition().duration(transitionDuration).attr('d', areaBelowTarget(certData));
+
+    svg.select('.target.line').transition().duration(transitionDuration).attr('d', targetLine(certData));
+    svg.select('.count.line').transition().duration(transitionDuration).attr('d', countLine(certData));
 
     certLegend.text($scope.cert.cert_short);
   };

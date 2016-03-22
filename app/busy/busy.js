@@ -108,10 +108,28 @@ require('angular').module(moduleName, [])
         var previousText;
         element.on('$destroy', busySvc.register(function (busy) {
           if (busy) {
-            previousText = element.text();
+            previousText = element.html();
+            element.text(attrs.busyText);
+          } else {
+            element.html(previousText || element.html());
           }
 
-          element.text(busy ? attrs.busyText : previousText);
+          setTimeout(function () { scope.$apply(); }, 0);
+        }, attrs.busyTask));
+      }
+    };
+  }])
+  .directive('busyHtml', ['BusySvc', function (busySvc) {
+    return {
+      restrict: 'A',
+      link: function (scope, element, attrs) {
+        var previousText;
+        element.on('$destroy', busySvc.register(function (busy) {
+          if (busy) {
+            previousText = element.html();
+          }
+
+          element.html(busy ? attrs.busyHtml : previousText || element.html());
           setTimeout(function () { scope.$apply(); }, 0);
         }, attrs.busyTask));
       }

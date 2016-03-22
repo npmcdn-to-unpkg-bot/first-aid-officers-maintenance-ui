@@ -20,7 +20,7 @@ require('angular').module(moduleName, [])
     function notify(task) {
       (listeners[task] || []).forEach(function (callback) {
         callback(state[task].count > 0, function () {
-          if (listeners[task].indexOf(callback) > 0) {
+          if (listeners[task].indexOf(callback) !== -1) {
             listeners[task].splice(listeners[task].indexOf(callback), 1);
           }
         });
@@ -36,11 +36,17 @@ require('angular').module(moduleName, [])
           listeners[task] = [callback];
         }
 
-        callback(state[task].count > 0, function () {
+        callback(state[task] && state[task].count > 0, function () {
           if (listeners[task].indexOf(callback) > 0) {
             listeners[task].splice(listeners[task].indexOf(callback), 1);
           }
         });
+
+        return function () {
+          if (listeners[task].indexOf(callback) !== -1) {
+            listeners[task].splice(listeners[task].indexOf(callback), 1);
+          }
+        };
       },
       busy: function (task, detach) {
         task = task ? task : 'global';
@@ -87,11 +93,43 @@ require('angular').module(moduleName, [])
       scope: {
         task: '@busyTask'
       },
-      link: function (scope) {
-        busySvc.register(function (busy) {
+      link: function (scope, element) {
+        element.on('$destroy', busySvc.register(function (busy) {
           scope.busy = busy;
           setTimeout(function () { scope.$apply(); }, 0);
-        }, scope.task);
+        }, scope.task));
+      }
+    };
+  }])
+  .directive('busyText', ['BusySvc', function (busySvc) {
+    return {
+      restrict: 'A',
+      link: function (scope, element, attrs) {
+        var previousText;
+        element.on('$destroy', busySvc.register(function (busy) {
+          if (busy) {
+            previousText = element.text();
+          }
+
+          element.text(busy ? attrs.busyText : previousText);
+          setTimeout(function () { scope.$apply(); }, 0);
+        }, attrs.busyTask));
+      }
+    };
+  }])
+  .directive('busyDisable', ['BusySvc', function (busySvc) {
+    return {
+      restrict: 'A',
+      link: function (scope, element, attrs) {
+        var previouslyDisabled;
+        element.on('$destroy', busySvc.register(function (busy) {
+          if (busy) {
+            previouslyDisabled = element.attr('disabled') || false;
+          }
+
+          element.attr('disabled', busy || previouslyDisabled);
+          setTimeout(function () { scope.$apply(); }, 0);
+        }, attrs.busyTask));
       }
     };
   }]);

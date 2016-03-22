@@ -51,7 +51,7 @@ require('angular').module(moduleName, [])
       busy: function (task, detach) {
         task = task ? task : 'global';
         detach = detach ? true : false;
-        if (state[task] && (state[task].count > 0) || task === 'global' && state[task].detached !== detach) {
+        if ((state[task] && (state[task].count > 0) || task === 'global') && state[task].detached !== detach) {
           throw 'Unable to alter detachment status of ongoing task \'' + task + '\', was previously \'' + (state[task].detached ? 'detached' : 'attached') + '\'.';
         }
 

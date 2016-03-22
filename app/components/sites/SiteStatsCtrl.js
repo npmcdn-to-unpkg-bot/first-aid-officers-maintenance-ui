@@ -74,11 +74,7 @@ module.exports = function ($scope, $routeParams, dataSvc, busySvc) {
     width = placeholder.attr('width') - margin.left - margin.right;
     height = placeholder.attr('height') - margin.top - margin.bottom;
 
-    svg = placeholder
-      /*.append('svg')
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)*/
-      .append('g')
+    svg = placeholder.append('g')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
     x = d3.time.scale().range([0, width]).nice();

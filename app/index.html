@@ -31,8 +31,7 @@
                 <div class="navbar navbar-default">
                     <div class="container-fluid">
                         <div class="navbar-header">
-                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-                                <span class="icon-bar"></span>
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse"> <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
@@ -40,13 +39,21 @@
                         </div>
                         <div class="navbar-collapse collapse navbar-responsive-collapse">
                             <ul class="nav navbar-nav">
-                                <li ng-class="{ active: isActive('/sites')}" if-role="'user'"><a href="#/sites">Sites</a></li>
+                                <li class="dropdown" ng-class="{ active: isActive('/sites')}">
+                                    <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Sites&nbsp;<b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#/sites">Consulter sites</a></li>
+                                        <li><a href="#/sites/search">Recherche avanc&eacute;e</a></li>
+                                    </ul>
+                                </li>
                                 <li ng-class="{ active: isActive('/employees')}" if-role="'user'"><a href="#/employees">Agents</a></li>
                                 <li ng-class="{ active: isActive('/trainings')}" if-role="'user'"><a href="#/trainings" if-role="'!trainer'">Formations</a></li>
                                 <li class="dropdown" ng-class="{ active: isActive('/trainings')}" if-role="'trainer'">
-                                    <a href="javascript(void)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Formations<b class="caret"></b></a>
+                                    <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Formations&nbsp;<b class="caret"></b></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#/trainings">Consulter formations</a></li>
+                                        <li><a href="#/trainings">Recherche avanc&eacute;e</a></li>
+                                        <li class="divider"></li>
                                         <li><a href="#/trainings/create">Cr&eacute;er formation</a></li>
                                         <li><a href="#/trainings/stats">Dresser statistiques</a></li>
                                     </ul>
@@ -61,7 +68,7 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li ng-class="{ active: isActive('/account')}" if-role="'user'"><a href="#/account">Mon compte</a></li>
                                 <li class="dropdown" ng-class="{ active: isActive('/administration')}" if-role="'admin'">
-                                    <a href="javascript(void)" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Administration<b class="caret"></b></a>
+                                    <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Administration&nbsp;<b class="caret"></b></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#/administration/users">Administration utilisateurs</a></li>
                                         <li><a href="#/administration/sites">Gestion des sites</a></li>
@@ -80,11 +87,7 @@
             </div>
             <footer>
                 <br />
-                <p>
-                    Gestion des formations s&eacute;curit&eacute; - <span class="version">version 1.2</span> - P&ocirc;le emploi IDF
-                    <span class="pull-right">&copy; 2014-{{today | date: 'yyyy'}} NCLS&nbsp;Development<span class="text-danger">&nbsp;|&nbsp;</span>
-                    <a href="mailto:nclsdevelopment@gmail.com?subject=Enquiry about {{title}} at {{whereami}}" class="contact-us">nous contacter</a>
-                    </span>
+                <p> Gestion des formations s&eacute;curit&eacute; - <span class="version">version 1.2</span> - P&ocirc;le emploi IDF <span class="pull-right">&copy; 2014-{{today | date: 'yyyy'}} NCLS&nbsp;Development<span class="text-danger">&nbsp;|&nbsp;</span>                    <a href="mailto:nclsdevelopment@gmail.com?subject=Enquiry about {{title}} at {{whereami}}" class="contact-us">nous contacter</a> </span>
                 </p>
             </footer>
         </div>

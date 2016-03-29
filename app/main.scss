@@ -24,11 +24,28 @@ $screen-xs: 768px;
     }
 }
 
+.form-group label.control-label.checkbox-label {
+    padding-top: 6px;
+}
+
 @media (min-resolution: 192dpi) {
     .container {
         width: 100%;
         padding: 0;
     }
+}
+
+.panel-heading span.label {
+    position: relative;
+    top: -2px;
+}
+
+li.divider {
+    background-color: #eee !important;
+}
+
+hr {
+    margin: 10px 0;
 }
 
 textarea.vresize {
@@ -127,6 +144,10 @@ h3.pull-left {
 
 .no-margin {
     margin: 0;
+}
+
+.no-padding {
+    padding: 0;
 }
 
 .no-events {

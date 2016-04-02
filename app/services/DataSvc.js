@@ -51,6 +51,10 @@ module.exports = function ($http, $q, apiSvc, $filter) {
     return deferred.promise;
   };
 
+  dataSvc.getSiteStatsHistory = function (site_pk, from) {
+    return apiSvc.get(apiSvc.statisticsEndpoint + 'sites/' + site_pk + '?from=' + dateFilter(from, 'yyyy-MM-dd') + '&interval=1');
+  };
+
   dataSvc.getSiteEmployees = function (site_pk) {
     return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees?site=' + site_pk);
   };

@@ -49,6 +49,31 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="panel-body" uib-collapse="!history">
+                <div ng-controller="SiteStatsCtrl">
+                    <div class="form form-horizontal">
+                        <div class="form-group">
+                            <label for="start" class="col-xs-4 control-label">Depuis le</label>
+                            <div class="col-xs-8">
+                                <input id="start" type="text" ng-model="from" class="form-control" ng-click="startpicker=true" uib-datepicker-popup="fullDate" datepicker-mode="'year'" is-open="startpicker"
+                                    show-button-bar="false" starting-day="1" show-weeks="false" ng-change="recompute()" busy-disable busy-task="siteStats" max-date="today">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="cert" class="col-xs-4 control-label">Aptitude</label>
+                            <div class="col-xs-8">
+                                <select id="cert" ng-model="cert" ng-options="cert as cert.cert_short + ' - ' + cert.cert_name for cert in certificates" class="form-control" ng-change="displayData(cert.cert_pk)"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <busy busy-task="siteStats">
+                        <svg class="siteStats" width="620" height="200"></svg>
+                    </busy>
+                </div>
+            </div>
+            <div class="panel-footer text-center">
+                <button class="btn btn-primary" ng-click="history = !history">{{history ? 'Cacher' : 'Voir'}} historique</button>
+            </div>
         </div>
     </div>
 </div>

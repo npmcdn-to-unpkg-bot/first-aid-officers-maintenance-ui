@@ -232,6 +232,11 @@ angular.module('faomaintenanceApp', [
       });
     }
 
+    if (!/\/sites\/(search|results)/.test(newUrl) && ($location.search().filter || $location.search().display)) {
+      $location.search('filter', null);
+      $location.search('display', null);
+    }
+
     if (newUrl !== oldUrl && /\/trainings\/([^\/]+\/)?(create|edit|complete)/.test(oldUrl) && !($location.search().force)) {
       event.preventDefault();
       var dialogScope = $rootScope.$new(true);

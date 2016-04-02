@@ -111,6 +111,11 @@ angular.module('faomaintenanceApp', [
         controller: 'SitesSearchCtrl',
         reloadOnSearch: false
       })
+      .when('/sites/results', {
+        templateUrl: 'components/sites/sites_search_results.html',
+        controller: 'SitesSearchResultsCtrl',
+        reloadOnSearch: false
+      })
       .when('/sites/:site_pk', {
         templateUrl: 'components/sites/site.html',
         controller: 'SiteCtrl'
@@ -186,7 +191,8 @@ angular.module('faomaintenanceApp', [
   .controller('SitesAdministrationCtrl', ['$scope', 'DataSvc', 'ngDialog', '$route', 'BusySvc', require('./components/administration/sites/SitesAdministrationCtrl.js')])
   .controller('SiteEditCtrl', ['$rootScope', '$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/site_edit/SiteEditCtrl.js')])
   .controller('SiteCreationCtrl', ['$rootScope', '$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/site_edit/SiteCreationCtrl.js')])
-  .controller('SitesSearchCtrl', ['$rootScope', '$routeParams', '$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', require('./components/sites/SitesSearchCtrl.js')])
+  .controller('SitesSearchCtrl', ['$rootScope', '$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', require('./components/sites/SitesSearchCtrl.js')])
+  .controller('SitesSearchResultsCtrl', ['$rootScope', '$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', require('./components/sites/SitesSearchResultsCtrl.js')])
   .controller('TrainingCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'BusySvc', 'dateFilter', require(
     './components/trainings/TrainingCtrl.js')])
   .controller('TrainingsCtrl', ['$scope', 'DataSvc', '$location', 'BusySvc', require('./components/trainings/TrainingsCtrl.js')])

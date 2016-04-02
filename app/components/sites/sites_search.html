@@ -1,107 +1,113 @@
 <h3>Sites - recherche avanc&eacute;e</h3>
 <br />
 <div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-primary">
-            <div class="panel-heading">Param&egrave;tres de recherche</div>
-            <div class="panel-body form form-horizontal" autocomplete="off">
-                <div class="form-group">
-                    <label for="department" class="col-xs-4 control-label">D&eacute;partement</label>
-                    <div class="col-xs-8">
-                        <select id="department" class="form-control" ng-model="filter.dept" ng-options="dept.dept_pk as dept.dept_name for dept in departments | orderBy: 'dept_name'">
-                            <option value="" selected>{{filter.dept ? 'Ne pas filtrer' : ''}}</option>
-                        </select>
+    <div class="col-lg-6">
+        <div class="col-md-8 col-md-offset-2 col-lg-12 col-lg-offset-0">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Param&egrave;tres de recherche</div>
+                <div class="panel-body form form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label for="department" class="col-xs-4 control-label">D&eacute;partement</label>
+                        <div class="col-xs-8">
+                            <select id="department" class="form-control" ng-model="filter.dept" ng-options="dept.dept_pk as dept.dept_name for dept in departments | orderBy: 'dept_name'">
+                                <option value="" selected>{{filter.dept ? 'Ne pas filtrer' : ''}}</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="employees" class="col-xs-4 control-label">Nombre d'agents</label>
-                    <div class="col-xs-5">
-                        <select class="form-control" ng-model="filter.nb.o" ng-options="option.value as option.short + ' (' + option.display + ')' for option in comparisonOptions" ng-change="filter.nb.o ? '': filter.nb = undefined">
-                            <option value="" selected>{{filter.nb.o ? 'Ne pas filtrer' : ''}}</option>
-                        </select>
-                    </div>
-                    <div class="col-xs-3">
-                        <input id="employees" type="number" min="0" class="form-control" ng-model="filter.nb.d" ng-disabled="!filter.nb.o" />
+                    <div class="form-group">
+                        <label for="employees" class="col-xs-4 control-label">Nombre d'agents</label>
+                        <div class="col-xs-5">
+                            <select class="form-control" ng-model="filter.nb.o" ng-options="option.value as option.short + ' (' + option.display + ')' for option in comparisonOptions" ng-change="filter.nb.o ? '': filter.nb = undefined">
+                                <option value="" selected>{{filter.nb.o ? 'Ne pas filtrer' : ''}}</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-3">
+                            <input id="employees" type="number" min="0" class="form-control" ng-model="filter.nb.d" ng-disabled="!filter.nb.o" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col-md-8 col-md-offset-2 col-lg-12 col-lg-offset-0">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Param&egrave;tres d'affichage</div>
+                <div class="panel-body form form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label for="name" class="col-xs-6 control-label checkbox-label">Nom du site</label>
+                        <div class="col-xs-6 checkbox">
+                            <label>
+                                <input id="name" type="checkbox" disabled checked />
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="department" class="col-xs-6 control-label checkbox-label">D&eacute;partement</label>
+                        <div class="col-xs-6 checkbox">
+                            <label>
+                                <input id="department" type="checkbox" ng-model="display.dept" />
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="employees" class="col-xs-6 control-label checkbox-label">Nombre d'agents</label>
+                        <div class="col-xs-6 checkbox">
+                            <label>
+                                <input id="employees" type="checkbox" ng-model="display.nb" />
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="permanent" class="col-xs-6 control-label checkbox-label">Nombre d'agents permanents</label>
+                        <div class="col-xs-6 checkbox">
+                            <label>
+                                <input id="permanent" type="checkbox" ng-model="display.perm" />
+                            </label>
+                        </div>
+                    </div>
+                    <hr />
+                    <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
+                        <div class="form-group" ng-repeat="cert in certificates">
+                            <label for="permanent" class="col-xs-6 control-label checkbox-label">{{cert.cert_name}}</label>
+                            <div class="col-xs-3 checkbox">
+                                <label>
+                                    <input id="permanent" type="checkbox" ng-model="display[cert.cert_pk].nb" ng-init="display[cert.cert_pk].nb ? '' : display[cert.cert_pk].nb = cert.checked" />&nbsp;&nbsp;Nombre
+                                </label>
+                            </div>
+                            <div class="col-xs-3 checkbox">
+                                <label>
+                                    <input id="permanent" type="checkbox" ng-model="display[cert.cert_pk].pc" ng-init="display[cert.cert_pk].pc ? '' : display[cert.cert_pk].pc = cert.checked" />&nbsp;&nbsp;Taux
+                                </label>
+                            </div>
+                        </div>
+                    </state-sustain>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
         <form class="form-horizontal" autocomplete="off">
-            <div class="panel panel-default" ng-repeat="cert in certificates">
-                <div class="panel-heading"><span class="label label-primary">{{cert.cert_short}}</span> - {{cert.cert_name}}</div>
-                <div class="panel-body" uib-collapse="!(cert.conditions && cert.conditions.length > 0)">
-                    <div class="form-group" ng-repeat="condition in cert.conditions">
-                        <label class="col-xs-4 control-label" style="padding-top: 2px">{{$first ? '&Agrave; condition que' : 'et que'}}</label>
-                        <div class="col-xs-8">
-                            <div class="pill clickme" ng-click="cert.conditions.splice(cert.conditions.indexOf(condition), 1)">
-                                {{condition.display}}<span class="pill-delete">&times;</span>
+            <div class="col-md-8 col-md-offset-2 col-lg-12 col-lg-offset-0" ng-repeat="cert in certificates">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span class="label label-primary">{{cert.cert_short}}</span> - {{cert.cert_name}}</div>
+                    <div class="panel-body" uib-collapse="!(cert.conditions && cert.conditions.length > 0)">
+                        <div class="form-group" ng-repeat="condition in cert.conditions">
+                            <label class="col-xs-4 control-label" style="padding-top: 2px">{{$first ? '&Agrave; condition que' : 'et que'}}</label>
+                            <div class="col-xs-8">
+                                <div class="pill clickme" ng-click="cert.conditions.splice(cert.conditions.indexOf(condition), 1)">
+                                    {{condition.display}}<span class="pill-delete">&times;</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="panel-footer text-center no-padding">
-                    <button type="button" class="btn btn-primary no-margin" ng-click="addCondition(cert)">{{newCondition ? 'R&eacute;duire panneau' : 'Ajouter condition'}}</button>
+                    <div class="panel-footer text-center no-padding">
+                        <button type="button" class="btn btn-primary no-margin" ng-click="addCondition(cert)">{{newCondition ? 'R&eacute;duire panneau' : 'Ajouter condition'}}</button>
+                    </div>
                 </div>
             </div>
         </form>
     </div>
-
-    <div class="col-md-6">
-        <div class="panel panel-primary">
-            <div class="panel-heading">Param&egrave;tres d'affichage</div>
-            <div class="panel-body form form-horizontal" autocomplete="off">
-                <div class="form-group">
-                    <label for="name" class="col-xs-6 control-label checkbox-label">Nom du site</label>
-                    <div class="col-xs-6 checkbox">
-                        <label>
-                            <input id="name" type="checkbox" disabled ng-model="display.name" ng-init="display.name = true;" />
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="department" class="col-xs-6 control-label checkbox-label">D&eacute;partement</label>
-                    <div class="col-xs-6 checkbox">
-                        <label>
-                            <input id="department" type="checkbox" ng-model="display.dept" />
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="employees" class="col-xs-6 control-label checkbox-label">Nombre d'agents</label>
-                    <div class="col-xs-6 checkbox">
-                        <label>
-                            <input id="employees" type="checkbox" ng-model="display.nb" />
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="permanent" class="col-xs-6 control-label checkbox-label">Nombre d'agents permanents</label>
-                    <div class="col-xs-6 checkbox">
-                        <label>
-                            <input id="permanent" type="checkbox" ng-model="display.perm" />
-                        </label>
-                    </div>
-                </div>
-                <hr />
-                <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
-                    <div class="form-group" ng-repeat="cert in certificates">
-                        <label for="permanent" class="col-xs-6 control-label checkbox-label">{{cert.cert_name}}</label>
-                        <div class="col-xs-3 checkbox">
-                            <label>
-                                <input id="permanent" type="checkbox" ng-model="display[cert.cert_pk].nb" ng-init="display[cert.cert_pk].nb ? '' : display[cert.cert_pk].nb = cert.checked" />&nbsp;&nbsp;Nombre
-                            </label>
-                        </div>
-                        <div class="col-xs-3 checkbox">
-                            <label>
-                                <input id="permanent" type="checkbox" ng-model="display[cert.cert_pk].pc" ng-init="display[cert.cert_pk].pc ? '' : display[cert.cert_pk].pc = cert.checked" />&nbsp;&nbsp;Taux
-                            </label>
-                        </div>
-                    </div>
-                </state-sustain>
-            </div>
-            <div class="panel-footer text-center">
-                <button type="button" class="btn btn-primary" ng-click="search()">Lancer la recherche</button>
-            </div>
-        </div>
-    </div>
+</div>
+<div class="side-panel-container text-right">
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="search()"><span class="glyphicon glyphicon-search"></span>&nbsp;Lancer la recherche</button>
 </div>

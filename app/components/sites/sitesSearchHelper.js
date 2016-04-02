@@ -113,6 +113,6 @@ module.exports = {
   },
 
   fromURIComponent: function (str) {
-    return JSON.parse(lzString.decompressFromEncodedURIComponent(str));
+    return JSON.parse(lzString.decompressFromEncodedURIComponent(str) || '{}');
   }
 };

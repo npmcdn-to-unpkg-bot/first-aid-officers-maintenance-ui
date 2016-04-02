@@ -21,8 +21,17 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
     $location.search('display', helper.toURIComponent($scope.display));
   }
 
-  $scope.search = function () {
-    $location.path('/sites/results');
+  $scope.params = function () {
+    $location.path('/sites/search');
+  };
+
+  $scope.getLink = function () {
+    $rootScope.alerts.push({
+      type: 'success',
+      msg: 'Utilisez le lien ci-dessous (clic droit, puis <em>Copier l\'adresse du lien</em>) pour partager cette recherche ou y acc&eacute;der &agrave; tout moment,' +
+        ' et toujours avoir les r&eacute;sultats &agrave; jour.<br /><hr />Alternativement, ajoutez cette page &agrave; vos favoris (<kbd>Ctrl+D</kbd>) pour un acc&egrave;s rapide.<br /><br /><a href="' +
+        $location.absUrl() + '">R&eacute;sultats de la recherche</a>'
+    });
   };
 
   $scope.addCondition = function (cert) {
@@ -52,9 +61,9 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
 
   busySvc.busy('sitesSearch');
   Promise.all([dataSvc.getDepartments(), dataSvc.getCertificates()]).then(function (results) {
-    $scope.departments = _.values(results[0]);
+    $scope.departments = results[0];
     $scope.filter = helper.fromURIComponent($location.search().filter);
-    $scope.certificates = helper.fillUp(_.values(results[1]), $scope.filter.certificates);
+    $scope.certificates = _.filter(helper.fillUp(_.values(results[1]), $scope.filter.certificates), 'conditions');
     $scope.display = helper.fromURIComponent($location.search().display);
     $scope.$watch('filter', setSearchUrl, true);
     $scope.$watch('display', setSearchUrl, true);

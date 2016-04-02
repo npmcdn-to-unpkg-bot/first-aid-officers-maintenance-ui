@@ -12,8 +12,7 @@
             <div class="col-sm-8 col-xs-12 text-right">
                 <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
                     <div class="btn-group">
-                        <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates"
-                            tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
+                        <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
                     </div>
                 </state-sustain>
             </div>
@@ -65,6 +64,6 @@
 </div>
 <div class="side-panel-container">
     <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="edit()" ng-disabled="!stats">
-        <span class="glyphicon glyphicon-wrench"></span>&nbsp;Modifier param&egrave;tres
+        <span class="glyphicon glyphicon-cog"></span>&nbsp;Modifier param&egrave;tres
     </button>
 </div>

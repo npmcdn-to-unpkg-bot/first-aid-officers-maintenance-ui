@@ -101,6 +101,7 @@ textarea.vresize {
 
 .form-group:not(.label-floating) {
     margin: 0;
+    .checkbox label,
     label.control-label {
         font-size: 14px;
     }

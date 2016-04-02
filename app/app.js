@@ -108,7 +108,8 @@ angular.module('faomaintenanceApp', [
       })
       .when('/sites/search', {
         templateUrl: 'components/sites/sites_search.html',
-        controller: 'SitesSearchCtrl'
+        controller: 'SitesSearchCtrl',
+        reloadOnSearch: false
       })
       .when('/sites/:site_pk', {
         templateUrl: 'components/sites/site.html',

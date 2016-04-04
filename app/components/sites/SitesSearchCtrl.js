@@ -5,10 +5,6 @@ var _ = require('lodash');
 var helper = require('./sitesSearchHelper.js');
 
 module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dataSvc) {
-  $scope.comparisonOptions = helper.comparisonOptions;
-  $scope.targetOptions = helper.targetOptions;
-  $scope.certificatesConditions = helper.certificatesConditions;
-
   $scope.filter = {};
   $scope.display = {};
 
@@ -28,6 +24,10 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
   $scope.addCondition = function (cert) {
     var dialogScope = $scope.$new();
     dialogScope.cert = cert;
+    dialogScope.comparisonOptions = helper.comparisonOptions;
+    dialogScope.targetOptions = helper.targetOptions;
+    dialogScope.certificatesConditions = helper.certificatesConditions;
+
     ngDialog.open({
       template: './components/dialogs/sites_params_certificate.html',
       scope: dialogScope,

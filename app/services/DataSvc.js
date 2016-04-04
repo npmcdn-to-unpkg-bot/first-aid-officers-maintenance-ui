@@ -61,29 +61,30 @@ module.exports = function ($http, $q, apiSvc, $filter) {
 
   dataSvc.getSiteEmployeesWithStats = function (site_pk) {
     var deferred = $q.defer();
-    Promise.all([apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees?site=' + site_pk), apiSvc.get(apiSvc.statisticsEndpoint + 'employees?site=' + site_pk)]).then(function (results) {
-      var res = results[0];
-      _.each(_.first(_.values(results[1])), function (stats, empl_pk) {
-        res[empl_pk].stats = stats;
-      });
+    Promise.all([apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees?site=' + site_pk), apiSvc.get(apiSvc.statisticsEndpoint + 'employees?site=' + site_pk)])
+      .then(function (results) {
+        var res = results[0];
+        _.each(_.first(_.values(results[1])), function (stats, empl_pk) {
+          res[empl_pk].stats = stats;
+        });
 
-      deferred.resolve(res);
-    });
+        deferred.resolve(res);
+      });
 
     return deferred.promise;
   };
 
-  dataSvc.getSites = function () {
-    return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'sites');
+  dataSvc.getSites = function (dept_pk) {
+    return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'sites' + (dept_pk ? '?department=' + dept_pk : ''));
   };
 
   dataSvc.getAllSites = function () {
     return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'sites?unlisted=true');
   };
 
-  dataSvc.getSitesWithStats = function () {
+  dataSvc.getSitesWithStats = function (dept_pk) {
     var deferred = $q.defer();
-    Promise.all([dataSvc.getSites(), apiSvc.get(apiSvc.statisticsEndpoint + 'sites')]).then(function (results) {
+    Promise.all([dataSvc.getSites(dept_pk), apiSvc.get(apiSvc.statisticsEndpoint + 'sites' + (dept_pk ? '?department=' + dept_pk : ''))]).then(function (results) {
       var res = results[0];
       _.each(_.first(_.values(results[1])), function (stats, site_pk) {
         res[site_pk].stats = stats;
@@ -149,16 +150,17 @@ module.exports = function ($http, $q, apiSvc, $filter) {
 
   dataSvc.getTrainingTypes = function () {
     var deferred = $q.defer();
-    Promise.all([apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainingtypes'), apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainingtypes_certificates'), dataSvc.getCertificates()]).then(function (results) {
-      var res = results[0];
-      _.each(results[1], function (certificates, trty_pk) {
-        res[trty_pk].certificates = _.map(certificates, function (cert_pk) {
-          return results[2][cert_pk];
+    Promise.all([apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainingtypes'), apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainingtypes_certificates'), dataSvc.getCertificates()])
+      .then(function (results) {
+        var res = results[0];
+        _.each(results[1], function (certificates, trty_pk) {
+          res[trty_pk].certificates = _.map(certificates, function (cert_pk) {
+            return results[2][cert_pk];
+          });
         });
-      });
 
-      deferred.resolve(res);
-    });
+        deferred.resolve(res);
+      });
 
     return deferred.promise;
   };
@@ -188,16 +190,17 @@ module.exports = function ($http, $q, apiSvc, $filter) {
 
   dataSvc.getTraining = function (trng_pk) {
     var deferred = $q.defer();
-    Promise.all([apiSvc.get(apiSvc.resourcesEndpoint + 'trainings/' + trng_pk), apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees?training=' + trng_pk)]).then(function (results) {
-      var res = results[0];
-      res.trainees = results[1];
-      Promise.all(_.map(res.trainers, function (empl_pk) {
-        return apiSvc.get(apiSvc.resourcesEndpoint + 'employees/' + empl_pk);
-      })).then(function (results) {
-        res.trainers = results;
-        deferred.resolve(res);
+    Promise.all([apiSvc.get(apiSvc.resourcesEndpoint + 'trainings/' + trng_pk), apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees?training=' + trng_pk)])
+      .then(function (results) {
+        var res = results[0];
+        res.trainees = results[1];
+        Promise.all(_.map(res.trainers, function (empl_pk) {
+          return apiSvc.get(apiSvc.resourcesEndpoint + 'employees/' + empl_pk);
+        })).then(function (results) {
+          res.trainers = results;
+          deferred.resolve(res);
+        });
       });
-    });
 
     return deferred.promise;
   };

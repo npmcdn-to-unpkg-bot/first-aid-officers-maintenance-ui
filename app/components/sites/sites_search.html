@@ -25,6 +25,17 @@
                             <input id="employees" type="number" min="0" class="form-control" ng-model="filter.nb.d" ng-disabled="!filter.nb.o" />
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="permanent" class="col-xs-4 control-label">Nombre de CDI</label>
+                        <div class="col-xs-5">
+                            <select class="form-control" ng-model="filter.perm.o" ng-options="option.value as option.short + ' (' + option.display + ')' for option in comparisonOptions" ng-change="filter.perm.o ? '': filter.perm = undefined">
+                                <option value="" selected>{{filter.perm.o ? 'Ne pas filtrer' : ''}}</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-3">
+                            <input id="permanent" type="number" min="0" class="form-control" ng-model="filter.perm.d" ng-disabled="!filter.perm.o" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -33,32 +44,32 @@
                 <div class="panel-heading">Param&egrave;tres d'affichage</div>
                 <div class="panel-body form form-horizontal" autocomplete="off">
                     <div class="form-group">
-                        <label for="name" class="col-xs-6 control-label checkbox-label">Nom du site</label>
-                        <div class="col-xs-6 checkbox">
+                        <label for="name" class="col-xs-4 control-label checkbox-label">Nom du site</label>
+                        <div class="col-xs-8 checkbox">
                             <label>
                                 <input id="name" type="checkbox" disabled checked />
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="department" class="col-xs-6 control-label checkbox-label">D&eacute;partement</label>
-                        <div class="col-xs-6 checkbox">
+                        <label for="department" class="col-xs-4 control-label checkbox-label">D&eacute;partement</label>
+                        <div class="col-xs-8 checkbox">
                             <label>
                                 <input id="department" type="checkbox" ng-model="display.dept" />
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="employees" class="col-xs-6 control-label checkbox-label">Nombre d'agents</label>
-                        <div class="col-xs-6 checkbox">
+                        <label for="employees" class="col-xs-4 control-label checkbox-label">Nombre d'agents</label>
+                        <div class="col-xs-8 checkbox">
                             <label>
                                 <input id="employees" type="checkbox" ng-model="display.nb" />
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="permanent" class="col-xs-6 control-label checkbox-label">Nombre d'agents permanents</label>
-                        <div class="col-xs-6 checkbox">
+                        <label for="permanent" class="col-xs-4 control-label checkbox-label">Nombre de CDI</label>
+                        <div class="col-xs-8 checkbox">
                             <label>
                                 <input id="permanent" type="checkbox" ng-model="display.perm" />
                             </label>
@@ -67,13 +78,13 @@
                     <hr />
                     <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
                         <div class="form-group" ng-repeat="cert in certificates">
-                            <label for="permanent" class="col-xs-6 control-label checkbox-label">{{cert.cert_name}}</label>
-                            <div class="col-xs-3 checkbox">
+                            <label for="permanent" class="col-xs-4 control-label checkbox-label">Agents {{cert.cert_short}}</label>
+                            <div class="col-xs-4 checkbox">
                                 <label>
                                     <input id="permanent" type="checkbox" ng-model="display[cert.cert_pk].nb" ng-init="display[cert.cert_pk].nb ? '' : display[cert.cert_pk].nb = cert.checked" />&nbsp;&nbsp;Nombre
                                 </label>
                             </div>
-                            <div class="col-xs-3 checkbox">
+                            <div class="col-xs-4 checkbox">
                                 <label>
                                     <input id="permanent" type="checkbox" ng-model="display[cert.cert_pk].pc" ng-init="display[cert.cert_pk].pc ? '' : display[cert.cert_pk].pc = cert.checked" />&nbsp;&nbsp;Taux
                                 </label>

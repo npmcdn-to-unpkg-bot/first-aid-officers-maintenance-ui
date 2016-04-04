@@ -41,6 +41,10 @@ $screen-xs: 768px;
     top: -2px;
 }
 
+.panel .panel-body + table {
+    border-top: 1px solid #ddd;
+}
+
 .alert a {
     text-decoration: underline;
 }

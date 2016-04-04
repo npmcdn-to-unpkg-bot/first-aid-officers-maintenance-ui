@@ -113,6 +113,7 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
   };
 
   $scope.theaders = [];
+  $scope.sites = [];
   $scope.filter = {};
   $scope.display = {};
 

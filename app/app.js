@@ -96,6 +96,11 @@ angular.module('faomaintenanceApp', [
         templateUrl: 'components/employees/employees.html',
         controller: 'EmployeesCtrl'
       })
+      .when('/employees/search', {
+        templateUrl: 'components/employees/employees_search.html',
+        controller: 'EmployeesSearchCtrl',
+        reloadOnSearch: false
+      })
       .when('/employees/:empl_pk', {
         templateUrl: 'components/employees/employee.html',
         controller: 'EmployeeCtrl'
@@ -180,8 +185,10 @@ angular.module('faomaintenanceApp', [
 .controller('AccountCtrl', ['$scope', '$rootScope', 'AdminSvc', 'ngDialog', 'BusySvc', require('./components/account/AccountCtrl.js')])
   .controller('DepartmentEditCtrl', ['$rootScope', '$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/department_edit/DepartmentEditCtrl.js')])
   .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', require('./components/employees/EmployeesCtrl.js')])
-  .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc', require(
-    './components/employees/EmployeeCtrl.js')])
+  .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc',
+    require('./components/employees/EmployeeCtrl.js')
+  ])
+  .controller('EmployeesSearchCtrl', ['$rootScope', '$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', require('./components/employees/EmployeesSearchCtrl.js')])
   .controller('HomeCtrl', ['$scope', 'ngDialog', require('./components/home/HomeCtrl.js')])
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
   .controller('LoginCtrl', ['$rootScope', '$location', 'AuthenticationSvc', 'ngDialog', '$window', require('./components/index/LoginCtrl.js')])
@@ -194,17 +201,21 @@ angular.module('faomaintenanceApp', [
   .controller('SiteCreationCtrl', ['$rootScope', '$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/site_edit/SiteCreationCtrl.js')])
   .controller('SitesSearchCtrl', ['$rootScope', '$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', require('./components/sites/SitesSearchCtrl.js')])
   .controller('SitesSearchResultsCtrl', ['$rootScope', '$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', require('./components/sites/SitesSearchResultsCtrl.js')])
-  .controller('TrainingCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'BusySvc', 'dateFilter', require(
-    './components/trainings/TrainingCtrl.js')])
+  .controller('TrainingCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'BusySvc', 'dateFilter',
+    require('./components/trainings/TrainingCtrl.js')
+  ])
   .controller('TrainingsCtrl', ['$scope', 'DataSvc', '$location', 'BusySvc', require('./components/trainings/TrainingsCtrl.js')])
-  .controller('TrainingCompletionCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', '$location', 'ngDialog', 'TrainingsSvc', 'BusySvc', 'dateFilter', require(
-    './components/trainings/TrainingCompletionCtrl.js')])
-  .controller('TrainingEditCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'dateFilter', 'BusySvc', require(
-    './components/trainings/TrainingEditCtrl.js')])
+  .controller('TrainingCompletionCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', '$location', 'ngDialog', 'TrainingsSvc', 'BusySvc', 'dateFilter',
+    require('./components/trainings/TrainingCompletionCtrl.js')
+  ])
+  .controller('TrainingEditCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'dateFilter', 'BusySvc',
+    require('./components/trainings/TrainingEditCtrl.js')
+  ])
   .controller('TrainingsStatsCtrl', ['$scope', '$rootScope', 'DataSvc', 'dateFilter', 'BusySvc', 'ngDialog', require('./components/trainings/TrainingsStatsCtrl')])
   .controller('UpdateCtrl', ['$scope', '$rootScope', 'UpdateSvc', 'DataSvc', 'ngDialog', 'BusySvc', require('./components/administration/update/UpdateCtrl.js')])
-  .controller('UsersAdministrationCtrl', ['$scope', '$rootScope', 'DataSvc', 'AdminSvc', 'ngDialog', '$route', '$location', 'BusySvc', require(
-    './components/administration/users/UsersAdministrationCtrl.js')])
+  .controller('UsersAdministrationCtrl', ['$scope', '$rootScope', 'DataSvc', 'AdminSvc', 'ngDialog', '$route', '$location', 'BusySvc',
+    require('./components/administration/users/UsersAdministrationCtrl.js')
+  ])
 
 .run(['$rootScope', '$location', '$cookies', '$http', 'ngDialog', 'AuthenticationSvc', function ($rootScope, $location, $cookies, $http, ngDialog, authenticationSvc) {
   // keep user logged in after page refresh
@@ -233,9 +244,10 @@ angular.module('faomaintenanceApp', [
       });
     }
 
-    if (!/\/sites\/(search|results)/.test(newUrl) && ($location.search().filter || $location.search().display)) {
-      $location.search('filter', null);
-      $location.search('display', null);
+    var searchPage = /([^/]+)\/(search|results)/;
+    if (!searchPage.test(newUrl) || searchPage.test(oldUrl)[0] !== searchPage.test(newUrl)[0]) {
+      $location.search('filter', null).replace();
+      $location.search('display', null).replace();
     }
 
     if (newUrl !== oldUrl && /\/trainings\/([^\/]+\/)?(create|edit|complete)/.test(oldUrl) && !($location.search().force)) {

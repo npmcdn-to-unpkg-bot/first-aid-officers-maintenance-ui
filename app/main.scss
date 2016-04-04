@@ -160,6 +160,14 @@ h3.pull-left {
     padding: 0;
 }
 
+.no-lpadding {
+    padding-left: 0;
+}
+
+.no-rpadding {
+    padding-right: 0;
+}
+
 .no-events {
     pointer-events: none;
 }

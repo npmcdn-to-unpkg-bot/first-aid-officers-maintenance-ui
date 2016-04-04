@@ -107,18 +107,14 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
     });
   }
 
-  $scope.theaders = [];
-  $scope.tdata = [];
-
-  $scope.filter = {};
-  $scope.display = {};
-
+  $scope.get = _.get;
   $scope.hasFiltersBesidesCert = function () {
     return _($scope.filter).omit('certificates').keys().value().length > 0;
   };
 
-  $scope.get = _.get;
-  $scope.sites = [];
+  $scope.theaders = [];
+  $scope.filter = {};
+  $scope.display = {};
 
   busySvc.busy();
   busySvc.busy('sitesSearchResults', true);
@@ -133,7 +129,6 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
     dataSvc.getSitesWithStats($scope.filter.dept).then(function (sites) {
       _(sites).filter(_.partial(filterSite, _, $scope.filter)).forEach(function (site) {
         site.dept = $scope.departments[site.site_dept_fk];
-        $scope.tdata.push(_($scope.theaders).map('path').map(_.partial(_.get, site)).value());
         $scope.sites.push(site);
       });
 

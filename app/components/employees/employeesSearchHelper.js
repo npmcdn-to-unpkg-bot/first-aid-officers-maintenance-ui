@@ -5,11 +5,11 @@ var _ = require('lodash');
 var lzString = require('lz-string');
 
 var recentOptions = [{
-  value: 'out',
-  display: 'Expirée'
-}, {
-  value: 'in',
+  value: 'success',
   display: 'Obenue'
+}, {
+  value: 'danger',
+  display: 'Expirée'
 }];
 
 var statusOptions = [{
@@ -79,7 +79,7 @@ module.exports = {
           cert.conditions = _.map(srcCert.c, function (condition) {
             var params = {
               condition: _(certificatesConditions).find({ value: condition.c }),
-              option: _(recentOptions).find({ value: condition.o }) || _(statusOptions).find({ value: condition.o }),
+              option: condition.c === 'recent' ? _(recentOptions).find({ value: condition.o }) : _(statusOptions).find({ value: condition.o }),
               data: condition.d
             };
 

@@ -12,13 +12,21 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
     $scope.filter.certificates = helper.stripDown(certificates);
   }, true);
 
+  $scope.$watch('site', function (site) {
+    if (site && site.site_pk) {
+      $scope.filter.site = site.site_pk;
+    } else {
+      delete $scope.filter.site;
+    }
+  });
+
   function setSearchUrl() {
     $location.search('filter', helper.toURIComponent($scope.filter));
     $location.search('display', helper.toURIComponent($scope.display));
   }
 
   $scope.search = function () {
-    $location.path('/sites/results');
+    $location.path('/employees/results');
   };
 
   $scope.addCondition = function (cert) {
@@ -54,6 +62,7 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
   Promise.all([dataSvc.getCertificates(), dataSvc.getSites()]).then(_.spread(function (cert, sites) {
     $scope.sites = sites;
     $scope.filter = helper.fromURIComponent($location.search().filter);
+    $scope.site = sites[$scope.filter.site];
     $scope.certificates = helper.fillUp(_.values(cert), $scope.filter.certificates);
     $scope.display = helper.fromURIComponent($location.search().display);
     $scope.$watch('filter', setSearchUrl, true);

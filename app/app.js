@@ -101,6 +101,11 @@ angular.module('faomaintenanceApp', [
         controller: 'EmployeesSearchCtrl',
         reloadOnSearch: false
       })
+      .when('/employees/results', {
+        templateUrl: 'components/employees/employees_search_results.html',
+        controller: 'EmployeesSearchResultsCtrl',
+        reloadOnSearch: false
+      })
       .when('/employees/:empl_pk', {
         templateUrl: 'components/employees/employee.html',
         controller: 'EmployeeCtrl'
@@ -189,6 +194,9 @@ angular.module('faomaintenanceApp', [
     require('./components/employees/EmployeeCtrl.js')
   ])
   .controller('EmployeesSearchCtrl', ['$rootScope', '$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', require('./components/employees/EmployeesSearchCtrl.js')])
+  .controller('EmployeesSearchResultsCtrl', ['$rootScope', '$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', 'dateFilter',
+    require('./components/employees/EmployeesSearchResultsCtrl.js')
+  ])
   .controller('HomeCtrl', ['$scope', 'ngDialog', require('./components/home/HomeCtrl.js')])
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
   .controller('LoginCtrl', ['$rootScope', '$location', 'AuthenticationSvc', 'ngDialog', '$window', require('./components/index/LoginCtrl.js')])

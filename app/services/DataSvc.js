@@ -96,9 +96,9 @@ module.exports = function ($http, $q, apiSvc, $filter) {
     return deferred.promise;
   };
 
-  dataSvc.getEmployees = function () {
+  dataSvc.getEmployees = function (site_pk) {
     var deferred = $q.defer();
-    Promise.all([dataSvc.getSites(), apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees')]).then(function (results) {
+    Promise.all([dataSvc.getSites(), apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'employees' + (site_pk ? '?site=' + site_pk : ''))]).then(function (results) {
       deferred.resolve(_.each(results[1], function (empl) {
         empl.site = results[0][empl.siem_site_fk];
       }));
@@ -107,9 +107,9 @@ module.exports = function ($http, $q, apiSvc, $filter) {
     return deferred.promise;
   };
 
-  dataSvc.getEmployeesWithStats = function () {
+  dataSvc.getEmployeesWithStats = function (site_pk) {
     var deferred = $q.defer();
-    Promise.all([dataSvc.getEmployees(), apiSvc.get(apiSvc.statisticsEndpoint + 'employees')]).then(function (results) {
+    Promise.all([dataSvc.getEmployees(site_pk), apiSvc.get(apiSvc.statisticsEndpoint + 'employees' + (site_pk ? '?site=' + site_pk : ''))]).then(function (results) {
       var res = results[0];
       _.each(_.first(_.values(results[1])), function (stats, empl_pk) {
         res[empl_pk].stats = stats;

@@ -58,6 +58,18 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
           display: cert.cert_short + ' (%)'
         });
       }
+      if (displayCert && displayCert.tg) {
+        headers.push({
+          path: 'stats.certificates[' + cert_pk + '].target',
+          display: 'Cible ' + cert.cert_short
+        });
+      }
+      if (displayCert && displayCert.need) {
+        headers.push({
+          path: 'stats.certificates[' + cert_pk + '].needed',
+          display: cert.cert_short + ' &agrave; former'
+        });
+      }
     });
 
     return headers;
@@ -130,6 +142,10 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
     dataSvc.getSitesWithStats($scope.filter.dept).then(function (sites) {
       _(sites).filter(_.partial(filterSite, _, $scope.filter)).forEach(function (site) {
         site.dept = $scope.departments[site.site_dept_fk];
+        _(site.stats.certificates).forEach(function (certStats) {
+          certStats.needed = certStats.count > certStats.target ? 0 : certStats.target - certStats.count;
+        });
+
         $scope.sites.push(site);
       });
 

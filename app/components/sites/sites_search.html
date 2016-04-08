@@ -81,12 +81,27 @@
                             <label for="permanent" class="col-xs-4 control-label checkbox-label">Agents {{cert.cert_short}}</label>
                             <div class="col-xs-4 checkbox">
                                 <label>
-                                    <input id="permanent" type="checkbox" ng-model="display[cert.cert_pk].nb" ng-init="display[cert.cert_pk].nb ? '' : display[cert.cert_pk].nb = cert.checked" />&nbsp;&nbsp;Nombre
+                                    <input type="checkbox" ng-model="display[cert.cert_pk].nb" />
+                                    <span class="checkbox-label">Form&eacute;s</span>
                                 </label>
                             </div>
                             <div class="col-xs-4 checkbox">
                                 <label>
-                                    <input id="permanent" type="checkbox" ng-model="display[cert.cert_pk].pc" ng-init="display[cert.cert_pk].pc ? '' : display[cert.cert_pk].pc = cert.checked" />&nbsp;&nbsp;Taux
+                                    <input type="checkbox" ng-model="display[cert.cert_pk].pc" />
+                                    <span class="checkbox-label">Form&eacute;s (taux)</span>
+                                </label>
+                            </div>
+                            <div class="col-xs-4"></div>
+                            <div class="col-xs-4 checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="display[cert.cert_pk].tg" />
+                                    <span class="checkbox-label">Cible (nombre)</span>
+                                </label>
+                            </div>
+                            <div class="col-xs-4 checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="display[cert.cert_pk].need" />
+                                    <span class="checkbox-label">Reste &agrave; former</span>
                                 </label>
                             </div>
                         </div>
@@ -101,7 +116,7 @@
             <div class="col-md-8 col-md-offset-2 col-lg-12 col-lg-offset-0" ng-repeat="cert in certificates">
                 <div class="panel panel-default">
                     <div class="panel-heading"><span class="label label-primary">{{cert.cert_short}}</span> - {{cert.cert_name}}</div>
-                    <div class="panel-body" uib-collapse="!(cert.conditions && cert.conditions.length > 0)">
+                    <div class="panel-body" ng-show="cert.conditions && cert.conditions.length > 0">
                         <div class="form-group" ng-repeat="condition in cert.conditions">
                             <label class="col-xs-4 control-label" style="padding-top: 2px">{{$first ? '&Agrave; condition que' : 'et que'}}</label>
                             <div class="col-xs-8">

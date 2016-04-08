@@ -29,6 +29,14 @@ $screen-xs: 768px;
     padding-top: 6px;
 }
 
+.form-group .checkbox {
+    .checkbox-label {
+        margin-left: 5px;
+        position: relative;
+        top: -1px;
+    }
+}
+
 @media (min-resolution: 192dpi) {
     .container {
         width: 100%;

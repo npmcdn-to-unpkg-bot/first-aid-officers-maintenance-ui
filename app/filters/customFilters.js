@@ -40,7 +40,6 @@ customFilters.filter('filterEmpl', function () {
 
 customFilters.filter('orderByNullLast', function () {
   return function (array, key, reverse) {
-    if (!angular.isArray(array)) return;
     var res = _.partition(array, function (entry) {
       return _.get(entry, key);
     });

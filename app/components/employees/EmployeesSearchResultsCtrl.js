@@ -73,8 +73,10 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
         if (params.o === 'danger') {
           return moment(certStats.expiryDate).isBetween(xMonthsAgo, new Date());
         }
-        // TODO: impl 'success'
-        return true;
+
+        return _.some(certStats.trainings, function (trng) {
+          return trng.trem_outcome === 'VALIDATED' && moment(trng.trng_date).isBetween(xMonthsAgo, new Date());
+        });
       case 'expiring':
         if (!certStats) {
           return false;

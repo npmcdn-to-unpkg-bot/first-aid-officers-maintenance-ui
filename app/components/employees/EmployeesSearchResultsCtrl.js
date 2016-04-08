@@ -57,6 +57,12 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
           display: cert.cert_short + ' jusqu\'au'
         });
       }
+      if (displayCert && displayCert.flnk) {
+        headers.push({
+          path: 'stats.certificates[' + cert_pk + '].flunked',
+          display: 'Recalages/absences ' + cert.cert_short
+        });
+      }
     });
 
     return headers;
@@ -131,6 +137,7 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
         _(empl.stats.certificates).forEach(function (certStats) {
           certStats.expiryDateDisplay = dateFilter(new Date(certStats.expiryDate), 'dd/MM/yyyy');
           certStats.validDisplay = certStats.valid ? 'Valide' : 'Expirée';
+          certStats.flunked = _.countBy(certStats.trainings, 'trem_outcome')['FLUNKED'];
         });
 
         $scope.employees.push(empl);

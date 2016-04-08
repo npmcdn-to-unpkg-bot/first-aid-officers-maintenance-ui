@@ -3,7 +3,7 @@
 
 var customFilters = require('angular').module('customFilters', []);
 var moment = require('moment');
-var _ = require('underscore');
+var _ = require('lodash');
 
 function summariseSite(site) {
   return site.site_name;
@@ -35,6 +35,25 @@ customFilters.filter('filterEmpl', function () {
 
       return '1' + entry.empl_surname;
     });
+  };
+});
+
+customFilters.filter('orderByNullLast', function () {
+  return function (array, key, reverse) {
+    if (!angular.isArray(array)) return;
+    var res = _.partition(array, function (entry) {
+      return _.get(entry, key);
+    });
+
+    var sorted = _.sortBy(res[0], function (entry) {
+      return _.get(entry, key);
+    });
+
+    if (reverse) {
+      sorted = _.reverse(sorted);
+    }
+
+    return sorted.concat(res[1]);
   };
 });
 

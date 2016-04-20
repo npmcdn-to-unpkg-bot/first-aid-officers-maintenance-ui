@@ -90,6 +90,12 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
 
         var inXMonths = moment(new Date()).add(params.d, 'months');
         return moment(certStats.expiryDate).isBetween(new Date(), inXMonths);
+      case 'expiry':
+        if (!certStats) {
+          return false;
+        }
+
+        return moment(certStats.expiryDate).isBetween(params.d.from, params.d.to, null, '[]');
       case 'status':
         if (!certStats) {
           return params.o === 'blank';

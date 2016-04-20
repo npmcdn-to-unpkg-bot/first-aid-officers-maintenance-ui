@@ -30,6 +30,10 @@
                                     <span class="text-primary">{{cert.cert_short}}</span> <span class="text-warning">expirant</span> dans les
                                     <span class="text-primary">{{params.data}}</span> prochains mois
                                 </div>
+                                <div ng-switch-when="expiry">
+                                    <span class="text-primary">{{cert.cert_short}}</span> <span class="text-warning">expirant</span> entre le
+                                    <span class="text-primary">{{params.data.from | date: 'longDate'}}</span> et le <span class="text-primary">{{params.data.to | date: 'longDate'}}</span>
+                                </div>
                                 <div ng-switch-when="status"><span class="text-primary">{{cert.cert_short}}</span> {{params.option.value !== 'blank' ? 'actuellement' : ''}} <span class="text-{{params.option.value}}">{{params.option.display | lowercase}}</span></div>
                             </div>
                         </div>

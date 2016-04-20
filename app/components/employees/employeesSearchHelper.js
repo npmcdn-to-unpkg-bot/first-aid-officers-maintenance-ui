@@ -2,6 +2,7 @@
 /*jshint camelcase: false*/
 
 var _ = require('lodash');
+var moment = require('moment');
 var lzString = require('lz-string');
 
 var recentOptions = [{
@@ -33,6 +34,9 @@ var certificatesConditions = [{
   value: 'expiring',
   display: 'Expire prochainement'
 }, {
+  value: 'expiry',
+  display: 'Expire sur une certaine période'
+}, {
   value: 'status',
   display: 'Statut de l\'aptitude'
 }];
@@ -43,6 +47,8 @@ function getConditionDisplay(cert, params) {
       return cert.cert_short + ' ' + params.option.display.toLowerCase() + ' il y a moins de ' + params.data + ' mois';
     case 'expiring':
       return cert.cert_short + ' expirant sous ' + params.data + ' mois';
+    case 'expiry':
+      return cert.cert_short + ' expirant entre le ' + moment(params.data.from).format('Do MMMM YYYY') + ' et le ' + moment(params.data.to).format('Do MMMM YYYY');
     case 'status':
       return cert.cert_short + ' ' + params.option.display.toLowerCase();
   }

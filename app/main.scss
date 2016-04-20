@@ -44,6 +44,15 @@ $screen-xs: 768px;
     }
 }
 
+.input-group {
+    .input-group-btn {
+        padding: 0;
+        button.btn {
+            padding: 8px 12px;
+        }
+    }
+}
+
 .panel-heading span.label {
     position: relative;
     top: -2px;

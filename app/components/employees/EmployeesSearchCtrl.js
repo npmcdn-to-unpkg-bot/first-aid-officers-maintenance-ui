@@ -41,11 +41,34 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
       scope: dialogScope,
       controller: function ($scope) {
         $scope.params = {};
+        $scope.isValid = function () {
+          var res = true;
+          if (!$scope.params.condition) {
+            return false;
+          }
+
+          if ($scope.params.condition.value !== 'expiring' && $scope.params.condition.value !== 'expiry') {
+            res = $scope.params.option !== undefined;
+          }
+
+          if ($scope.params.condition.value !== 'status') {
+            res = res && $scope.params.data !== undefined && $scope.params.data !== null;
+          }
+
+          if ($scope.params.condition.value === 'expiry') {
+            res = res && $scope.params.data && $scope.params.data.from;
+            res = res && $scope.params.data.to && !isNaN($scope.params.data.from.getTime()) && !isNaN($scope.params.data.to.getTime());
+          }
+
+          return res;
+        };
+
         $scope.add = function () {
           var condition = {
             display: helper.getConditionDisplay($scope.cert, $scope.params),
             params: $scope.params
           };
+
           if ($scope.cert.conditions) {
             $scope.cert.conditions.push(condition);
           } else {

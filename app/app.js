@@ -254,8 +254,8 @@ angular.module('faomaintenanceApp', [
 
     var searchPage = /([^/]+)\/(search|results)/;
     if (!searchPage.test(newUrl) || searchPage.test(oldUrl)[0] !== searchPage.test(newUrl)[0]) {
-      $location.search('filter', null).replace();
-      $location.search('display', null).replace();
+      $location.search('filter', null);
+      $location.search('display', null);
     }
 
     if (newUrl !== oldUrl && /\/trainings\/([^\/]+\/)?(create|edit|complete)/.test(oldUrl) && !($location.search().force)) {

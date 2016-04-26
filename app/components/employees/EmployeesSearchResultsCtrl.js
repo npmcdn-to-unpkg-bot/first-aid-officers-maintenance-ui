@@ -115,6 +115,10 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
     });
   }
 
+  $scope.select = function (empl_pk) {
+    $location.path('/employees/' + empl_pk);
+  };
+
   $scope.get = _.get;
   $scope.hasFiltersBesidesCert = function () {
     return _($scope.filter).omit('certificates').keys().value().length > 0;

@@ -21,8 +21,8 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
   });
 
   function setSearchUrl() {
-    $location.search('filter', helper.toURIComponent($scope.filter));
-    $location.search('display', helper.toURIComponent($scope.display));
+    $location.search('filter', helper.toURIComponent($scope.filter)).replace();
+    $location.search('display', helper.toURIComponent($scope.display)).replace();
   }
 
   $scope.search = function () {

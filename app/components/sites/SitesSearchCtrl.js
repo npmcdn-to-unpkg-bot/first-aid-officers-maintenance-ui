@@ -7,6 +7,7 @@ var helper = require('./sitesSearchHelper.js');
 module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dataSvc) {
   $scope.filter = {};
   $scope.display = {};
+  $scope.comparisonOptions = helper.comparisonOptions;
 
   $scope.$watch('certificates', function (certificates) {
     $scope.filter.certificates = helper.stripDown(certificates);

@@ -80,12 +80,8 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
       switch (params.o) {
         case 'lt':
           return value < params.d;
-        case 'le':
-          return value <= params.d;
         case 'eq':
           return value === params.d;
-        case 'ge':
-          return value >= params.d;
         case 'gt':
           return value > params.d;
       }

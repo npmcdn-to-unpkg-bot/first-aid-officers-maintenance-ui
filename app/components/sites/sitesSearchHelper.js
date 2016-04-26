@@ -9,17 +9,9 @@ var comparisonOptions = [{
   short: '<',
   display: 'inférieur à'
 }, {
-  value: 'le',
-  short: '≤',
-  display: 'inférieur ou égal à'
-}, {
   value: 'eq',
   short: '=',
   display: 'égal à'
-}, {
-  value: 'ge',
-  short: '≥',
-  display: 'supérieur ou égal à'
 }, {
   value: 'gt',
   short: '>',

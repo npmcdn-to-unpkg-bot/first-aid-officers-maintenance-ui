@@ -1,118 +1,122 @@
 <h3>Sites - recherche avanc&eacute;e</h3>
 <br />
 <div class="row">
-    <div class="col-lg-6">
-        <div class="col-md-8 col-md-offset-2 col-lg-12 col-lg-offset-0">
-            <div class="panel panel-primary">
-                <div class="panel-heading">Param&egrave;tres de recherche</div>
-                <div class="panel-body form form-horizontal" autocomplete="off">
-                    <div class="form-group">
-                        <label for="department" class="col-xs-4 control-label">D&eacute;partement</label>
-                        <div class="col-xs-8">
-                            <select id="department" class="form-control" ng-model="filter.dept" ng-options="dept.dept_pk as dept.dept_name for dept in departments | orderBy: 'dept_name'">
-                                <option value="" selected>{{filter.dept ? 'Ne pas filtrer' : ''}}</option>
-                            </select>
+    <div class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-0">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 col-lg-12 col-lg-offset-0">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Param&egrave;tres de recherche</div>
+                    <div class="panel-body form form-horizontal" autocomplete="off">
+                        <div class="form-group">
+                            <label for="department" class="col-xs-4 control-label">D&eacute;partement</label>
+                            <div class="col-xs-8">
+                                <select id="department" class="form-control" ng-model="filter.dept" ng-options="dept.dept_pk as dept.dept_name for dept in departments | orderBy: 'dept_name'">
+                                    <option value="" selected>{{filter.dept ? 'Ne pas filtrer' : ''}}</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="employees" class="col-xs-4 control-label">Nombre d'agents</label>
-                        <div class="col-xs-5">
-                            <select class="form-control" ng-model="filter.nb.o" ng-options="option.value as option.short + ' (' + option.display + ')' for option in comparisonOptions" ng-change="filter.nb.o ? '': filter.nb = undefined">
-                                <option value="" selected>{{filter.nb.o ? 'Ne pas filtrer' : ''}}</option>
-                            </select>
+                        <div class="form-group">
+                            <label for="employees" class="col-xs-4 control-label">Nombre d'agents</label>
+                            <div class="col-xs-5">
+                                <select class="form-control" ng-model="filter.nb.o" ng-options="option.value as option.short + ' (' + option.display + ')' for option in comparisonOptions" ng-change="filter.nb.o ? '': filter.nb = undefined">
+                                    <option value="" selected>{{filter.nb.o ? 'Ne pas filtrer' : ''}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-3">
+                                <input id="employees" type="number" min="0" class="form-control" ng-model="filter.nb.d" ng-disabled="!filter.nb.o" />
+                            </div>
                         </div>
-                        <div class="col-xs-3">
-                            <input id="employees" type="number" min="0" class="form-control" ng-model="filter.nb.d" ng-disabled="!filter.nb.o" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="permanent" class="col-xs-4 control-label">Nombre de CDI</label>
-                        <div class="col-xs-5">
-                            <select class="form-control" ng-model="filter.perm.o" ng-options="option.value as option.short + ' (' + option.display + ')' for option in comparisonOptions" ng-change="filter.perm.o ? '': filter.perm = undefined">
-                                <option value="" selected>{{filter.perm.o ? 'Ne pas filtrer' : ''}}</option>
-                            </select>
-                        </div>
-                        <div class="col-xs-3">
-                            <input id="permanent" type="number" min="0" class="form-control" ng-model="filter.perm.d" ng-disabled="!filter.perm.o" />
+                        <div class="form-group">
+                            <label for="permanent" class="col-xs-4 control-label">Nombre de CDI</label>
+                            <div class="col-xs-5">
+                                <select class="form-control" ng-model="filter.perm.o" ng-options="option.value as option.short + ' (' + option.display + ')' for option in comparisonOptions" ng-change="filter.perm.o ? '': filter.perm = undefined">
+                                    <option value="" selected>{{filter.perm.o ? 'Ne pas filtrer' : ''}}</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-3">
+                                <input id="permanent" type="number" min="0" class="form-control" ng-model="filter.perm.d" ng-disabled="!filter.perm.o" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-8 col-md-offset-2 col-lg-12 col-lg-offset-0">
-            <div class="panel panel-primary">
-                <div class="panel-heading">Param&egrave;tres d'affichage</div>
-                <div class="panel-body form form-horizontal" autocomplete="off">
-                    <div class="form-group">
-                        <label for="name" class="col-xs-4 control-label checkbox-label">Nom du site</label>
-                        <div class="col-xs-8 checkbox">
-                            <label>
-                                <input id="name" type="checkbox" disabled checked />
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="department" class="col-xs-4 control-label checkbox-label">D&eacute;partement</label>
-                        <div class="col-xs-8 checkbox">
-                            <label>
-                                <input id="department" type="checkbox" ng-model="display.dept" />
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="employees" class="col-xs-4 control-label checkbox-label">Nombre d'agents</label>
-                        <div class="col-xs-8 checkbox">
-                            <label>
-                                <input id="employees" type="checkbox" ng-model="display.nb" />
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="permanent" class="col-xs-4 control-label checkbox-label">Nombre de CDI</label>
-                        <div class="col-xs-8 checkbox">
-                            <label>
-                                <input id="permanent" type="checkbox" ng-model="display.perm" />
-                            </label>
-                        </div>
-                    </div>
-                    <hr />
-                    <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
-                        <div class="form-group" ng-repeat="cert in certificates">
-                            <label for="permanent" class="col-xs-4 control-label checkbox-label">Agents {{cert.cert_short}}</label>
-                            <div class="col-xs-4 checkbox">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 col-lg-12 col-lg-offset-0">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Param&egrave;tres d'affichage</div>
+                    <div class="panel-body form form-horizontal" autocomplete="off">
+                        <div class="form-group">
+                            <label for="name" class="col-xs-4 control-label checkbox-label">Nom du site</label>
+                            <div class="col-xs-8 checkbox">
                                 <label>
-                                    <input type="checkbox" ng-model="display[cert.cert_pk].nb" />
-                                    <span class="checkbox-label">Form&eacute;s</span>
-                                </label>
-                            </div>
-                            <div class="col-xs-4 checkbox">
-                                <label>
-                                    <input type="checkbox" ng-model="display[cert.cert_pk].pc" />
-                                    <span class="checkbox-label">Form&eacute;s (taux)</span>
-                                </label>
-                            </div>
-                            <div class="col-xs-4"></div>
-                            <div class="col-xs-4 checkbox">
-                                <label>
-                                    <input type="checkbox" ng-model="display[cert.cert_pk].tg" />
-                                    <span class="checkbox-label">Cible (nombre)</span>
-                                </label>
-                            </div>
-                            <div class="col-xs-4 checkbox">
-                                <label>
-                                    <input type="checkbox" ng-model="display[cert.cert_pk].need" />
-                                    <span class="checkbox-label">Reste &agrave; former</span>
+                                    <input id="name" type="checkbox" disabled checked />
                                 </label>
                             </div>
                         </div>
-                    </state-sustain>
+                        <div class="form-group">
+                            <label for="department" class="col-xs-4 control-label checkbox-label">D&eacute;partement</label>
+                            <div class="col-xs-8 checkbox">
+                                <label>
+                                    <input id="department" type="checkbox" ng-model="display.dept" />
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="employees" class="col-xs-4 control-label checkbox-label">Nombre d'agents</label>
+                            <div class="col-xs-8 checkbox">
+                                <label>
+                                    <input id="employees" type="checkbox" ng-model="display.nb" />
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="permanent" class="col-xs-4 control-label checkbox-label">Nombre de CDI</label>
+                            <div class="col-xs-8 checkbox">
+                                <label>
+                                    <input id="permanent" type="checkbox" ng-model="display.perm" />
+                                </label>
+                            </div>
+                        </div>
+                        <hr />
+                        <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
+                            <div class="form-group" ng-repeat="cert in certificates">
+                                <label for="permanent" class="col-xs-4 control-label checkbox-label">Agents {{cert.cert_short}}</label>
+                                <div class="col-xs-4 checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="display[cert.cert_pk].nb" />
+                                        <span class="checkbox-label">Form&eacute;s</span>
+                                    </label>
+                                </div>
+                                <div class="col-xs-4 checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="display[cert.cert_pk].pc" />
+                                        <span class="checkbox-label">Form&eacute;s (taux)</span>
+                                    </label>
+                                </div>
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-4 checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="display[cert.cert_pk].tg" />
+                                        <span class="checkbox-label">Cible (nombre)</span>
+                                    </label>
+                                </div>
+                                <div class="col-xs-4 checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-model="display[cert.cert_pk].need" />
+                                        <span class="checkbox-label">Reste &agrave; former</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </state-sustain>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="col-lg-6">
-        <form class="form-horizontal" autocomplete="off">
+        <form class="form-horizontal row" autocomplete="off">
             <div class="col-md-8 col-md-offset-2 col-lg-12 col-lg-offset-0" ng-repeat="cert in certificates">
                 <div class="panel panel-default">
                     <div class="panel-heading"><span class="label label-primary">{{cert.cert_short}}</span> - {{cert.cert_name}}</div>

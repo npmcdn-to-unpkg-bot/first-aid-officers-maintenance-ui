@@ -41,7 +41,8 @@ customFilters.filter('filterEmpl', function () {
 customFilters.filter('orderByNullLast', function () {
   return function (array, key, reverse) {
     var res = _.partition(array, function (entry) {
-      return _.get(entry, key);
+      var gotten = _.get(entry, key);
+      return gotten !== undefined && gotten !== null;
     });
 
     var sorted = _.sortBy(res[0], function (entry) {

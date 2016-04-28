@@ -32,7 +32,7 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
     ngDialog.open({
       template: './components/dialogs/sites_params_certificate.html',
       scope: dialogScope,
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.params = {};
         $scope.add = function () {
           var condition = {
@@ -47,7 +47,7 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
 
           $scope.closeThisDialog();
         };
-      }
+      }]
     });
   };
 

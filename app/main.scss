@@ -87,6 +87,9 @@ textarea.vresize {
     border-radius: 5px;
     border: 1px solid #D2D2D2;
     padding: 5px 8px;
+    &.pill-label {
+        margin-top: 8px;
+    }
     & + & {
         margin-top: 8px;
     }

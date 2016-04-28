@@ -136,6 +136,16 @@ angular.module('faomaintenanceApp', [
         templateUrl: 'components/trainings/trainings.html',
         controller: 'TrainingsCtrl'
       })
+      .when('/trainings/search', {
+        templateUrl: 'components/trainings/trainings_search.html',
+        controller: 'TrainingsSearchCtrl',
+        reloadOnSearch: false
+      })
+      .when('/trainings/results', {
+        templateUrl: 'components/trainings/trainings_search_results.html',
+        controller: 'TrainingsSearchResultsCtrl',
+        reloadOnSearch: false
+      })
       .when('/trainings/create', {
         templateUrl: 'components/trainings/training_edit.html',
         controller: 'TrainingEditCtrl'
@@ -218,6 +228,10 @@ angular.module('faomaintenanceApp', [
   ])
   .controller('TrainingEditCtrl', ['$scope', '$rootScope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'dateFilter', 'BusySvc',
     require('./components/trainings/TrainingEditCtrl.js')
+  ])
+  .controller('TrainingsSearchCtrl', ['$rootScope', '$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', require('./components/trainings/TrainingsSearchCtrl.js')])
+  .controller('TrainingsSearchResultsCtrl', ['$rootScope', '$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', 'dateFilter',
+    require('./components/trainings/TrainingsSearchResultsCtrl.js')
   ])
   .controller('TrainingsStatsCtrl', ['$scope', '$rootScope', 'DataSvc', 'dateFilter', 'BusySvc', 'ngDialog', require('./components/trainings/TrainingsStatsCtrl')])
   .controller('UpdateCtrl', ['$scope', '$rootScope', 'UpdateSvc', 'DataSvc', 'ngDialog', 'BusySvc', require('./components/administration/update/UpdateCtrl.js')])

@@ -1,7 +1,7 @@
 'use strict';
 /*jshint camelcase: false*/
 
-var _ = require('underscore');
+var _ = require('lodash');
 
 module.exports = function ($http, $q, apiSvc, $filter) {
 
@@ -165,9 +165,18 @@ module.exports = function ($http, $q, apiSvc, $filter) {
     return deferred.promise;
   };
 
-  dataSvc.getTrainings = function () {
+  dataSvc.getTrainings = function (types, from, to) {
     var deferred = $q.defer();
-    apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainings').then(function (trainings) {
+    var queryParams = types ? '?type=' + _.join(types, '&type=') : '';
+    if (from) {
+      queryParams += (queryParams === '' ? '?from=' : '&from=') + dateFilter(from, 'yyyy-MM-dd');
+    }
+
+    if (to) {
+      queryParams += (queryParams === '' ? '?to=' : '&to=') + dateFilter(to, 'yyyy-MM-dd');
+    }
+
+    apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainings' + queryParams).then(function (trainings) {
       _.each(_.values(trainings), function (training) {
         if (training.trng_start) {
           var dateFromFormat;

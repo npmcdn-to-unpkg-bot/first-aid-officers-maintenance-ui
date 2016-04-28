@@ -39,7 +39,7 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
     ngDialog.open({
       template: './components/dialogs/employees_params_certificate.html',
       scope: dialogScope,
-      controller: function ($scope) {
+      controller: ['$scope', function ($scope) {
         $scope.params = {};
         $scope.isValid = function () {
           var res = true;
@@ -77,7 +77,7 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
 
           $scope.closeThisDialog();
         };
-      }
+      }]
     });
   };
 

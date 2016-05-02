@@ -27,6 +27,10 @@ module.exports = function ($http, $q, apiSvc, $filter) {
     return deferred.promise;
   };
 
+  dataSvc.getEmployeeCertificatesVoiding = function (empl_pk) {
+    return apiSvc.get(apiSvc.resourcesEndpoint + 'employees/' + empl_pk + '/voiding');
+  };
+
   dataSvc.getSite = function (site_pk) {
     return apiSvc.get(apiSvc.resourcesEndpoint + 'sites/' + site_pk);
   };

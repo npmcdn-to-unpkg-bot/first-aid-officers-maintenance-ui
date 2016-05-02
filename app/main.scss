@@ -25,11 +25,19 @@ $screen-xs: 768px;
     }
 }
 
+.bootstrap-switch-danger {
+    background-color: $brand-danger !important;
+}
+
 @media (min-resolution: 192dpi) {
     .container {
         width: 100%;
         padding: 0;
     }
+}
+
+.input-group .input-group-btn {
+    padding: 0;
 }
 
 textarea.vresize {

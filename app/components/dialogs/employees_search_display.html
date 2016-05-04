@@ -39,13 +39,14 @@
         <hr />
         <div class="form-group" ng-repeat="cert in certificates">
             <label for="permanent" class="col-xs-4 control-label checkbox-label">Aptitude {{cert.cert_short}}</label>
-            <div class="col-xs-3 checkbox">
+            <div class="col-xs-8 checkbox">
                 <label>
                     <input id="permanent" type="checkbox" ng-model="display[cert.cert_pk].st" />
                     <span class="checkbox-label">Statut</span>
                 </label>
             </div>
-            <div class="col-xs-5 checkbox">
+            <div class="col-xs-4"></div>
+            <div class="col-xs-8 checkbox">
                 <label>
                     <input id="permanent" type="checkbox" ng-model="display[cert.cert_pk].exp" />
                     <span class="checkbox-label">Date d'expiration</span>

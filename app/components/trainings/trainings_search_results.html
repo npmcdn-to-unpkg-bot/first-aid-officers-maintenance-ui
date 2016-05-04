@@ -69,7 +69,7 @@
                             <td ng-repeat="header in theaders">{{get(trng, header.path)}}</td>
                         </tr>
                         <tr ng-if="shown.length > 100">
-                            <td colspan="{{theaders.length}}" class="text-center">{{shown.length - 100}} formations suppl&eacute;mentaires...</td>
+                            <td colspan="{{theaders.length + 1}}" class="text-center">{{shown.length - 100}} formations suppl&eacute;mentaires...</td>
                         </tr>
                     </tbody>
                 </table>

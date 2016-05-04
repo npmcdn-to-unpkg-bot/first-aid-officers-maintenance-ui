@@ -27,68 +27,7 @@
         </div>
         <div class="row">
             <div class="col-md-8 col-md-offset-2 col-lg-12 col-lg-offset-0">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Param&egrave;tres d'affichage</div>
-                    <div class="panel-body form form-horizontal" autocomplete="off">
-                        <div class="form-group">
-                            <label for="surname" class="col-xs-4 control-label checkbox-label">Nom</label>
-                            <div class="col-xs-8 checkbox">
-                                <label>
-                                    <input id="surname" type="checkbox" disabled checked />
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="firstname" class="col-xs-4 control-label checkbox-label">Pr&eacute;nom</label>
-                            <div class="col-xs-8 checkbox">
-                                <label>
-                                    <input id="firstname" type="checkbox" disabled checked />
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="site" class="col-xs-4 control-label checkbox-label">Affectation</label>
-                            <div class="col-xs-8 checkbox">
-                                <label>
-                                    <input id="site" type="checkbox" ng-model="display.site" />
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="status" class="col-xs-4 control-label checkbox-label">Statut (CDI/CDD)</label>
-                            <div class="col-xs-8 checkbox">
-                                <label>
-                                    <input id="status" type="checkbox" ng-model="display.status" />
-                                </label>
-                            </div>
-                        </div>
-                        <hr />
-                        <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
-                            <div class="form-group" ng-repeat="cert in certificates">
-                                <label for="permanent" class="col-xs-4 control-label checkbox-label">Aptitude {{cert.cert_short}}</label>
-                                <div class="col-xs-3 checkbox">
-                                    <label>
-                                        <input id="permanent" type="checkbox" ng-model="display[cert.cert_pk].st" />
-                                        <span class="checkbox-label">Statut</span>
-                                    </label>
-                                </div>
-                                <div class="col-xs-5 checkbox">
-                                    <label>
-                                        <input id="permanent" type="checkbox" ng-model="display[cert.cert_pk].exp" />
-                                        <span class="checkbox-label">Date d'expiration</span>
-                                    </label>
-                                </div>
-                                <div class="col-xs-4"></div>
-                                <div class="col-xs-8 checkbox">
-                                    <label>
-                                        <input id="permanent" type="checkbox" ng-model="display[cert.cert_pk].flnk" />
-                                        <span class="checkbox-label">Nombre d'absences/recalages</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </state-sustain>
-                    </div>
-                </div>
+                <div ng-include="'./components/dialogs/employees_search_display.html'"></div>
             </div>
         </div>
     </div>

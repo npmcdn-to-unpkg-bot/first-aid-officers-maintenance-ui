@@ -133,11 +133,12 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
   busySvc.busy('employeesSearchResults', true);
   Promise.all([dataSvc.getSites(), dataSvc.getCertificates()]).then(function (results) {
     $scope.sites = results[0];
+    $scope.certificates = results[1];
     $scope.filter = helper.fromURIComponent($location.search().filter);
     $scope.display = helper.fromURIComponent($location.search().display);
 
     $scope.theaders = buildHeaders($scope.display, results[1]);
-    $scope.certificates = _.filter(helper.fillUp(_.values(results[1]), $scope.filter.certificates), 'conditions');
+    $scope.filterCertificates = _.filter(helper.fillUp(_.values(results[1]), $scope.filter.certificates), 'conditions');
     busySvc.done();
 
     dataSvc.getEmployeesWithStats($scope.filter.site).then(function (employees) {
@@ -156,4 +157,20 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
       busySvc.done('employeesSearchResults');
     });
   });
+
+  $scope.changeDisplay = function () {
+    var dialogScope = $scope.$new();
+    dialogScope.display = _($scope.display).cloneDeep();
+    dialogScope.callback = function (display) {
+      $scope.display = display;
+      $location.search('display', helper.toURIComponent($scope.display)).replace();
+      $scope.theaders = buildHeaders($scope.display, $scope.certificates);
+    };
+
+    ngDialog.open({
+      template: './components/dialogs/employees_search_display.html',
+      scope: dialogScope
+    });
+  };
+
 };

@@ -30,14 +30,14 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
       headers.push({
         path: 'start',
         sort: 'trng_start',
-        display: 'Début de formation'
+        display: 'Date de début'
       });
     }
 
     headers.push({
       path: 'date',
       sort: 'trng_date',
-      display: 'Date de formation'
+      display: 'Date de ' + (display.start ? 'fin' : 'formation')
     });
 
     if (display.status) {

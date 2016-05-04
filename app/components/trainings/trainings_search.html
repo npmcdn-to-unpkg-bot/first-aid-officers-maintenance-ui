@@ -94,7 +94,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="start" class="col-xs-4 control-label checkbox-label">D&eacute;but de formation</label>
+                    <label for="start" class="col-xs-4 control-label checkbox-label">Date de d&eacute;but</label>
                     <div class="col-xs-8 checkbox">
                         <label>
                             <input id="start" type="checkbox" ng-model="display.start" />
@@ -102,7 +102,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="date" class="col-xs-4 control-label checkbox-label">Date de formation</label>
+                    <label for="date" class="col-xs-4 control-label checkbox-label">Date de {{display.start ? 'fin' : 'formation'}}</label>
                     <div class="col-xs-8 checkbox">
                         <label>
                             <input id="date" type="checkbox" disabled checked />

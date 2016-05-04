@@ -144,19 +144,21 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
     busySvc.done();
 
     var from, to;
-    switch ($scope.filter.date.o) {
-      case 'specific':
-        from = new Date($scope.filter.date.from);
-        to = new Date($scope.filter.date.to);
-        break;
-      case 'soon':
-        from = new Date();
-        to = moment(from).add($scope.filter.date.data, 'months').toDate();
-        break;
-      case 'recent':
-        to = new Date();
-        from = moment(to).subtract($scope.filter.date.data, 'months').toDate();
-        break;
+    if ($scope.filter.date) {
+      switch ($scope.filter.date.o) {
+        case 'specific':
+          from = new Date($scope.filter.date.from);
+          to = new Date($scope.filter.date.to);
+          break;
+        case 'soon':
+          from = new Date();
+          to = moment(from).add($scope.filter.date.data, 'months').toDate();
+          break;
+        case 'recent':
+          to = new Date();
+          from = moment(to).subtract($scope.filter.date.data, 'months').toDate();
+          break;
+      }
     }
 
     dataSvc.getTrainings($scope.filter.trtys, from, to).then(function (trainings) {

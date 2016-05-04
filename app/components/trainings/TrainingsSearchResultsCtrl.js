@@ -172,4 +172,19 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
       busySvc.done('trainingsSearchResults');
     });
   });
+
+  $scope.changeDisplay = function () {
+    var dialogScope = $scope.$new(true);
+    dialogScope.display = _($scope.display).cloneDeep();
+    dialogScope.callback = function (display) {
+      $scope.display = display;
+      $location.search('display', helper.toURIComponent($scope.display)).replace();
+      $scope.theaders = buildHeaders($scope.display);
+    };
+
+    ngDialog.open({
+      template: './components/dialogs/trainings_search_display.html',
+      scope: dialogScope
+    });
+  };
 };

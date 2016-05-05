@@ -58,7 +58,7 @@
                     <thead>
                         <tr>
                             <th width="53px"></th>
-                            <th ng-repeat="header in theaders" ng-bind-html="header.display" class="st-sort" st-sort="{{header.path}}" st-skip-natural="true"></th>
+                            <th ng-repeat="header in theaders" ng-bind-html="header.display" class="st-sort" st-sort="{{header.sort || header.path}}" st-skip-natural="true"></th>
                         </tr>
                     </thead>
                     <tbody>

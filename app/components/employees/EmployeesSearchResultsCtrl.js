@@ -54,6 +54,7 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
       if (displayCert && displayCert.exp) {
         headers.push({
           path: 'stats.certificates[' + cert_pk + '].expiryDateDisplay',
+          sort: 'stats.certificates[' + cert_pk + '].expiryDate',
           display: cert.cert_short + ' jusqu\'au'
         });
       }

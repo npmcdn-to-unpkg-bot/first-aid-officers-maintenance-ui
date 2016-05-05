@@ -172,5 +172,4 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
       scope: dialogScope
     });
   };
-
 };

@@ -43,74 +43,7 @@
         </div>
         <div class="row">
             <div class="col-md-8 col-md-offset-2 col-lg-12 col-lg-offset-0">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Param&egrave;tres d'affichage</div>
-                    <div class="panel-body form form-horizontal" autocomplete="off">
-                        <div class="form-group">
-                            <label for="name" class="col-xs-4 control-label checkbox-label">Nom du site</label>
-                            <div class="col-xs-8 checkbox">
-                                <label>
-                                    <input id="name" type="checkbox" disabled checked />
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="department" class="col-xs-4 control-label checkbox-label">D&eacute;partement</label>
-                            <div class="col-xs-8 checkbox">
-                                <label>
-                                    <input id="department" type="checkbox" ng-model="display.dept" />
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="employees" class="col-xs-4 control-label checkbox-label">Nombre d'agents</label>
-                            <div class="col-xs-8 checkbox">
-                                <label>
-                                    <input id="employees" type="checkbox" ng-model="display.nb" />
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="permanent" class="col-xs-4 control-label checkbox-label">Nombre de CDI</label>
-                            <div class="col-xs-8 checkbox">
-                                <label>
-                                    <input id="permanent" type="checkbox" ng-model="display.perm" />
-                                </label>
-                            </div>
-                        </div>
-                        <hr />
-                        <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
-                            <div class="form-group" ng-repeat="cert in certificates">
-                                <label for="permanent" class="col-xs-4 control-label checkbox-label">Agents {{cert.cert_short}}</label>
-                                <div class="col-xs-4 checkbox">
-                                    <label>
-                                        <input type="checkbox" ng-model="display[cert.cert_pk].nb" />
-                                        <span class="checkbox-label">Form&eacute;s</span>
-                                    </label>
-                                </div>
-                                <div class="col-xs-4 checkbox">
-                                    <label>
-                                        <input type="checkbox" ng-model="display[cert.cert_pk].pc" />
-                                        <span class="checkbox-label">Form&eacute;s (taux)</span>
-                                    </label>
-                                </div>
-                                <div class="col-xs-4"></div>
-                                <div class="col-xs-4 checkbox">
-                                    <label>
-                                        <input type="checkbox" ng-model="display[cert.cert_pk].tg" />
-                                        <span class="checkbox-label">Cible (nombre)</span>
-                                    </label>
-                                </div>
-                                <div class="col-xs-4 checkbox">
-                                    <label>
-                                        <input type="checkbox" ng-model="display[cert.cert_pk].need" />
-                                        <span class="checkbox-label">Reste &agrave; former</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </state-sustain>
-                    </div>
-                </div>
+                <div ng-include="'components/dialogs/sites_search_display.html'"></div>
             </div>
         </div>
     </div>

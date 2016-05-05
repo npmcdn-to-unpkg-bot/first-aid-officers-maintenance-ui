@@ -133,8 +133,9 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
   busySvc.busy('sitesSearchResults', true);
   Promise.all([dataSvc.getDepartments(), dataSvc.getCertificates()]).then(function (results) {
     $scope.departments = results[0];
+    $scope.certificates = results[1];
     $scope.filter = helper.fromURIComponent($location.search().filter);
-    $scope.certificates = _.filter(helper.fillUp(_.values(results[1]), $scope.filter.certificates), 'conditions');
+    $scope.filterCertificates = _.filter(helper.fillUp(_.values(results[1]), $scope.filter.certificates), 'conditions');
     $scope.display = helper.fromURIComponent($location.search().display);
     busySvc.done();
 
@@ -152,4 +153,19 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
       busySvc.done('sitesSearchResults');
     });
   });
+
+  $scope.changeDisplay = function () {
+    var dialogScope = $scope.$new();
+    dialogScope.display = _($scope.display).cloneDeep();
+    dialogScope.callback = function (display) {
+      $scope.display = display;
+      $location.search('display', helper.toURIComponent($scope.display)).replace();
+      $scope.theaders = buildHeaders($scope.display, $scope.certificates);
+    };
+
+    ngDialog.open({
+      template: './components/dialogs/sites_search_display.html',
+      scope: dialogScope
+    });
+  };
 };

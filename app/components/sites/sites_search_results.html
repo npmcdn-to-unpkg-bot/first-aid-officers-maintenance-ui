@@ -17,8 +17,8 @@
                     <div class="col-xs-4 text-right">Nombre de CDI</div>
                     <div class="col-xs-8">{{option.display}} <span class="text-primary">{{filter.perm.d}}</span></div>
                 </div>
-                <hr ng-if="certificates.length > 0 && hasFiltersBesidesCert()" />
-                <div ng-repeat="cert in certificates">
+                <hr ng-if="filterCertificates.length > 0 && hasFiltersBesidesCert()" />
+                <div ng-repeat="cert in filterCertificates">
                     <div class="row" ng-repeat="condition in cert.conditions" ng-init="params = condition.params">
                         <div class="col-xs-4 text-right">{{$first && $parent.$first ? 'Aptitudes' : ''}}</div>
                         <div class="col-xs-8">
@@ -75,4 +75,5 @@
 <div class="side-panel-container text-right">
     <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="getLink()"><span class="glyphicon glyphicon-link"></span>&nbsp;Sauver/partager recherche</button>
     <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="params()"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Modifier param&egrave;tres</button>
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="changeDisplay()"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;Param&egrave;tres d'affichage</button>
 </div>

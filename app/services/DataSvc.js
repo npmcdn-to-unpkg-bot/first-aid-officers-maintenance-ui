@@ -167,7 +167,7 @@ module.exports = function ($http, $q, apiSvc, $filter) {
 
   dataSvc.getTrainings = function (types, from, to) {
     var deferred = $q.defer();
-    var queryParams = types ? '?type=' + _.join(types, '&type=') : '';
+    var queryParams = types && types.length > 0 ? '?type=' + _.join(types, '&type=') : '';
     if (from) {
       queryParams += (queryParams === '' ? '?from=' : '&from=') + dateFilter(from, 'yyyy-MM-dd');
     }

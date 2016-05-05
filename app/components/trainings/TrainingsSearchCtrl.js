@@ -11,6 +11,10 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
   $scope.datesOptions = helper.datesOptions;
 
   function setSearchUrl() {
+    if ($scope.filter.trtys && $scope.filter.trtys.length === 0) {
+      delete $scope.filter.trtys;
+    }
+
     $location.search('filter', helper.toURIComponent($scope.filter)).replace();
     $location.search('display', helper.toURIComponent($scope.display)).replace();
   }

@@ -23,6 +23,17 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
     $location.path('/trainings/results');
   };
 
+  $scope.steps = [{
+    step: 1,
+    title: 'Param&egrave;tres de recherche',
+    template: 'components/trainings/trainings_search_step1.html'
+  }, {
+    step: 2,
+    title: 'Param&egrave;tres d\'affichage',
+    template: 'components/trainings/trainings_search_step2.html'
+  }];
+  $scope.currentStep = $scope.steps[0];
+
   busySvc.busy('trainingsSearch');
   Promise.all([dataSvc.getDepartments(), dataSvc.getCertificates(), dataSvc.getTrainingTypes()]).then(function (results) {
     $scope.departments = _.values(results[0]);

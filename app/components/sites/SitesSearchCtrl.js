@@ -51,6 +51,17 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
     });
   };
 
+  $scope.steps = [{
+    step: 1,
+    title: 'Param&egrave;tres de recherche',
+    template: 'components/sites/sites_search_step1.html'
+  }, {
+    step: 2,
+    title: 'Param&egrave;tres d\'affichage',
+    template: 'components/sites/sites_search_step2.html'
+  }];
+  $scope.currentStep = $scope.steps[0];
+
   busySvc.busy('sitesSearch');
   Promise.all([dataSvc.getDepartments(), dataSvc.getCertificates()]).then(function (results) {
     $scope.departments = _.values(results[0]);

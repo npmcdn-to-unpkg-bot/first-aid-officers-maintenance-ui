@@ -5,6 +5,7 @@ var _ = require('lodash');
 var helper = require('./employeesSearchHelper.js');
 
 module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dataSvc) {
+  $scope.searchType = 'agents';
   $scope.filter = {};
   $scope.display = {};
 
@@ -88,11 +89,11 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
   $scope.steps = [{
     step: 1,
     title: 'Crit&egrave;res de recherche',
-    template: 'components/employees/employees_search_step1.html'
+    template: 'components/search/employees/employees_search_step1.html'
   }, {
     step: 2,
     title: 'Param&egrave;tres d\'affichage',
-    template: 'components/employees/employees_search_step2.html'
+    template: 'components/search/employees/employees_search_step2.html'
   }];
   $scope.currentStep = $scope.steps[0];
 

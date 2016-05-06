@@ -5,6 +5,7 @@ var _ = require('lodash');
 var helper = require('./sitesSearchHelper.js');
 
 module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dataSvc) {
+  $scope.searchType = 'sites';
   $scope.filter = {};
   $scope.display = {};
   $scope.comparisonOptions = helper.comparisonOptions;
@@ -58,11 +59,11 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
   $scope.steps = [{
     step: 1,
     title: 'Crit&egrave;res de recherche',
-    template: 'components/sites/sites_search_step1.html'
+    template: 'components/search/sites/sites_search_step1.html'
   }, {
     step: 2,
     title: 'Param&egrave;tres d\'affichage',
-    template: 'components/sites/sites_search_step2.html'
+    template: 'components/search/sites/sites_search_step2.html'
   }];
   $scope.currentStep = $scope.steps[0];
 

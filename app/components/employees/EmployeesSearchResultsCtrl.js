@@ -137,6 +137,7 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
     $scope.certificates = results[1];
     $scope.filter = helper.fromURIComponent($location.search().filter);
     $scope.display = helper.fromURIComponent($location.search().display);
+    $scope.noFilter = _.keys($scope.filter).length === 0;
 
     $scope.theaders = buildHeaders($scope.display, results[1]);
     $scope.filterCertificates = _.filter(helper.fillUp(_.values(results[1]), $scope.filter.certificates), 'conditions');

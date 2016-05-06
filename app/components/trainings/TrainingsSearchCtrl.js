@@ -11,9 +11,9 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
   $scope.datesOptions = helper.datesOptions;
 
   function setSearchUrl() {
-    if ($scope.filter.trtys && $scope.filter.trtys.length === 0) {
-      delete $scope.filter.trtys;
-    }
+    $scope.filter = _.omitBy($scope.filter, function (value) {
+      return value === false || value === null || _.isArray(value) && value.length === 0 || _.isObject(value) && _.keys(value).length === 0;
+    });
 
     $location.search('filter', helper.toURIComponent($scope.filter)).replace();
     $location.search('display', helper.toURIComponent($scope.display)).replace();
@@ -25,7 +25,7 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
 
   $scope.steps = [{
     step: 1,
-    title: 'Param&egrave;tres de recherche',
+    title: 'Crit&egrave;res de recherche',
     template: 'components/trainings/trainings_search_step1.html'
   }, {
     step: 2,

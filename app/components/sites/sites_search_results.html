@@ -3,8 +3,12 @@
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
         <div class="panel panel-primary">
-            <div class="panel-heading">Param&egrave;tres de recherche</div>
-            <div class="panel-body">
+            <div class="panel-heading">Crit&egrave;res de recherche</div>
+            <div class="panel-body" ng-if="noFilter">
+                <div class="col-xs-4 text-right">Filtrage des r&eacute;sultats</div>
+                <div class="col-xs-8 text-primary">Aucun filtre appliqu&eacute;</div>
+            </div>
+            <div class="panel-body" ng-if="!noFilter">
                 <div class="row" ng-if="filter.dept">
                     <div class="col-xs-4 text-right">D&eacute;partement</div>
                     <div class="col-xs-8"><strong>{{departments[filter.dept].dept_name}}</strong></div>

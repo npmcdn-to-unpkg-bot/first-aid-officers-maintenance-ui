@@ -29,6 +29,10 @@ $screen-xs: 768px;
     padding-top: 6px;
 }
 
+.bootstrap-switch-danger {
+    background-color: $brand-danger !important;
+}
+
 .form-group .checkbox {
     .checkbox-label {
         margin-left: 5px;

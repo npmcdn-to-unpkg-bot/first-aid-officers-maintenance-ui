@@ -194,7 +194,7 @@ angular.module('faomaintenanceApp', [
   .factory('ApiSvc', ['$http', '$q', require('./services/ApiSvc.js')])
   .factory('AdminSvc', ['$http', '$q', 'ApiSvc', require('./services/AdminSvc.js')])
   .factory('AuthenticationSvc', ['$http', '$cookies', '$rootScope', 'ApiSvc', require('./services/AuthenticationSvc.js')])
-  .factory('EmployeesNotesSvc', ['ApiSvc', require('./services/EmployeesNotesSvc.js')])
+  .factory('EmployeesNotesSvc', ['ApiSvc', 'dateFilter', require('./services/EmployeesNotesSvc.js')])
   .factory('DataSvc', ['$http', '$q', 'ApiSvc', '$filter', require('./services/DataSvc.js')])
   .factory('TrainingsSvc', ['ApiSvc', require('./services/TrainingsSvc.js')])
   .factory('UpdateSvc', ['$http', '$q', 'ApiSvc', require('./services/UpdateSvc.js')])

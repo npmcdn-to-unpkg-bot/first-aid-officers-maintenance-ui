@@ -98,7 +98,7 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
 
     dialogScope.isValid = function (optout, cert, date) {
       if (optout) {
-        return Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date.getTime()) && cert;
+        return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime()) && cert;
       }
 
       return cert;

@@ -9,7 +9,10 @@ module.exports = function ($http, $q) {
     }
   };
 
-  apiSvc.apiBaseUrl = 'http://localhost:8080/api/';
+  apiSvc.apiBaseUrl = /*apiurl:start*/ 'http://localhost:8080/api/' /*apiurl:end*/ ;
+  if (!apiSvc.apiBaseUrl.endsWith('/')) {
+    apiSvc.apiBaseUrl += '/';
+  }
 
   apiSvc.authEndpoint = apiSvc.apiBaseUrl + 'auth/';
   apiSvc.adminEndpoint = apiSvc.apiBaseUrl + 'admin/';

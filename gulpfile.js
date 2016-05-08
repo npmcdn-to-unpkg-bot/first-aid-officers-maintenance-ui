@@ -2,11 +2,13 @@ var browserify = require('browserify'),
   gulp = require('gulp'),
   gulpif = require('gulp-if'),
   jshint = require('gulp-jshint'),
+  replace = require('gulp-replace'),
   sass = require('gulp-sass'),
   uglify = require('gulp-uglify'),
   webserver = require('gulp-webserver'),
   buffer = require('vinyl-buffer'),
-  source = require('vinyl-source-stream');
+  source = require('vinyl-source-stream'),
+  argv = require('yargs').argv;
 
 var prod = true;
 
@@ -52,6 +54,7 @@ function bundlejs() {
     })
     .pipe(source('bundle.js'))
     .pipe(buffer())
+    .pipe(gulpif(argv.apiurl !== undefined, replace(/\/\*apiurl:start\*\/.*\/\*apiurl:end\*\//g, '\'' + argv.apiurl + '\'')))
     .pipe(gulpif(prod, uglify().on('error', function (err) {
       console.log(err.message);
       this.emit('end');

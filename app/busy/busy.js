@@ -5,13 +5,16 @@ require('angular').module(moduleName, [])
   .run(['$templateCache', function ($templateCache) {
     /*jshint multistr: true*/
     $templateCache.put('ccjmne-busy_tmpl.html',
-      '<div class="sk-folding-cube" ng-show="busy"> \
-        <div class="sk-cube1 sk-cube"></div> \
-        <div class="sk-cube2 sk-cube"></div> \
-        <div class="sk-cube4 sk-cube"></div> \
-        <div class="sk-cube3 sk-cube"></div> \
-      </div> \
-      <div ng-transclude ng-show="!busy"></div>');
+      '<div class="sk-folding-cube-wrap" ng-show="busy"> \
+        <div class="sk-folding-cube"> \
+          <div class="sk-cube1 sk-cube"></div> \
+          <div class="sk-cube2 sk-cube"></div> \
+          <div class="sk-cube4 sk-cube"></div> \
+          <div class="sk-cube3 sk-cube"></div> \
+        </div> \
+      </div>  \
+      <div ng-transclude ng-show="!busy"></div>'
+    );
   }])
   .factory('BusySvc', function () {
     var state = { global: { count: 0, detached: false } };
@@ -93,11 +96,11 @@ require('angular').module(moduleName, [])
       scope: {
         task: '@busyTask'
       },
-      link: function (scope, element) {
+      link: function (scope, element, attrs) {
         element.on('$destroy', busySvc.register(function (busy) {
           scope.busy = busy;
           setTimeout(function () { scope.$apply(); }, 0);
-        }, scope.task));
+        }, attrs.busy || scope.task));
       }
     };
   }])
@@ -115,7 +118,7 @@ require('angular').module(moduleName, [])
           }
 
           setTimeout(function () { scope.$apply(); }, 0);
-        }, attrs.busyTask));
+        }, attrs.busyText || attrs.busyTask));
       }
     };
   }])
@@ -131,7 +134,7 @@ require('angular').module(moduleName, [])
 
           element.html(busy ? attrs.busyHtml : previousText || element.html());
           setTimeout(function () { scope.$apply(); }, 0);
-        }, attrs.busyTask));
+        }, attrs.busyHtml || attrs.busyTask));
       }
     };
   }])
@@ -147,7 +150,7 @@ require('angular').module(moduleName, [])
 
           element.attr('disabled', busy || previouslyDisabled);
           setTimeout(function () { scope.$apply(); }, 0);
-        }, attrs.busyTask));
+        }, attrs.busyDisable || attrs.busyTask));
       }
     };
   }]);

@@ -25,8 +25,20 @@ $screen-xs: 768px;
     }
 }
 
+.form-group label.control-label.checkbox-label {
+    padding-top: 6px;
+}
+
 .bootstrap-switch-danger {
     background-color: $brand-danger !important;
+}
+
+.form-group .checkbox {
+    .checkbox-label {
+        margin-left: 5px;
+        position: relative;
+        top: -1px;
+    }
 }
 
 @media (min-resolution: 192dpi) {
@@ -36,8 +48,34 @@ $screen-xs: 768px;
     }
 }
 
-.input-group .input-group-btn {
-    padding: 0;
+.input-group {
+    .input-group-btn {
+        padding: 0;
+        button.btn {
+            padding: 8px 12px;
+        }
+    }
+}
+
+.panel-heading span.label {
+    position: relative;
+    top: -2px;
+}
+
+.panel .panel-body + table {
+    border-top: 1px solid #ddd;
+}
+
+.alert a {
+    text-decoration: underline;
+}
+
+li.divider {
+    background-color: #eee !important;
+}
+
+hr {
+    margin: 10px 0;
 }
 
 textarea.vresize {
@@ -53,6 +91,9 @@ textarea.vresize {
     border-radius: 5px;
     border: 1px solid #D2D2D2;
     padding: 5px 8px;
+    &.pill-label {
+        margin-top: 8px;
+    }
     & + & {
         margin-top: 8px;
     }
@@ -93,6 +134,7 @@ textarea.vresize {
 
 .form-group:not(.label-floating) {
     margin: 0;
+    .checkbox label,
     label.control-label {
         font-size: 14px;
     }
@@ -136,6 +178,18 @@ h3.pull-left {
 
 .no-margin {
     margin: 0;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.no-lpadding {
+    padding-left: 0;
+}
+
+.no-rpadding {
+    padding-right: 0;
 }
 
 .no-events {

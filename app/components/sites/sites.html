@@ -1,59 +1,61 @@
-<div st-persist="sites" st-table="shown" st-safe-src="sites">
-	<form class="form-horizontal">
-		<div class="form-group">
-			<label for="pageSize" class="control-label col-xs-4 col-md-2">Sites par page</label>
-			<div class="col-xs-8 col-md-2">
-				<select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
-			</div>
-		</div>
-	</form>
+<div st-persist="sites" st-table="shown" st-safe-src="sites" st-set-sort="orderByNullLast">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="pageSize" class="control-label col-xs-4 col-md-2">Sites par page</label>
+            <div class="col-xs-8 col-md-2">
+                <select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
+            </div>
+        </div>
+    </form>
 
-	<div class="panel panel-primary">
-		<div class="panel-heading">
-			<div class="row">
-				<div class="col-xs-2">Sites</div>
-				<div class="col-xs-10 text-right">
-					<state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
-						<div class="btn-group">
-						    <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
-						</div>
-					</state-sustain>
-				</div>
-			</div>
-		</div>
-		<table class="table table-striped table-hover">
-			<thead>
-				<tr>
-					<th class="vtop"></th>
-					<th width="50%">
-						<div class="st-sort" st-sort="site_name" st-skip-natural="true">Nom</div>
-						<input st-search="site_name" placeholder="Rechercher..." class="form-control" type="text" />
-					</th>
-					<th width="50%">
-						<div class="st-sort" st-sort="dept.dept_name" st-skip-natural="true">D&eacute;partement</div>
-						<input st-search="dept.dept_name" placeholder="Rechercher..." class="form-control" type="text" />
-					</th>
-					<th class="last vtop" ng-repeat="cert in certificates | filter: {'checked': true}">
-						<div class="st-sort" st-sort="stats.certificates[{{cert.cert_pk}}].countPercentage" st-skip-natural="true">{{cert.cert_short}}</div>
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="site in shown" ng-click="select(site.site_pk);" class="clickme" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
-					<td><button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button></td>
-					<td class="shrinkable" ng-class="{'text-primary': hover}">{{ site.site_name }}</td>
-					<td class="shrinkable">{{ site.dept.dept_name }}</td>
-					<td class="shrinkable text-center" ng-repeat="cert in certificates | filter: {'checked': true}" ng-init="certStats = site.stats.certificates[cert.cert_pk]">
-						<span class="label" ng-class="'label-' + certStats.targetStatus">{{certStats.countPercentage}}%</span>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		
-		<div class="panel-footer text-center">
-			<td colspan="5" class="text-center">
-				<div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
-			</td>
-		</div>
-	</div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-2">Sites</div>
+                <div class="col-xs-10 text-right">
+                    <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
+                        <div class="btn-group">
+                            <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
+                        </div>
+                    </state-sustain>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="vtop"></th>
+                    <th width="50%">
+                        <div class="st-sort" st-sort="site_name" st-skip-natural="true">Nom</div>
+                        <input st-search="site_name" placeholder="Rechercher..." class="form-control" type="text" />
+                    </th>
+                    <th width="50%">
+                        <div class="st-sort" st-sort="dept.dept_name" st-skip-natural="true">D&eacute;partement</div>
+                        <input st-search="dept.dept_name" placeholder="Rechercher..." class="form-control" type="text" />
+                    </th>
+                    <th class="last vtop" ng-repeat="cert in certificates | filter: {'checked': true}">
+                        <div class="st-sort" st-sort="stats.certificates[{{cert.cert_pk}}].countPercentage" st-skip-natural="true">{{cert.cert_short}}</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="site in shown" ng-click="select(site.site_pk);" class="clickme" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
+                    <td>
+                        <button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button>
+                    </td>
+                    <td class="shrinkable" ng-class="{'text-primary': hover}">{{ site.site_name }}</td>
+                    <td class="shrinkable">{{ site.dept.dept_name }}</td>
+                    <td class="shrinkable text-center" ng-repeat="cert in certificates | filter: {'checked': true}" ng-init="certStats = site.stats.certificates[cert.cert_pk]">
+                        <span class="label" ng-class="'label-' + certStats.targetStatus">{{certStats.countPercentage}}%</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="panel-footer text-center">
+            <td colspan="5" class="text-center">
+                <div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
+            </td>
+        </div>
+    </div>
 </div>

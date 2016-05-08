@@ -1,6 +1,6 @@
 <h3>{{trng.type.trty_name}} - {{trng && getDisplayDate()}}</h3>
 <br />
-<div st-table="shown" st-safe-src="trainees" ng-if="trainees.length > 0">
+<div st-table="shown" st-safe-src="trainees" ng-if="trainees.length > 0" st-set-sort="orderByNullLast">
     <form class="form-horizontal">
         <div class="form-group">
             <label for="pageSize" class="control-label col-xs-4 col-md-2">Agents par page</label>
@@ -57,8 +57,8 @@
                         <input type="text" class="form-control" ng-model="empl.trem_comment" />
                     </td>
                     <td ng-init="(trng.trng_outcome === 'COMPLETED' && empl.trem_outcome !== 'SCHEDULED') ? empl.validated = empl.trem_outcome === 'VALIDATED' : null">
-                        <input bswitch="empl.validated" type="checkbox" name="my-checkbox" data-indeterminate="true" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)"
-                            data-off-text="Non&nbsp;valid&eacute;(e)" data-label-width="0" ng-init="empl.validated=empl.validated || false" />
+                        <input bswitch="empl.validated" type="checkbox" name="my-checkbox" data-indeterminate="true" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)"
+                            data-label-width="0" ng-init="empl.validated=empl.validated || false" />
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm" ng-disabled="!hover" ng-click="unregister(empl)">D&eacute;sinscrire</button>

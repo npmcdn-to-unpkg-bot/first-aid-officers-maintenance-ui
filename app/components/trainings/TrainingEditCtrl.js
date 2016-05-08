@@ -85,7 +85,8 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
 
   $scope.unregister = function (empl) {
     var dialogScope = $scope.$new(true);
-    dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">d&eacute;sinscrire<br />' + empl.empl_firstname + ' ' + empl.empl_surname + '</span> de cette formation&nbsp?';
+    dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">d&eacute;sinscrire<br />' + empl.empl_firstname + ' ' + empl.empl_surname +
+      '</span> de cette formation&nbsp?';
     ngDialog.openConfirm({
       template: 'components/dialogs/warning.html',
       scope: dialogScope
@@ -96,10 +97,6 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
 
   $scope.selectEmployee = function (empl_pk) {
     $location.path('/employees/' + empl_pk);
-  };
-
-  $scope.disabled = function (date, mode) {
-    return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
   };
 
   $scope.registerAgents = function () {
@@ -139,7 +136,8 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
 
   $scope.save = function () {
     var dialogScope = $scope.$new(true);
-    dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">' + (($routeParams.trng_pk) ? 'enregistrer les modifications apport&eacute;es</span> &agrave' : 'cr&eacute;er</span>') + ' cette formation&nbsp?';
+    dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">' + (($routeParams.trng_pk) ?
+      'enregistrer les modifications apport&eacute;es</span> &agrave' : 'cr&eacute;er</span>') + ' cette formation&nbsp?';
     ngDialog.openConfirm({
       template: 'components/dialogs/warning.html',
       scope: dialogScope
@@ -174,7 +172,8 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
 
   $scope.cancel = function () {
     var dialogScope = $scope.$new(true);
-    dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">annuler la cr&eacute;ation/modification</span> de cette formation&nbsp?<hr />En confirmant, toutes les modifications qui n\'ont pas &eacute;t&eacute; sauvegard&eacute;es seront perdues.';
+    dialogScope.innerHtml =
+      '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">annuler la cr&eacute;ation/modification</span> de cette formation&nbsp?<hr />En confirmant, toutes les modifications qui n\'ont pas &eacute;t&eacute; sauvegard&eacute;es seront perdues.';
     ngDialog.openConfirm({
       template: 'components/dialogs/warning.html',
       scope: dialogScope

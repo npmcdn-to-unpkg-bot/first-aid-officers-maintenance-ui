@@ -12,8 +12,11 @@ module.exports = function (dateFilter) {
     template: ' \
       <form class="form-group" autocomplete="off"> \
         <div class="input-group full-width"> \
-          <input id="date" type="text" ng-model="viewDate" placeholder="Rechercher..." class="form-control" ng-click="datepicker=true" uib-datepicker-popup="fullDate" \
-          datepicker-mode="\'month\'" is-open="datepicker" show-button-bar="false" starting-day="1" date-disabled="disabled(date, mode)" show-weeks="false" /> \
+          <input id="date" type="text" ng-model="viewDate" placeholder="Rechercher..." class="form-control" uib-datepicker-popup="dd/MM/yyyy" \
+          datepicker-mode="\'month\'" is-open="datepicker" show-button-bar="false" starting-day="1" show-weeks="false" /> \
+          <div class="input-group-btn">\
+            <button type="button" class="btn btn-default" ng-click="datepicker=true" style="padding: 8px 12px;"><span class="glyphicon glyphicon-calendar"></span></button>\
+          </div>\
         </div> \
       </form>',
     link: function (scope, element, attr, table) {

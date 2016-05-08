@@ -28,7 +28,7 @@
                         <div class="input-group">
                             <span class="input-group-addon no-lpadding">Entre le</span>
                             <input id="from" type="text" max-date="null || params.to" ng-model="params.from" class="form-control" uib-datepicker-popup="dd/MM/yyyy" datepicker-mode="'month'" is-open="frompicker"
-                                show-button-bar="false" starting-day="1" show-weeks="false" placeholder="JJ/MM/YYYY" />
+                                show-button-bar="false" starting-day="1" show-weeks="false" placeholder="JJ/MM/AAAA" />
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-default" ng-click="frompicker=true"><span class="glyphicon glyphicon-calendar"></span></button>
                             </div>
@@ -39,7 +39,7 @@
                         <div class="input-group">
                             <span class="input-group-addon no-lpadding">Et le</span>
                             <input id="to" type="text" min-date="null || params.from" ng-model="params.to" class="form-control" uib-datepicker-popup="dd/MM/yyyy" datepicker-mode="'month'" is-open="topicker" show-button-bar="false"
-                                starting-day="1" show-weeks="false" placeholder="JJ/MM/YYYY" />
+                                starting-day="1" show-weeks="false" placeholder="JJ/MM/AAAA" />
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-default" ng-click="topicker=true"><span class="glyphicon glyphicon-calendar"></span></button>
                             </div>

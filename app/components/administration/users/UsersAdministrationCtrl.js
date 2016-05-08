@@ -79,13 +79,20 @@ module.exports = function ($scope, $rootScope, dataSvc, adminSvc, ngDialog, $rou
 
   $scope.resetPassword = function (empl) {
     var dialogScope = $scope.$new(true);
-    dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">r&eacute;initialiser le mot de passe</span> de<br /><span class="text-warning">' + empl.empl_firstname + '&nbsp;' + empl.empl_surname + '</span>&nbsp;? Cette modification est irr&eacute;versible et prend effet imm&eacute;diatement.';
+    dialogScope.innerHtml =
+      '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">r&eacute;initialiser le mot de passe</span> de<br /><span class="text-warning">' + (empl.empl_gender ?
+        'M.' : 'Mme') + '&nbsp;' + empl.empl_surname + '&nbsp;' + empl.empl_firstname +
+      '</span>&nbsp;? Cette modification est irr&eacute;versible et prend effet imm&eacute;diatement.';
     ngDialog.openConfirm({
       template: 'components/dialogs/warning.html',
       scope: dialogScope
     }).then(function () {
       adminSvc.resetUserPassword(empl.empl_pk).then(function (password) {
-        $rootScope.alerts.push({ type: 'success', msg: 'Mot de passe r&eacute;initialis&eacute;&nbsp: <strong><samp>' + password + '</samp></strong><hr />Veuillez transmettre son nouveau mot de passe &agrave; l\'agent concern&eacute;.' });
+        $rootScope.alerts.push({
+          type: 'success',
+          msg: 'Mot de passe r&eacute;initialis&eacute;&nbsp: <strong><samp>' + password +
+            '</samp></strong><hr />Veuillez transmettre son nouveau mot de passe &agrave; l\'agent concern&eacute;.'
+        });
       });
     });
   };

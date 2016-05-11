@@ -7,8 +7,6 @@
         <link rel="stylesheet" type="text/css" href="main.css" />
         <title>Gestion des Formations Sécurité</title>
         <link rel="shortcut icon" href="./img/favicon.ico" />
-        <!-- support for effing old browsers like the client has -->
-        <script src="https://www.promisejs.org/polyfills/promise-6.1.0.min.js"></script>
     </head>
 
     <body ng-controller="IndexCtrl">
@@ -22,9 +20,9 @@
                         <a href="#/home" class="logo"><img src="./img/logo.png" alt="Pole emploi" /></a>
                     </div>
                     <div class="col-md-4 col-sm-6 connection-status">
-                        <div if-role="'user'">Connect&eacute;(e) en tant que <span class="text-primary">{{userInfo.empl_firstname}} {{userInfo.empl_surname}}</span>
+                        <div if-role="'user'"><span ng-bind="'Connect&eacute;(e) en tant que'"></span> <span class="text-primary" ng-bind="userInfo.empl_firstname + ' ' + userInfo.empl_surname"></span>
                             <br />
-                            <button type="button" class="btn btn-danger btn-sm" ng-click="disconnect()">Se d&eacute;connecter</button>
+                            <button type="button" class="btn btn-danger btn-sm" ng-click="disconnect()" ng-bind="'Se d&eacute;connecter'"></button>
                         </div>
                     </div>
                 </div>
@@ -37,53 +35,7 @@
                             </button>
                             <a class="navbar-brand" href="#/home">Formations S&eacute;curit&eacute;</a>
                         </div>
-                        <div class="navbar-collapse collapse navbar-responsive-collapse" ng-show="currentUser.info">
-                            <ul class="nav navbar-nav">
-                                <li class="dropdown" ng-class="{ active: isActive('/sites')}">
-                                    <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Sites&nbsp;<b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#/sites">Consulter sites</a></li>
-                                        <li><a href="#/sites/search">Recherche avanc&eacute;e</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown" ng-class="{ active: isActive('/employees')}">
-                                    <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Agents&nbsp;<b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#/employees">Consulter agents</a></li>
-                                        <li><a href="#/employees/search">Recherche avanc&eacute;e</a></li>
-                                    </ul>
-                                </li>
-                                <li ng-class="{ active: isActive('/trainings')}"><a href="#/trainings" if-role="'!trainer'">Formations</a></li>
-                                <li class="dropdown" ng-class="{ active: isActive('/trainings')}" if-role="'trainer'">
-                                    <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Formations&nbsp;<b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#/trainings">Consulter formations</a></li>
-                                        <li><a href="#/trainings/search">Recherche avanc&eacute;e</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#/trainings/create">Cr&eacute;er formation</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#/trainings/stats">Dresser statistiques</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                            <form class="navbar-form navbar-left">
-                                <div class="form-group uib-typeahead">
-                                    <input type="text" class="form-control col-md-8" placeholder="Recherche globale..." uib-typeahead="select as select.summary for select in globalIndex | filterGlobal:$viewValue | limitTo:8"
-                                        ng-model="select" ng-focus="refreshIndex()" />
-                                </div>
-                            </form>
-                            <ul class="nav navbar-nav navbar-right">
-                                <li ng-class="{ active: isActive('/account')}"><a href="#/account">Mon compte</a></li>
-                                <li class="dropdown" ng-class="{ active: isActive('/administration')}" if-role="'admin'">
-                                    <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Administration&nbsp;<b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#/administration/users">Administration utilisateurs</a></li>
-                                        <li><a href="#/administration/sites">Gestion des sites</a></li>
-                                        <li><a href="#/administration/update">Mise &agrave; jour</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
+                        <div ng-include="'./components/index/navbar.html'" ng-if="currentUser.info"></div>
                     </div>
                 </div>
             </header>
@@ -96,7 +48,7 @@
                 <br />
                 <p>
                     Gestion des formations s&eacute;curit&eacute; - <span class="version">version 1.2-DEV</span> - P&ocirc;le emploi IDF
-                    <span class="pull-right">&copy; 2014-{{today | date: 'yyyy'}} NCLS&nbsp;Development<span class="text-danger">&nbsp;|&nbsp;</span>
+                    <span class="pull-right">&copy; 2014- <span ng-bind="today | date: 'yyyy'"></span> NCLS&nbsp;Development<span class="text-danger">&nbsp;|&nbsp;</span>
                     <a href="mailto:nclsdevelopment@gmail.com?subject=Enquiry about {{title}} at {{whereami}}" class="contact-us">nous contacter</a>
                     </span>
                 </p>

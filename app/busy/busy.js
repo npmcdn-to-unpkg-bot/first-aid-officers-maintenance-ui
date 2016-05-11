@@ -60,8 +60,10 @@ require('angular').module(moduleName, [])
 
         if (task && task !== 'global') {
           if (!state[task]) {
-            state[task] = { count: 0, detached: detach };
+            state[task] = { count: 0 };
           }
+
+          state[task].detached = detach;
 
           if (1 === (state[task].count += 1)) {
             notify(task);
@@ -74,6 +76,10 @@ require('angular').module(moduleName, [])
       },
       done: function (task) {
         task = task ? task : 'global';
+        if (!state[task]) {
+          return;
+        }
+
         if (task && task !== 'global') {
           if (!(state[task].count = state[task].count ? state[task].count - 1 : 0)) {
             notify(task);
@@ -83,6 +89,10 @@ require('angular').module(moduleName, [])
         if (!state[task].detached && !(state.global.count = state.global.count ? state.global.count - 1 : 0)) {
           notify('global');
         }
+      },
+      check: function (task) {
+        task = task ? task : 'global';
+        return state[task] ? state[task].count : 0;
       }
     };
   })
@@ -118,7 +128,7 @@ require('angular').module(moduleName, [])
           }
 
           setTimeout(function () { scope.$apply(); }, 0);
-        }, attrs.busyText || attrs.busyTask));
+        }, attrs.busyTask));
       }
     };
   }])
@@ -134,7 +144,7 @@ require('angular').module(moduleName, [])
 
           element.html(busy ? attrs.busyHtml : previousText || element.html());
           setTimeout(function () { scope.$apply(); }, 0);
-        }, attrs.busyHtml || attrs.busyTask));
+        }, attrs.busyTask));
       }
     };
   }])

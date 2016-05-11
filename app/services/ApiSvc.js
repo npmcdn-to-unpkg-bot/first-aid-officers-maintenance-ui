@@ -29,7 +29,7 @@ module.exports = function ($http, $q) {
     $http.get(encodeURI(url)).success(function (data) {
       deferred.resolve(data);
     }).error(function (data, status) {
-      deferred.reject('Error: request returned status ' + status);
+      deferred.reject(url + '\nError: request returned status ' + status);
     });
 
     return deferred.promise;
@@ -40,7 +40,7 @@ module.exports = function ($http, $q) {
     $http.post(encodeURI(url), JSON.stringify(data || {}), requestOptions).success(function (data) {
       deferred.resolve(data);
     }).error(function (data, status) {
-      deferred.reject('Error: request returned status ' + status);
+      deferred.reject(url + '\nError: request returned status ' + status);
     });
 
     return deferred.promise;
@@ -51,7 +51,7 @@ module.exports = function ($http, $q) {
     $http.put(encodeURI(url), JSON.stringify(data || {}), requestOptions).success(function (data) {
       deferred.resolve(data);
     }).error(function (data, status) {
-      deferred.reject('Error: request returned status ' + status);
+      deferred.reject(url + '\nError: request returned status ' + status);
     });
 
     return deferred.promise;
@@ -62,7 +62,7 @@ module.exports = function ($http, $q) {
     $http.delete(encodeURI(url)).success(function (data) {
       deferred.resolve(data);
     }).error(function (data, status) {
-      deferred.reject('Error: request returned status ' + status);
+      deferred.reject(url + '\nError: request returned status ' + status);
     });
 
     return deferred.promise;

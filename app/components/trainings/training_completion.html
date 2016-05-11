@@ -56,9 +56,13 @@
                     <td class="shrinkable">
                         <input type="text" class="form-control" ng-model="empl.trem_comment" />
                     </td>
-                    <td ng-init="(trng.trng_outcome === 'COMPLETED' && empl.trem_outcome !== 'SCHEDULED') ? empl.validated = empl.trem_outcome === 'VALIDATED' : null">
-                        <input bswitch="empl.validated" type="checkbox" name="my-checkbox" data-indeterminate="true" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)"
-                            data-label-width="0" ng-init="empl.validated=empl.validated || false" />
+                    <td ng-if="trng.trng_outcome === 'COMPLETED' || empl.trem_outcome !== 'SCHEDULED'" ng-init="empl.validated = empl.trem_outcome === 'VALIDATED'">
+                        <input bswitch="empl.validated" type="checkbox" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)" data-label-width="0"
+                            readonly />
+                    </td>
+                    <td ng-if="trng.trng_outcome === 'SCHEDULED' || empl.trem_outcome === 'SCHEDULED'">
+                        <input bswitch="undefined" data-indeterminate="true" type="checkbox" data-on-color="default" data-off-color="default" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)"
+                            data-label-width="0" readonly />
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm" ng-disabled="!hover" ng-click="unregister(empl)">D&eacute;sinscrire</button>

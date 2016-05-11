@@ -104,12 +104,12 @@
                         {{trng.type.trty_name}}<span class="pull-right"><span ng-repeat="cert in trng.type.certificates">&nbsp;<label class="label" ng-class="{'label-success': trng.trem_outcome === 'VALIDATED', 'label-danger': trng.trem_outcome === 'FLUNKED'}">{{cert.cert_short}}</label></span></span>
                     </td>
                     <td>{{trng.trem_comment}}</td>
-                    <td ng-if="trng.trng_outcome === 'COMPLETED'" ng-init="trng.validated = trng.trem_outcome === 'VALIDATED'">
+                    <td ng-if="trng.trem_outcome !== 'SCHEDULED'" ng-init="trng.validated = trng.trem_outcome === 'VALIDATED'">
                         <input bswitch="trng.validated" type="checkbox" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)" data-label-width="0"
                             readonly />
                     </td>
-                    <td ng-if="trng.trng_outcome === 'SCHEDULED'">
-                        <input bswitch="undefined" data-indeterminate="true" type="checkbox" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)"
+                    <td ng-if="trng.trem_outcome === 'SCHEDULED'">
+                        <input bswitch="undefined" data-indeterminate="true" type="checkbox" data-on-color="default" data-off-color="default" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)"
                             data-label-width="0" readonly />
                     </td>
                 </tr>

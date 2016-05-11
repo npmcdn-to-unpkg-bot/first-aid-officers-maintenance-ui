@@ -19,7 +19,7 @@ module.exports = function ($scope, $rootScope, $route, authSvc, busySvc) {
   }
 
   $scope.login = function (username, password) {
-    busySvc.busy('auth-pending');
+    busySvc.busy('auth-pending', true);
     authSvc.authenticate(username, password).then(success, error);
   };
 };

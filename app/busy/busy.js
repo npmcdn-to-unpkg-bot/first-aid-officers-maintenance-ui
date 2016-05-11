@@ -72,15 +72,19 @@ require('angular').module(moduleName, [])
           notify('global');
         }
       },
-      done: function (task) {
+      done: function (task, force) {
         task = task ? task : 'global';
+        if (!state[task]) {
+          return;
+        }
+
         if (task && task !== 'global') {
-          if (!(state[task].count = state[task].count ? state[task].count - 1 : 0)) {
+          if (!(state[task].count = state[task].count && !force ? state[task].count - 1 : 0)) {
             notify(task);
           }
         }
 
-        if (!state[task].detached && !(state.global.count = state.global.count ? state.global.count - 1 : 0)) {
+        if (!state[task].detached && !(state.global.count = state.global.count && !force ? state.global.count - 1 : 0)) {
           notify('global');
         }
       }
@@ -118,7 +122,7 @@ require('angular').module(moduleName, [])
           }
 
           setTimeout(function () { scope.$apply(); }, 0);
-        }, attrs.busyText || attrs.busyTask));
+        }, attrs.busyTask));
       }
     };
   }])
@@ -134,7 +138,7 @@ require('angular').module(moduleName, [])
 
           element.html(busy ? attrs.busyHtml : previousText || element.html());
           setTimeout(function () { scope.$apply(); }, 0);
-        }, attrs.busyHtml || attrs.busyTask));
+        }, attrs.busyTask));
       }
     };
   }])

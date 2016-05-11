@@ -7,8 +7,6 @@
         <link rel="stylesheet" type="text/css" href="main.css" />
         <title>Gestion des Formations Sécurité</title>
         <link rel="shortcut icon" href="./img/favicon.ico" />
-        <!-- support for effing old browsers like the client has -->
-        <script src="https://www.promisejs.org/polyfills/promise-6.1.0.min.js"></script>
     </head>
 
     <body ng-controller="IndexCtrl">
@@ -37,7 +35,7 @@
                             </button>
                             <a class="navbar-brand" href="#/home">Formations S&eacute;curit&eacute;</a>
                         </div>
-                        <div class="navbar-collapse collapse navbar-responsive-collapse" ng-show="currentUser.info">
+                        <div class="navbar-collapse collapse navbar-responsive-collapse" ng-if="currentUser.info">
                             <ul class="nav navbar-nav">
                                 <li class="dropdown" ng-class="{ active: isActive('/sites')}">
                                     <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Sites&nbsp;<b class="caret"></b></a>

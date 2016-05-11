@@ -28,6 +28,11 @@
                     <div class="col-xs-4 text-right">Derni&egrave;re mise &agrave; jour</div>
                     <div class="col-xs-8"><strong>{{update.updt_date | date: 'fullDate'}}</strong></div>
                 </div>
+                <hr ng-if="site.site_notes" />
+                <div class="row" ng-if="site.site_notes">
+                    <div class="col-xs-4 text-right">Informations</div>
+                    <div class="col-xs-8 preserve-whitespace text-muted">{{site.site_notes}}</div>
+                </div>
             </div>
             <table class="table" ng-show="(checkedCertificates = (certificates | filter: {'checked': true})).length > 0">
                 <thead>
@@ -157,6 +162,6 @@
     </div>
 </div>
 <div class="side-panel-container text-right">
-    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="openDashboardOptions()">
-        <span class="glyphicon glyphicon-download-alt"></span>&nbsp;G&eacute;n&eacute;rer tableau de bord</button>
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="editNotes()" if-role="'admin'"><span class="glyphicon glyphicon-pencil"></span>&nbsp;{{site.site_notes ? 'Modifier' : 'Ajouter'}} informations</button>
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="openDashboardOptions()"><span class="glyphicon glyphicon-download-alt"></span>&nbsp;G&eacute;n&eacute;rer tableau de bord</button>
 </div>

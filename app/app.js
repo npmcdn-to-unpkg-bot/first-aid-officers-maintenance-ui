@@ -2,6 +2,7 @@
 
 var $ = window.jQuery = require('jquery');
 var angular = require('angular');
+var _ = require('lodash');
 require('angular-bootstrap-templates');
 require('angular-i18n-fr');
 require('angular-smart-table');
@@ -187,13 +188,12 @@ angular.module('faomaintenanceApp', [
   .directive('fileread', [require('./directives/fileread.js')])
   .directive('formValidity', [require('./directives/formValidity.js')])
   .directive('ifRole', ['$rootScope', 'ngIfDirective', require('./directives/ifRole.js')])
-  .directive('loading', [require('./directives/loading.js')])
   .directive('stateSustain', ['$rootScope', '$cookies', require('./directives/stateSustain.js')])
   .directive('stSelectDistinct', ['$parse', require('./directives/stSelectDistinct.js')])
   .directive('stSelectDate', ['dateFilter', require('./directives/stSelectDate.js')])
   .factory('ApiSvc', ['$http', '$q', require('./services/ApiSvc.js')])
   .factory('AdminSvc', ['$http', '$q', 'ApiSvc', require('./services/AdminSvc.js')])
-  .factory('AuthenticationSvc', ['$http', '$cookies', '$rootScope', 'ApiSvc', require('./services/AuthenticationSvc.js')])
+  .factory('AuthSvc', ['$http', '$q', '$cookies', 'ApiSvc', require('./services/AuthSvc.js')])
   .factory('EmployeesNotesSvc', ['ApiSvc', 'dateFilter', require('./services/EmployeesNotesSvc.js')])
   .factory('DataSvc', ['$http', '$q', 'ApiSvc', '$filter', require('./services/DataSvc.js')])
   .factory('TrainingsSvc', ['ApiSvc', require('./services/TrainingsSvc.js')])
@@ -211,7 +211,7 @@ angular.module('faomaintenanceApp', [
   ])
   .controller('HomeCtrl', ['$scope', 'ngDialog', require('./components/home/HomeCtrl.js')])
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
-  .controller('LoginCtrl', ['$rootScope', '$location', 'AuthenticationSvc', 'ngDialog', '$window', require('./components/index/LoginCtrl.js')])
+  .controller('LoginCtrl', ['$scope', '$rootScope', '$window', 'AuthSvc', 'BusySvc', require('./components/index/LoginCtrl.js')])
   .controller('RolesEditCtrl', ['$rootScope', '$scope', 'AdminSvc', 'ngDialog', require('./components/dialogs/roles_edit/RolesEditCtrl.js')])
   .controller('SiteCtrl', ['$scope', '$routeParams', '$location', 'DataSvc', 'BusySvc', 'ngDialog', require('./components/sites/SiteCtrl.js')])
   .controller('SiteStatsCtrl', ['$scope', '$routeParams', 'DataSvc', 'BusySvc', require('./components/sites/SiteStatsCtrl.js')])
@@ -241,31 +241,38 @@ angular.module('faomaintenanceApp', [
     require('./components/administration/users/UsersAdministrationCtrl.js')
   ])
 
-.run(['$rootScope', '$location', '$cookies', '$http', 'ngDialog', 'AuthenticationSvc', function ($rootScope, $location, $cookies, $http, ngDialog, authenticationSvc) {
-  // keep user logged in after page refresh
-  $rootScope.currentUser = $cookies.getObject('currentUser');
-  if ($rootScope.currentUser) {
-    $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.currentUser.authdata; // jshint ignore:line
-  }
+.run(['$rootScope', '$location', '$cookies', '$http', 'ngDialog', 'BusySvc', 'AuthSvc', function ($rootScope, $location, $cookies, $http, ngDialog, busySvc, authSvc) {
+  $rootScope.alerts = [];
+  $rootScope.currentUser = {};
 
   $rootScope.disconnect = function () {
+    authSvc.logout();
+    delete $rootScope.currentUser.info;
     $location.path('/home');
-    authenticationSvc.ClearCredentials();
   };
 
-  $rootScope.alerts = [];
+  busySvc.busy('auth-restore');
+  authSvc.restoreSession().then(function (info) {
+    $rootScope.currentUser.info = info;
+    busySvc.done('auth-restore');
+  }, _.partial(busySvc.done, 'auth-restore'));
 
   $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
-    // redirect to login page if not logged in and trying to access a restricted page
-    var restrictedPage = $.inArray($location.path(), ['/login', '/home']) === -1;
-    var loggedIn = $rootScope.currentUser;
-    if (restrictedPage && !loggedIn) {
-      ngDialog.closeAll();
-      ngDialog.openConfirm({
-        template: 'components/index/login.html',
-        controller: 'LoginCtrl',
-        controllerAs: 'vm'
-      });
+    if (['/home'].indexOf($location.path()) === -1) {
+      // wait 'till session restore is done
+      busySvc.register(function (busy, unregister) {
+        if (!busy) {
+          if (!authSvc.isLoggedIn()) {
+            ngDialog.closeAll();
+            ngDialog.openConfirm({
+              template: 'components/index/login.html',
+              controller: 'LoginCtrl'
+            });
+          }
+
+          unregister();
+        }
+      }, 'auth-restore');
     }
 
     var searchPage = /([^/]+)\/(search|results)/;

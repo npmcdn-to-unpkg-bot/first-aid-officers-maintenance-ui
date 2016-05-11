@@ -1,0 +1,47 @@
+<div class="navbar-collapse collapse navbar-responsive-collapse">
+    <ul class="nav navbar-nav">
+        <li class="dropdown" ng-class="{ active: isActive('/sites')}">
+            <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Sites&nbsp;<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="#/sites">Consulter sites</a></li>
+                <li><a href="#/sites/search">Recherche avanc&eacute;e</a></li>
+            </ul>
+        </li>
+        <li class="dropdown" ng-class="{ active: isActive('/employees')}">
+            <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Agents&nbsp;<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="#/employees">Consulter agents</a></li>
+                <li><a href="#/employees/search">Recherche avanc&eacute;e</a></li>
+            </ul>
+        </li>
+        <li ng-class="{ active: isActive('/trainings')}"><a href="#/trainings" if-role="'!trainer'">Formations</a></li>
+        <li class="dropdown" ng-class="{ active: isActive('/trainings')}" if-role="'trainer'">
+            <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Formations&nbsp;<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="#/trainings">Consulter formations</a></li>
+                <li><a href="#/trainings/search">Recherche avanc&eacute;e</a></li>
+                <li class="divider"></li>
+                <li><a href="#/trainings/create">Cr&eacute;er formation</a></li>
+                <li class="divider"></li>
+                <li><a href="#/trainings/stats">Dresser statistiques</a></li>
+            </ul>
+        </li>
+    </ul>
+    <form class="navbar-form navbar-left">
+        <div class="form-group uib-typeahead">
+            <input type="text" class="form-control col-md-8" placeholder="Recherche globale..." uib-typeahead="select as select.summary for select in globalIndex | filterGlobal:$viewValue | limitTo:8"
+                ng-model="select" ng-focus="refreshIndex()" />
+        </div>
+    </form>
+    <ul class="nav navbar-nav navbar-right">
+        <li ng-class="{ active: isActive('/account')}"><a href="#/account">Mon compte</a></li>
+        <li class="dropdown" ng-class="{ active: isActive('/administration')}" if-role="'admin'">
+            <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Administration&nbsp;<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="#/administration/users">Administration utilisateurs</a></li>
+                <li><a href="#/administration/sites">Gestion des sites</a></li>
+                <li><a href="#/administration/update">Mise &agrave; jour</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>

@@ -211,7 +211,7 @@ angular.module('faomaintenanceApp', [
   ])
   .controller('HomeCtrl', ['$scope', 'ngDialog', require('./components/home/HomeCtrl.js')])
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
-  .controller('LoginCtrl', ['$scope', '$rootScope', '$window', 'AuthSvc', 'BusySvc', require('./components/index/LoginCtrl.js')])
+  .controller('LoginCtrl', ['$scope', '$rootScope', '$route', 'AuthSvc', 'BusySvc', require('./components/index/LoginCtrl.js')])
   .controller('RolesEditCtrl', ['$rootScope', '$scope', 'AdminSvc', 'ngDialog', require('./components/dialogs/roles_edit/RolesEditCtrl.js')])
   .controller('SiteCtrl', ['$scope', '$routeParams', '$location', 'DataSvc', 'BusySvc', 'ngDialog', require('./components/sites/SiteCtrl.js')])
   .controller('SiteStatsCtrl', ['$scope', '$routeParams', 'DataSvc', 'BusySvc', require('./components/sites/SiteStatsCtrl.js')])
@@ -259,7 +259,7 @@ angular.module('faomaintenanceApp', [
 
   $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
     if (['/home'].indexOf($location.path()) === -1) {
-      // wait 'till session restore is done
+      // wait until session restore is done
       busySvc.register(function (busy, unregister) {
         if (!busy) {
           if (!authSvc.isLoggedIn()) {

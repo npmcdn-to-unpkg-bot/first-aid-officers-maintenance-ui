@@ -272,7 +272,7 @@ module.exports = function ($scope, $routeParams, dataSvc, busySvc) {
     $scope.data = results[1];
     $scope.displayData(_($scope.certificates).keys().head());
     busySvc.done('siteStats');
-  });
+  }, _.partial(busySvc.done, 'siteStats'));
 
   $scope.recompute = function () {
     busySvc.busy('siteStats', true);
@@ -280,7 +280,7 @@ module.exports = function ($scope, $routeParams, dataSvc, busySvc) {
       $scope.data = data;
       $scope.displayData($scope.cert.cert_pk, true);
       busySvc.done('siteStats');
-    });
+    }, _.partial(busySvc.done, 'siteStats'));
   };
 
   $scope.displayData = function (cert_pk, skipTransitions) {

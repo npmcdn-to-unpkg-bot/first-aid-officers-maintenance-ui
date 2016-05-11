@@ -5,6 +5,7 @@ module.exports = function ($scope, $rootScope, $route, authSvc, busySvc) {
     $scope.closeThisDialog();
     busySvc.done('auth-pending');
     $rootScope.currentUser.info = authSvc.getInfo();
+    $rootScope.$broadcast('update');
     $route.reload();
   }
 

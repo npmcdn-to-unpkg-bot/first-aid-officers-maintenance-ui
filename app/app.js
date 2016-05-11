@@ -254,6 +254,7 @@ angular.module('faomaintenanceApp', [
   busySvc.busy('auth-restore', true);
   authSvc.restoreSession().then(function (info) {
     $rootScope.currentUser.info = info;
+    $rootScope.$broadcast('update');
     busySvc.done('auth-restore');
   }, _.partial(busySvc.done, 'auth-restore'));
 

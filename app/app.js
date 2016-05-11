@@ -209,7 +209,7 @@ angular.module('faomaintenanceApp', [
   .controller('EmployeesSearchResultsCtrl', ['$rootScope', '$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', 'dateFilter',
     require('./components/search/employees/EmployeesSearchResultsCtrl.js')
   ])
-  .controller('HomeCtrl', ['$scope', 'ngDialog', require('./components/home/HomeCtrl.js')])
+  .controller('HomeCtrl', ['$scope', 'ngDialog', 'BusySvc', require('./components/home/HomeCtrl.js')])
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
   .controller('LoginCtrl', ['$scope', '$rootScope', '$route', 'AuthSvc', 'BusySvc', require('./components/index/LoginCtrl.js')])
   .controller('RolesEditCtrl', ['$rootScope', '$scope', 'AdminSvc', 'ngDialog', require('./components/dialogs/roles_edit/RolesEditCtrl.js')])
@@ -254,22 +254,24 @@ angular.module('faomaintenanceApp', [
   busySvc.busy('auth-restore', true);
   authSvc.restoreSession().then(function (info) {
     $rootScope.currentUser.info = info;
-  }, null, _.partial(busySvc.done, 'auth-restore'));
+    busySvc.done('auth-restore');
+  }, _.partial(busySvc.done, 'auth-restore'));
 
   $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
     if (['/home'].indexOf($location.path()) === -1) {
       // wait until session restore is done
       busySvc.register(function (busy, unregister) {
         if (!busy) {
+          unregister();
           if (!authSvc.isLoggedIn()) {
+            busySvc.busy('auth');
             ngDialog.closeAll();
             ngDialog.openConfirm({
               template: 'components/index/login.html',
-              controller: 'LoginCtrl'
+              controller: 'LoginCtrl',
+              preCloseCallback: _.partial(busySvc.done, 'auth')
             });
           }
-
-          unregister();
         }
       }, 'auth-restore');
     }

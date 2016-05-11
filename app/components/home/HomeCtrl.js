@@ -1,14 +1,17 @@
 'use strict';
 
-module.exports = function ($scope, ngDialog) {
-	$scope.login = function () {
-		ngDialog.closeAll();
-		ngDialog.open({
-			template: 'components/index/login.html',
-			controller: 'LoginCtrl',
-			controllerAs: 'vm'
-		});
-	};
+var _ = require('lodash');
 
-	return this;
+module.exports = function ($scope, ngDialog, busySvc) {
+  $scope.login = function () {
+    ngDialog.closeAll();
+    busySvc.busy('auth', true);
+    ngDialog.open({
+      template: 'components/index/login.html',
+      controller: 'LoginCtrl',
+      preCloseCallback: _.partial(busySvc.done, 'auth', true)
+    });
+  };
+
+  return this;
 };

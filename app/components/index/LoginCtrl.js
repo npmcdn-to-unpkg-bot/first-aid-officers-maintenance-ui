@@ -1,11 +1,8 @@
 'use strict';
 
 module.exports = function ($scope, $rootScope, $route, authSvc, busySvc) {
-  busySvc.busy('auth');
-
   function success() {
     $scope.closeThisDialog();
-    busySvc.done('auth', true);
     busySvc.done('auth-pending');
     $rootScope.currentUser.info = authSvc.getInfo();
     $route.reload();

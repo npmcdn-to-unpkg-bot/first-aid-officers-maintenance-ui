@@ -60,8 +60,10 @@ require('angular').module(moduleName, [])
 
         if (task && task !== 'global') {
           if (!state[task]) {
-            state[task] = { count: 0, detached: detach };
+            state[task] = { count: 0 };
           }
+
+          state[task].detached = detach;
 
           if (1 === (state[task].count += 1)) {
             notify(task);
@@ -72,21 +74,25 @@ require('angular').module(moduleName, [])
           notify('global');
         }
       },
-      done: function (task, force) {
+      done: function (task) {
         task = task ? task : 'global';
         if (!state[task]) {
           return;
         }
 
         if (task && task !== 'global') {
-          if (!(state[task].count = state[task].count && !force ? state[task].count - 1 : 0)) {
+          if (!(state[task].count = state[task].count ? state[task].count - 1 : 0)) {
             notify(task);
           }
         }
 
-        if (!state[task].detached && !(state.global.count = state.global.count && !force ? state.global.count - 1 : 0)) {
+        if (!state[task].detached && !(state.global.count = state.global.count ? state.global.count - 1 : 0)) {
           notify('global');
         }
+      },
+      check: function (task) {
+        task = task ? task : 'global';
+        return state[task] ? state[task].count : 0;
       }
     };
   })

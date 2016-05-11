@@ -251,11 +251,10 @@ angular.module('faomaintenanceApp', [
     $location.path('/home');
   };
 
-  busySvc.busy('auth-restore');
+  busySvc.busy('auth-restore', true);
   authSvc.restoreSession().then(function (info) {
     $rootScope.currentUser.info = info;
-    busySvc.done('auth-restore');
-  }, _.partial(busySvc.done, 'auth-restore'));
+  }, null, _.partial(busySvc.done, 'auth-restore'));
 
   $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
     if (['/home'].indexOf($location.path()) === -1) {

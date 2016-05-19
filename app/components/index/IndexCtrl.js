@@ -36,7 +36,6 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
     $scope.userInfo = userInfo;
   }, true);
   $scope.$watch('navbar.select', function (select) {
-    console.log(JSON.stringify(select))
     if (select !== undefined) {
       if (select.site_pk) {
         $location.path('/sites/' + select.site_pk);

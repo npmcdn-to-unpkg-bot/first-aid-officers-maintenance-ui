@@ -58,25 +58,25 @@
                         <div class="col-xs-8"><strong>{{employees.length}}</strong> agents(s) correspondant aux crit&egrave;res</div>
                     </div>
                 </div>
-                <table class="table table-striped table-hover" st-table="shown" st-safe-src="employees" st-set-sort="orderByNullLast">
+                <table class="panel-body table table-striped table-hover" st-table="shown" st-safe-src="employees" st-set-sort="orderByNullLast">
                     <thead>
                         <tr>
                             <th width="53px"></th>
                             <th ng-repeat="header in theaders" ng-bind-html="header.display" class="st-sort" st-sort="{{header.sort || header.path}}" st-skip-natural="true"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr ng-repeat="empl in shown" ng-if="$index < 100" ng-click="select(empl.empl_pk);" class="clickme" ng-mouseenter="hover=true" ng-mouseleave="hover=false" ng-class="{'text-primary': hover}">
+                    <tbody ng-init="maxShown = 100">
+                        <tr ng-repeat="empl in shown" ng-if="$index < maxShown" ng-click="select(empl.empl_pk);" class="clickme" ng-mouseenter="hover=true" ng-mouseleave="hover=false" ng-class="{'text-primary': hover}">
                             <td>
                                 <button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button>
                             </td>
                             <td ng-repeat="header in theaders">{{::get(empl, header.path)}}</td>
                         </tr>
-                        <tr ng-if="shown.length > 100">
-                            <td colspan="{{theaders.length + 1}}" class="text-center">{{shown.length - 100}} agents suppl&eacute;mentaires...</td>
-                        </tr>
                     </tbody>
                 </table>
+                <div class="panel-footer text-center" ng-show="shown.length > maxShown">
+                    <button type="button" class="btn btn-primary" ng-click="maxShown = maxShown + 100">{{shown.length - maxShown}} agents suppl&eacute;mentaires</button>
+                </div>
             </busy>
         </div>
     </div>

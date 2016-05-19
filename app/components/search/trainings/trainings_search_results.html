@@ -65,18 +65,18 @@
                             <th ng-repeat="header in theaders" ng-bind-html="header.display" class="st-sort" st-sort="{{header.sort || header.path}}" st-skip-natural="true"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr ng-repeat="trng in shown" ng-if="$index < 100" ng-click="select(trng.trng_pk);" class="clickme" ng-mouseenter="hover=true" ng-mouseleave="hover=false" ng-class="{'text-primary': hover}">
+                    <tbody ng-init="maxShown = 100">
+                        <tr ng-repeat="trng in shown" ng-if="$index < maxShown" ng-click="select(trng.trng_pk);" class="clickme" ng-mouseenter="hover=true" ng-mouseleave="hover=false" ng-class="{'text-primary': hover}">
                             <td>
                                 <button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button>
                             </td>
                             <td ng-repeat="header in theaders">{{get(trng, header.path)}}</td>
                         </tr>
-                        <tr ng-if="shown.length > 100">
-                            <td colspan="{{theaders.length + 1}}" class="text-center">{{shown.length - 100}} formations suppl&eacute;mentaires...</td>
-                        </tr>
                     </tbody>
                 </table>
+                <div class="panel-footer text-center" ng-show="shown.length > maxShown">
+                    <button type="button" class="btn btn-primary" ng-click="maxShown = maxShown + 100">{{shown.length - maxShown}} formations suppl&eacute;mentaires</button>
+                </div>
             </busy>
         </div>
     </div>

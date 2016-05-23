@@ -134,11 +134,10 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
               }],
               margin: [0, 0, 0, 20]
             }, {
-              text: [{ text: 'Résultat :\n' }, {
-                text: $scope.trainees.length + ' agents inscrits, dont :\n' + _.filter($scope.trainees, { trem_outcome: 'VALIDATED' }).length +
-                  ' validés et ' + _.reject($scope.trainees, { trem_outcome: 'VALIDATED' }).length + ' recalés/absents',
-                style: 'em'
-              }]
+              text: $scope.trng.trng_outcome === 'COMPLETED' ? $scope.trainees.length + ' agents inscrits, dont :\n' + _.filter($scope.trainees, { trem_outcome: 'VALIDATED' })
+                .length + ' validés et ' + _.reject($scope.trainees, { trem_outcome: 'VALIDATED' }).length + ' recalés/absents' : '',
+              style: 'em',
+              alignment: 'right'
             }]
           ]
         },

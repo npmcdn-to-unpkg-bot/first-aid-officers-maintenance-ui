@@ -39,13 +39,13 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
     if (select !== undefined) {
       if (select.site_pk) {
         $location.path('/sites/' + select.site_pk);
-        delete($scope.select);
+        delete($scope.navbar.select);
       } else if (select.empl_pk) {
         $location.path('/employees/' + select.empl_pk);
-        delete($scope.select);
+        delete($scope.navbar.select);
       } else if (select.trng_pk) {
         $location.path('/trainings/' + select.trng_pk);
-        delete($scope.select);
+        delete($scope.navbar.select);
       }
     }
   });

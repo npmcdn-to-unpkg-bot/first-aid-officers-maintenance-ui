@@ -1,0 +1,88 @@
+<h3>Agents - recherche avanc&eacute;e - <span class="text-primary">r&eacute;sultats</span></h3>
+<br />
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Crit&egrave;res de recherche</div>
+            <div class="panel-body" ng-if="noFilter">
+                <div class="col-xs-4 text-right">Filtrage des r&eacute;sultats</div>
+                <div class="col-xs-8 text-primary">Aucun filtre appliqu&eacute;</div>
+            </div>
+            <div class="panel-body" ng-if="!noFilter">
+                <div class="row" ng-if="filter.site">
+                    <div class="col-xs-4 text-right">Affectation</div>
+                    <div class="col-xs-8"><strong>{{sites[filter.site].site_name}}</strong></div>
+                </div>
+                <div class="row" ng-if="filter.perm">
+                    <div class="col-xs-4 text-right">Type de contrat</div>
+                    <div class="col-xs-8">
+                        <label class="label label-success">CDI</label>&nbsp;uniquement
+                    </div>
+                </div>
+                <hr ng-if="certificates.length > 0 && hasFiltersBesidesCert()" />
+                <div ng-repeat="cert in filterCertificates">
+                    <div class="row" ng-repeat="condition in cert.conditions" ng-init="params = condition.params">
+                        <div class="col-xs-4 text-right">{{$first && $parent.$first ? 'Aptitudes' : ''}}</div>
+                        <div class="col-xs-8">
+                            <hr ng-if="!$parent.$first && $first" />
+                            <div ng-switch="params.condition.value">
+                                <div ng-switch-when="recent">
+                                    <span class="text-primary">{{cert.cert_short}}</span> <span class="text-{{params.option.value}}">{{params.option.display | lowercase}}</span> il
+                                    y a moins de <span class="text-primary">{{params.data}}</span> moins
+                                </div>
+                                <div ng-switch-when="expiring">
+                                    <span class="text-primary">{{cert.cert_short}}</span> <span class="text-warning">expirant</span> dans les
+                                    <span class="text-primary">{{params.data}}</span> prochains mois
+                                </div>
+                                <div ng-switch-when="expiry">
+                                    <span class="text-primary">{{cert.cert_short}}</span> <span class="text-warning">expirant</span> entre le
+                                    <span class="text-primary">{{params.data.from | date: 'longDate'}}</span> et le <span class="text-primary">{{params.data.to | date: 'longDate'}}</span>
+                                </div>
+                                <div ng-switch-when="status"><span class="text-primary">{{cert.cert_short}}</span> {{params.option.value !== 'blank' ? 'actuellement' : ''}} <span class="text-{{params.option.value}}">{{params.option.display | lowercase}}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">R&eacute;sultats</div>
+            <busy busy-task="employeesSearchResults">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-4 text-right">Nombre d'agents</div>
+                        <div class="col-xs-8"><strong>{{employees.length}}</strong> agents(s) correspondant aux crit&egrave;res</div>
+                    </div>
+                </div>
+                <table class="panel-body table table-striped table-hover" st-table="shown" st-safe-src="employees" st-set-sort="orderByNullLast">
+                    <thead>
+                        <tr>
+                            <th width="53px"></th>
+                            <th ng-repeat="header in theaders" ng-bind-html="header.display" class="st-sort" st-sort="{{header.sort || header.path}}" st-skip-natural="true"></th>
+                        </tr>
+                    </thead>
+                    <tbody ng-init="maxShown = 100">
+                        <tr ng-repeat="empl in shown" ng-if="$index < maxShown" ng-click="select(empl.empl_pk);" class="clickme" ng-mouseenter="hover=true" ng-mouseleave="hover=false" ng-class="{'text-primary': hover}">
+                            <td>
+                                <button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button>
+                            </td>
+                            <td ng-repeat="header in theaders">{{::get(empl, header.path)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="panel-footer text-center" ng-show="shown.length > maxShown">
+                    <button type="button" class="btn btn-primary" ng-click="maxShown = maxShown + 100">{{shown.length - maxShown}} agents suppl&eacute;mentaires</button>
+                </div>
+            </busy>
+        </div>
+    </div>
+</div>
+<div class="side-panel-container text-right">
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="getLink()"><span class="glyphicon glyphicon-link"></span>&nbsp;Sauver/partager recherche</button>
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="params()"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Modifier param&egrave;tres</button>
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="changeDisplay()"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;Param&egrave;tres d'affichage</button>
+</div>

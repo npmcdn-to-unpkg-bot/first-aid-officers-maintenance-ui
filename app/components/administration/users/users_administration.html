@@ -1,6 +1,6 @@
 <h3>Gestion des utilisateurs</h3>
 <br />
-<div class="row" st-table="shown" st-safe-src="users">
+<div class="row" st-table="shown" st-safe-src="users" st-set-sort="orderByNullLast">
     <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-primary">
             <div class="panel-heading">Gestion des privil&egrave;ges</div>
@@ -25,7 +25,7 @@
                         <th class="shrinkable" width="0%"></th>
                         <th class="st-sort" width="10%" st-sort="empl_pk" st-skip-natural="true">Matricule</th>
                         <th class="st-sort" st-sort="empl_gender" st-skip-natural="true">Titre</th>
-                        <th class="st-sort shrinkable" width="35%" st-sort="empl_surname" st-skip-natural="true">Nom</th>
+                        <th class="st-sort shrinkable" width="35%" st-sort="empl_surname" st-skip-natural="true" st-sort-default="true">Nom</th>
                         <th class="st-sort shrinkable" width="35%" st-sort="empl_firstname" st-skip-natural="true">Pr&eacute;nom</th>
                         <th class="shrinkable" width="20%">R&ocirc;les</th>
                         <th></th>

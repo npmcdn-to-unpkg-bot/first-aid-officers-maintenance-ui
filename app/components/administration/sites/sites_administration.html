@@ -1,4 +1,4 @@
-<div st-table="shown" st-safe-src="sites">
+<div st-table="shown" st-safe-src="sites" st-set-sort="orderByNullLast">
     <form class="form-horizontal">
         <div class="form-group">
             <label for="pageSize" class="control-label col-xs-4 col-md-2">Sites par page</label>
@@ -16,7 +16,7 @@
                         <tr>
                             <th></th>
                             <th width="50%">
-                                <div class="st-sort" st-sort="site_name" st-skip-natural="true">Nom</div>
+                                <div class="st-sort" st-sort="site_name" st-skip-natural="true" st-sort-default="true">Nom</div>
                                 <input st-search="site_name" placeholder="Rechercher..." class="form-control" type="text" />
                             </th>
                             <th></th>

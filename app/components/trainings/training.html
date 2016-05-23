@@ -82,7 +82,7 @@
     </div>
     <div class="col-md-2"></div>
 </div>
-<div st-persist="trainingEmployees" st-table="shown" st-safe-src="trainees" ng-if="trainees.length > 0">
+<div st-persist="trainingEmployees" st-table="shown" st-safe-src="trainees" ng-if="trainees.length > 0" st-set-sort="orderByNullLast">
     <form class="form-horizontal">
         <div class="form-group">
             <label for="pageSize" class="control-label col-xs-4 col-md-2">Agents par page</label>
@@ -109,7 +109,7 @@
                         <div class="st-sort" st-sort="empl_gender" st-skip-natural="true">Titre</div>
                     </th>
                     <th class="shrinkable" width="20%">
-                        <div class="st-sort" st-sort="empl_surname" st-skip-natural="true">Nom</div>
+                        <div class="st-sort" st-sort="empl_surname" st-skip-natural="true" st-sort-default="true">Nom</div>
                         <input st-search="empl_surname" placeholder="Rechercher..." class="form-control" type="text" />
                     </th>
                     <th class="shrinkable" width="20%">
@@ -141,8 +141,13 @@
                         <span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span>
                     </td>
                     <td class="shrinkable">{{empl.trem_comment}}</td>
-                    <td ng-init="(trng.trng_outcome === 'COMPLETED' && empl.trem_outcome !== 'SCHEDULED') ? empl.validated = empl.trem_outcome === 'VALIDATED' : null" class="no-events">
-                        <input bswitch="empl.validated" data-indeterminate="true" type="checkbox" name="my-checkbox" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)" data-label-width="0" readonly />
+                    <td ng-if="trng.trng_outcome === 'COMPLETED' || empl.trem_outcome !== 'SCHEDULED'" ng-init="empl.validated = empl.trem_outcome === 'VALIDATED'">
+                        <input bswitch="empl.validated" type="checkbox" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)" data-label-width="0"
+                            readonly />
+                    </td>
+                    <td ng-if="trng.trng_outcome === 'SCHEDULED' || empl.trem_outcome === 'SCHEDULED'">
+                        <input bswitch="undefined" data-indeterminate="true" type="checkbox" data-on-color="default" data-off-color="default" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)"
+                            data-label-width="0" readonly />
                     </td>
                 </tr>
             </tbody>
@@ -155,9 +160,9 @@
     </div>
 </div>
 <div class="side-panel-container text-right">
-    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-show="trng.trng_outcome === 'COMPLETED'" ng-click="complete()" ng-disabled="trainees.length === 0" if-role="['trainer', 'admin']">
+    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-show="trng.trng_outcome === 'COMPLETED'" ng-click="complete()" ng-disabled="!canComplete()" if-role="['trainer', 'admin']">
         <span class="glyphicon glyphicon-check"></span>&nbsp;Modifier le Proc&egrave;s Verbal</button>
-    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-show="trng.trng_outcome === 'SCHEDULED'" ng-click="complete()" ng-disabled="trainees.length === 0" if-role="'trainer'">
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-show="trng.trng_outcome === 'SCHEDULED'" ng-click="complete()" ng-disabled="!canComplete()" if-role="'trainer'">
         <span class="glyphicon glyphicon-check"></span>&nbsp;Dresser le Proc&egrave;s Verbal</button>
     <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="edit()" if-role="'trainer'">
         <span class="glyphicon glyphicon-wrench"></span>&nbsp;Modifier</button>

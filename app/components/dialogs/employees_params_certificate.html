@@ -1,0 +1,77 @@
+<form class="form-horizontal" autocomplete="off" ng-submit="add()">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            {{cert.cert_short}} - {{cert.cert_name}}
+            <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label for="{{cert.cert_pk}}-condition" class="col-xs-4 control-label">Nouvelle condition</label>
+                <div class="col-xs-8">
+                    <select id="{{cert.cert_pk}}-condition" class="form-control" ng-model="params.condition" ng-options="condition as condition.display for condition in certificatesConditions" ng-change="params.option = undefined; params.data = undefined;"></select>
+                </div>
+            </div>
+            <div uib-collapse="!params.condition.value">
+                <div ng-switch="params.condition.value">
+                    <div ng-switch-when="recent">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-3">
+                            <select class="form-control" ng-model="params.option" ng-options="option as option.display for option in recentOptions"></select>
+                        </div>
+                        <div class="col-xs-5 no-lpadding">
+                            <div class="input-group">
+                                <span class="input-group-addon no-lpadding">il y a moins de</span>
+                                <input type="number" min="1" max="24" class="form-control" ng-model="params.data" />
+                                <span class="input-group-addon no-rpadding">mois</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-switch-when="expiring">
+                        <div class="col-xs-4"></div>
+                        <div class="form-group col-xs-8">
+                            <div class="input-group">
+                                <span class="input-group-addon no-lpadding">Dans moins de</span>
+                                <input type="number" min="1" max="24" class="form-control" ng-model="params.data" />
+                                <span class="input-group-addon no-rpadding">mois</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-switch-when="expiry">
+                        <div class="col-xs-4"></div>
+                        <div class="form-group col-xs-8">
+                            <div class="input-group">
+                                <span class="input-group-addon no-lpadding">Entre le</span>
+                                <input id="from" type="text" max-date="null || params.data.to" ng-model="params.data.from" class="form-control" uib-datepicker-popup="dd/MM/yyyy" datepicker-mode="'month'" is-open="frompicker"
+                                    show-button-bar="false" starting-day="1" show-weeks="false" placeholder="JJ/MM/AAAA" />
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="frompicker=true"><span class="glyphicon glyphicon-calendar"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4"></div>
+                        <div class="form-group col-xs-8">
+                            <div class="input-group">
+                                <span class="input-group-addon no-lpadding">Et le</span>
+                                <input id="to" type="text" min-date="null || params.data.from" ng-model="params.data.to" class="form-control" uib-datepicker-popup="dd/MM/yyyy" datepicker-mode="'month'" is-open="topicker"
+                                    show-button-bar="false" starting-day="1" show-weeks="false" placeholder="JJ/MM/AAAA" />
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="topicker=true"><span class="glyphicon glyphicon-calendar"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-switch-when="status">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-8">
+                            <select class="form-control" ng-model="params.option" ng-options="option as option.display for option in statusOptions"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer text-center">
+            <button type="submit" class="btn btn-primary" ng-click="add()" ng-disabled="!isValid()">Ok</button>
+            <button type="button" class="btn btn-default" ng-click="closeThisDialog()">Annuler</button>
+        </div>
+    </div>
+</form>

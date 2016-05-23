@@ -1,0 +1,33 @@
+<form class="form form-horizontal panel panel-{{optout ? 'danger' : 'success'}}" ng-submit="callback(optout, cert, date)" autocomplete="off" ng-init="optout=true">
+    <div class="panel-heading">
+        <div style="display: inline-table;">
+            <input bswitch="optout" type="checkbox" data-on-color="danger" data-off-color="success" data-on-text="Sortir" data-off-text="R&eacute;int&eacute;grer" data-label-width="0" />
+        </div>
+        &nbsp;{{empl.empl_gender ? 'M.' : 'Mme'}} {{empl.empl_surname + ' ' + empl.empl_firstname}}
+        <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <label for="notes" class="control-label col-md-4 col-sm-4">Dispositif</label>
+            <div class="col-md-8 col-sm-8">
+                <select class="form-control" ng-model="cert" ng-options="cert as cert.cert_name for cert in (optout ? availableVoidings : currentVoidings)"></select>
+            </div>
+        </div>
+        <div class="form-group" uib-collapse="!optout">
+            <label for="notes" class="control-label col-md-4 col-sm-4">Date de sortie</label>
+            <div class="col-md-8 col-sm-8">
+                <div class="input-group">
+                    <input id="from" type="text" ng-model="date" class="form-control" uib-datepicker-popup="dd/MM/yyyy" datepicker-mode="'month'" is-open="datepicker" show-button-bar="false" starting-day="1"
+                        show-weeks="false" placeholder="JJ/MM/AAAA" />
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="datepicker=true"><span class="glyphicon glyphicon-calendar"></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer text-center">
+        <button type="submit" class="btn btn-{{optout ? 'danger' : 'success'}}" ng-disabled="!isValid(optout, cert, date)">Confirmer</button>
+        <button type="button" class="btn btn-default" ng-click="closeThisDialog()">Annuler</button>
+    </div>
+</form>

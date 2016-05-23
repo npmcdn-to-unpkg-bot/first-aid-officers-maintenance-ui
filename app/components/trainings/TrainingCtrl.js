@@ -22,6 +22,10 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
     busySvc.done();
   });
 
+  $scope.canComplete = function () {
+    return $scope.trainees.length > 0 && moment($scope.trng.trng_date).isSameOrBefore(new Date());
+  };
+
   $scope.getDisplayDate = function () {
     if ($scope.trng.trng_start) {
       var dateFromFormat;
@@ -128,9 +132,14 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
                 text: $scope.trng.trng_comment || '\n',
                 style: 'em'
               }],
-              colSpan: 2,
               margin: [0, 0, 0, 20]
-            }, {}]
+            }, {
+              text: [{ text: 'Résultat :\n' }, {
+                text: $scope.trainees.length + ' agents inscrits, dont :\n' + _.filter($scope.trainees, { trem_outcome: 'VALIDATED' }).length +
+                  ' validés et ' + _.reject($scope.trainees, { trem_outcome: 'VALIDATED' }).length + ' recalés/absents',
+                style: 'em'
+              }]
+            }]
           ]
         },
       }, {
@@ -248,7 +257,8 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
 
   $scope.delete = function () {
     var dialogScope = $scope.$new(true);
-    dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">supprimer d&eacute;finitivement</span> cette formation&nbsp? Cette op&eacute;ration est irr&eacute;versible et prend effet imm&eacute;diatement.';
+    dialogScope.innerHtml =
+      '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">supprimer d&eacute;finitivement</span> cette formation&nbsp? Cette op&eacute;ration est irr&eacute;versible et prend effet imm&eacute;diatement.';
     ngDialog.openConfirm({
       template: 'components/dialogs/warning.html',
       scope: dialogScope

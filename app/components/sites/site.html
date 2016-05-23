@@ -28,6 +28,11 @@
                     <div class="col-xs-4 text-right">Derni&egrave;re mise &agrave; jour</div>
                     <div class="col-xs-8"><strong>{{update.updt_date | date: 'fullDate'}}</strong></div>
                 </div>
+                <hr ng-if="site.site_notes" />
+                <div class="row" ng-if="site.site_notes">
+                    <div class="col-xs-4 text-right">Informations</div>
+                    <div class="col-xs-8 preserve-whitespace text-muted">{{site.site_notes}}</div>
+                </div>
             </div>
             <table class="table" ng-show="(checkedCertificates = (certificates | filter: {'checked': true})).length > 0">
                 <thead>
@@ -49,10 +54,40 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="panel-body" uib-collapse="!history">
+                <div ng-controller="SiteStatsCtrl">
+                    <div class="form form-horizontal">
+                        <div class="form-group">
+                            <label for="start" class="col-xs-4 control-label">Depuis le</label>
+                            <div class="col-xs-8">
+                                <div class="input-group">
+                                    <input id="start" type="text" ng-model="from" class="form-control" uib-datepicker-popup="dd/MM/yyyy" datepicker-mode="'year'" is-open="startpicker" show-button-bar="false" starting-day="1"
+                                        show-weeks="false" ng-change="recompute()" max-date="today" placeholder="JJ/MM/AAAA">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="startpicker=true"><span class="glyphicon glyphicon-calendar"></span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="cert" class="col-xs-4 control-label">Aptitude</label>
+                            <div class="col-xs-8">
+                                <select id="cert" ng-model="cert" ng-options="cert as cert.cert_short + ' - ' + cert.cert_name for cert in certificates" class="form-control" ng-change="displayData(cert.cert_pk)"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <busy busy-task="siteStats">
+                        <svg class="siteStats" width="620" height="200"></svg>
+                    </busy>
+                </div>
+            </div>
+            <div class="panel-footer text-center">
+                <button class="btn btn-primary" ng-click="history = !history">{{history ? 'Cacher' : 'Voir'}} historique</button>
+            </div>
         </div>
     </div>
 </div>
-<div st-persist="siteEmployees-{{site.site_pk}}" st-table="shown" st-safe-src="employees">
+<div st-persist="siteEmployees-{{site.site_pk}}" st-table="shown" st-safe-src="employees" st-set-sort="orderByNullLast">
     <form class="form-horizontal">
         <div class="form-group">
             <label for="pageSize" class="control-label col-xs-4 col-md-2">Agents par page</label>
@@ -86,7 +121,7 @@
                         <div class="st-sort" st-sort="empl_gender" st-skip-natural="true">Titre</div>
                     </th>
                     <th class="shrinkable" width="35%">
-                        <div class="st-sort" st-sort="empl_surname" st-skip-natural="true">Nom</div>
+                        <div class="st-sort" st-sort="empl_surname" st-skip-natural="true" st-sort-default="true">Nom</div>
                         <input st-search="empl_surname" placeholder="Rechercher..." class="form-control" type="text" />
                     </th>
                     <th class="shrinkable" width="35%">
@@ -127,6 +162,6 @@
     </div>
 </div>
 <div class="side-panel-container text-right">
-    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="openDashboardOptions()">
-        <span class="glyphicon glyphicon-download-alt"></span>&nbsp;G&eacute;n&eacute;rer tableau de bord</button>
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="editNotes()" if-role="'admin'"><span class="glyphicon glyphicon-pencil"></span>&nbsp;{{site.site_notes ? 'Modifier' : 'Ajouter'}} informations</button>
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="openDashboardOptions()"><span class="glyphicon glyphicon-download-alt"></span>&nbsp;G&eacute;n&eacute;rer tableau de bord</button>
 </div>

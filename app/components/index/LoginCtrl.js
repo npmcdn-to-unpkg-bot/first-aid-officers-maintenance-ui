@@ -1,27 +1,26 @@
 'use strict';
 
-module.exports = function ($rootScope, $location, AuthenticationSvc, ngDialog, $window) {
-	var vm = this;
+module.exports = function ($scope, $rootScope, $route, authSvc, busySvc) {
+  function success() {
+    $scope.closeThisDialog();
+    busySvc.done('auth-pending');
+    $rootScope.currentUser.info = authSvc.getInfo();
+    $rootScope.$broadcast('update');
+    $route.reload();
+  }
 
-	(function initController() {
-		AuthenticationSvc.ClearCredentials();
-	})();
+  function error() {
+    busySvc.done('auth-pending');
+    $rootScope.alerts.push({
+      type: 'danger',
+      msg: '<strong>&Eacute;chec d\'authentification</strong>&nbsp;: ' +
+        'Le matricule et/ou le mot de passe que vous avez entr&eacute; est invalide.<br />' +
+        'En cas d\'&eacute;checs r&eacute;p&eacute;t&eacute;s, votre identifiant sera <u>invalid&eacute; temporairement</u>.'
+    });
+  }
 
-	function login() {
-		vm.busy = true;
-		AuthenticationSvc.Login(vm.username, vm.password, function (data) {
-			vm.busy = false;
-			AuthenticationSvc.SetCredentials(vm.username, vm.password, data);
-			ngDialog.closeAll();
-			$window.location.reload();
-		}, function () {
-			vm.busy = false;
-			$rootScope.alerts.push({ type: 'danger', msg: '<strong>&Eacute;chec d\'authentification</strong>&nbsp;: ' +
-				'Le matricule et/ou le mot de passe que vous avez entr&eacute; est invalide.<br />' +
-				'En cas d\'&eacute;checs r&eacute;p&eacute;t&eacute;s, votre identifiant sera <u>invalid&eacute; temporairement</u>.' });
-			vm.password = '';
-		});
-	}
-
-	vm.login = login;
+  $scope.login = function (username, password) {
+    busySvc.busy('auth-pending', true);
+    authSvc.authenticate(username, password).then(success, error);
+  };
 };

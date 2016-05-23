@@ -6,19 +6,37 @@ var moment = require('moment');
 var pdfMake = require('pdfmake');
 var imgs64 = require('../../img/imgs64.js');
 
-module.exports = function ($scope, $routeParams, $location, dataSvc, busySvc, ngDialog) {
+module.exports = function ($rootScope, $scope, $routeParams, $location, $route, dataSvc, busySvc, ngDialog, updateSvc) {
   busySvc.busy();
 
-  Promise.all([dataSvc.getSiteEmployeesWithStats($routeParams.site_pk), dataSvc.getSiteWithStats($routeParams.site_pk), dataSvc.getCertificates(), dataSvc.getLatestUpdate()]).then(function (results) {
-    $scope.employees = _.values(results[0]);
-    $scope.site = results[1];
-    $scope.certificates = _.values(results[2]);
-    $scope.update = results[3];
-    busySvc.done();
-    $scope.$apply();
-  }, function () {
-    busySvc.done();
-  });
+  Promise.all([dataSvc.getSiteEmployeesWithStats($routeParams.site_pk), dataSvc.getSiteWithStats($routeParams.site_pk), dataSvc.getCertificates(), dataSvc.getLatestUpdate()]).then(
+    function (results) {
+      $scope.employees = _.values(results[0]);
+      $scope.site = results[1];
+      $scope.certificates = _.values(results[2]);
+      $scope.update = results[3];
+      busySvc.done();
+      $scope.$apply();
+    },
+    function () {
+      busySvc.done();
+    });
+
+  $scope.editNotes = function () {
+    var dialogScope = $scope.$new(false);
+    dialogScope.callback = function (notes, closeThisDialog) {
+      updateSvc.createSite($scope.site.site_pk, $scope.site.site_name, $scope.site.site_dept_fk, notes).then(function () {
+        closeThisDialog();
+        $route.reload();
+        $rootScope.alerts.push({ type: 'success', msg: 'Informations mises &agrave; jour.' });
+      });
+    };
+
+    ngDialog.open({
+      scope: dialogScope,
+      template: 'components/dialogs/edit_site_notes.html'
+    });
+  };
 
   $scope.openDashboardOptions = function () {
     ngDialog.open({

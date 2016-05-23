@@ -9,7 +9,10 @@ module.exports = function ($http, $q) {
     }
   };
 
-  apiSvc.apiBaseUrl = 'http://localhost:8080/api/';
+  apiSvc.apiBaseUrl = /*apiurl:start*/ 'http://localhost:8080/api/' /*apiurl:end*/ ;
+  if (!apiSvc.apiBaseUrl.endsWith('/')) {
+    apiSvc.apiBaseUrl += '/';
+  }
 
   apiSvc.authEndpoint = apiSvc.apiBaseUrl + 'auth/';
   apiSvc.adminEndpoint = apiSvc.apiBaseUrl + 'admin/';
@@ -26,7 +29,7 @@ module.exports = function ($http, $q) {
     $http.get(encodeURI(url)).success(function (data) {
       deferred.resolve(data);
     }).error(function (data, status) {
-      deferred.reject('Error: request returned status ' + status);
+      deferred.reject(url + '\nError: request returned status ' + status);
     });
 
     return deferred.promise;
@@ -37,7 +40,7 @@ module.exports = function ($http, $q) {
     $http.post(encodeURI(url), JSON.stringify(data || {}), requestOptions).success(function (data) {
       deferred.resolve(data);
     }).error(function (data, status) {
-      deferred.reject('Error: request returned status ' + status);
+      deferred.reject(url + '\nError: request returned status ' + status);
     });
 
     return deferred.promise;
@@ -48,7 +51,7 @@ module.exports = function ($http, $q) {
     $http.put(encodeURI(url), JSON.stringify(data || {}), requestOptions).success(function (data) {
       deferred.resolve(data);
     }).error(function (data, status) {
-      deferred.reject('Error: request returned status ' + status);
+      deferred.reject(url + '\nError: request returned status ' + status);
     });
 
     return deferred.promise;
@@ -59,7 +62,7 @@ module.exports = function ($http, $q) {
     $http.delete(encodeURI(url)).success(function (data) {
       deferred.resolve(data);
     }).error(function (data, status) {
-      deferred.reject('Error: request returned status ' + status);
+      deferred.reject(url + '\nError: request returned status ' + status);
     });
 
     return deferred.promise;

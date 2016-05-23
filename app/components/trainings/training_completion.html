@@ -1,61 +1,81 @@
 <h3>{{trng.type.trty_name}} - {{trng && getDisplayDate()}}</h3>
 <br />
-<div class="panel panel-primary" st-table="shown" st-safe-src="trainees" ng-if="trainees.length > 0">
-    <div class="panel-heading">
-        <div class="row">
-            <div class="col-md-6">Agents inscrits</div>
+<div st-table="shown" st-safe-src="trainees" ng-if="trainees.length > 0" st-set-sort="orderByNullLast">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="pageSize" class="control-label col-xs-4 col-md-2">Agents par page</label>
+            <div class="col-xs-8 col-md-2">
+                <select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size as size for size in [5, 10, 25, 100]"></select>
+            </div>
+        </div>
+    </form>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-6">Agents inscrits</div>
+            </div>
+        </div>
+        <table class="table table table-striped table-hover" ng-if="stats !== 'loading'">
+            <thead>
+                <tr>
+                    <th width="10%">
+                        <span class="st-sort" st-sort="empl_pk">Matricule</span>
+                        <input st-search="empl_pk" placeholder="Rechercher..." class="form-control" type="text" />
+                    </th>
+                    <th class="vtop">
+                        <div class="st-sort" st-sort="empl_gender" st-skip-natural="true">Titre</div>
+                    </th>
+                    <th class="shrinkable" width="20%">
+                        <span class="st-sort" st-sort="empl_surname" st-skip-natural="true" st-sort-default="true">Nom</span>
+                        <input st-search="empl_surname" placeholder="Rechercher..." class="form-control" type="text" />
+                    </th>
+                    <th class="shrinkable" width="20%">
+                        <span class="st-sort" st-sort="empl_firstname" st-skip-natural="true">Pr&eacute;nom</span>
+                        <input st-search="empl_firstname" placeholder="Rechercher..." class="form-control" type="text" />
+                    </th>
+                    <th class="vtop">
+                        <span class="st-sort" st-sort="empl_permanent" st-skip-natural="true">Statut</span>
+                    </th>
+                    <th class="shrinkable" width="40%">
+                        <span class="st-sort" st-sort="trem_comment" st-skip-natural="true">Commentaire</span>
+                        <input st-search="trem_comment" placeholder="Rechercher..." class="form-control" type="text" />
+                    </th>
+                    <th class="vtop">
+                        <span class="st-sort" st-sort="trem_valid" st-skip-natural="true">R&eacute;sultat</span>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="empl in shown track by empl.empl_pk" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
+                    <td class="shrinkable">{{empl.empl_pk}}</td>
+                    <td class="text-right" ng-class="{'text-primary': hover}">{{empl.empl_gender ? 'M.' : 'Mme'}}&nbsp;</td>
+                    <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_surname}}&nbsp;</td>
+                    <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_firstname}}&nbsp;</td>
+                    <td class="text-center"><span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span></td>
+                    <td class="shrinkable">
+                        <input type="text" class="form-control" ng-model="empl.trem_comment" />
+                    </td>
+                    <td ng-if="trng.trng_outcome === 'COMPLETED' || empl.trem_outcome !== 'SCHEDULED'" ng-init="empl.validated = empl.trem_outcome === 'VALIDATED'">
+                        <input bswitch="empl.validated" type="checkbox" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)" data-label-width="0"
+                            readonly />
+                    </td>
+                    <td ng-if="trng.trng_outcome === 'SCHEDULED' || empl.trem_outcome === 'SCHEDULED'">
+                        <input bswitch="undefined" data-indeterminate="true" type="checkbox" data-on-color="default" data-off-color="default" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)"
+                            data-label-width="0" readonly />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm" ng-disabled="!hover" ng-click="unregister(empl)">D&eacute;sinscrire</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="panel-footer text-center">
+            <td colspan="5" class="text-center">
+                <div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
+            </td>
         </div>
     </div>
-    <table class="table table table-striped table-hover" ng-if="stats !== 'loading'">
-        <thead>
-            <tr>
-                <th width="10%">
-                    <span class="st-sort" st-sort="empl_pk">Matricule</span>
-                    <input st-search="empl_pk" placeholder="Rechercher..." class="form-control" type="text" />
-                </th>
-                <th class="vtop">
-                    <div class="st-sort" st-sort="empl_gender" st-skip-natural="true">Titre</div>
-                </th>
-                <th class="shrinkable" width="20%">
-                    <span class="st-sort" st-sort="empl_surname" st-skip-natural="true">Nom</span>
-                    <input st-search="empl_surname" placeholder="Rechercher..." class="form-control" type="text" />
-                </th>
-                <th class="shrinkable" width="20%">
-                    <span class="st-sort" st-sort="empl_firstname" st-skip-natural="true">Pr&eacute;nom</span>
-                    <input st-search="empl_firstname" placeholder="Rechercher..." class="form-control" type="text" />
-                </th>
-                <th class="vtop">
-                    <span class="st-sort" st-sort="empl_permanent" st-skip-natural="true">Statut</span>
-                </th>
-                <th class="shrinkable" width="40%">
-                    <span class="st-sort" st-sort="trem_comment" st-skip-natural="true">Commentaire</span>
-                    <input st-search="trem_comment" placeholder="Rechercher..." class="form-control" type="text" />
-                </th>
-                <th class="vtop">
-                    <span class="st-sort" st-sort="trem_valid" st-skip-natural="true">R&eacute;sultat</span>
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="empl in shown track by empl.empl_pk" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
-                <td class="shrinkable">{{empl.empl_pk}}</td>
-                <td class="text-right" ng-class="{'text-primary': hover}">{{empl.empl_gender ? 'M.' : 'Mme'}}&nbsp;</td>
-                <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_surname}}&nbsp;</td>
-                <td class="shrinkable" ng-class="{'text-primary': hover}">{{empl.empl_firstname}}&nbsp;</td>
-                <td class="text-center"><span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span></td>
-                <td class="shrinkable">
-                    <input type="text" class="form-control" ng-model="empl.trem_comment" />
-                </td>
-                <td ng-init="(trng.trng_outcome === 'COMPLETED' && empl.trem_outcome !== 'SCHEDULED') ? empl.validated = empl.trem_outcome === 'VALIDATED' : null">
-                    <input bswitch="empl.validated" type="checkbox" name="my-checkbox" data-indeterminate="true" data-on-color="success" data-off-color="danger" data-on-text="Valid&eacute;(e)" data-off-text="Non&nbsp;valid&eacute;(e)" data-label-width="0" ng-init="empl.validated=empl.validated || false" />
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm" ng-disabled="!hover" ng-click="unregister(empl)">D&eacute;sinscrire</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
 </div>
 <div class="side-panel-container text-right">
     <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="save()"><span class="glyphicon glyphicon-ok"></span>&nbsp;Enregistrer</button>

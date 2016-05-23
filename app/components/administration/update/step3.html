@@ -3,7 +3,8 @@
         <div class="panel-heading">Mise &agrave; jour pr&ecirc;te</div>
         <div class="panel-body">
             <strong class="text-primary" ng-bind="employees.length" />&nbsp;employ&eacute;s sont inclus dans ce recensement des effectifs.
-            <hr /> Toutes les informations comprises dans ce fichier ont &eacute;t&eacute; <strong class="text-success">analys&eacute;es</strong> et <strong class="text-success">valid&eacute;es</strong>&nbsp;: la mise &agrave; jour peut &ecirc;tre effectu&eacute;e.
+            <hr /> Toutes les informations comprises dans ce fichier ont &eacute;t&eacute; <strong class="text-success">analys&eacute;es</strong> et <strong class="text-success">valid&eacute;es</strong>&nbsp;:
+            la mise &agrave; jour peut &ecirc;tre effectu&eacute;e.
         </div>
         <div class="panel-footer text-center">
             <button type="button" class="btn btn-primary" ng-click="step3.update()" loading="busy" loading-text="Mise &agrave; jour...">Mettre &agrave; jour</button>
@@ -12,7 +13,8 @@
     <div class="panel panel-danger" ng-if="invalidEmployees.length > 0">
         <div class="panel-heading">Mise &agrave; jour impossible</div>
         <div class="panel-body">
-            <strong class="text-primary" ng-bind="employees.length" />&nbsp;employ&eacute;s sont inclus dans ce recensement, dont <strong class="text-danger" ng-bind="invalidEmployees.length" /> pr&eacute;sentant une ou plusieurs erreur(s).
+            <strong class="text-primary" ng-bind="employees.length" />&nbsp;employ&eacute;s sont inclus dans ce recensement, dont <strong class="text-danger" ng-bind="invalidEmployees.length"
+            /> pr&eacute;sentant une ou plusieurs erreur(s).
             <hr />
             <span class="text-danger">Les informations comprises dans ce fichier n'ont pas toutes &eacute;t&eacute; valid&eacute;es&nbsp;: la mise &agrave; jour ne peut pas &ecirc;tre effectu&eacute;e.</span>
             <br />
@@ -21,7 +23,7 @@
     </div>
 </div>
 <div class="col-xs-12">
-    <div class="panel panel-danger" st-table="shown" st-safe-src="invalidEmployees" ng-if="invalidEmployees.length > 0">
+    <div class="panel panel-danger" st-table="shown" st-safe-src="invalidEmployees" ng-if="invalidEmployees.length > 0" st-set-sort="orderByNullLast">
         <div class="panel-heading">Agents invalid&eacute;s</div>
         <table class="table table-striped table-hover">
             <thead>
@@ -55,7 +57,7 @@
                     <td class="shrinkable">{{empl.empl_surname}}</td>
                     <td class="shrinkable text-danger">
                         <span ng-repeat="error in empl.error">
-							<span ng-bind-html="step2.template[error].display" ng-if="$first" /><span ng-bind-html="step2.template[error].display | lowercase" ng-if="!$first" /><span ng-if="!$last">, </span>
+                            <span ng-bind-html="step2.template[error].display" ng-if="$first" /><span ng-bind-html="step2.template[error].display | lowercase" ng-if="!$first" /><span ng-if="!$last">, </span>
                         </span>
                     </td>
                 </tr>

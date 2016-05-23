@@ -1,0 +1,82 @@
+$count-color: $brand-primary;
+$target-color: grey;
+svg.siteStats {
+    display: block;
+    margin: auto;
+}
+
+.axis {
+    opacity: 1;
+    path,
+    line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+        stroke-dasharray: 0;
+    }
+    text {
+        font: 10px sans-serif;
+        stroke: none;
+    }
+}
+
+.highlight-coordinates {
+    shape-rendering: crispEdges;
+    stroke-dasharray: 10 5;
+    stroke: grey;
+    opacity: 0.5;
+}
+
+.grid {
+    opacity: 0.5;
+    .tick {
+        shape-rendering: crispEdges;
+        stroke: lightgrey;
+    }
+}
+
+.line {
+    fill: none;
+    &.target {
+        stroke: $target-color;
+        stroke-dasharray: 10 5;
+        @at-root circle#{&} {
+            stroke-width: 2px;
+            stroke-dasharray: none;
+        }
+    }
+    &.count {
+        stroke: $count-color;
+        stroke-width: 2px;
+    }
+    @at-root circle#{&} {
+        fill: white;
+    }
+}
+
+.area {
+    opacity: 0.6;
+    &.target {
+        fill: $target-color;
+        opacity: 0.3;
+    }
+    &.count {
+        fill: $count-color;
+    }
+}
+
+text {
+    font: 12px sans-serif;
+    &.target {
+        fill: $target-color;
+    }
+    &.count {
+        fill: $count-color;
+    }
+}
+
+.highlight-shadow {
+    stroke: white;
+    stroke-width: 3px;
+    opacity: 0.8;
+}

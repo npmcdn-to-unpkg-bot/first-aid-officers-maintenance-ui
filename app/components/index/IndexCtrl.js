@@ -66,7 +66,13 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
     });
   };
 
-  $scope.closeAlert = function (index) {
-    $scope.alerts.splice(index, 1);
+  $scope.closeAlert = function (alert) {
+    if ($scope.alerts.indexOf(alert) > -1) {
+      $scope.alerts.splice($scope.alerts.indexOf(alert), 1);
+    }
+  };
+
+  $scope.alertCallback = function (index) {
+    return $scope.alerts[index].callback();
   };
 };

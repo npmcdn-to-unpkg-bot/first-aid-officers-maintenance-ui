@@ -1,0 +1,8 @@
+<div class="alerts-container">
+    <uib-alert class="alert" ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert(alert)" dismiss-on-timeout="{{alert.static ? '' : 5000}}">
+        <div ng-bind-html="alert.msg"></div>
+        <div class="text-center">
+            <button type="button" class="btn btn-default" ng-click="alertCallback($index) && closeAlert(alert)" ng-if="alert.callback">{{alert.callbackDisplay || 'Annuler'}}</button>
+        </div>
+    </uib-alert>
+</div>

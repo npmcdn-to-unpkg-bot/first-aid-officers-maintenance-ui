@@ -113,7 +113,7 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
   $scope.editRoles = function () {
     adminSvc.getUserRoles($scope.empl.empl_pk).then(function (roles) {
       var dialogScope = $scope.$new(false);
-      dialogScope.roles = _.object(_.pluck(roles, 'role_name'), roles);
+      dialogScope.roles = _.keyBy(roles, 'role_name');
       dialogScope.callback = function (empl) {
         $route.reload();
         if (empl.empl_pk === $rootScope.currentUser.info.empl_pk) {

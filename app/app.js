@@ -241,62 +241,65 @@ angular.module('faomaintenanceApp', [
     require('./components/administration/users/UsersAdministrationCtrl.js')
   ])
 
-.run(['$rootScope', '$location', '$cookies', '$http', 'ngDialog', 'BusySvc', 'AuthSvc', function ($rootScope, $location, $cookies, $http, ngDialog, busySvc, authSvc) {
-  $rootScope.alerts = [];
-  $rootScope.currentUser = {};
+.run(['$rootScope', '$location', '$route', '$cookies', '$http', 'ngDialog', 'BusySvc', 'AuthSvc',
+  function ($rootScope, $location, $route, $cookies, $http, ngDialog, busySvc, authSvc) {
+    $rootScope.alerts = [];
+    $rootScope.currentUser = {};
 
-  $rootScope.disconnect = function () {
-    authSvc.logout();
-    delete $rootScope.currentUser.info;
-    $location.path('/home');
-  };
+    $rootScope.disconnect = function () {
+      authSvc.logout();
+      delete $rootScope.currentUser.info;
+      $location.path('/home');
+    };
 
-  busySvc.busy('auth-restore', true);
-  authSvc.restoreSession().then(function (info) {
-    $rootScope.currentUser.info = info;
-    $rootScope.$broadcast('update');
-    busySvc.done('auth-restore');
-  }, _.partial(busySvc.done, 'auth-restore'));
+    busySvc.busy('auth-restore', true);
+    authSvc.restoreSession().then(function (info) {
+      $rootScope.currentUser.info = info;
+      $rootScope.$broadcast('update');
+      $route.reload();
+      busySvc.done('auth-restore');
+    }, _.partial(busySvc.done, 'auth-restore'));
 
-  $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
-    if (['/home'].indexOf($location.path()) === -1) {
-      // wait until session restore is done
-      busySvc.register(function (busy, unregister) {
-        if (!busy) {
-          unregister();
-          if (!authSvc.isLoggedIn()) {
-            busySvc.busy('auth');
-            ngDialog.closeAll();
-            ngDialog.openConfirm({
-              template: 'components/index/login.html',
-              controller: 'LoginCtrl',
-              preCloseCallback: _.partial(busySvc.done, 'auth')
-            });
+    $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
+      if (['/home'].indexOf($location.path()) === -1) {
+        // wait until session restore is done
+        busySvc.register(function (busy, unregister) {
+          if (!busy) {
+            unregister();
+            if (!authSvc.isLoggedIn()) {
+              busySvc.busy('auth');
+              ngDialog.closeAll();
+              ngDialog.openConfirm({
+                template: 'components/index/login.html',
+                controller: 'LoginCtrl',
+                preCloseCallback: _.partial(busySvc.done, 'auth')
+              });
+            }
           }
-        }
-      }, 'auth-restore');
-    }
+        }, 'auth-restore');
+      }
 
-    var searchPage = /([^/]+)\/(search|results)/;
-    if (!searchPage.test(newUrl) || searchPage.test(oldUrl)[0] !== searchPage.test(newUrl)[0]) {
-      $location.search('filter', null);
-      $location.search('display', null);
-    }
+      var searchPage = /([^/]+)\/(search|results)/;
+      if (!searchPage.test(newUrl) || searchPage.test(oldUrl)[0] !== searchPage.test(newUrl)[0]) {
+        $location.search('filter', null);
+        $location.search('display', null);
+      }
 
-    if (newUrl !== oldUrl && /\/trainings\/([^\/]+\/)?(create|edit|complete)/.test(oldUrl) && !($location.search().force)) {
-      event.preventDefault();
-      var dialogScope = $rootScope.$new(true);
-      dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">abandonner l\'op&eacute;ration en cours</span>&nbsp;?';
-      ngDialog.openConfirm({
-        template: 'components/dialogs/warning.html',
-        scope: dialogScope
-      }).then(function () {
-        $location.path(newUrl.substring($location.absUrl().length - $location.url().length)).search('force', true);
-      });
-    }
-  });
+      if (newUrl !== oldUrl && /\/trainings\/([^\/]+\/)?(create|edit|complete)/.test(oldUrl) && !($location.search().force)) {
+        event.preventDefault();
+        var dialogScope = $rootScope.$new(true);
+        dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">abandonner l\'op&eacute;ration en cours</span>&nbsp;?';
+        ngDialog.openConfirm({
+          template: 'components/dialogs/warning.html',
+          scope: dialogScope
+        }).then(function () {
+          $location.path(newUrl.substring($location.absUrl().length - $location.url().length)).search('force', true);
+        });
+      }
+    });
 
-  $rootScope.$on('$locationChangeSuccess', function () {
-    $location.search('force', null).replace();
-  });
-}]);
+    $rootScope.$on('$locationChangeSuccess', function () {
+      $location.search('force', null).replace();
+    });
+  }
+]);

@@ -84,15 +84,18 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
   });
 
   $scope.unregister = function (empl) {
-    var dialogScope = $scope.$new(true);
-    dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">d&eacute;sinscrire<br />' + empl.empl_firstname + ' ' + empl.empl_surname +
-      '</span> de cette formation&nbsp?';
-    ngDialog.openConfirm({
-      template: 'components/dialogs/warning.html',
-      scope: dialogScope
-    }).then(function () {
-      $scope.trainees.splice($scope.trainees.indexOf(empl), 1);
+    var empl_display = (empl.empl_gender ? 'M.' : 'Mme') + ' ' + empl.empl_surname + ' ' + empl.empl_firstname;
+    var msg = '<b>' + empl_display +
+      '</b> a &eacute;t&eacute; d&eacute;sinscrit(e) de la formation.';
+    $rootScope.alerts.push({
+      type: 'warning',
+      msg: msg,
+      callback: function () {
+        $scope.trainees.push(empl);
+        return true;
+      }
     });
+    $scope.trainees.splice($scope.trainees.indexOf(empl), 1);
   };
 
   $scope.selectEmployee = function (empl_pk) {

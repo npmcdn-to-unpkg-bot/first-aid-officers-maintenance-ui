@@ -61,8 +61,14 @@ $screen-xs: 768px;
     border-top: 1px solid #ddd;
 }
 
-.alert a {
-    text-decoration: underline;
+.alert {
+    button.btn {
+        color: white !important;
+        margin: 0 !important;
+    }
+    a {
+        text-decoration: underline;
+    }
 }
 
 li.divider {

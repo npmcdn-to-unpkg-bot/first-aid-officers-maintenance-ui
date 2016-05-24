@@ -10,9 +10,7 @@
     </head>
 
     <body ng-controller="IndexCtrl">
-        <div class="alerts-container">
-            <uib-alert class="alert" ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)"><span ng-bind-html="alert.msg" /></alert>
-        </div>
+        <div ng-include="'./components/index/alerts.html'"></div>
         <div class="container">
             <header>
                 <div class="row top-panel" id="top-panel">

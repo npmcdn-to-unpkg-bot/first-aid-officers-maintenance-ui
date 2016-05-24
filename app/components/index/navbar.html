@@ -14,16 +14,14 @@
                 <li><a href="#/employees/search">Recherche avanc&eacute;e</a></li>
             </ul>
         </li>
-        <li ng-class="{ active: isActive('/trainings')}"><a href="#/trainings" if-role="'!trainer'">Formations</a></li>
-        <li class="dropdown" ng-class="{ active: isActive('/trainings')}" if-role="'trainer'">
+        <li class="dropdown" ng-class="{ active: isActive('/trainings')}">
             <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Formations&nbsp;<b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li><a href="#/trainings">Consulter formations</a></li>
                 <li><a href="#/trainings/search">Recherche avanc&eacute;e</a></li>
-                <li class="divider"></li>
-                <li><a href="#/trainings/create">Cr&eacute;er formation</a></li>
-                <li class="divider"></li>
-                <li><a href="#/trainings/stats">Dresser statistiques</a></li>
+                <li class="divider" if-role="'trainer'"></li>
+                <li><a href="#/trainings/create" if-role="'trainer'">Cr&eacute;er formation</a></li>
+                <li><a href="#/trainings/stats" if-role="'trainer'">Dresser statistiques</a></li>
             </ul>
         </li>
     </ul>

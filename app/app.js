@@ -171,7 +171,11 @@ angular.module('faomaintenanceApp', [
       })
 
     // Administration
-    .when('/administration/sites', {
+    .when('/administration/certificates_management', {
+        templateUrl: 'components/administration/certificates/certificates_mgmt.html',
+        controller: 'CertificatesMgmtCtrl'
+      })
+      .when('/administration/sites', {
         templateUrl: 'components/administration/sites/sites_administration.html',
         controller: 'SitesAdministrationCtrl'
       })
@@ -200,6 +204,7 @@ angular.module('faomaintenanceApp', [
   .factory('UpdateSvc', ['$http', '$q', 'ApiSvc', require('./services/UpdateSvc.js')])
 
 .controller('AccountCtrl', ['$scope', '$rootScope', 'AdminSvc', 'ngDialog', 'BusySvc', require('./components/account/AccountCtrl.js')])
+  .controller('CertificatesMgmtCtrl', ['$scope', '$rootScope', 'AdminSvc', 'DataSvc', 'BusySvc', require('./components/administration/certificates/CertificatesMgmtCtrl.js')])
   .controller('DepartmentEditCtrl', ['$rootScope', '$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/department_edit/DepartmentEditCtrl.js')])
   .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', require('./components/employees/EmployeesCtrl.js')])
   .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc',
@@ -256,8 +261,8 @@ angular.module('faomaintenanceApp', [
     authSvc.restoreSession().then(function (info) {
       $rootScope.currentUser.info = info;
       $rootScope.$broadcast('update');
-      $route.reload();
       busySvc.done('auth-restore');
+      $route.reload();
     }, _.partial(busySvc.done, 'auth-restore'));
 
     $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {

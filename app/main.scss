@@ -25,6 +25,16 @@ $screen-xs: 768px;
     }
 }
 
+.progress {
+    border-radius: 3px;
+    margin: 20px 0 0 0;
+    transition: height .2s ease;
+}
+
+.progress-large {
+    height: 20px;
+}
+
 .panel .table {
     margin-bottom: 0;
 }

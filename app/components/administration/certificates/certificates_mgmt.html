@@ -13,6 +13,29 @@
             </div>
         </div>
         <form class="panel-body form-horizontal" autocomplete="off">
+            <div uib-collapse="!edit">
+                <div class="form-group">
+                    <label class="control-label col-xs-3">Identifiant</label>
+                    <div class="col-xs-9">
+                        <input type="text" class="form-control" ng-model="cert.cert_short" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-xs-3">Nom</label>
+                    <div class="col-xs-9">
+                        <input type="text" class="form-control" ng-model="cert.cert_name" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-xs-3">Cible</label>
+                    <div class="col-xs-9">
+                        <div class="input-group">
+                            <input type="number" class="form-control" min="0" max="100" ng-model="cert.cert_target" />
+                            <span class="input-group-addon">%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div uib-collapse="edit" class="clickme" ng-click="height = !height">
                 <div class="col-xs-3 text-right">Cible</div>
                 <div class="col-xs-9"><span class="text-primary">{{cert.cert_target}}</span>% de l'effectif</div>
@@ -38,29 +61,6 @@
                             <uib-bar value="round(cert.cert_target * 1/3)" type="warning"></uib-bar>
                             <uib-bar value="100 - cert.cert_target" type="success"><span>&ge;&nbsp;{{cert.cert_target}}%</span></uib-bar>
                         </uib-progress>
-                    </div>
-                </div>
-            </div>
-            <div uib-collapse="!edit">
-                <div class="form-group">
-                    <label class="control-label col-xs-3">Identifiant</label>
-                    <div class="col-xs-9">
-                        <input type="text" class="form-control" ng-model="cert.cert_short" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-3">Nom</label>
-                    <div class="col-xs-9">
-                        <input type="text" class="form-control" ng-model="cert.cert_name" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-3">Cible</label>
-                    <div class="col-xs-9">
-                        <div class="input-group">
-                            <input type="number" class="form-control" min="0" max="100" ng-model="cert.cert_target" />
-                            <span class="input-group-addon">%</span>
-                        </div>
                     </div>
                 </div>
             </div>

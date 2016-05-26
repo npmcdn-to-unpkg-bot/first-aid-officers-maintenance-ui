@@ -171,9 +171,9 @@ angular.module('faomaintenanceApp', [
       })
 
     // Administration
-    .when('/administration/certificates_management', {
-        templateUrl: 'components/administration/certificates/certificates_mgmt.html',
-        controller: 'CertificatesMgmtCtrl'
+    .when('/administration/certificates', {
+        templateUrl: 'components/administration/certificates/certificates.html',
+        controller: 'CertificatesCtrl'
       })
       .when('/administration/sites', {
         templateUrl: 'components/administration/sites/sites_administration.html',
@@ -204,7 +204,9 @@ angular.module('faomaintenanceApp', [
   .factory('UpdateSvc', ['$http', '$q', 'ApiSvc', require('./services/UpdateSvc.js')])
 
 .controller('AccountCtrl', ['$scope', '$rootScope', 'AdminSvc', 'ngDialog', 'BusySvc', require('./components/account/AccountCtrl.js')])
-  .controller('CertificatesMgmtCtrl', ['$scope', '$rootScope', 'AdminSvc', 'DataSvc', 'BusySvc', require('./components/administration/certificates/CertificatesMgmtCtrl.js')])
+  .controller('CertificatesCtrl', ['$scope', '$rootScope', 'AdminSvc', 'DataSvc', 'BusySvc', 'ngDialog',
+    require('./components/administration/certificates/CertificatesCtrl.js')
+  ])
   .controller('DepartmentEditCtrl', ['$rootScope', '$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/department_edit/DepartmentEditCtrl.js')])
   .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', require('./components/employees/EmployeesCtrl.js')])
   .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc',

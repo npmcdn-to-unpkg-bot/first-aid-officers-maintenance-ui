@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('underscore');
+var _ = require('lodash');
 /*jshint camelcase: false*/
 
 module.exports = function ($rootScope, $scope, $document, $location, ngDialog, dataSvc) {
@@ -10,22 +10,21 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
   $scope.navbar = {};
 
   $scope.refreshIndex = function () {
-    dataSvc.getTrainings().then(function (trainings) {
+    Promise.all([dataSvc.getTrainings(), dataSvc.getTrainingTypes()]).then(_.spread(function (trainings, trainingTypes) {
       $scope.trainingsIndex = _.sortBy(_.each(_.values(trainings), function (training) {
-        training.type = $scope.trainingTypes[training.trng_trty_fk];
+        training.type = trainingTypes[training.trng_trty_fk];
       }), function (training) {
         return training.trng_date;
       }).reverse();
 
       $scope.globalIndex = $scope.sitesIndex.concat($scope.employeesIndex).concat($scope.trainingsIndex);
-    });
+    }));
   };
 
   $scope.refreshEntireIndex = function () {
-    Promise.all([dataSvc.getSites(), dataSvc.getEmployees(), dataSvc.getTrainingTypes()]).then(function (results) {
+    Promise.all([dataSvc.getSites(), dataSvc.getEmployees()]).then(function (results) {
       $scope.sitesIndex = _.values(results[0]);
       $scope.employeesIndex = _.values(results[1]);
-      $scope.trainingTypes = results[2];
       $scope.refreshIndex();
     });
   };

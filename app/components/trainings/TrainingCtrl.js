@@ -23,7 +23,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
   });
 
   $scope.canComplete = function () {
-    return $scope.trainees.length > 0 && moment($scope.trng.trng_date).isSameOrBefore(new Date());
+    return $scope.trainees && $scope.trainees.length > 0 && moment($scope.trng.trng_date).isSameOrBefore(new Date());
   };
 
   $scope.getDisplayDate = function () {

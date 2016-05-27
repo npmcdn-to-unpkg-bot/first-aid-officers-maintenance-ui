@@ -1,0 +1,42 @@
+<h3><a href="#/administration/certificates">Aptitudes</a> et types de formation<small> - Types de formation</small></h3>
+<br />
+<div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start;" ui-sortable="{disabled: !reorder}" ng-model="trainingTypes">
+    <div class="panel panel-primary" ng-repeat="type in trainingTypes" style="flex-basis: 500px;" ng-class="{'ui-sortable-handle': reorder}">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-8" style="margin-top: 9px;">
+                    <label class="label label-default">{{type.trty_pk}}</label>
+                    <span ng-if="reorder" class="text-{{type.idx === type.trty_pk ? 'default' : 'warning'}}">&nbsp;&rarr;&nbsp;<label class="label label-{{type.idx === type.trty_pk ? 'default' : 'warning'}}">{{type.idx}}</label></span>                    - {{type.trty_name}}
+                </div>
+                <div class="col-xs-4 text-right">
+                    <button type="button" class="btn btn-warning no-margin" ng-click="edit(type)" ng-disabled="reorder">Modifier</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-4 text-right">Dur&eacute;e de validit&eacute;</div>
+                <div class="col-xs-8">{{type.trty_validity}} mois (<span class="text-primary">{{type.validityYears}} an{{type.validityYears > 1 ? 's' : ''}}</span>)</div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-xs-4 text-right">
+                    Aptitudes octoy&eacute;es
+                </div>
+                <div class="col-xs-8">
+                    <div ng-repeat="cert in type.certificates">
+                        <span class="label label-success">{{cert.cert_short}}</span> - {{cert.cert_name}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="side-panel-container" ng-show="!reorder">
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="edit()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nouveau type de formation</button>
+    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="startReorder()"><span class="glyphicon glyphicon-glyphicon glyphicon-th-list"></span>&nbsp;R&eacute;organiser types</button>
+</div>
+<div class="side-panel-container" ng-show="reorder">
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="saveReorder()"><span class="glyphicon glyphicon-glyphicon glyphicon-ok"></span>&nbsp;Valider r&eacute;organisation</button>
+    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="cancelReorder()"><span class="glyphicon glyphicon-glyphicon glyphicon-remove"></span>&nbsp;Annuler r&eacute;organisation</button>
+</div>

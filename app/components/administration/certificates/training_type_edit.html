@@ -1,0 +1,50 @@
+<div class="panel panel-{{edit ? 'primary' : 'success'}}" ng-init="edit = type.trty_pk">
+    <div class="panel-heading">
+        <span ng-if="edit">{{type.trty_name}}</span>
+        <span ng-if="!edit">Nouveau type de formation</span>
+        <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
+    </div>
+    <form class="panel-body form-horizontal" autocomplete="off">
+        <div class="form-group">
+            <label class="control-label col-xs-4">Nom</label>
+            <div class="col-xs-8">
+                <input type="text" class="form-control" ng-model="type.trty_name" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-4">Dur&eacute;e de validit&eacute;</label>
+            <div class="col-xs-8">
+                <div class="input-group">
+                    <input type="number" min="12" class="form-control" ng-model="type.trty_validity" />
+                    <div class="input-group-addon">mois</div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-4">Aptitudes octroy&eacute;es</label>
+            <div class="col-xs-8">
+                <select class="form-control" ng-model="cert" ng-options="cert as cert.cert_short + ' - ' + cert.cert_name for cert in remaining" ng-change="accept(cert)">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <div class="row">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-8">
+                    <div class="pill clickme" ng-click="type.certificates.splice(type.certificates.indexOf(cert), 1)" ng-repeat="cert in type.certificates">
+                        {{cert.cert_short}} - {{cert.cert_name}}<span class="pill-delete">&times;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="panel-footer text-center">
+        <div ng-if="edit">
+            <button type="button" class="btn btn-primary" ng-click="exec()">Sauvegarder</button>
+            <button type="button" class="btn btn-danger" ng-click="delete()">Supprimer</button>
+        </div>
+        <div ng-if="!edit">
+            <button type="button" class="btn btn-success" ng-click="exec()">Sauvegarder</button>
+            <button type="button" class="btn btn-default" ng-click="closeThisDialog()">Annuler</button>
+        </div>
+    </div>
+</div>

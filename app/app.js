@@ -6,9 +6,11 @@ var _ = require('lodash');
 require('angular-bootstrap-templates');
 require('angular-i18n-fr');
 require('angular-smart-table');
+require('angular-ui-sortable');
 require('bootstrap_material_design');
 require('bootstrap-switch');
 require('moment-fr');
+require('../lib/jquery-ui.min.js');
 var Trianglify = require('trianglify');
 
 $(function () {
@@ -55,6 +57,7 @@ angular.module('faomaintenanceApp', [
     require('./busy/busy.js'),
     require('ng-dialog'),
     'ui.bootstrap',
+    'ui.sortable',
     'smart-table',
   ]).config(['$routeProvider', 'ngDialogProvider', 'uibButtonConfig', '$httpProvider', function ($routeProvider, ngDialogProvider, uibButtonConfig, $httpProvider) {
     uibButtonConfig.activeClass = 'btn-primary';
@@ -179,6 +182,10 @@ angular.module('faomaintenanceApp', [
         templateUrl: 'components/administration/sites/sites_administration.html',
         controller: 'SitesAdministrationCtrl'
       })
+      .when('/administration/training_types', {
+        templateUrl: 'components/administration/certificates/training_types.html',
+        controller: 'TrainingTypesCtrl'
+      })
       .when('/administration/users', {
         templateUrl: 'components/administration/users/users_administration.html',
         controller: 'UsersAdministrationCtrl'
@@ -243,6 +250,9 @@ angular.module('faomaintenanceApp', [
     require('./components/search/trainings/TrainingsSearchResultsCtrl.js')
   ])
   .controller('TrainingsStatsCtrl', ['$scope', '$rootScope', 'DataSvc', 'dateFilter', 'BusySvc', 'ngDialog', require('./components/trainings/TrainingsStatsCtrl')])
+  .controller('TrainingTypesCtrl', ['$scope', '$rootScope', 'AdminSvc', 'DataSvc', 'BusySvc', 'ngDialog',
+    require('./components/administration/certificates/TrainingTypesCtrl.js')
+  ])
   .controller('UpdateCtrl', ['$scope', '$rootScope', 'UpdateSvc', 'DataSvc', 'ngDialog', 'BusySvc', require('./components/administration/update/UpdateCtrl.js')])
   .controller('UsersAdministrationCtrl', ['$scope', '$rootScope', 'DataSvc', 'AdminSvc', 'ngDialog', '$route', '$location', 'BusySvc',
     require('./components/administration/users/UsersAdministrationCtrl.js')

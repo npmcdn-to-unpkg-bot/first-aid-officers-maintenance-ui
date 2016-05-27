@@ -19,13 +19,23 @@ module.exports = function ($scope, $rootScope, adminSvc, dataSvc, busySvc, ngDia
       template: './components/administration/certificates/certificate_edit.html',
       scope: $scope,
       controller: ['$scope', 'ngDialog', function ($scope, ngDialog) {
-        $scope.exec = function () {
-          $scope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir blablabla&nbsp?';
+        function confirm(msg, callback) {
+          var dialogScope = $scope.$new();
+          dialogScope.innerHtml = msg;
           ngDialog.openConfirm({
             template: './components/dialogs/warning.html',
-            scope: $scope
-          }).then(_.partial(console.log, 'rofl :D'));
-        };
+            scope: dialogScope
+          }).then(callback);
+        }
+
+        $scope.exec = _.partial(confirm, '&Ecirc;tes-vous s&ucirc;r(e) de vouloir blablabla&nbsp?', function () {
+          //TODO: impl;
+        });
+
+        $scope.delete = _.partial(confirm, '&Ecirc;tes-vous s&ucirc;r(e) de vouloir blablabla&nbsp?', function () {
+          //TODO: impl;
+        });
+
       }]
     });
   };

@@ -24,7 +24,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location,
   $scope.unregister = function (empl) {
     var empl_display = (empl.empl_gender ? 'M.' : 'Mme') + ' ' + empl.empl_surname + ' ' + empl.empl_firstname;
     var msg = '<b>' + empl_display +
-      '</b> a &eacute;t&eacute; d&eacute;sinscrit(e) de la formation.';
+      '</b> a &eacute;t&eacute; d&eacute;sinscrit(e) de la formation.< hr / >';
     $rootScope.alerts.push({
       type: 'warning',
       msg: msg,

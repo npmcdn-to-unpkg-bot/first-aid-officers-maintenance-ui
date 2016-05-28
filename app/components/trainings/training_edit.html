@@ -16,7 +16,7 @@
                     <div class="form-group">
                         <label for="type" class="col-xs-4 control-label">Type de formation</label>
                         <div class="col-xs-8">
-                            <select id="type" class="form-control" ng-model="trng.type" ng-options="type as type.trty_name for type in trainingTypes | orderBy: type.trty_pk"></select>
+                            <select id="type" class="form-control" ng-model="trng.type" ng-options="type as type.trty_name for type in trainingTypes | orderBy: 'trty_order'"></select>
                         </div>
                     </div>
                     <div class="form-group">

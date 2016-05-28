@@ -1,10 +1,10 @@
-<div class="panel panel-{{edit ? 'primary' : 'success'}}" ng-init="edit = cert.cert_pk">
+<form class="panel panel-{{edit ? 'primary' : 'success'}}" ng-init="edit = cert.cert_pk" autocomplete="off" ng-submit="exec()">
     <div class="panel-heading">
         <span ng-if="edit"><label class="label label-default">{{cert.cert_short}}</label> - {{cert.cert_name}}</span>
         <span ng-if="!edit">Nouvelle aptitude</span>
         <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
     </div>
-    <form class="panel-body form-horizontal" autocomplete="off">
+    <div class="panel-body form-horizontal">
         <div class="form-group">
             <label class="control-label col-xs-4">Nom</label>
             <div class="col-xs-8">
@@ -26,15 +26,15 @@
                 </div>
             </div>
         </div>
-    </form>
+    </div>
     <div class="panel-footer text-center">
         <div ng-if="edit">
-            <button type="button" class="btn btn-primary" ng-click="exec()">Sauvegarder</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="!(cert.cert_pk && cert.cert_short && cert.cert_target >= 0)">Sauvegarder</button>
             <button type="button" class="btn btn-danger" ng-click="delete()">Supprimer</button>
         </div>
         <div ng-if="!edit">
-            <button type="button" class="btn btn-success" ng-click="exec()">Sauvegarder</button>
+            <button type="submit" class="btn btn-success" ng-disabled="!(cert.cert_pk && cert.cert_short && cert.cert_target >= 0)">Sauvegarder</button>
             <button type="button" class="btn btn-default" ng-click="closeThisDialog()">Annuler</button>
         </div>
     </div>
-</div>
+</form>

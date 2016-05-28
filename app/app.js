@@ -263,7 +263,7 @@ angular.module('faomaintenanceApp', [
     $rootScope.alerts = [];
     $rootScope.error = function () {
       $rootScope.alerts.push({ type: 'danger', msg: 'Une erreur est survenue. Merci de bien vouloir r&eacute;essayer ult&eacute;rieurement.\nSi le probl&egrave;me persiste, contactez un administrateur de la solution.' });
-    }
+    };
     $rootScope.currentUser = {};
 
     $rootScope.disconnect = function () {

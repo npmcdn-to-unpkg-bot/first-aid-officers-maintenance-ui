@@ -31,9 +31,9 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDi
   };
 
   $scope.saveReorder = function () {
-    confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">sauvegarder la r&eacute;organisation</span> des types de formation&nbsp;?', function () {
+    confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">sauvegarder la r&eacute;organisation</span> des aptitudes&nbsp;?', function () {
       updateSvc.reorderCerts(_.zipObject(_.map($scope.certificates, 'cert_pk'), _.map($scope.certificates, 'idx'))).then(function () {
-        $rootScope.alerts.push({ type: 'success', msg: 'Types de formations r&eacute;ordonn&eacute;s.' });
+        $rootScope.alerts.push({ type: 'success', msg: 'Aptitudes r&eacute;ordonn&eacute;es.' });
         $route.reload();
       }, $rootScope.error);
       $scope.reorder = false;
@@ -41,7 +41,7 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDi
   };
 
   $scope.cancelReorder = function () {
-    confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">annuler la r&eacute;organisation</span> des types de formation&nbsp;?', function () {
+    confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">annuler la r&eacute;organisation</span> des aptitudes&nbsp;?', function () {
       $scope.certificates = _.sortBy($scope.certificates, 'cert_order');
       $scope.reorder = false;
     });

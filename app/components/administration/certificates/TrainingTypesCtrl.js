@@ -21,12 +21,10 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDi
     });
   });
 
-  function confirm(msg, callback) {
-    var dialogScope = $scope.$new();
-    dialogScope.innerHtml = msg;
+  function confirm(msg, callback, extension) {
     ngDialog.openConfirm({
       template: './components/dialogs/warning.html',
-      scope: dialogScope
+      scope: _.extend($scope.$new(), { innerHtml: msg }, extension)
     }).then(callback);
   }
 
@@ -57,7 +55,7 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDi
     ngDialog.open({
       template: './components/administration/certificates/training_type_edit.html',
       scope: $scope,
-      controller: ['$scope', 'ngDialog', function ($scope, ngDialog) {
+      controller: ['$scope', function ($scope) {
         $scope.$watchCollection('type.certificates', function () {
           $scope.remaining = _.differenceBy($scope.certificates, $scope.type.certificates, 'cert_pk');
         });
@@ -66,33 +64,44 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDi
           $scope.type.certificates = _.intersectionBy($scope.certificates, [cert].concat($scope.type.certificates), 'cert_pk');
         };
 
-        $scope.exec = _.partial(confirm, '&Ecirc;tes-vous s&ucirc;r(e) de vouloir blablabla&nbsp?', function () {
-          if ($scope.type.trty_pk) {
-            updateSvc.updateTrty($scope.type.trty_pk, $scope.type.trty_name, $scope.type.trty_validity, _.map($scope.type.certificates, 'cert_pk')).then(function () {
-              $rootScope.alerts.push({ type: 'success', msg: 'Type de formation mis &agrave; jour.' });
-              $route.reload();
-              $scope.closeThisDialog();
-            }, $rootScope.error);
-          } else {
-            updateSvc.createTrty($scope.type.trty_name, $scope.type.trty_validity, _.map($scope.type.certificates, 'cert_pk')).then(function () {
-              $rootScope.alerts.push({ type: 'success', msg: 'Type de formation cr&eacute;&eacute;.' });
-              $route.reload();
-              $scope.closeThisDialog();
-            }, $rootScope.error);
-          }
-        });
+        function complete(alert) {
+          $rootScope.alerts.push(alert);
+          $route.reload();
+          $scope.closeThisDialog();
+        }
 
-        $scope.delete = _.partial(confirm,
-          'Cette modification est irr&eacute;versible et entra&icirc;nera &eacute;galement la <span class="text-warning">suppression de l\'int&eacute;gralit&eacute; des formations de ce type</span>.' +
-          '<hr />&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">supprimer</span> le type <span class="text-warning">' + $scope.type.trty_name +
-          '</span>&nbsp?',
-          function () {
-            updateSvc.deleteTrty($scope.type.trty_pk).then(function () {
-              $rootScope.alerts.push({ type: 'success', msg: 'Type de formation effac&eacute;.' });
-              $route.reload();
-              $scope.closeThisDialog();
-            }, $rootScope.error);
+        $scope.exec = function () {
+          if ($scope.type.trty_pk) {
+            confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">modifier</span> le type <span class="text-warning">' + $scope.type.trty_name +
+              '</span>&nbsp?',
+              function () {
+                updateSvc.updateTrty($scope.type.trty_pk, $scope.type.trty_name, $scope.type.trty_validity, _.map($scope.type.certificates, 'cert_pk')).then(_.partial(
+                  complete, { type: 'success', msg: 'Type de formation mis &agrave; jour.' }), $rootScope.error);
+              });
+          } else {
+            confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-success">cr&eacute;er</span> le type <span class="text-success">' + $scope.type.trty_name +
+              '</span>&nbsp?',
+              function () {
+                updateSvc.createTrty($scope.type.trty_name, $scope.type.trty_validity, _.map($scope.type.certificates, 'cert_pk')).then(
+                  _.partial(complete, { type: 'success', msg: 'Type de formation cr&eacute;&eacute;.' }), $rootScope.error);
+              }, { _type: 'success', _title: 'Confirmer' });
+          }
+        };
+
+        $scope.delete = function () {
+          var dialogScope = $scope.$new();
+          dialogScope._type = 'danger';
+          dialogScope.innerHtml =
+            'Cette modification est irr&eacute;versible et entra&icirc;nera &eacute;galement la <span class="text-danger">suppression de l\'int&eacute;gralit&eacute; des formations de ce type</span>.' +
+            '<hr />&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-danger">supprimer</span> le type <span class="text-danger">' + $scope.type.trty_name +
+            '</span>&nbsp?';
+          ngDialog.openConfirm({
+            template: './components/dialogs/warning.html',
+            scope: dialogScope
+          }).then(function () {
+            updateSvc.deleteTrty($scope.type.trty_pk).then(_.partial(complete, { type: 'success', msg: 'Type de formation effac&eacute;.' }), $rootScope.error);
           });
+        };
       }]
     });
   };

@@ -1,17 +1,17 @@
-<div class="panel panel-warning">
-	<div class="panel-heading">
-		Attention
-		<span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
-	</div>
-	<div class="panel-body text-center">
-		<div ng-bind-html="innerHtml" />
-	</div>
-	<div class="panel-footer text-center">
-		<button type="button" class="btn btn-warning" ng-click="confirm()">
-			Confirmer
-		</button>
-		<button type="button" class="btn btn-default" ng-click="closeThisDialog()">
-			Annuler
-		</button>
-	</div>
+<div class="panel panel-{{_type ? _type : 'warning'}}">
+    <div class="panel-heading">
+        {{_title ? _title : 'Attention'}}
+        <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
+    </div>
+    <div class="panel-body text-center">
+        <div ng-bind-html="innerHtml" />
+    </div>
+    <div class="panel-footer text-center">
+        <button type="button" class="btn btn-{{_type ? _type : 'warning'}}" ng-click="confirm()">
+            Confirmer
+        </button>
+        <button type="button" class="btn btn-default" ng-click="closeThisDialog()">
+            Annuler
+        </button>
+    </div>
 </div>

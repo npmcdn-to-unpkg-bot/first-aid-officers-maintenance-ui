@@ -9,7 +9,7 @@
                     <div class="col-sm-8 col-xs-12 text-right">
                         <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
                             <div class="btn-group">
-                                <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
+                                <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates | orderBy: 'cert_order'" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
                             </div>
                         </state-sustain>
                     </div>
@@ -101,7 +101,7 @@
                     </td>
                     <td ng-class="{'text-primary': hover}">{{trng.trng_displayDate}}</td>
                     <td ng-class="{'text-primary': hover}">
-                        {{trng.type.trty_name}}<span class="pull-right"><span ng-repeat="cert in trng.type.certificates">&nbsp;<label class="label" ng-class="{'label-success': trng.trem_outcome === 'VALIDATED', 'label-danger': trng.trem_outcome === 'FLUNKED'}">{{cert.cert_short}}</label></span></span>
+                        {{trng.type.trty_name}}<span class="pull-right"><span ng-repeat="cert in trng.type.certificates | orderBy: 'cert_order'">&nbsp;<label class="label" ng-class="{'label-success': trng.trem_outcome === 'VALIDATED', 'label-danger': trng.trem_outcome === 'FLUNKED'}">{{cert.cert_short}}</label></span></span>
                     </td>
                     <td>{{trng.trem_comment}}</td>
                     <td ng-if="trng.trem_outcome !== 'SCHEDULED'" ng-init="trng.validated = trng.trem_outcome === 'VALIDATED'">

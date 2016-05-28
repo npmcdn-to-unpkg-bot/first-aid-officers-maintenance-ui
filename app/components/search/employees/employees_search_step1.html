@@ -20,7 +20,7 @@
     </div>
 </div>
 <div class="col-md-6">
-    <form class="form-horizontal" autocomplete="off" ng-repeat="cert in certificates">
+    <form class="form-horizontal" autocomplete="off" ng-repeat="cert in certificates | orderBy: 'cert_order'">
         <div class="panel panel-default">
             <div class="panel-heading"><span class="label label-primary">{{cert.cert_short}}</span> - {{cert.cert_name}}</div>
             <div class="panel-body" ng-show="cert.conditions && cert.conditions.length > 0">

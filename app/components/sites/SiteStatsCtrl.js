@@ -268,9 +268,9 @@ module.exports = function ($scope, $routeParams, dataSvc, busySvc) {
 
   Promise.all([dataSvc.getCertificates(), dataSvc.getSiteStatsHistory($routeParams.site_pk, $scope.from)]).then(function (results) {
     $scope.initSvg();
-    $scope.certificates = results[0];
+    $scope.certificates = _(results[0]).values().orderBy('cert_order').value();
     $scope.data = results[1];
-    $scope.displayData(_($scope.certificates).keys().head());
+    $scope.displayData(_($scope.certificates).map('cert_pk').head());
     busySvc.done('siteStats');
   }, _.partial(busySvc.done, 'siteStats'));
 
@@ -284,7 +284,7 @@ module.exports = function ($scope, $routeParams, dataSvc, busySvc) {
   };
 
   $scope.displayData = function (cert_pk, skipTransitions) {
-    $scope.cert = $scope.certificates[cert_pk];
+    $scope.cert = _($scope.certificates).find({ cert_pk: cert_pk });
     certData = _($scope.data).map(function (entry, date) {
       return {
         count: entry.certificates[cert_pk].count,

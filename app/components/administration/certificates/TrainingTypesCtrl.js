@@ -6,9 +6,9 @@ var moment = require('moment');
 module.exports = function ($scope, $rootScope, adminSvc, dataSvc, busySvc, ngDialog) {
   busySvc.busy('trainingTypes');
   Promise.all([dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(_.spread(function (trainingTypes, certificates) {
-    $scope.trainingTypes = _.values(_.each(trainingTypes, function (type) {
-      type.validityYears = moment.duration(type.trty_validity, 'months').asYears(); //jshint ignore:line
-    }));
+    $scope.trainingTypes = _(trainingTypes).map(function (type) {
+      return _.extend(type, { validityYears: moment.duration(type.trty_validity, 'months').asYears() }); //jshint ignore:line
+    }).orderBy('trty_order').value();
     $scope.certificates = _.values(certificates);
     busySvc.done('trainingTypes');
   }), _.partial(busySvc.done, 'trainingTypes'));

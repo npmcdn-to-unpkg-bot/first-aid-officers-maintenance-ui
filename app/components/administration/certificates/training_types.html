@@ -5,8 +5,10 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-8" style="margin-top: 9px;">
-                    <label class="label label-default">{{type.trty_pk}}</label>
-                    <span ng-if="reorder" class="text-{{type.idx === type.trty_pk ? 'default' : 'warning'}}">&nbsp;&rarr;&nbsp;<label class="label label-{{type.idx === type.trty_pk ? 'default' : 'warning'}}">{{type.idx}}</label></span>                    - {{type.trty_name}}
+                    <label class="label label-default">{{type.trty_order}}</label>
+                    <span ng-if="reorder" class="text-{{type.idx === type.trty_order ? 'default' : 'warning'}}">&nbsp;&rarr;&nbsp;
+                        <label class="label label-{{type.idx === type.trty_order ? 'default' : 'warning'}}">{{type.idx}}</label>
+                    </span> - {{type.trty_name}}
                 </div>
                 <div class="col-xs-4 text-right">
                     <button type="button" class="btn btn-warning no-margin" ng-click="edit(type)" ng-disabled="reorder">Modifier</button>

@@ -34,23 +34,40 @@ module.exports = function ($http, $q, apiSvc) {
         site_notes: site_notes
       });
     },
-    deleteCert: function (cert_pk) {
-      return apiSvc.delete(encodeURI(apiSvc.updateEndpoint + 'certificates/' + cert_pk));
+    reorderTrtys: function (typesOrder) {
+      return apiSvc.post(apiSvc.updateEndpoint + 'trainingtypes/reorder', typesOrder);
     },
-    updateCert: function (cert_pk, cert_name, cert_short, cert_target, cert_permanentonly, new_pk) {
-      return apiSvc.put(encodeURI(apiSvc.updateEndpoint + 'certificates/' + cert_pk), {
-        cert_pk: new_pk || cert_pk,
+    deleteCert: function (cert_pk) {
+      return apiSvc.delete(apiSvc.updateEndpoint + 'certificates/' + cert_pk);
+    },
+    createCert: function (cert_name, cert_short, cert_target) {
+      return apiSvc.post(apiSvc.updateEndpoint + 'certificates', {
         cert_name: cert_name,
         cert_short: cert_short,
         cert_target: cert_target,
-        cert_permanentonly: cert_permanentonly
+        cert_permanentonly: true
+      });
+    },
+    updateCert: function (cert_pk, cert_name, cert_short, cert_target) {
+      return apiSvc.put(apiSvc.updateEndpoint + 'certificates/' + cert_pk, {
+        cert_name: cert_name,
+        cert_short: cert_short,
+        cert_target: cert_target,
+        cert_permanentonly: true
       });
     },
     deleteTrty: function (trty_pk) {
-      return apiSvc.delete(encodeURI(apiSvc.updateEndpoint + 'trainingtypes/' + trty_pk));
+      return apiSvc.delete(apiSvc.updateEndpoint + 'trainingtypes/' + trty_pk);
+    },
+    createTrty: function (trty_name, trty_validity, certificates) {
+      return apiSvc.post(apiSvc.updateEndpoint + 'trainingtypes', {
+        trty_name: trty_name,
+        trty_validity: trty_validity,
+        certificates: certificates
+      });
     },
     updateTrty: function (trty_pk, trty_name, trty_validity, certificates) {
-      return apiSvc.put(encodeURI(apiSvc.updateEndpoint + 'trainingtypes/' + trty_pk), {
+      return apiSvc.put(apiSvc.updateEndpoint + 'trainingtypes/' + trty_pk, {
         trty_name: trty_name,
         trty_validity: trty_validity,
         certificates: certificates

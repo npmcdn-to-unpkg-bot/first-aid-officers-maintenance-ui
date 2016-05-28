@@ -15,7 +15,7 @@
             <label class="control-label col-xs-4">Dur&eacute;e de validit&eacute;</label>
             <div class="col-xs-8">
                 <div class="input-group">
-                    <input type="number" min="12" class="form-control" ng-model="type.trty_validity" />
+                    <input type="number" min="0" class="form-control" ng-model="type.trty_validity" />
                     <div class="input-group-addon">mois</div>
                 </div>
             </div>
@@ -39,11 +39,11 @@
     </form>
     <div class="panel-footer text-center">
         <div ng-if="edit">
-            <button type="button" class="btn btn-primary" ng-click="exec()">Sauvegarder</button>
+            <button type="button" class="btn btn-primary" ng-click="exec()" ng-disabled="!(type.trty_name && type.trty_validity)">Sauvegarder</button>
             <button type="button" class="btn btn-danger" ng-click="delete()">Supprimer</button>
         </div>
         <div ng-if="!edit">
-            <button type="button" class="btn btn-success" ng-click="exec()">Sauvegarder</button>
+            <button type="button" class="btn btn-success" ng-click="exec()" ng-disabled="!(type.trty_name && type.trty_validity)">Sauvegarder</button>
             <button type="button" class="btn btn-default" ng-click="closeThisDialog()">Annuler</button>
         </div>
     </div>

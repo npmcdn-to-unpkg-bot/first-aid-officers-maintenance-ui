@@ -211,7 +211,7 @@ angular.module('faomaintenanceApp', [
   .factory('UpdateSvc', ['$http', '$q', 'ApiSvc', require('./services/UpdateSvc.js')])
 
 .controller('AccountCtrl', ['$scope', '$rootScope', 'AdminSvc', 'ngDialog', 'BusySvc', require('./components/account/AccountCtrl.js')])
-  .controller('CertificatesCtrl', ['$scope', '$rootScope', 'AdminSvc', 'DataSvc', 'BusySvc', 'ngDialog',
+  .controller('CertificatesCtrl', ['$scope', '$rootScope', 'UpdateSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
     require('./components/administration/certificates/CertificatesCtrl.js')
   ])
   .controller('DepartmentEditCtrl', ['$rootScope', '$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/department_edit/DepartmentEditCtrl.js')])
@@ -250,7 +250,7 @@ angular.module('faomaintenanceApp', [
     require('./components/search/trainings/TrainingsSearchResultsCtrl.js')
   ])
   .controller('TrainingsStatsCtrl', ['$scope', '$rootScope', 'DataSvc', 'dateFilter', 'BusySvc', 'ngDialog', require('./components/trainings/TrainingsStatsCtrl')])
-  .controller('TrainingTypesCtrl', ['$scope', '$rootScope', 'AdminSvc', 'DataSvc', 'BusySvc', 'ngDialog',
+  .controller('TrainingTypesCtrl', ['$scope', '$rootScope', 'UpdateSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
     require('./components/administration/certificates/TrainingTypesCtrl.js')
   ])
   .controller('UpdateCtrl', ['$scope', '$rootScope', 'UpdateSvc', 'DataSvc', 'ngDialog', 'BusySvc', require('./components/administration/update/UpdateCtrl.js')])
@@ -261,6 +261,9 @@ angular.module('faomaintenanceApp', [
 .run(['$rootScope', '$location', '$route', '$cookies', '$http', 'ngDialog', 'BusySvc', 'AuthSvc',
   function ($rootScope, $location, $route, $cookies, $http, ngDialog, busySvc, authSvc) {
     $rootScope.alerts = [];
+    $rootScope.error = function () {
+      $rootScope.alerts.push({ type: 'danger', msg: 'Une erreur est survenue. Merci de bien vouloir r&eacute;essayer ult&eacute;rieurement.\nSi le probl&egrave;me persiste, contactez un administrateur de la solution.' });
+    }
     $rootScope.currentUser = {};
 
     $rootScope.disconnect = function () {

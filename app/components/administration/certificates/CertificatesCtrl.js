@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 
-module.exports = function ($scope, $rootScope, adminSvc, dataSvc, busySvc, ngDialog) {
+module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDialog, $route) {
   $scope.round = Math.round;
   busySvc.busy('certMgmt');
   Promise.all([dataSvc.getCertificates(), dataSvc.getTrainingTypes()]).then(_.spread(function (certificates, trainingTypes) {

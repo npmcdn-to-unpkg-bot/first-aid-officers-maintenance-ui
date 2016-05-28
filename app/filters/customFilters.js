@@ -113,7 +113,7 @@ customFilters.filter('filterGlobal', function () {
       return '1' + entry.empl_surname;
     });
 
-    return sites.concat(empls).concat(trngs);
+    return sites.concat(trngs).concat(empls);
   };
 });
 

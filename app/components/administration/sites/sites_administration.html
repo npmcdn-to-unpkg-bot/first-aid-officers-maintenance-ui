@@ -24,9 +24,6 @@
                                 <div class="st-sort" st-sort="dept.dept_name" st-skip-natural="true">D&eacute;partement</div>
                                 <input st-search="dept.dept_name" placeholder="Rechercher..." class="form-control" type="text" />
                             </th>
-                            <th class="last vtop" ng-repeat="cert in certificates | filter: {'checked': true}">
-                                <div class="st-sort" st-sort="stats.certificates[{{cert.cert_pk}}].countPercentage" st-skip-natural="true">{{cert.cert_short}}</div>
-                            </th>
                         </tr>
                     </thead>
                     <tbody>

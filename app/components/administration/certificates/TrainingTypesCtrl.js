@@ -3,7 +3,7 @@
 var _ = require('lodash');
 var moment = require('moment');
 
-// jshint:ignore camelcase
+/* jshint camelcase: false */
 
 module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDialog, $route) {
   busySvc.busy('trainingTypes');

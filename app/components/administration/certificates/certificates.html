@@ -1,14 +1,18 @@
 <h3>Aptitudes et <a href="#/administration/training_types">types de formation</a><small> - Aptitudes</small></h3>
 <br />
-<div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start;">
-    <div class="panel panel-primary" ng-repeat="cert in certificates" style="flex-basis: 500px;">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start;" ui-sortable="{disabled: !reorder}" ng-model="certificates">
+    <div class="panel panel-primary" ng-repeat="cert in certificates" style="flex-basis: 500px;" ng-class="{'ui-sortable-handle': reorder}">
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-8" style="margin-top: 9px;">
-                    <label class="label label-default">{{cert.cert_short}}</label> - {{cert.cert_name}}
+                    <label class="label label-default">{{cert.cert_order}}</label>
+                    <span ng-if="reorder" class="text-{{cert.idx === cert.cert_order ? 'default' : 'warning'}}">&nbsp;&rarr;&nbsp;
+                        <label class="label label-{{cert.idx === cert.cert_order ? 'default' : 'warning'}}">{{cert.idx}}</label>
+                    </span>
+                    <span ng-show="!reorder"> - <label class="label label-default">{{cert.cert_short}}</label></span> - {{cert.cert_name}}
                 </div>
                 <div class="col-xs-4 text-right">
-                    <button type="button" class="btn btn-warning no-margin" ng-click="edit(cert)">Modifier</button>
+                    <button type="button" class="btn btn-warning no-margin" ng-click="edit(cert)" ng-disabled="reorder">Modifier</button>
                 </div>
             </div>
         </div>
@@ -42,6 +46,11 @@
         </div>
     </div>
 </div>
-<div class="side-panel-container">
+<div class="side-panel-container" ng-show="!reorder">
     <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="edit()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Cr&eacute;er nouvelle aptitude</button>
+    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="startReorder()"><span class="glyphicon glyphicon-glyphicon glyphicon-th-list"></span>&nbsp;R&eacute;organiser types</button>
+</div>
+<div class="side-panel-container" ng-show="reorder">
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="saveReorder()"><span class="glyphicon glyphicon-glyphicon glyphicon-ok"></span>&nbsp;Valider r&eacute;organisation</button>
+    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="cancelReorder()"><span class="glyphicon glyphicon-glyphicon glyphicon-remove"></span>&nbsp;Annuler r&eacute;organisation</button>
 </div>

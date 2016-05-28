@@ -34,6 +34,28 @@ module.exports = function ($http, $q, apiSvc) {
         site_notes: site_notes
       });
     },
+    deleteCert: function (cert_pk) {
+      return apiSvc.delete(encodeURI(apiSvc.updateEndpoint + 'certificates/' + cert_pk));
+    },
+    updateCert: function (cert_pk, cert_name, cert_short, cert_target, cert_permanentonly, new_pk) {
+      return apiSvc.put(encodeURI(apiSvc.updateEndpoint + 'certificates/' + cert_pk), {
+        cert_pk: new_pk || cert_pk,
+        cert_name: cert_name,
+        cert_short: cert_short,
+        cert_target: cert_target,
+        cert_permanentonly: cert_permanentonly
+      });
+    },
+    deleteTrty: function (trty_pk) {
+      return apiSvc.delete(encodeURI(apiSvc.updateEndpoint + 'trainingtypes/' + trty_pk));
+    },
+    updateTrty: function (trty_pk, trty_name, trty_validity, certificates) {
+      return apiSvc.put(encodeURI(apiSvc.updateEndpoint + 'trainingtypes/' + trty_pk), {
+        trty_name: trty_name,
+        trty_validity: trty_validity,
+        certificates: certificates
+      });
+    },
     deleteDept: function (dept_pk) {
       return apiSvc.delete(apiSvc.updateEndpoint + 'departments/' + dept_pk);
     },

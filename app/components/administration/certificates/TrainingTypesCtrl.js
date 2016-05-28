@@ -4,7 +4,6 @@ var _ = require('lodash');
 var moment = require('moment');
 
 /* jshint camelcase: false */
-
 module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDialog, $route) {
   busySvc.busy('trainingTypes');
   Promise.all([dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(_.spread(function (trainingTypes, certificates) {
@@ -75,8 +74,8 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDi
             confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">modifier</span> le type <span class="text-warning">' + $scope.type.trty_name +
               '</span>&nbsp?',
               function () {
-                updateSvc.updateTrty($scope.type.trty_pk, $scope.type.trty_name, $scope.type.trty_validity, _.map($scope.type.certificates, 'cert_pk')).then(_.partial(
-                  complete, { type: 'success', msg: 'Type de formation mis &agrave; jour.' }), $rootScope.error);
+                updateSvc.updateTrty($scope.type.trty_pk, $scope.type.trty_name, $scope.type.trty_validity, _.map($scope.type.certificates, 'cert_pk')).then(
+                  _.partial(complete, { type: 'success', msg: 'Type de formation mis &agrave; jour.' }), $rootScope.error);
               });
           } else {
             confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-success">cr&eacute;er</span> le type <span class="text-success">' + $scope.type.trty_name +
@@ -89,18 +88,13 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDi
         };
 
         $scope.delete = function () {
-          var dialogScope = $scope.$new();
-          dialogScope._type = 'danger';
-          dialogScope.innerHtml =
+          confirm(
             'Cette modification est irr&eacute;versible et entra&icirc;nera &eacute;galement la <span class="text-danger">suppression de l\'int&eacute;gralit&eacute; des formations de ce type</span>.' +
             '<hr />&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-danger">supprimer</span> le type <span class="text-danger">' + $scope.type.trty_name +
-            '</span>&nbsp?';
-          ngDialog.openConfirm({
-            template: './components/dialogs/warning.html',
-            scope: dialogScope
-          }).then(function () {
-            updateSvc.deleteTrty($scope.type.trty_pk).then(_.partial(complete, { type: 'success', msg: 'Type de formation effac&eacute;.' }), $rootScope.error);
-          });
+            '</span>&nbsp?',
+            function () {
+              updateSvc.deleteTrty($scope.type.trty_pk).then(_.partial(complete, { type: 'success', msg: 'Type de formation effac&eacute;.' }), $rootScope.error);
+            }, { _type: 'danger' });
         };
       }]
     });

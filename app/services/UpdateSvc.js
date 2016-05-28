@@ -34,6 +34,9 @@ module.exports = function ($http, $q, apiSvc) {
         site_notes: site_notes
       });
     },
+    reorderCerts: function (certsOrder) {
+      return apiSvc.post(apiSvc.updateEndpoint + 'certificates/reorder', certsOrder);
+    },
     reorderTrtys: function (typesOrder) {
       return apiSvc.post(apiSvc.updateEndpoint + 'trainingtypes/reorder', typesOrder);
     },

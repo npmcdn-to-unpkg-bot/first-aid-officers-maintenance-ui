@@ -26,6 +26,7 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDi
   }
 
   $scope.startReorder = function () {
+    busySvc.busy('ongoingOperation', true);
     $scope.alerts.push({ type: 'primary', msg: 'D&eacute;placez les panneaux pour les r&eacute;organiser.' });
     $scope.reorder = true;
   };
@@ -37,6 +38,7 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDi
         $route.reload();
       }, $rootScope.error);
       $scope.reorder = false;
+      busySvc.done('ongoingOperation');
     });
   };
 
@@ -44,6 +46,7 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDi
     confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">annuler la r&eacute;organisation</span> des aptitudes&nbsp;?', function () {
       $scope.certificates = _.sortBy($scope.certificates, 'cert_order');
       $scope.reorder = false;
+      busySvc.done('ongoingOperation');
     });
   };
 

@@ -37,7 +37,7 @@
                             </td>
                             <td>{{trng.type.trty_name}}</td>
                             <td width="1%" class="text-right">
-                                <span ng-repeat="cert in trng.type.certificates | orderBy: 'cert_order'"><label class="label label-primary">{{cert.cert_short}}</label>&nbsp;</span>
+                                <span ng-repeat="cert in trng.type.certificates | orderBy: 'cert_order'"><label class="label label-{{trng.trng_outcome === 'COMPLETED' ? 'success' : 'primary'}}">{{cert.cert_short}}</label>&nbsp;</span>
                             </td>
                             <td>{{trng.trng_displayDate}}</td>
                             <td class="text-right">

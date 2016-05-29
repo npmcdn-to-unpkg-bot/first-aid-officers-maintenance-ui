@@ -25,6 +25,54 @@ $screen-xs: 768px;
     }
 }
 
+.panel-primary .panel-heading label.label-default {
+    background-color: rgba(255, 255, 255, 0.84);
+    color: $brand-primary;
+}
+
+.ui-sortable-handle {
+    cursor: move;
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    &.ui-sortable-helper {
+        opacity: .8;
+        cursor: grabbing;
+        cursor: -moz-grabbing;
+        cursor: -webkit-grabbing;
+    }
+}
+
+.ui-sortable-placeholder {
+    visibility: visible !important;
+    background-color: lighten($brand-primary, 40%);
+    box-shadow: none;
+    animation: breathe 1s infinite ease-in-out;
+    @keyframes breathe {
+        0% {
+            opacity: 0;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+}
+
+.progress {
+    border-radius: 3px;
+    margin: 20px 0 0 0;
+    transition: height .2s ease;
+}
+
+.hover-trigger:hover .hover-target {
+    &.progress {
+        height: 20px;
+    }
+}
+
 .panel .table {
     margin-bottom: 0;
 }

@@ -9,7 +9,7 @@
                     <div class="col-sm-8 col-xs-12 text-right">
                         <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
                             <div class="btn-group">
-                                <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
+                                <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates | orderBy: 'cert_order'" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
                             </div>
                         </state-sustain>
                     </div>
@@ -88,10 +88,10 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th class="st-sort" width="30%" st-sort="trng_date" st-skip-natural="true" st-sort-default="reverse">Date</th>
-                    <th class="st-sort shrinkable" width="30%" st-sort="type.trty_name" st-skip-natural="true">Type de formation</th>
+                    <th class="st-sort" width="25%" st-sort="trng_date" st-skip-natural="true" st-sort-default="reverse">Date</th>
+                    <th class="st-sort shrinkable" width="35%" st-sort="type.trty_name" st-skip-natural="true">Type de formation</th>
                     <th class="st-sort" width="30%" st-sort="trem_comment" st-skip-natural="true">Commentaire</th>
-                    <th class="st-sort" class="last text-right" width="15%" st-sort="trem_valid" st-skip-natural="true">R&eacute;sultat</th>
+                    <th class="st-sort" class="last text-right" width="10%" st-sort="trem_valid" st-skip-natural="true">R&eacute;sultat</th>
                 </tr>
             </thead>
             <tbody>
@@ -101,7 +101,7 @@
                     </td>
                     <td ng-class="{'text-primary': hover}">{{trng.trng_displayDate}}</td>
                     <td ng-class="{'text-primary': hover}">
-                        {{trng.type.trty_name}}<span class="pull-right"><span ng-repeat="cert in trng.type.certificates">&nbsp;<label class="label" ng-class="{'label-success': trng.trem_outcome === 'VALIDATED', 'label-danger': trng.trem_outcome === 'FLUNKED'}">{{cert.cert_short}}</label></span></span>
+                        {{trng.type.trty_name}}<span class="pull-right"><span ng-repeat="cert in trng.type.certificates | orderBy: 'cert_order'">&nbsp;<label class="label" ng-class="{'label-success': trng.trem_outcome === 'VALIDATED', 'label-danger': trng.trem_outcome === 'FLUNKED'}">{{cert.cert_short}}</label></span></span>
                     </td>
                     <td>{{trng.trem_comment}}</td>
                     <td ng-if="trng.trem_outcome !== 'SCHEDULED'" ng-init="trng.validated = trng.trem_outcome === 'VALIDATED'">

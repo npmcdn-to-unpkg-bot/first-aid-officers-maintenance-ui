@@ -6,9 +6,11 @@ var _ = require('lodash');
 require('angular-bootstrap-templates');
 require('angular-i18n-fr');
 require('angular-smart-table');
+require('angular-ui-sortable');
 require('bootstrap_material_design');
 require('bootstrap-switch');
 require('moment-fr');
+require('../lib/jquery-ui.min.js');
 var Trianglify = require('trianglify');
 
 $(function () {
@@ -55,6 +57,7 @@ angular.module('faomaintenanceApp', [
     require('./busy/busy.js'),
     require('ng-dialog'),
     'ui.bootstrap',
+    'ui.sortable',
     'smart-table',
   ]).config(['$routeProvider', 'ngDialogProvider', 'uibButtonConfig', '$httpProvider', function ($routeProvider, ngDialogProvider, uibButtonConfig, $httpProvider) {
     uibButtonConfig.activeClass = 'btn-primary';
@@ -171,9 +174,17 @@ angular.module('faomaintenanceApp', [
       })
 
     // Administration
-    .when('/administration/sites', {
+    .when('/administration/certificates', {
+        templateUrl: 'components/administration/certificates/certificates.html',
+        controller: 'CertificatesCtrl'
+      })
+      .when('/administration/sites', {
         templateUrl: 'components/administration/sites/sites_administration.html',
         controller: 'SitesAdministrationCtrl'
+      })
+      .when('/administration/training_types', {
+        templateUrl: 'components/administration/certificates/training_types.html',
+        controller: 'TrainingTypesCtrl'
       })
       .when('/administration/users', {
         templateUrl: 'components/administration/users/users_administration.html',
@@ -200,6 +211,9 @@ angular.module('faomaintenanceApp', [
   .factory('UpdateSvc', ['$http', '$q', 'ApiSvc', require('./services/UpdateSvc.js')])
 
 .controller('AccountCtrl', ['$scope', '$rootScope', 'AdminSvc', 'ngDialog', 'BusySvc', require('./components/account/AccountCtrl.js')])
+  .controller('CertificatesCtrl', ['$scope', '$rootScope', 'UpdateSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
+    require('./components/administration/certificates/CertificatesCtrl.js')
+  ])
   .controller('DepartmentEditCtrl', ['$rootScope', '$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/department_edit/DepartmentEditCtrl.js')])
   .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', require('./components/employees/EmployeesCtrl.js')])
   .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc',
@@ -236,6 +250,9 @@ angular.module('faomaintenanceApp', [
     require('./components/search/trainings/TrainingsSearchResultsCtrl.js')
   ])
   .controller('TrainingsStatsCtrl', ['$scope', '$rootScope', 'DataSvc', 'dateFilter', 'BusySvc', 'ngDialog', require('./components/trainings/TrainingsStatsCtrl')])
+  .controller('TrainingTypesCtrl', ['$scope', '$rootScope', 'UpdateSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
+    require('./components/administration/certificates/TrainingTypesCtrl.js')
+  ])
   .controller('UpdateCtrl', ['$scope', '$rootScope', 'UpdateSvc', 'DataSvc', 'ngDialog', 'BusySvc', require('./components/administration/update/UpdateCtrl.js')])
   .controller('UsersAdministrationCtrl', ['$scope', '$rootScope', 'DataSvc', 'AdminSvc', 'ngDialog', '$route', '$location', 'BusySvc',
     require('./components/administration/users/UsersAdministrationCtrl.js')
@@ -244,6 +261,9 @@ angular.module('faomaintenanceApp', [
 .run(['$rootScope', '$location', '$route', '$cookies', '$http', 'ngDialog', 'BusySvc', 'AuthSvc',
   function ($rootScope, $location, $route, $cookies, $http, ngDialog, busySvc, authSvc) {
     $rootScope.alerts = [];
+    $rootScope.error = function () {
+      $rootScope.alerts.push({ type: 'danger', msg: 'Une erreur est survenue. Merci de bien vouloir r&eacute;essayer ult&eacute;rieurement.\nSi le probl&egrave;me persiste, contactez un administrateur de la solution.' });
+    };
     $rootScope.currentUser = {};
 
     $rootScope.disconnect = function () {
@@ -256,8 +276,8 @@ angular.module('faomaintenanceApp', [
     authSvc.restoreSession().then(function (info) {
       $rootScope.currentUser.info = info;
       $rootScope.$broadcast('update');
-      $route.reload();
       busySvc.done('auth-restore');
+      $route.reload();
     }, _.partial(busySvc.done, 'auth-restore'));
 
     $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
@@ -284,22 +304,20 @@ angular.module('faomaintenanceApp', [
         $location.search('display', null);
       }
 
-      if (newUrl !== oldUrl && /\/trainings\/([^\/]+\/)?(create|edit|complete)/.test(oldUrl) && !($location.search().force)) {
+      if (busySvc.check('ongoingOperation')) {
         event.preventDefault();
-        var dialogScope = $rootScope.$new(true);
-        dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">abandonner l\'op&eacute;ration en cours</span>&nbsp;?';
         ngDialog.openConfirm({
           template: 'components/dialogs/warning.html',
-          scope: dialogScope
+          scope: _.extend($rootScope.$new(true), { innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">abandonner l\'op&eacute;ration en cours</span>&nbsp;?' })
         }).then(function () {
-          $location.path(newUrl.substring($location.absUrl().length - $location.url().length)).search('force', true);
+          busySvc.done('ongoingOperation');
+          $location.path(newUrl.substring($location.absUrl().length - $location.url().length));
         });
       }
     });
 
     $rootScope.$on('$locationChangeSuccess', function () {
       ngDialog.closeAll();
-      $location.search('force', null).replace();
     });
   }
 ]);

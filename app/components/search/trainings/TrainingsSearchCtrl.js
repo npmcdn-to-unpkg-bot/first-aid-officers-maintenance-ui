@@ -38,14 +38,14 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
   busySvc.busy('trainingsSearch');
   Promise.all([dataSvc.getDepartments(), dataSvc.getCertificates(), dataSvc.getTrainingTypes()]).then(function (results) {
     $scope.departments = _.values(results[0]);
-    $scope.trainingTypes = results[2];
+    $scope.trainingTypes = _.values(results[2]);
     $scope.filter = helper.fromURIComponent($location.search().filter);
     $scope.certificates = _.values(results[1]);
     $scope.display = helper.fromURIComponent($location.search().display);
     $scope.$watch('filter', setSearchUrl, true);
     $scope.$watch('display', setSearchUrl, true);
     busySvc.done('trainingsSearch');
-  });
+  }, _.partial(busySvc.done, 'trainingsSearch'));
 
   $scope.addDatesFor = function (dateMode, params) {
     $scope.filter.date = _.extend({

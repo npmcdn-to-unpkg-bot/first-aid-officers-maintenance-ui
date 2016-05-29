@@ -37,7 +37,7 @@
             </div>
         </div>
         <hr />
-        <div class="form-group" ng-repeat="cert in certificates">
+        <div class="form-group" ng-repeat="cert in certificates | orderBy: 'cert_order'">
             <label for="permanent" class="col-xs-4 control-label checkbox-label">Agents {{cert.cert_short}}</label>
             <div class="col-xs-4 checkbox">
                 <label>

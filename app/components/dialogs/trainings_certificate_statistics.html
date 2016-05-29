@@ -56,9 +56,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="(trty, trtyStats) in statistics.trainingTypesStatistics">
+            <tr ng-repeat="trty in trainingTypes | orderBy: 'trty_order'" ng-if="statistics.trainingTypesStatistics[trty.trty_pk]" ng-init="trtyStats = statistics.trainingTypesStatistics[trty.trty_pk]">
                 <td class="text-right">
-                    {{trainingTypes[trty].trty_name}}
+                    {{trty.trty_name}}
                 </td>
                 <td>
                     <span class="text-success" ng-if="infos.trained.checked">{{trtyStats.employeesTrained || 0}}</span>

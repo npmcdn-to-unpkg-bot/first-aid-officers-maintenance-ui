@@ -51,7 +51,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="row" ng-repeat="cert in trng.type.certificates">
+                <div class="row" ng-repeat="cert in trng.type.certificates | orderBy: 'cert_order'">
                     <div class="col-xs-4 text-right">
                         <span class="label label-success">{{cert.cert_short}}</span>
                     </div>

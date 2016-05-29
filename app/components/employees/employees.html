@@ -14,7 +14,7 @@
                 <div class="col-xs-10 text-right">
                     <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
                         <div class="btn-group">
-                            <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
+                            <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates | orderBy: 'cert_order'" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
                         </div>
                     </state-sustain>
                 </div>
@@ -50,7 +50,7 @@
                     <th class="vtop">
                         <div class="st-sort" st-sort="empl_permanent" st-skip-natural="true">Statut</div>
                     </th>
-                    <th class="last vtop" ng-repeat="cert in certificates | filter: {'checked': true}">
+                    <th class="last vtop" ng-repeat="cert in certificates | orderBy: 'cert_order' | filter: {'checked': true}">
                         <div class="st-sort" st-sort="stats.certificates[{{cert.cert_pk}}].expiryDate" st-skip-natural="true">{{cert.cert_short}}</div>
                     </th>
                 </tr>
@@ -70,7 +70,7 @@
                     <td class="shrinkable" ng-mouseenter="siteHover=true" ng-mouseleave="siteHover=false"><span ng-class="{'text-primary': siteHover}">{{empl.site.site_name}}</span></td>
                     <!-- <td>{{empl.empl_dob | date: 'shortDate'}}</td> -->
                     <td class="text-center"><span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span></td>
-                    <td ng-repeat="cert in certificates | filter: {'checked': true}" ng-init="certStats = empl.stats.certificates[cert.cert_pk]" class="text-center">
+                    <td ng-repeat="cert in certificates | orderBy: 'cert_order' | filter: {'checked': true}" ng-init="certStats = empl.stats.certificates[cert.cert_pk]" class="text-center">
                         <span class="label" ng-class="'label-' + certStats.validityStatus">{{certStats.expiryDate | date: 'MMM yyyy'}}</span>
                     </td>
                 </tr>

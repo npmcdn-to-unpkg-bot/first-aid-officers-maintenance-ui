@@ -7,7 +7,7 @@ var lzString = require('lz-string');
 
 var recentOptions = [{
   value: 'success',
-  display: 'Obenue'
+  display: 'Obtenue'
 }, {
   value: 'danger',
   display: 'Expirée'

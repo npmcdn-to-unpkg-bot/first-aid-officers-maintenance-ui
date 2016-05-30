@@ -20,8 +20,23 @@
     width: 400px;
     pointer-events: none;
     .alert {
-        /*box-shadow: black 0px 0px 5px 0px;*/
+        border-radius: 3px;
         pointer-events: all;
+        .close {
+            color: white;
+            opacity: .5;
+            &:focus,
+            &:hover {
+                opacity: 1;
+            }
+        }
+        button.btn {
+            color: white !important;
+            margin: 0 !important;
+        }
+        a {
+            text-decoration: underline;
+        }
     }
 }
 

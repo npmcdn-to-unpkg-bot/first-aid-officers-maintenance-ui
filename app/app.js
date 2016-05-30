@@ -268,7 +268,6 @@ angular.module('faomaintenanceApp', [
             unregister();
             if (!authSvc.isLoggedIn()) {
               busySvc.busy('auth');
-              ngDialog.closeAll();
               ngDialog.openConfirm({
                 template: 'components/index/login.html',
                 controller: 'LoginCtrl',
@@ -299,6 +298,7 @@ angular.module('faomaintenanceApp', [
     });
 
     $rootScope.$on('$locationChangeSuccess', function () {
+      ngDialog.closeAll();
       $location.search('force', null).replace();
     });
   }

@@ -22,6 +22,7 @@
     "arrive": "~2.3.0",
     "bootstrap-sass": "~3.3.6",
     "angular-bootstrap": "~1.0.0",
-    "trianglify": "~0.4.0"
+    "trianglify": "~0.4.0",
+    "pdfmake": "^0.1.20"
   }
 }

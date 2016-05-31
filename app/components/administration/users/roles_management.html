@@ -1,0 +1,5 @@
+<h3>Gestion des r&ocirc;les</h1>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start;">
+    <div ng-include="'components/administration/users/role_edit.html'" ng-repeat="role in roles" style="flex-basis: 500px;"></div>
+</div>
+<pre>{{roles | json}}</pre>

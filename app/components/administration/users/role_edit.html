@@ -1,0 +1,137 @@
+<div class="panel panel-{{typeFor(role.role_type).color}}">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-9">
+                <label class="label label-default">{{role.role_short | uppercase}}</label> - {{role.role_name}}
+            </div>
+            <!-- <div class="col-xs-3 text-right">
+                <label class="label label-default">{{typeFor(role.role_type).short | uppercase}}</label>
+            </div> -->
+        </div>
+    </div>
+    <div class="panel-body form form-horizontal" autocomplete="off">
+        <div class="row">
+            <div class="form-group">
+                <label class="col-xs-4 control-label">Type</label>
+                <div class="col-xs-8">
+                    <select class="form-control" ng-model="role.role_type" ng-options="typeId as typeFor(typeId).name for (typeId, type) in roleTypes"></select>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-xs-12 text-justify" ng-switch="role.role_type">
+                Le type de r&ocirc;le <span class="text-{{typeFor(role.role_type).color}}">{{typeFor(role.role_type).name | lowercase}}</span> est utilis&eacute; pour d&eacute;finir
+                <span ng-switch-when="administration">
+                    les acc&egrave;s aux fonctionnalit&eacute;s administratives, comme&nbsp;:
+                    <ul>
+                        <li>la gestion et l'attribution des roles aux utilisateurs, ou bien&nbsp;:</li>
+                        <li>les activit&eacute;s de maintenance de la solution.</li>
+                    </ul>
+                </span>
+                <span ng-switch-when="data-manipulation">
+                    les acc&egrave;s aux fonctionnalit&eacute;s de gestion des formations. Il est n&eacute;cessaire pour tout utilisateur ayant besoin de cr&eacute;er, modifier ou supprimer celles-ci.
+                </span>
+                <span ng-switch-when="data-access">
+                les consultations de donn&eacute;es. Il permet ainsi de d&eacute;terminer les limitations des acc&egrave;s aux informations concernant&nbsp;:
+                <ul>
+                    <li>les sites et les agents, ou bien&nbsp;:</li>
+                    <li>les formations.</li>
+                </ul>
+                La restriction vis-&agrave;-vis de ces acc&egrave;s peut &ecirc;tre affin&eacute;e par site, par d&eacute;partement ou par type de formation.
+                </span>
+                <span ng-switch-when="user">
+                    les acc&egrave;s &agrave; la solution. Attribuer celui-ci &agrave; un agent correspond &agrave; la cr&eacute;ation d'un compte pour ce dernier.
+                </span>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="form-group">
+                <label class="col-xs-4 control-label">Nom</label>
+                <div class="col-xs-8">
+                    <input type="text" class="form-control" ng-model="role.role_name" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="col-xs-4 control-label">Abbr&eacute;viation</label>
+                <div class="col-xs-8">
+                    <input type="text" class="form-control" ng-model="role.role_short" />
+                </div>
+            </div>
+        </div>
+        <hr ng-if="role.role_type !== 'user'" />
+        <div ng-switch="role.role_type">
+            <div ng-switch-when="administration">
+                <div class="form-group" popover-trigger="mouseenter" popover-animation="false" uib-popover-template="'popover_admin_roles.html'">
+                    <div class="row">
+                        <script type="text/ng-template" id="popover_admin_roles.html">
+                            <div>
+                                La <b>gestion des r&ocirc;les</b> recouvre l'administration des comptes utilisateurs ainsi que la g&eacute;rance des groupes eux-m&ecirc;mes.
+                            </div>
+                        </script>
+                        <label class="col-xs-4 control-label checkbox-label">Gestion des roles</label>
+                        <div class="col-xs-8 checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="role.type.users" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" popover-trigger="mouseenter" popover-animation="false" uib-popover-template="'popover_admin_general.html'">
+                    <script type="text/ng-template" id="popover_admin_general.html">
+                        <div>
+                            La <b>maintenance</b> comprend la gestion&nbsp;:
+                            <ul>
+                                <li>des aptitudes et types de formation,</li>
+                                <li>des sites et de leur d&eacute;partements, ainsi que&nbsp;:</li>
+                                <li>de la mise &agrave; jour des affectations des agents</li>
+                            </ul>
+                        </div>
+                    </script>
+                    <div class="row">
+                        <label class="col-xs-4 control-label checkbox-label">Maintenance</label>
+                        <div class="col-xs-8 checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="role.type.general" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-when="data-manipulation">
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-xs-4 control-label checkbox-label">Filtrer formations</label>
+                        <div class="col-xs-8 checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="role.type.filter" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-if="role.type.filter">
+                    <div class="row">
+                        <label class="control-label col-xs-4">Types de formation</label>
+                        <div class="col-xs-8">
+                            <select class="form-control" ng-model="cert" ng-options="cert as cert.cert_short + ' - ' + cert.cert_name for cert in remaining" ng-change="accept(cert)">
+                                <option value="" selected></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-8">
+                            <div class="pill clickme" ng-repeat="cert in [{cert_short: 'SST', cert_name: 'Sauveteur Secouriste du Travail'}, {cert_short: 'EPI', cert_name: 'Equipement de Premiere Intervention'}]">
+                                {{cert.cert_short}} - {{cert.cert_name}}<span class="pill-delete">&times;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-when="data-access">lolz ACCESS :D</div>
+        </div>
+    </div>
+</div>

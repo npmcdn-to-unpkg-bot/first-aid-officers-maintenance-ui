@@ -2,6 +2,7 @@
 $brand-primary: #337ab7 !default;
 $brand-danger: #e51c23 !default;
 $brand-warning: #ff9800 !default;
+$brand-success: #4caf50 !default;
 $brand-info: $brand-primary !default;
 $screen-xs: 768px;
 // Bootstrap's CDN also includes relevant Glyphicons
@@ -25,9 +26,22 @@ $screen-xs: 768px;
     }
 }
 
-.panel-primary .panel-heading label.label-default {
-    background-color: rgba(255, 255, 255, 0.84);
-    color: $brand-primary;
+.popover {
+    max-width: 450px;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    line-height: 1.42857143;
+}
+
+@each $theme,
+$color in ( default: black,
+primary: $brand-primary,
+warning: $brand-warning,
+danger: $brand-danger,
+success: $brand-success) {
+    .panel-#{$theme} .panel-heading label.label-default {
+        background-color: rgba(255, 255, 255, 0.84);
+        color: $color;
+    }
 }
 
 .ui-sortable-handle {

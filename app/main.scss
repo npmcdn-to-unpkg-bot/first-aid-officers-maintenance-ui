@@ -25,6 +25,25 @@ $screen-xs: 768px;
     }
 }
 
+.togglebutton {
+    margin-top: 5px;
+    label input[type=checkbox]:checked+.toggle {
+        background-color: lighten($brand-primary, 40%);
+    }
+    &.togglebutton-success label input[type=checkbox]:checked+.toggle {
+        background-color: lighten($brand-success, 40%);
+        &:after {
+            background-color: $brand-success;
+        }
+    }
+}
+
+.popover {
+    max-width: 450px;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    line-height: 1.42857143;
+}
+
 .panel-primary .panel-heading label.label-default {
     background-color: rgba(255, 255, 255, 0.84);
     color: $brand-primary;

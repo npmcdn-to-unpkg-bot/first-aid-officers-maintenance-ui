@@ -1,0 +1,103 @@
+<h3>Gestion des r&ocirc;les</h3>
+<br />
+<script type="text/ng-template" id="popover_access.html">
+    <div>
+        N&eacute;cessite <strong>authentification</strong>
+    </div>
+</script>
+<script type="text/ng-template" id="popover_trainer.html">
+    <div>
+        N&eacute;cessite <strong>acc&egrave;s aux donn&eacute;es</strong> niveau <strong>4</strong>
+    </div>
+</script>
+<script type="text/ng-template" id="popover_admin.html">
+    <div>
+        N&eacute;cessite <strong>acc&egrave;s aux donn&eacute;es</strong> niveau <strong>4</strong>
+    </div>
+</script>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start;">
+    <div class="panel panel-{{role.checked ? 'success' : 'default'}}" style="flex-basis: 500px;" ng-repeat="role in roles">
+        <div class="panel-heading" uib-popover-template="disabled(role) ? 'popover_' + role.role_type + '.html' : none" popover-trigger="mouseenter">
+            <div class="row">
+                <div class="col-xs-8" style="margin-top: 7px;">{{role.role_name}}</div>
+                <div class="col-xs-4 togglebutton togglebutton-success text-right">
+                    <label>
+                        <input type="checkbox" ng-model="role.checked" ng-disabled="disabled(role)" />
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div uib-collapse="!role.checked">
+            <form class="panel-body form-horizontal" ng-switch="role.role_type" autocomplete="off">
+                <div ng-switch-when="user">
+                    <div class="text-justify">
+                        Le privil&egrave;ge d'<span class="text-primary">authentification</span> est utilis&eacute; pour d&eacute;finir les acc&egrave;s &agrave; la solution. Attribuer
+                        celui-ci &agrave; un agent correspond &agrave; la cr&eacute;ation d'un compte pour ce dernier.
+                    </div>
+                </div>
+                <div ng-switch-when="access">
+                    <div class="text-justify">
+                        Le privil&egrave;ge d'<span class="text-primary">acc&egrave;s</span> est utilis&eacute; pour d&eacute;finir les limitations des acc&egrave;s aux informations
+                        concernant les sites, les agents et les formations.
+                    </div>
+                    <hr />
+                    <div class="form-group no-padding">
+                        <div class="row">
+                            <label class="col-xs-4 control-label">Niveau d'acc&egrave;s</label>
+                            <div class="col-xs-8">
+                                <div class="btn-group">
+                                    <label class="btn btn-raised btn-{{role.level.value === level.value ? level.color : 'default'}} btn-sm" ng-click="role.level=level" ng-repeat="level in role.levels">niv. {{level.value}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="text-justify">
+                        Privil&egrave;ge d'acc&egrave;s <span class="text-{{role.level.color}}">niveau {{role.level.value}}</span> permet la consultation&nbsp;:
+                        <ul>
+                            <li ng-show="role.level.value === 4">des fiches et statisques de formations, et&nbsp;:<span class="text-success pull-right">niveau 4</span></li>
+                            <li ng-show="role.level.value === 1">des fiches de son site et de ses agents.<span class="text-danger pull-right">niveau 1</span></li>
+                            <li ng-show="role.level.value === 2">des fiches sites et agents de son d&eacute;partement.<span class="text-warning pull-right">niveau 2</span></li>
+                            <li ng-show="role.level.value >= 3">de toutes les fiches sites et agents.<span class="text-primary pull-right">niveau 3</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div ng-switch-when="trainer">
+                    <div class="text-justify">
+                        Le privil&egrave;ge de <span class="text-primary">gestion des formations</span> est n&eacute;cessaire pour tout utilisateur ayant besoin de cr&eacute;er, modifier
+                        ou supprimer des formations.
+                    </div>
+                </div>
+                <div ng-switch-when="admin">
+                    <div class="text-justify">
+                        Le privil&egrave;ge d'<span class="text-primary">administration</span> est utilis&eacute; pour d&eacute;finir les acc&egrave;s aux fonctionnalit&eacute;s administratives.
+                    </div>
+                    <hr />
+                    <div class="form-group no-padding">
+                        <div class="row">
+                            <label class="col-xs-4 control-label">Niveau d'acc&egrave;s</label>
+                            <div class="col-xs-8">
+                                <div class="btn-group">
+                                    <label class="btn btn-raised btn-{{role.level.value === level.value ? level.color : 'default'}} btn-sm" ng-click="role.level=level" ng-repeat="level in role.levels">niveau {{level.value}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="text-justify">
+                        Le privil&egrave;ge d'administration <span class="text-{{role.level.color}}">niveau {{role.level.value}}</span> permet la gestion&nbsp;:
+                        <ul>
+                            <li ng-show="role.level.value === 2">des comptes et privil&egrave;ges utilisateurs,<span class="text-success pull-right">niveau 2</span></li>
+                            <li>des aptitudes et types de formation,<span class="text-primary pull-right">niveau 1</span></li>
+                            <li>des sites et de leur d&eacute;partements, ainsi que&nbsp;:<span class="text-primary pull-right">niveau 1</span></li>
+                            <li>de la mise &agrave; jour des affectations des agents.<span class="text-primary pull-right">niveau 1</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+            <div class="panel-footer text-center" ng-if="role.role_type === 'user'">
+                <button type="button" class="btn btn-warning">R&eacute;initialiser MDP.</button>
+            </div>
+        </div>
+    </div>
+</div>

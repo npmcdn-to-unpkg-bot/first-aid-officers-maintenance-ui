@@ -178,6 +178,10 @@ angular.module('faomaintenanceApp', [
         templateUrl: 'components/administration/certificates/certificates.html',
         controller: 'CertificatesCtrl'
       })
+      .when('/administration/roles', {
+        templateUrl: 'components/administration/users/roles_management.html',
+        controller: 'RolesManagementCtrl'
+      })
       .when('/administration/sites', {
         templateUrl: 'components/administration/sites/sites_administration.html',
         controller: 'SitesAdministrationCtrl'
@@ -197,6 +201,19 @@ angular.module('faomaintenanceApp', [
   }])
   .directive('bswitch', ['$parse', require('./directives/bSwitch.js')])
   .directive('fileread', [require('./directives/fileread.js')])
+  .directive('formGroup', _.constant({
+    restrict: 'E',
+    transclude: true,
+    scope: {
+      label: '=',
+      labelSize: '@',
+      checkbox: '@'
+    },
+    templateUrl: 'form-control.html',
+    link: function (scope) {
+      scope.labelSize = scope.labelSize || 4;
+    }
+  }))
   .directive('formValidity', [require('./directives/formValidity.js')])
   .directive('ifRole', ['$rootScope', 'ngIfDirective', require('./directives/ifRole.js')])
   .directive('stateSustain', ['$rootScope', '$cookies', require('./directives/stateSustain.js')])
@@ -227,6 +244,9 @@ angular.module('faomaintenanceApp', [
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
   .controller('LoginCtrl', ['$scope', '$rootScope', '$route', 'AuthSvc', 'BusySvc', require('./components/index/LoginCtrl.js')])
   .controller('RolesEditCtrl', ['$rootScope', '$scope', 'AdminSvc', 'ngDialog', require('./components/dialogs/roles_edit/RolesEditCtrl.js')])
+  .controller('RolesManagementCtrl', ['$rootScope', '$scope', '$route', 'BusySvc', 'DataSvc', 'AdminSvc', 'ngDialog',
+    require('./components/administration/users/RolesManagementCtrl.js')
+  ])
   .controller('SiteCtrl', ['$rootScope', '$scope', '$routeParams', '$location', '$route', 'DataSvc', 'BusySvc', 'ngDialog', 'UpdateSvc', require('./components/sites/SiteCtrl.js')])
   .controller('SiteStatsCtrl', ['$scope', '$routeParams', 'DataSvc', 'BusySvc', require('./components/sites/SiteStatsCtrl.js')])
   .controller('SitesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', require('./components/sites/SitesCtrl.js')])
@@ -258,8 +278,18 @@ angular.module('faomaintenanceApp', [
     require('./components/administration/users/UsersAdministrationCtrl.js')
   ])
 
-.run(['$rootScope', '$location', '$route', '$cookies', '$http', 'ngDialog', 'BusySvc', 'AuthSvc',
-  function ($rootScope, $location, $route, $cookies, $http, ngDialog, busySvc, authSvc) {
+.run(['$templateCache', '$rootScope', '$location', '$route', '$cookies', '$http', 'ngDialog', 'BusySvc', 'AuthSvc',
+  function ($templateCache, $rootScope, $location, $route, $cookies, $http, ngDialog, busySvc, authSvc) {
+    /*jshint multistr: true*/
+    $templateCache.put('form-control.html',
+      '<div class="form-group"> \
+        <div class="row"> \
+          <label class="col-xs-{{labelSize}} control-label" ng-class="{\'checkbox-label\': checkbox}">{{label}}</label>\
+          <div class="col-xs-{{12 - labelSize}}" ng-class="{\'togglebutton\': checkbox}" ng-transclude></div>\
+        </div> \
+      </div>'
+    );
+
     $rootScope.alerts = [];
     $rootScope.error = function () {
       $rootScope.alerts.push({ type: 'danger', msg: 'Une erreur est survenue. Merci de bien vouloir r&eacute;essayer ult&eacute;rieurement.\nSi le probl&egrave;me persiste, contactez un administrateur de la solution.' });

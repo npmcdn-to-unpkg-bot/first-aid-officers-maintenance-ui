@@ -1,22 +1,22 @@
-<h3>Aptitudes et <a href="#/administration/training_types">types de formation</a><small> - Aptitudes</small></h3>
+<h3>Aptitudes<small> - <a href="#/administration/training_types">types de formation</a></small></h3>
 <br />
 <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start;" ui-sortable="{disabled: !reorder}" ng-model="certificates">
     <div class="panel panel-primary" ng-repeat="cert in certificates" style="flex-basis: 500px;" ng-class="{'grabbable': reorder}">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-xs-8" style="margin-top: 9px;">
+                <div class="col-xs-8" style="margin-top: 9px;" ng-switch="reorder">
                     <label class="label label-default">{{cert.cert_order}}</label>
-                    <span ng-if="reorder" class="text-{{cert.idx === cert.cert_order ? 'default' : 'warning'}}">&nbsp;&rarr;&nbsp;
+                    <span ng-switch-when="true" class="text-{{cert.idx === cert.cert_order ? 'default' : 'warning'}}">&nbsp;&rarr;&nbsp;
                         <label class="label label-{{cert.idx === cert.cert_order ? 'default' : 'warning'}}">{{cert.idx}}</label>
                     </span>
-                    <span ng-show="!reorder"> - <label class="label label-default">{{cert.cert_short}}</label></span> - {{cert.cert_name}}
+                    <span ng-switch-when="false"> - <label class="label label-default">{{cert.cert_short}}</label></span> - {{cert.cert_name}}
                 </div>
                 <div class="col-xs-4 text-right">
                     <button type="button" class="btn btn-warning no-margin" ng-click="edit(cert)" ng-disabled="reorder">Modifier</button>
                 </div>
             </div>
         </div>
-        <div class="panel-body hover-trigger">
+        <div class="panel-body" ng-class="{'hover-trigger': !reorder}">
             <div class="col-xs-3 text-right">Cible</div>
             <div class="col-xs-9"><span class="text-primary">{{cert.cert_target}}</span>% de l'effectif</div>
             <div class="col-xs-3 text-right">Indicateurs</div>

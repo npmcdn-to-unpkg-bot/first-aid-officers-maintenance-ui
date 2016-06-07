@@ -60,6 +60,33 @@ module.exports = {
   certificatesConditions: certificatesConditions,
   getConditionDisplay: getConditionDisplay,
 
+  stripDownConditions: function (conditions) {
+    return _.map(conditions, function (condition) {
+      return {
+        c: condition.params.condition.value,
+        o: condition.params.option ? condition.params.option.value : undefined,
+        d: condition.params.data,
+        cert: condition.cert
+      };
+    });
+  },
+
+  fillUpConditions: function (conditions, certificates) {
+    return _.map(conditions, function (condition) {
+      var params = {
+        condition: _(certificatesConditions).find({ value: condition.c }),
+        option: condition.c === 'recent' ? _(recentOptions).find({ value: condition.o }) : _(statusOptions).find({ value: condition.o }),
+        data: condition.d
+      };
+
+      return {
+        params: params,
+        display: getConditionDisplay(certificates[condition.cert], params),
+        cert: condition.cert
+      };
+    });
+  },
+
   stripDown: function (certificates) {
     return _(certificates).filter(function (cert) {
       return cert.conditions && cert.conditions.length > 0;
@@ -109,5 +136,13 @@ module.exports = {
 
   fromURIComponent: function (str) {
     return JSON.parse(lzString.decompressFromEncodedURIComponent(str) || '{}');
+  },
+
+  arrayToURIComponent: function (arr) {
+    return lzString.compressToEncodedURIComponent(JSON.stringify(arr));
+  },
+
+  arrayFromURIComponent: function (str) {
+    return JSON.parse(lzString.decompressFromEncodedURIComponent(str) || '[]');
   }
 };

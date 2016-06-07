@@ -12,6 +12,7 @@
     "bootstrap": "./bower_components/bootstrap/dist/js/bootstrap.js",
     "bootstrap_material_design": "./bower_components/bootstrap-material-design/dist/js/material.min.js",
     "moment-fr": "./node_modules/moment/locale/fr.js",
+    "ng-table": "./bower_components/ng-table/dist/ng-table.js",
     "pdfmakeLib": "./bower_components/pdfmake/build/pdfmake.js",
     "pdfmake": "./bower_components/pdfmake/build/vfs_fonts.js",
     "ripples": "./bower_components/bootstrap-material-design/dist/js/ripples.min.js",

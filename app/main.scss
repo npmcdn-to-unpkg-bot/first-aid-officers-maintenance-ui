@@ -8,6 +8,7 @@ $screen-xs: 768px;
 @import url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
 @import 'bower_components/bootstrap-material-design/sass/bootstrap-material-design';
 @import 'bower_components/bootstrap-material-design/sass/ripples';
+//@import 'bower_components/ng-table/dist/ng-table.min';
 @import 'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min';
 @import 'node_modules/ng-dialog/css/ngDialog-theme-default.min';
 @import 'node_modules/ng-dialog/css/ngDialog.min';
@@ -25,9 +26,37 @@ $screen-xs: 768px;
     }
 }
 
+.panel-heading.panel-heading-togglebutton {
+    .togglebutton {
+        padding-left: 5px;
+        label {
+            color: rgba(255, 255, 255, 0.84);
+        }
+    }
+    .panel-heading-buttons {
+        padding-top: 7px;
+    }
+}
+
+.input-group-addon {
+    padding: 6px 15px;
+}
+
 .panel-primary .panel-heading label.label-default {
     background-color: rgba(255, 255, 255, 0.84);
     color: $brand-primary;
+}
+
+.panel-primary .togglebutton label input[type=checkbox] {
+    & + .toggle {
+        background-color: darken($brand-primary, 10%);
+    }
+    &:checked + .toggle {
+        background-color: lighten($brand-primary, 40%);
+    }
+    &[disabled]:checked + .toggle::after {
+        background-color: lighten($brand-primary, 40%);
+    }
 }
 
 .ui-sortable-handle {

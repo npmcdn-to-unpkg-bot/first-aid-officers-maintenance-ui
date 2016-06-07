@@ -4,7 +4,7 @@
 var _ = require('lodash');
 var helper = require('./employeesSearchHelper.js');
 
-module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dataSvc) {
+module.exports = function ($scope, $location, ngDialog, busySvc, dataSvc) {
   $scope.searchType = 'agents';
   $scope.filter = {};
   $scope.display = {};

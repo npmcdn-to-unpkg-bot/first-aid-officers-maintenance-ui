@@ -4,7 +4,7 @@
 var _ = require('lodash');
 var helper = require('./sitesSearchHelper.js');
 
-module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dataSvc) {
+module.exports = function ($scope, $location, ngDialog, busySvc, dataSvc) {
   $scope.comparisonOptions = helper.comparisonOptions;
 
   $scope.params = function () {
@@ -12,7 +12,7 @@ module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dat
   };
 
   $scope.getLink = function () {
-    $rootScope.alerts.push({
+    $scope.$emit('alert', {
       type: 'success',
       msg: 'Utilisez le lien ci-dessous (clic droit, puis <em>Copier l\'adresse du lien</em>) pour partager cette recherche ou y acc&eacute;der &agrave; tout moment,' +
         ' et avoir des r&eacute;sultats <strong>toujours &agrave; jour</strong>.<br /><hr />Alternativement, ajoutez cette page &agrave; vos favoris (<kbd>Ctrl+D</kbd>) pour un acc&egrave;s rapide.<br /><br /><a href="' +

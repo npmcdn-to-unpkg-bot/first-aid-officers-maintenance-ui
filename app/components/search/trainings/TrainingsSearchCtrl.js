@@ -4,7 +4,7 @@
 var _ = require('lodash');
 var helper = require('./trainingsSearchHelper.js');
 
-module.exports = function ($rootScope, $scope, $location, ngDialog, busySvc, dataSvc) {
+module.exports = function ($scope, $location, ngDialog, busySvc, dataSvc) {
   $scope.searchType = 'formations';
   $scope.filter = {};
   $scope.display = {};

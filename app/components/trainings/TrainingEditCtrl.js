@@ -4,7 +4,7 @@
 var _ = require('underscore');
 var moment = require('moment');
 
-module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $location, ngDialog, dateFilter, busySvc) {
+module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ngDialog, dateFilter, busySvc) {
   busySvc.busy();
   busySvc.busy('ongoingOperation', true);
 
@@ -87,8 +87,8 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
   $scope.unregister = function (empl) {
     var empl_display = (empl.empl_gender ? 'M.' : 'Mme') + ' ' + empl.empl_surname + ' ' + empl.empl_firstname;
     var msg = '<b>' + empl_display +
-      '</b> a &eacute;t&eacute; d&eacute;sinscrit(e) de la formation.<hr />';
-    $rootScope.alerts.push({
+      '</b> a &eacute;t&eacute; d&eacute;sinscrit(e) de la formation.';
+    $scope.$emit('alert', {
       type: 'warning',
       msg: msg,
       callback: function () {
@@ -169,7 +169,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
 
       promise.then(function (trng_pk) {
         busySvc.done('ongoingOperation');
-        $rootScope.alerts.push({ type: 'success', msg: $scope.trng.trng_pk ? 'Formation mise &agrave; jour.' : 'Formation cr&eacute;&eacute;e.' });
+        $scope.$emit('alert', { type: 'success', msg: $scope.trng.trng_pk ? 'Formation mise &agrave; jour.' : 'Formation cr&eacute;&eacute;e.' });
         $location.path('/trainings/' + ($scope.trng.trng_pk || trng_pk)).search('force', true);
       });
     });

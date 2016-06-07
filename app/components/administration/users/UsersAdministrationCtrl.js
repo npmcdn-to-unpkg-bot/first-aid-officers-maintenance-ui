@@ -3,7 +3,7 @@
 
 var _ = require('underscore');
 
-module.exports = function ($scope, $rootScope, dataSvc, adminSvc, ngDialog, $route, $location, busySvc) {
+module.exports = function ($rootScope, $scope, dataSvc, adminSvc, ngDialog, $route, $location, busySvc) {
   function updateUsersCount() {
     $scope.usersCount = _.filter($scope.users, function (user) {
       return _.contains(user.roles, 'user');
@@ -88,7 +88,7 @@ module.exports = function ($scope, $rootScope, dataSvc, adminSvc, ngDialog, $rou
       scope: dialogScope
     }).then(function () {
       adminSvc.resetUserPassword(empl.empl_pk).then(function (password) {
-        $rootScope.alerts.push({
+        $scope.$emit('alert', {
           type: 'success',
           msg: 'Mot de passe r&eacute;initialis&eacute;&nbsp: <strong><samp>' + password +
             '</samp></strong><hr />Veuillez transmettre son nouveau mot de passe &agrave; l\'agent concern&eacute;.'

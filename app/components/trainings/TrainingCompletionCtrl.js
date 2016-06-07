@@ -4,7 +4,7 @@
 var _ = require('underscore');
 var moment = require('moment');
 
-module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location, ngDialog, trainingsSvc, busySvc, dateFilter) {
+module.exports = function ($scope, $routeParams, dataSvc, $location, ngDialog, trainingsSvc, busySvc, dateFilter) {
   busySvc.busy();
   busySvc.busy('ongoingOperation', true);
 
@@ -25,8 +25,8 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location,
   $scope.unregister = function (empl) {
     var empl_display = (empl.empl_gender ? 'M.' : 'Mme') + ' ' + empl.empl_surname + ' ' + empl.empl_firstname;
     var msg = '<b>' + empl_display +
-      '</b> a &eacute;t&eacute; d&eacute;sinscrit(e) de la formation.< hr / >';
-    $rootScope.alerts.push({
+      '</b> a &eacute;t&eacute; d&eacute;sinscrit(e) de la formation.';
+    $scope.$emit('alert', {
       type: 'warning',
       msg: msg,
       callback: function () {
@@ -80,7 +80,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location,
         })
       }).then(function () {
         busySvc.done('ongoingOperation');
-        $rootScope.alerts.push({ type: 'success', msg: 'Proc&egrave;s verbal de fin de session &eacute;dit&eacute;.' });
+        $scope.$emit('alert', { type: 'success', msg: 'Proc&egrave;s verbal de fin de session &eacute;dit&eacute;.' });
         $location.path('/trainings/' + $scope.trng.trng_pk).search('force', true);
       });
     });

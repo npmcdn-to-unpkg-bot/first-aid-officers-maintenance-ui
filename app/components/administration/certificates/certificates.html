@@ -1,7 +1,7 @@
 <h3>Aptitudes et <a href="#/administration/training_types">types de formation</a><small> - Aptitudes</small></h3>
 <br />
 <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start;" ui-sortable="{disabled: !reorder}" ng-model="certificates">
-    <div class="panel panel-primary" ng-repeat="cert in certificates" style="flex-basis: 500px;" ng-class="{'ui-sortable-handle': reorder}">
+    <div class="panel panel-primary" ng-repeat="cert in certificates" style="flex-basis: 500px;" ng-class="{'grabbable': reorder}">
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-8" style="margin-top: 9px;">

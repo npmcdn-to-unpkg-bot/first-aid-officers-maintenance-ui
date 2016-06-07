@@ -30,7 +30,7 @@ $screen-xs: 768px;
     color: $brand-primary;
 }
 
-.ui-sortable-handle {
+.ui-sortable-handle.grabbable {
     cursor: move;
     cursor: grab;
     cursor: -moz-grab;

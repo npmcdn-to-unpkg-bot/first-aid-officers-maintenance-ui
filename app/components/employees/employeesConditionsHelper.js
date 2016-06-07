@@ -44,11 +44,11 @@ var certificatesConditions = [{
 function getConditionDisplay(cert, params) {
   switch (params.condition.value) {
     case 'recent':
-      return cert.cert_short + ' ' + params.option.display.toLowerCase() + ' il y a moins de ' + params.data + ' mois';
+      return cert.cert_short + ' a ' + (params.option.value === 'success' ? 'été obtenue/renouvelée' : 'expirée') + ' il y a moins de ' + params.data + ' mois';
     case 'expiring':
-      return cert.cert_short + ' expirant sous ' + params.data + ' mois';
+      return cert.cert_short + ' expire sous ' + params.data + ' mois';
     case 'expiry':
-      return cert.cert_short + ' expirant entre le ' + moment(params.data.from).format('Do MMMM YYYY') + ' et le ' + moment(params.data.to).format('Do MMMM YYYY');
+      return cert.cert_short + ' expire entre le ' + moment(params.data.from).format('Do MMMM YYYY') + ' et le ' + moment(params.data.to).format('Do MMMM YYYY');
     case 'status':
       return cert.cert_short + ' est ' + params.option.display.toLowerCase();
   }

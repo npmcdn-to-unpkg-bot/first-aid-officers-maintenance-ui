@@ -1,7 +1,7 @@
 'use strict';
 /*jshint camelcase: false*/
 
-module.exports = function ($rootScope, $scope, updateSvc, ngDialog, $route) {
+module.exports = function ($scope, updateSvc, ngDialog, $route) {
   $scope.create = function () {
     var dialogScope = $scope.$new(false);
     dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">modifier</span> le site<br /><span class="text-warning">' + $scope.site.site_name +
@@ -12,8 +12,8 @@ module.exports = function ($rootScope, $scope, updateSvc, ngDialog, $route) {
     }).then(function () {
       $scope.busy = true;
       updateSvc.createSite($scope.site.site_pk, $scope.site.site_name, $scope.site.dept.dept_pk, $scope.site.site_notes, $scope.site.new_pk).then(function () {
-        $rootScope.alerts.push({ type: 'success', msg: 'Site <b>' + $scope.site.site_name + '</b> mis &agrave; jour.' });
-        $rootScope.$broadcast('update');
+        $scope.$emit('alert', { type: 'success', msg: 'Site <b>' + $scope.site.site_name + '</b> mis &agrave; jour.' });
+        $scope.$emit('update');
         $scope.closeThisDialog();
         $route.reload();
       });
@@ -30,8 +30,8 @@ module.exports = function ($rootScope, $scope, updateSvc, ngDialog, $route) {
     }).then(function () {
       $scope.busy = true;
       updateSvc.deleteSite($scope.site.site_pk).then(function () {
-        $rootScope.alerts.push({ type: 'success', msg: 'Site <b>' + $scope.site.site_name + '</b> supprim&eacute;.' });
-        $rootScope.$broadcast('update');
+        $scope.$emit('alert', { type: 'success', msg: 'Site <b>' + $scope.site.site_name + '</b> supprim&eacute;.' });
+        $scope.$emit('update');
         $scope.closeThisDialog();
         $route.reload();
       });

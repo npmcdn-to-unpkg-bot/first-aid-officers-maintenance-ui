@@ -3,7 +3,7 @@
 var _ = require('underscore');
 var moment = require('moment');
 
-module.exports = function ($scope, $rootScope, updateSvc, dataSvc, ngDialog, busySvc) {
+module.exports = function ($scope, updateSvc, dataSvc, ngDialog, busySvc) {
   $scope.headers = [];
   $scope.data = [
     []
@@ -47,7 +47,10 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, ngDialog, bus
           busySvc.done();
         }, function () {
           busySvc.done();
-          $rootScope.alerts.push({ type: 'danger', msg: '<strong>Erreur&nbsp;:</strong> Le fichier selectionn&eacute; n\'a pas pu &ecirc;tre lu.<hr />Assurez-vous de disposer d\'un document au format <strong>.xls</strong> ou <strong>.xlsx</strong> et que le nom (ou le num&eacute;ro) de la page &agrave; charger est correctement reseign&eacute;.' });
+          $scope.$emit('alert', {
+            type: 'danger',
+            msg: '<strong>Erreur&nbsp;:</strong> Le fichier selectionn&eacute; n\'a pas pu &ecirc;tre lu.<hr />Assurez-vous de disposer d\'un document au format <strong>.xls</strong> ou <strong>.xlsx</strong> et que le nom (ou le num&eacute;ro) de la page &agrave; charger est correctement reseign&eacute;.'
+          });
         });
     }
   };
@@ -146,8 +149,8 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, ngDialog, bus
     update: function () {
       busySvc.busy();
       updateSvc.update($scope.employees).then(function () {
-        $rootScope.alerts.push({ type: 'success', msg: 'Mise &agrave; jour effectu&eacute;e avec succ&egrave;s.' });
-        $rootScope.$emit('update');
+        $scope.$emit('alert', { type: 'success', msg: 'Mise &agrave; jour effectu&eacute;e avec succ&egrave;s.' });
+        $scope.$emit('update');
         busySvc.done();
         window.history.back();
       }, function () {

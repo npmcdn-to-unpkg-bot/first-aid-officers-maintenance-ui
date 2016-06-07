@@ -4,7 +4,7 @@
 var _ = require('lodash');
 var moment = require('moment');
 
-module.exports = function ($scope, $rootScope, dataSvc, dateFilter, busySvc, ngDialog) {
+module.exports = function ($scope, dataSvc, dateFilter, busySvc, ngDialog) {
   $scope.params = {
     beginning: undefined,
     end: undefined,

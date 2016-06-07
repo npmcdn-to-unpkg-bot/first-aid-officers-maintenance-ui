@@ -2,17 +2,24 @@
 /* jshint camelcase: false*/
 
 var _ = require('lodash');
-var helper = require('./sitesSearchHelper.js');
+var helper = require('./employeesSearchHelper.js');
 
 module.exports = function ($scope, $location, ngDialog, busySvc, dataSvc) {
-  $scope.searchType = 'sites';
+  $scope.searchType = 'agents';
   $scope.filter = {};
   $scope.display = {};
-  $scope.comparisonOptions = helper.comparisonOptions;
 
   $scope.$watch('certificates', function (certificates) {
     $scope.filter.certificates = helper.stripDown(certificates);
   }, true);
+
+  $scope.$watch('site', function (site) {
+    if (site && site.site_pk) {
+      $scope.filter.site = site.site_pk;
+    } else {
+      delete $scope.filter.site;
+    }
+  });
 
   function setSearchUrl() {
     $scope.filter = _.omitBy($scope.filter, function (value) {
@@ -24,26 +31,49 @@ module.exports = function ($scope, $location, ngDialog, busySvc, dataSvc) {
   }
 
   $scope.search = function () {
-    $location.path('/sites/results');
+    $location.path('/employees/results');
   };
 
   $scope.addCondition = function (cert) {
     var dialogScope = $scope.$new();
     dialogScope.cert = cert;
-    dialogScope.comparisonOptions = helper.comparisonOptions;
-    dialogScope.targetOptions = helper.targetOptions;
+    dialogScope.recentOptions = helper.recentOptions;
+    dialogScope.statusOptions = helper.statusOptions;
     dialogScope.certificatesConditions = helper.certificatesConditions;
 
     ngDialog.open({
-      template: './components/dialogs/sites_params_certificate.html',
+      template: './components/dialogs/employees_params_certificate.html',
       scope: dialogScope,
       controller: ['$scope', function ($scope) {
         $scope.params = {};
+        $scope.isValid = function () {
+          var res = true;
+          if (!$scope.params.condition) {
+            return false;
+          }
+
+          if ($scope.params.condition.value !== 'expiring' && $scope.params.condition.value !== 'expiry') {
+            res = $scope.params.option !== undefined;
+          }
+
+          if ($scope.params.condition.value !== 'status') {
+            res = res && $scope.params.data !== undefined && $scope.params.data !== null;
+          }
+
+          if ($scope.params.condition.value === 'expiry') {
+            res = res && $scope.params.data && $scope.params.data.from;
+            res = res && $scope.params.data.to && !isNaN($scope.params.data.from.getTime()) && !isNaN($scope.params.data.to.getTime());
+          }
+
+          return res;
+        };
+
         $scope.add = function () {
           var condition = {
             display: helper.getConditionDisplay($scope.cert, $scope.params),
             params: $scope.params
           };
+
           if ($scope.cert.conditions) {
             $scope.cert.conditions.push(condition);
           } else {
@@ -59,22 +89,23 @@ module.exports = function ($scope, $location, ngDialog, busySvc, dataSvc) {
   $scope.steps = [{
     step: 1,
     title: 'Crit&egrave;res de recherche',
-    template: 'components/search/sites/sites_search_step1.html'
+    template: 'components/search/employees/employees_search_step1.html'
   }, {
     step: 2,
     title: 'Param&egrave;tres d\'affichage',
-    template: 'components/search/sites/sites_search_step2.html'
+    template: 'components/search/employees/employees_search_step2.html'
   }];
   $scope.currentStep = $scope.steps[0];
 
-  busySvc.busy('sitesSearch');
-  Promise.all([dataSvc.getDepartments(), dataSvc.getCertificates()]).then(function (results) {
-    $scope.departments = _.values(results[0]);
+  busySvc.busy('employeesSearch');
+  Promise.all([dataSvc.getCertificates(), dataSvc.getSites()]).then(_.spread(function (cert, sites) {
+    $scope.sites = sites;
     $scope.filter = helper.fromURIComponent($location.search().filter);
-    $scope.certificates = helper.fillUp(_.values(results[1]), $scope.filter.certificates);
+    $scope.site = sites[$scope.filter.site];
+    $scope.certificates = helper.fillUp(_.values(cert), $scope.filter.certificates);
     $scope.display = helper.fromURIComponent($location.search().display);
     $scope.$watch('filter', setSearchUrl, true);
     $scope.$watch('display', setSearchUrl, true);
-    busySvc.done('sitesSearch');
-  });
+    busySvc.done('employeesSearch');
+  }));
 };

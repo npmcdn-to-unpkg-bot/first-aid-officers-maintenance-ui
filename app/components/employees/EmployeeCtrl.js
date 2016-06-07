@@ -40,7 +40,7 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
       EmployeesNotesSvc.setNotes($scope.empl.empl_pk, notes).then(function () {
         closeThisDialog();
         $route.reload();
-        $rootScope.alerts.push({ type: 'success', msg: 'Notes mises &agrave; jour.' });
+        $scope.$emit('alert', { type: 'success', msg: 'Notes mises &agrave; jour.' });
       });
     };
 
@@ -71,7 +71,7 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
         if (optout) {
           EmployeesNotesSvc.optOut($scope.empl.empl_pk, cert.cert_pk, date).then(function () {
             $route.reload();
-            $rootScope.alerts.push({
+            $scope.$emit('alert', {
               type: 'success',
               msg: empl_display + ' a &eacute;t&eacute; sorti(e) du dispositif ' + cert.cert_short + '.'
             });
@@ -79,7 +79,7 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
         } else {
           EmployeesNotesSvc.optIn($scope.empl.empl_pk, cert.cert_pk).then(function () {
             $route.reload();
-            $rootScope.alerts.push({
+            $scope.$emit('alert', {
               type: 'success',
               msg: empl_display + ' a r&eacute;int&eacute;gr&eacute; le dispositif ' + cert.cert_short + '.'
             });
@@ -116,7 +116,7 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
       dialogScope.roles = _.keyBy(roles, 'role_name');
       dialogScope.callback = function (empl) {
         $route.reload();
-        if (empl.empl_pk === $rootScope.currentUser.info.empl_pk) {
+        if (empl.empl_pk === $scope.currentUser.info.empl_pk) {
           adminSvc.getInfo().then(null, function () {
             ngDialog.openConfirm({
               template: 'components/dialogs/locked_out.html'

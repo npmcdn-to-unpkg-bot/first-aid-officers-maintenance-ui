@@ -244,7 +244,7 @@ angular.module('faomaintenanceApp', [
     require('./components/administration/certificates/CertificatesCtrl.js')
   ])
   .controller('DepartmentEditCtrl', ['$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/department_edit/DepartmentEditCtrl.js')])
-  .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', require('./components/employees/EmployeesCtrl.js')])
+  .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', 'NgTableParams', require('./components/employees/EmployeesCtrl.js')])
   .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc',
     require('./components/employees/EmployeeCtrl.js')
   ])

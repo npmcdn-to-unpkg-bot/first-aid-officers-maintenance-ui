@@ -12,7 +12,6 @@ require('bootstrap-switch');
 require('moment-fr');
 require('ng-table');
 require('../lib/jquery-ui.min.js');
-require('angular-digest-hud');
 var Trianglify = require('trianglify');
 
 $(function () {
@@ -61,18 +60,9 @@ angular.module('faomaintenanceApp', [
     'ngTable',
     'ui.bootstrap',
     'ui.sortable',
-    'smart-table',
-    'digestHud'
-  ]).config(['$routeProvider', 'ngDialogProvider', 'uibButtonConfig', '$httpProvider', '$provide', 'digestHudProvider',
-    function ($routeProvider, ngDialogProvider, uibButtonConfig, $httpProvider, $provide, digestHudProvider) {
-
-      digestHudProvider.enable()
-
-      // Optional configuration settings:
-      digestHudProvider.setHudPosition('top right'); // setup hud position on the page: top right, bottom left, etc. corner
-      digestHudProvider.numTopWatches = 20; // number of items to display in detailed table
-      digestHudProvider.numDigestStats = 25; // number of most recent digests to use for min/med/max stats
-
+    'smart-table'
+  ]).config(['$routeProvider', 'ngDialogProvider', 'uibButtonConfig', '$httpProvider', '$provide',
+    function ($routeProvider, ngDialogProvider, uibButtonConfig, $httpProvider, $provide) {
       $provide.decorator('orderByFilter', ['$delegate', '$parse', function ($delegate, $parse) {
         return function () {
           var predicates = arguments[1];
@@ -107,9 +97,7 @@ angular.module('faomaintenanceApp', [
         };
       }]);
 
-      //asdf.sortingFilterName = 'orderByNullLast';
       uibButtonConfig.activeClass = 'btn-primary';
-
       $httpProvider.interceptors.push(['$q', '$rootScope', function ($q, $rootScope) {
         return {
           request: function (config) {
@@ -144,17 +132,7 @@ angular.module('faomaintenanceApp', [
         })
 
       // Searches
-      .when('/employees/search', {
-          templateUrl: 'components/search/search.html',
-          controller: 'EmployeesSearchCtrl',
-          reloadOnSearch: false
-        })
-        .when('/employees/results', {
-          templateUrl: 'components/search/employees/employees_search_results.html',
-          controller: 'EmployeesSearchResultsCtrl',
-          reloadOnSearch: false
-        })
-        .when('/sites/search', {
+      .when('/sites/search', {
           templateUrl: 'components/search/search.html',
           controller: 'SitesSearchCtrl',
           reloadOnSearch: false
@@ -177,7 +155,7 @@ angular.module('faomaintenanceApp', [
 
       // Employees
       .when('/employees', {
-          templateUrl: 'components/employees/employees2.html',
+          templateUrl: 'components/employees/employees.html',
           controller: 'EmployeesCtrl',
           reloadOnSearch: false,
           controllerAs: 'ctrl'
@@ -253,28 +231,7 @@ angular.module('faomaintenanceApp', [
   .directive('stateSustain', ['$rootScope', '$cookies', require('./directives/stateSustain.js')])
   .directive('stSelectDistinct', ['$parse', require('./directives/stSelectDistinct.js')])
   .directive('stSelectDate', ['dateFilter', require('./directives/stSelectDate.js')])
-  .directive('hoverState', ['$parse', function ($parse) {
-    return {
-      restrict: 'A',
-      link: function (scope, element, attrs) {
-        var _scope = attrs.hoverState.indexOf('$parent') === 0 ? $parse(/\$parent(\.\$parent)*/.exec(attrs.hoverState)[0])(scope) : scope;
-        var set = _.partial($parse(attrs.hoverState).assign, scope);
-        var getIf = _.partial($parse(attrs.hoverStateIf || 'true'), scope);
-        element.on('mouseenter', function () {
-          if (getIf()) {
-            set(true);
-            _scope.$digest();
-          }
-        });
-        element.on('mouseleave', function () {
-          if (getIf()) {
-            set(false);
-            _scope.$digest();
-          }
-        });
-      }
-    };
-  }])
+  .directive('hoverState', ['$parse', require('./directives/hoverState.js')])
   .factory('ApiSvc', ['$http', '$q', require('./services/ApiSvc.js')])
   .factory('AdminSvc', ['$http', '$q', 'ApiSvc', require('./services/AdminSvc.js')])
   .factory('AuthSvc', ['$http', '$q', '$cookies', 'ApiSvc', require('./services/AuthSvc.js')])
@@ -291,11 +248,7 @@ angular.module('faomaintenanceApp', [
   .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc',
     require('./components/employees/EmployeeCtrl.js')
   ])
-  .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/employees/Employees2Ctrl.js')])
-  .controller('EmployeesSearchCtrl', ['$rootScope', '$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', require('./components/search/employees/EmployeesSearchCtrl.js')])
-  .controller('EmployeesSearchResultsCtrl', ['$rootScope', '$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', 'dateFilter',
-    require('./components/search/employees/EmployeesSearchResultsCtrl.js')
-  ])
+  .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/employees/EmployeesCtrl.js')])
   .controller('HomeCtrl', ['$scope', 'ngDialog', 'BusySvc', require('./components/home/HomeCtrl.js')])
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
   .controller('LoginCtrl', ['$scope', '$rootScope', '$route', 'AuthSvc', 'BusySvc', require('./components/index/LoginCtrl.js')])

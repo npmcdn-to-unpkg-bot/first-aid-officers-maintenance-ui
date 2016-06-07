@@ -2,6 +2,10 @@
     margin: 6px 0 0 0;
 }
 
+.vtop {
+    vertical-align: top!important;
+}
+
 table.table {
     &.ng-table {
         thead tr.ng-table-sort-header th {

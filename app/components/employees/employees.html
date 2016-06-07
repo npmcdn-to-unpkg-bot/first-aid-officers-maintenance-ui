@@ -1,85 +1,85 @@
-<div st-persist="employees" st-table="shown" st-safe-src="employees" st-set-sort="orderByNullLast">
-    <form class="form-horizontal">
-        <div class="form-group">
-            <label for="pageSize" class="control-label col-xs-4 col-md-2">Agents par page</label>
-            <div class="col-xs-8 col-md-2">
-                <select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
+<h3>Liste des <span class="text-primary">agents</span></h3>
+<br />
+<div class="panel panel-primary">
+    <div class="panel-heading panel-heading-togglebutton">
+        <div class="row">
+            <div class="col-xs-4 checkbox">
+                <span class="togglebutton">
+                    <label>
+                        <input type="checkbox" ng-model="advancedSearch" ng-disabled="conditions.length > 0" />Recherche avanc&eacute;e
+                    </label>
+                </span>
             </div>
-        </div>
-    </form>
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-xs-2">Agents</div>
-                <div class="col-xs-10 text-right">
-                    <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
-                        <div class="btn-group">
-                            <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates | orderBy: 'cert_order'" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
-                        </div>
-                    </state-sustain>
-                </div>
+            <div class="col-xs-8 text-right panel-heading-buttons">
+                <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
+                    <div class="btn-group">
+                        <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates | orderBy: 'cert_order'" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
+                    </div>
+                </state-sustain>
             </div>
-        </div>
-        <table class="table table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th width="10%">
-                        <div class="st-sort" st-sort="empl_pk">Matricule</div>
-                        <input st-search="empl_pk" placeholder="Rechercher..." class="form-control" type="text" />
-                    </th>
-                    <th class="vtop">
-                        <div class="st-sort" st-sort="empl_gender" st-skip-natural="true">Titre</div>
-                    </th>
-                    <th class="shrinkable" width="20%">
-                        <div class="st-sort" st-sort="empl_surname" st-skip-natural="true" st-sort-default="true">Nom</div>
-                        <input st-search="empl_surname" placeholder="Rechercher..." class="form-control" type="text" />
-                    </th>
-                    <th class="shrinkable" width="20%">
-                        <div class="st-sort" st-sort="empl_firstname" st-skip-natural="true">Pr&eacute;nom</div>
-                        <input st-search="empl_firstname" placeholder="Rechercher..." class="form-control" type="text" />
-                    </th>
-                    <th></th>
-                    <th class="shrinkable" width="40%">
-                        <div class="st-sort" st-sort="site.site_name" st-skip-natural="true">Affectation</div>
-                        <input st-search="site.site_name" placeholder="Rechercher..." class="form-control" type="text" />
-                    </th>
-                    <!-- <th class="shrinkable vtop" width="20%">
-						<div class="st-sort" st-sort="empl_dob" st-skip-natural="true">Naissance</div>
-					</th> -->
-                    <th class="vtop">
-                        <div class="st-sort" st-sort="empl_permanent" st-skip-natural="true">Statut</div>
-                    </th>
-                    <th class="last vtop" ng-repeat="cert in certificates | orderBy: 'cert_order' | filter: {'checked': true}">
-                        <div class="st-sort" st-sort="stats.certificates[{{cert.cert_pk}}].expiryDate" st-skip-natural="true">{{cert.cert_short}}</div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="empl in shown track by empl.empl_pk" class="clickme" ng-click="(siteHover)?selectSite(empl.site.site_pk):select(empl.empl_pk)" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
-                    <td>
-                        <button type="button" class="btn btn-primary btn-xs" ng-disabled="!(hover && !siteHover)">VOIR</button>
-                    </td>
-                    <td>{{empl.empl_pk}}</td>
-                    <td class="text-right" ng-class="{'text-primary': hover && !siteHover}">{{empl.empl_gender ? 'M.' : 'Mme'}}&nbsp;</td>
-                    <td class="shrinkable" ng-class="{'text-primary': hover && !siteHover}">{{empl.empl_surname}}&nbsp;</td>
-                    <td class="shrinkable" ng-class="{'text-primary': hover && !siteHover}">{{empl.empl_firstname}}&nbsp;</td>
-                    <td ng-mouseenter="siteHover=true" ng-mouseleave="siteHover=false">
-                        <button type="button" class="btn btn-primary btn-xs" ng-disabled="!siteHover">VOIR</button>
-                    </td>
-                    <td class="shrinkable" ng-mouseenter="siteHover=true" ng-mouseleave="siteHover=false"><span ng-class="{'text-primary': siteHover}">{{empl.site.site_name}}</span></td>
-                    <!-- <td>{{empl.empl_dob | date: 'shortDate'}}</td> -->
-                    <td class="text-center"><span class="label" ng-class="{'label-warning': !empl.empl_permanent, 'label-success': empl.empl_permanent}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</span></td>
-                    <td ng-repeat="cert in certificates | orderBy: 'cert_order' | filter: {'checked': true}" ng-init="certStats = empl.stats.certificates[cert.cert_pk]" class="text-center">
-                        <span class="label" ng-class="'label-' + certStats.validityStatus">{{certStats.expiryDate | date: 'MMM yyyy'}}</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="panel-footer text-center">
-            <td colspan="5" class="text-center">
-                <div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
-            </td>
         </div>
     </div>
+    <div style="border-bottom: 1px solid #ddd;" uib-collapse="!advancedSearch">
+        <form class="panel-body form-horizontal" autocomplete="off">
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-xs-4 control-label">Ajouter filtre</label>
+                    <div class="col-xs-8 col-lg-6 input-group">
+                        <div class="input-group-addon">Selon aptitude</div>
+                        <select class="form-control" ng-model="cert" ng-options="cert as cert.cert_short + ' - ' + cert.cert_name for cert in certificates | orderBy: 'cert_order'">
+                            <option value=""></option>
+                        </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="button" ng-disabled="!cert" ng-click="addCondition(cert)">D&eacute;finir</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="form-group" ng-repeat="condition in conditions">
+                <div class="row">
+                    <div class="col-xs-4 text-right" style="padding-top: 8px">{{$first ? 'Ne garder que ceux dont' : 'et dont'}}</div>
+                    <div class="col-xs-8 col-lg-6">
+                        <div class="pill clickme" ng-click="conditions.splice(conditions.indexOf(condition), 1)">
+                            {{condition.display}}<span class="pill-delete">&times;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" ng-repeat="(key, value) in tp.filter()" ng-if="value !== ''">
+                <div class="row">
+                    <div class="col-xs-4 text-right">{{$first && conditions.length === 0 ? 'Ne garder que ceux dont' : 'et dont'}} <strong ng-bind-html="colFor(key).title | lowercase"></strong></div>
+                    <div class="col-xs-8">contient <span class="text-primary">{{value}}</span></div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-xs-4 text-right">Total</div>
+                <div class="col-xs-8">
+                    <span class="text-primary">{{tp.total()}}</span> agents {{filtering() ? 'correspondant aux crit&egrave;res' : 'trouv&eacute;s'}}
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table table-striped table-hover" ng-table-dynamic="tp with cols" show-filter="true">
+        <tr ng-repeat="empl in $data track by empl.empl_pk" hover-state="hover">
+            <td ng-repeat="col in $columns" ng-switch="col.id" class="clickme text-{{col.align || 'left'}}" ng-class="{shrinkable: col.shrinkable}" ng-click="siteHover ? selectSite(empl.siem_site_fk) : select(empl.empl_pk)"
+                hover-state="$parent.$parent.siteHover" hover-state-if="col.siteHover" width="{{col.width}}">
+                <span ng-switch-when="empl_gender" ng-class="{'text-primary': hover && !siteHover}">{{empl.empl_gender ? 'M.' : 'Mme'}}</span>
+                <span ng-switch-when="empl_firstname" ng-class="{'text-primary': hover && !siteHover}">{{::parse(empl, col.id)}}</span>
+                <span ng-switch-when="empl_surname" ng-class="{'text-primary': hover && !siteHover}">{{::parse(empl, col.id)}}</span>
+                <span ng-switch-when="site.site_name" ng-class="{'text-primary': siteHover}">{{::parse(empl, col.id)}}</span>
+                <span ng-switch-when="empl_permanent">
+                    <label class="label label-{{empl.empl_permanent ? 'success' : 'warning'}}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</label>
+                </span>
+                <span ng-switch-when="cert" ng-init="certStats=empl.stats.certificates[col.cert_pk]">
+                    <label class="label label-{{certStats.validityStatus}}">{{::certStats.expiryDate | date: 'MMM yyyy'}}</label>
+                </span>
+                <span ng-switch-when="button">
+                    <button type="button" class="btn btn-{{col.clazz}} btn-xs" ng-disabled="!({{col.on}})">Voir</button>
+                </span>
+                <span ng-switch-default>{{::parse(empl, col.field)}}</span>
+            </td>
+        </tr>
+    </table>
 </div>

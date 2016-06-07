@@ -4,7 +4,7 @@ var _ = require('lodash');
 var moment = require('moment');
 
 /* jshint camelcase: false */
-module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDialog, $route) {
+module.exports = function ($scope, updateSvc, dataSvc, busySvc, ngDialog, $route) {
   busySvc.busy('trainingTypes');
   Promise.all([dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(_.spread(function (trainingTypes, certificates) {
     $scope.trainingTypes = _(trainingTypes).map(function (type) {
@@ -36,9 +36,9 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDi
   $scope.saveReorder = function () {
     confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">sauvegarder la r&eacute;organisation</span> des types de formation&nbsp;?', function () {
       updateSvc.reorderTrtys(_.zipObject(_.map($scope.trainingTypes, 'trty_pk'), _.map($scope.trainingTypes, 'idx'))).then(function () {
-        $rootScope.alerts.push({ type: 'success', msg: 'Types de formations r&eacute;ordonn&eacute;s.' });
+        $scope.$emit('alert', { type: 'success', msg: 'Types de formations r&eacute;ordonn&eacute;s.' });
         $route.reload();
-      }, $rootScope.error);
+      }, _.bind($scope.$emit, $scope, 'error'));
       $scope.reorder = false;
       busySvc.done('ongoingOperation');
     });
@@ -67,7 +67,7 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDi
         };
 
         function complete(alert) {
-          $rootScope.alerts.push(alert);
+          $scope.$emit('alert', alert);
           $route.reload();
           $scope.closeThisDialog();
         }
@@ -78,14 +78,14 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDi
               '</span>&nbsp?',
               function () {
                 updateSvc.updateTrty($scope.type.trty_pk, $scope.type.trty_name, $scope.type.trty_validity, _.map($scope.type.certificates, 'cert_pk')).then(
-                  _.partial(complete, { type: 'success', msg: 'Type de formation mis &agrave; jour.' }), $rootScope.error);
+                  _.partial(complete, { type: 'success', msg: 'Type de formation mis &agrave; jour.' }), _.bind($scope.$emit, $scope, 'error'));
               });
           } else {
             confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-success">cr&eacute;er</span> le type <span class="text-success">' + $scope.type.trty_name +
               '</span>&nbsp?',
               function () {
                 updateSvc.createTrty($scope.type.trty_name, $scope.type.trty_validity, _.map($scope.type.certificates, 'cert_pk')).then(
-                  _.partial(complete, { type: 'success', msg: 'Type de formation cr&eacute;&eacute;.' }), $rootScope.error);
+                  _.partial(complete, { type: 'success', msg: 'Type de formation cr&eacute;&eacute;.' }), _.bind($scope.$emit, $scope, 'error'));
               }, { _type: 'success', _title: 'Confirmer' });
           }
         };
@@ -96,7 +96,8 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, busySvc, ngDi
             '<hr />&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-danger">supprimer</span> le type <span class="text-danger">' + $scope.type.trty_name +
             '</span>&nbsp?',
             function () {
-              updateSvc.deleteTrty($scope.type.trty_pk).then(_.partial(complete, { type: 'success', msg: 'Type de formation effac&eacute;.' }), $rootScope.error);
+              updateSvc.deleteTrty($scope.type.trty_pk)
+                .then(_.partial(complete, { type: 'success', msg: 'Type de formation effac&eacute;.' }), _.bind($scope.$emit, $scope, 'error'));
             }, { _type: 'danger' });
         };
       }]

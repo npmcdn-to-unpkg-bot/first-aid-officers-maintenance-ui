@@ -1,7 +1,7 @@
 'use strict';
 /*jshint camelcase: false*/
 
-module.exports = function ($rootScope, $scope, updateSvc, ngDialog, $route) {
+module.exports = function ($scope, updateSvc, ngDialog, $route) {
   $scope.create = function () {
     var dialogScope = $scope.$new(false);
     dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">modifier</span> le d&eacute;partement<br /><span class="text-warning">' +
@@ -12,8 +12,8 @@ module.exports = function ($rootScope, $scope, updateSvc, ngDialog, $route) {
     }).then(function () {
       $scope.busy = true;
       updateSvc.createDept($scope.dept.dept_pk, $scope.dept.dept_name, $scope.dept.dept_id).then(function () {
-        $rootScope.alerts.push({ type: 'success', msg: 'D&eacute;partement <b>' + $scope.dept.dept_name + '</b> mis &agrave; jour.' });
-        $rootScope.$broadcast('update');
+        $scope.$emit('alert', { type: 'success', msg: 'D&eacute;partement <b>' + $scope.dept.dept_name + '</b> mis &agrave; jour.' });
+        $scope.$emit('update');
         $scope.closeThisDialog();
         $route.reload();
       });

@@ -9,6 +9,24 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
   $scope.today = new Date();
   $scope.navbar = {};
 
+  $scope.closeAlert = function (alert) {
+    if ($rootScope._alerts.indexOf(alert) > -1) {
+      $rootScope._alerts.splice($rootScope._alerts.indexOf(alert), 1);
+    }
+  };
+
+  $scope.alertCallback = function (index) {
+    return $rootScope._alerts[index].callback();
+  };
+
+  $rootScope._alerts = [];
+  $rootScope.$on('alert', _.flow(_.nthArg(1), _.bind(Array.prototype.push, $rootScope._alerts)));
+  $rootScope.$on('error', _.bind(Array.prototype.push, $rootScope._alerts, {
+    type: 'danger',
+    msg: 'Une erreur est survenue. Merci de bien vouloir r&eacute;essayer ult&eacute;rieurement.\nSi le probl&egrave;me persiste, contactez un administrateur de la solution.',
+    static: true
+  }));
+
   $scope.refreshIndex = function () {
     Promise.all([dataSvc.getTrainings(), dataSvc.getTrainingTypes()]).then(_.spread(function (trainings, trainingTypes) {
       $scope.trainingsIndex = _.sortBy(_.each(_.values(trainings), function (training) {
@@ -63,15 +81,5 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
     }).then(function () {
       $rootScope.disconnect();
     });
-  };
-
-  $scope.closeAlert = function (alert) {
-    if ($scope.alerts.indexOf(alert) > -1) {
-      $scope.alerts.splice($scope.alerts.indexOf(alert), 1);
-    }
-  };
-
-  $scope.alertCallback = function (index) {
-    return $scope.alerts[index].callback();
   };
 };

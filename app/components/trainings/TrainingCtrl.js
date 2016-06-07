@@ -6,7 +6,7 @@ var moment = require('moment');
 var pdfMake = require('pdfmake');
 var imgs64 = require('../../img/imgs64.js');
 
-module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $location, ngDialog, busySvc, dateFilter) {
+module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ngDialog, busySvc, dateFilter) {
   busySvc.busy();
 
   Promise.all([dataSvc.getTraining($routeParams.trng_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function (results) {
@@ -263,7 +263,7 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
       scope: dialogScope
     }).then(function () {
       trngSvc.deleteTraining($scope.trng.trng_pk).then(function () {
-        $rootScope.alerts.push({
+        $scope.$emit('alert', {
           type: 'success',
           msg: 'Formation effac&eacute;e.'
         });

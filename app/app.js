@@ -211,7 +211,7 @@ angular.module('faomaintenanceApp', [
   .factory('UpdateSvc', ['$http', '$q', 'ApiSvc', require('./services/UpdateSvc.js')])
 
 .controller('AccountCtrl', ['$scope', '$rootScope', 'AdminSvc', 'ngDialog', 'BusySvc', require('./components/account/AccountCtrl.js')])
-  .controller('CertificatesCtrl', ['$scope', '$rootScope', 'UpdateSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
+  .controller('CertificatesCtrl', ['$scope', 'UpdateSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
     require('./components/administration/certificates/CertificatesCtrl.js')
   ])
   .controller('DepartmentEditCtrl', ['$rootScope', '$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/department_edit/DepartmentEditCtrl.js')])
@@ -261,9 +261,13 @@ angular.module('faomaintenanceApp', [
 .run(['$rootScope', '$location', '$route', '$cookies', '$http', 'ngDialog', 'BusySvc', 'AuthSvc',
   function ($rootScope, $location, $route, $cookies, $http, ngDialog, busySvc, authSvc) {
     $rootScope.alerts = [];
-    $rootScope.error = function () {
-      $rootScope.alerts.push({ type: 'danger', msg: 'Une erreur est survenue. Merci de bien vouloir r&eacute;essayer ult&eacute;rieurement.\nSi le probl&egrave;me persiste, contactez un administrateur de la solution.' });
-    };
+    $rootScope.$on('alert', _.flow(_.nthArg(1), _.bind(Array.prototype.push, $rootScope.alerts)));
+    $rootScope.$on('error', _.bind(Array.prototype.push, $rootScope.alerts, {
+      type: 'danger',
+      msg: 'Une erreur est survenue. Merci de bien vouloir r&eacute;essayer ult&eacute;rieurement.\nSi le probl&egrave;me persiste, contactez un administrateur de la solution.',
+      static: true
+    }));
+
     $rootScope.currentUser = {};
 
     $rootScope.disconnect = function () {

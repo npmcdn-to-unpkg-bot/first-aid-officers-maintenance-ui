@@ -56,7 +56,7 @@
             <div class="row">
                 <div class="col-xs-4 text-right">Total</div>
                 <div class="col-xs-8">
-                    <span class="text-primary">{{tp.total()}}</span> agents {{filtering() ? 'correspondant aux crit&egrave;res' : 'trouv&eacute;s'}}
+                    <span class="text-primary">{{tp.total()}}</span> agents trouv&eacute;s
                 </div>
             </div>
         </form>
@@ -78,7 +78,7 @@
                 <span ng-switch-when="button">
                     <button type="button" class="btn btn-{{col.clazz}} btn-xs" ng-disabled="!({{col.on}})">Voir</button>
                 </span>
-                <span ng-switch-default>{{::parse(empl, col.field)}}</span>
+                <span ng-switch-default>{{::$eval(col.field, empl)}}</span>
             </td>
         </tr>
     </table>

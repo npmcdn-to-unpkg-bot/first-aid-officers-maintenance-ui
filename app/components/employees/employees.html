@@ -66,9 +66,9 @@
             <td ng-repeat="col in $columns" ng-switch="col.id" class="clickme text-{{col.align || 'left'}}" ng-class="{shrinkable: col.shrinkable}" ng-click="siteHover ? selectSite(empl.siem_site_fk) : select(empl.empl_pk)"
                 hover-state="$parent.$parent.siteHover" hover-state-if="col.siteHover" width="{{col.width}}">
                 <span ng-switch-when="empl_gender" ng-class="{'text-primary': hover && !siteHover}">{{empl.empl_gender ? 'M.' : 'Mme'}}</span>
-                <span ng-switch-when="empl_firstname" ng-class="{'text-primary': hover && !siteHover}">{{::parse(empl, col.id)}}</span>
-                <span ng-switch-when="empl_surname" ng-class="{'text-primary': hover && !siteHover}">{{::parse(empl, col.id)}}</span>
-                <span ng-switch-when="site.site_name" ng-class="{'text-primary': siteHover}">{{::parse(empl, col.id)}}</span>
+                <span ng-switch-when="empl_firstname" ng-class="{'text-primary': hover && !siteHover}">{{::$eval(col.id, empl)}}</span>
+                <span ng-switch-when="empl_surname" ng-class="{'text-primary': hover && !siteHover}">{{::$eval(col.id, empl)}}</span>
+                <span ng-switch-when="site.site_name" ng-class="{'text-primary': siteHover}">{{::$eval(col.id, empl)}}</span>
                 <span ng-switch-when="empl_permanent">
                     <label class="label label-{{empl.empl_permanent ? 'success' : 'warning'}}">{{empl.empl_permanent ? 'CDI' : 'CDD'}}</label>
                 </span>

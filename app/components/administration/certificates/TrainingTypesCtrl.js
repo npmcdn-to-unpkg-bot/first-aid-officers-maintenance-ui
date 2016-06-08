@@ -29,7 +29,7 @@ module.exports = function ($scope, updateSvc, dataSvc, busySvc, ngDialog, $route
 
   $scope.startReorder = function () {
     busySvc.busy('ongoingOperation', true);
-    $scope.alerts.push({ type: 'primary', msg: 'D&eacute;placez les panneaux pour les r&eacute;organiser.' });
+    $scope.$emit('alert', { type: 'primary', msg: 'D&eacute;placez les panneaux pour les r&eacute;organiser.' });
     $scope.reorder = true;
   };
 

@@ -1,5 +1,5 @@
 <div class="alerts-container">
-    <uib-alert class="alert uib-alert" ng-repeat="alert in _alerts" type="{{alert.type}}" close="closeAlert(alert)" dismiss-on-timeout="{{alert.static ? '' : 50000000}}">
+    <uib-alert class="alert uib-alert" ng-repeat="alert in _alerts" type="{{alert.type}}" close="closeAlert(alert)" dismiss-on-timeout="{{alert.static ? '' : 5000}}">
         <div ng-bind-html="alert.msg"></div>
         <div class="text-center" ng-if="alert.callback">
             <hr />

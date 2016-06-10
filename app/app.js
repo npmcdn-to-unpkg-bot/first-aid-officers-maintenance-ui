@@ -142,16 +142,6 @@ angular.module('faomaintenanceApp', [
           controller: 'SitesSearchResultsCtrl',
           reloadOnSearch: false
         })
-        .when('/trainings/search', {
-          templateUrl: 'components/search/search.html',
-          controller: 'TrainingsSearchCtrl',
-          reloadOnSearch: false
-        })
-        .when('/trainings/results', {
-          templateUrl: 'components/search/trainings/trainings_search_results.html',
-          controller: 'TrainingsSearchResultsCtrl',
-          reloadOnSearch: false
-        })
 
       // Employees
       .when('/employees', {
@@ -177,7 +167,8 @@ angular.module('faomaintenanceApp', [
       // Trainings
       .when('/trainings', {
           templateUrl: 'components/trainings/trainings.html',
-          controller: 'TrainingsCtrl'
+          controller: 'TrainingsCtrl',
+          reloadOnSearch: false
         })
         .when('/trainings/create', {
           templateUrl: 'components/trainings/training_edit.html',
@@ -244,10 +235,10 @@ angular.module('faomaintenanceApp', [
     require('./components/administration/certificates/CertificatesCtrl.js')
   ])
   .controller('DepartmentEditCtrl', ['$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/department_edit/DepartmentEditCtrl.js')])
-  .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/employees/EmployeesCtrl.js')])
   .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc',
     require('./components/employees/EmployeeCtrl.js')
   ])
+  .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/employees/EmployeesCtrl.js')])
   .controller('HomeCtrl', ['$scope', 'ngDialog', 'BusySvc', require('./components/home/HomeCtrl.js')])
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
   .controller('LoginCtrl', ['$scope', '$rootScope', '$route', 'AuthSvc', 'BusySvc', require('./components/index/LoginCtrl.js')])
@@ -263,16 +254,12 @@ angular.module('faomaintenanceApp', [
   .controller('TrainingCtrl', ['$scope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'BusySvc', 'dateFilter',
     require('./components/trainings/TrainingCtrl.js')
   ])
-  .controller('TrainingsCtrl', ['$scope', 'DataSvc', '$location', 'BusySvc', require('./components/trainings/TrainingsCtrl.js')])
+  .controller('TrainingsCtrl', ['$scope', 'DataSvc', '$location', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/trainings/TrainingsCtrl.js')])
   .controller('TrainingCompletionCtrl', ['$scope', '$routeParams', 'DataSvc', '$location', 'ngDialog', 'TrainingsSvc', 'BusySvc', 'dateFilter',
     require('./components/trainings/TrainingCompletionCtrl.js')
   ])
   .controller('TrainingEditCtrl', ['$scope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'dateFilter', 'BusySvc',
     require('./components/trainings/TrainingEditCtrl.js')
-  ])
-  .controller('TrainingsSearchCtrl', ['$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', require('./components/search/trainings/TrainingsSearchCtrl.js')])
-  .controller('TrainingsSearchResultsCtrl', ['$scope', '$location', 'ngDialog', 'BusySvc', 'DataSvc', 'dateFilter',
-    require('./components/search/trainings/TrainingsSearchResultsCtrl.js')
   ])
   .controller('TrainingsStatsCtrl', ['$scope', 'DataSvc', 'dateFilter', 'BusySvc', 'ngDialog', require('./components/trainings/TrainingsStatsCtrl')])
   .controller('TrainingTypesCtrl', ['$scope', 'UpdateSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
@@ -285,11 +272,19 @@ angular.module('faomaintenanceApp', [
 
 .run(['$rootScope', '$location', '$route', '$cookies', '$http', 'ngDialog', 'BusySvc', 'AuthSvc', '$templateCache',
   function ($rootScope, $location, $route, $cookies, $http, ngDialog, busySvc, authSvc, $templateCache) {
+    // Placeholder
     $templateCache.put('ng-table/filters/text.html',
       '<input type="text" name="{{name}}" placeholder="Rechercher..." ng-disabled="$filterRow.disabled" ng-model="params.filter()[name]" class="input-filter form-control" placeholder="{{getFilterPlaceholderValue(filter, name)}}"/> '
     );
+
+    // colspan + hideHeader
     $templateCache.put('ng-table/sorterRow.html',
-      '<tr class="ng-table-sort-header"> <th title="{{$column.headerTitle(this)}}" ng-repeat="$column in $columns" ng-class="{ \'sortable\': $column.sortable(this), \'sort-asc\': params.sorting()[$column.sortable(this)]==\'asc\', \'sort-desc\': params.sorting()[$column.sortable(this)]==\'desc\' }" ng-click="sortBy($column, $event)" ng-if="$column.show(this)" ng-init="template=$column.headerTemplateURL(this)" class="header {{$column.class(this)}}"> <div ng-if="!template" class="ng-table-header" ng-class="{\'sort-indicator\': params.settings().sortingIndicator==\'div\'}"> <span ng-bind-html="$column.title(this)" ng-class="{\'sort-indicator\': params.settings().sortingIndicator==\'span\'}"></span> </div> <div ng-if="template" ng-include="template"></div> </th> </tr> '
+      '<tr class="ng-table-sort-header"> <th colspan="{{$column.colspan}}" title="{{$column.headerTitle(this)}}" ng-repeat="$column in $columns" ng-class="{ \'sortable\': $column.sortable(this), \'sort-asc\': params.sorting()[$column.sortable(this)]==\'asc\', \'sort-desc\': params.sorting()[$column.sortable(this)]==\'desc\' }" ng-click="sortBy($column, $event)" ng-if="$column.show(this) && !$column.hideHeader" ng-init="template=$column.headerTemplateURL(this)" class="header {{$column.class(this)}}"> <div ng-if="!template" class="ng-table-header" ng-class="{\'sort-indicator\': params.settings().sortingIndicator==\'div\'}"> <span ng-bind-html="$column.title(this)" ng-class="{\'sort-indicator\': params.settings().sortingIndicator==\'span\'}"></span> </div> <div ng-if="template" ng-include="template"></div> </th> </tr>'
+    );
+
+    // colspan + hideHeader
+    $templateCache.put('ng-table/filterRow.html',
+      '<tr ng-show="show_filter" class="ng-table-filters"> <th colspan="{{$column.colspan}}" data-title-text="{{$column.titleAlt(this) || $column.title(this)}}" ng-repeat="$column in $columns" ng-if="$column.show(this) && !$column.hideHeader" class="filter {{$column.class(this)}}" ng-class="params.settings().filterOptions.filterLayout===\'horizontal\' ? \'filter-horizontal\' : \'\'"> <div ng-repeat="(name, filter) in $column.filter(this)" ng-include="config.getTemplateUrl(filter)" class="filter-cell" ng-class="[getFilterCellCss($column.filter(this), params.settings().filterOptions.filterLayout), $last ? \'last\' : \'\']"> </div> </th> </tr> '
     );
 
     /* jshint multistr: true */
@@ -355,7 +350,7 @@ angular.module('faomaintenanceApp', [
           scope: _.extend($rootScope.$new(true), { innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">abandonner l\'op&eacute;ration en cours</span>&nbsp;?' })
         }).then(function () {
           busySvc.done('ongoingOperation');
-          $location.path(newUrl.substring($location.absUrl().length - $location.url().length));
+          $location.url(newUrl.substring($location.absUrl().length - $location.url().length));
         });
       }
     });

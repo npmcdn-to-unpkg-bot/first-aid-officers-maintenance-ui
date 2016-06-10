@@ -1,61 +1,126 @@
-<div st-persist="trainings" st-table="shown" st-safe-src="trainings" st-set-sort="orderByNullLast">
-    <form class="form-horizontal">
-        <div class="form-group">
-            <label for="pageSize" class="control-label col-xs-4 col-md-2">Formations par page</label>
-            <div class="col-xs-8 col-md-2">
-                <select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
+<h3>Liste des <span class="text-primary">formations</span></h3>
+<br />
+<div class="panel panel-primary">
+    <div class="panel-heading panel-heading-togglebutton">
+        <div class="row">
+            <div class="col-xs-4 checkbox">
+                <span class="togglebutton">
+                    <label>
+                        <input type="checkbox" ng-model="advancedSearch" ng-disabled="datesCondition || types.length > 0" />Recherche avanc&eacute;e
+                    </label>
+                </span>
             </div>
-        </div>
-    </form>
-    <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-            <div class="panel panel-primary">
-                <div class="panel-heading">Formations</div>
-                <table class="table table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th width="50%" colspan="2">
-                                <div class="st-sort" st-sort="type.trty_name" st-skip-natural="true">Type</div>
-                                <st-select-distinct collection="trainings" predicate="type.trty_name"></st-select-distinct>
-                            </th>
-                            <th width="50%">
-                                <div class="st-sort" st-sort="trng_date" st-skip-natural="true" st-sort-default="reverse">Date</div>
-                                <st-select-date predicate="trng_date"></st-select-date>
-                            </th>
-                            <th class="vtop">
-                                <div class="st-sort" st-sort="trng_outcome" st-skip-natural="true">&Eacute;tat</div>
-                                <!-- <st-select-distinct collection="trainings" predicate="trng_outcome" /> -->
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="trng in shown track by trng.trng_pk" ng-mouseenter="hover=true" ng-mouseleave="hover = false" ng-class="{'text-primary': hover}" class="clickme" ng-click="select(trng.trng_pk)">
-                            <td>
-                                <button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button>
-                            </td>
-                            <td>{{trng.type.trty_name}}</td>
-                            <td width="1%" class="text-right">
-                                <span ng-repeat="cert in trng.type.certificates | orderBy: 'cert_order'"><label class="label label-{{trng.trng_outcome === 'COMPLETED' ? 'success' : 'primary'}}">{{cert.cert_short}}</label>&nbsp;</span>
-                            </td>
-                            <td>{{trng.trng_displayDate}}</td>
-                            <td class="text-right">
-                                <span ng-if="trng.trng_outcome === 'SCHEDULED'" class="label label-primary">Pr&eacute;vue</span>
-                                <span ng-if="trng.trng_outcome === 'COMPLETED'" class="label label-success">R&eacute;alis&eacute;e</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="panel-footer text-center">
-                    <td colspan="5" class="text-center">
-                        <div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
-                    </td>
+            <div class="col-xs-8 text-right panel-heading-buttons">
+                <div class="btn-group">
+                    <label class="btn btn-raised btn-default btn-sm" ng-model="dataType.checked" uib-btn-checkbox ng-repeat="dataType in additionalData" ng-bind-html="dataType.display"></label>
                 </div>
             </div>
         </div>
-        <div class="col-md-2"></div>
     </div>
+    <div style="border-bottom: 1px solid #ddd;" uib-collapse="!advancedSearch">
+        <form class="panel-body form-horizontal" autocomplete="off">
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-xs-4 control-label checkbox-label">D&eacute;tails</label>
+                    <div class="col-xs-8" style="display: flex; flex-wrap: wrap;">
+                        <div class="checkbox" style="flex-basis: 200px;">
+                            <label>
+                                <input type="checkbox" ng-model="details.registered" />Inscrits
+                            </label>
+                        </div>
+                        <div class="checkbox" style="flex-basis: 200px;">
+                            <label>
+                                <input type="checkbox" ng-model="details.validated" />Valid&eacute;s
+                            </label>
+                        </div>
+                        <div class="checkbox" style="flex-basis: 200px;">
+                            <label>
+                                <input type="checkbox" ng-model="details.flunked" />Recal&eacute;s/absents
+                            </label>
+                        </div>
+                        <div class="checkbox" style="flex-basis: 200px;">
+                            <label>
+                                <input type="checkbox" ng-model="details.trng_start" />Date de d&eacute;but
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-xs-4 control-label">Date de formation</label>
+                    <div class="col-xs-8 col-lg-6" ng-show="!datesCondition">
+                        <select class="form-control" ng-model="dateOption" ng-options="option as option.display for option in datesOptions" ng-change="addDateContition(dateOption.value)"></select>
+                    </div>
+                    <div class="col-xs-8 col-lg-6" ng-show="datesCondition">
+                        <div class="pill pill-label clickme" ng-click="deleteDatesCondition()" ng-switch="datesCondition.option">
+                            <span ng-switch-when="soon">Dans moins de <span class="text-primary">{{datesCondition.data}}</span> mois</span>
+                            <span ng-switch-when="recent">Il y a moins de <span class="text-primary">{{datesCondition.data}}</span> mois</span>
+                            <span ng-switch-when="specific">Entre le <span class="text-primary">{{datesCondition.from | date: 'dd/MM/yyyy'}}</span> et le <span class="text-primary">{{datesCondition.to | date: 'dd/MM/yyyy'}}</span></span>
+                            <span class="pill-delete">&times;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-xs-4 control-label">Type(s) de formation</label>
+                    <div class="col-xs-8 col-lg-6">
+                        <select class="form-control" ng-model="typeOption" ng-options="option as option.display for option in [{value: 'cert', display: 'Octroyant une certaine aptitude'}, {value: 'trty', display: 'Type particulier de formation'}]"
+                            ng-change="addTypes(typeOption.value)">
+                            <option value="" selected></option>
+                        </select>
+                    </div>
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-8 col-lg-6">
+                        <div class="pill clickme" ng-click="types.splice(types.indexOf(type), 1)" ng-repeat="type in types">
+                            {{type.trty_name}}<span class="pill-delete">&times;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="form-group" ng-repeat="condition in conditions">
+                <div class="row">
+                    <div class="col-xs-4 text-right" style="padding-top: 8px">{{$first ? 'Ne garder que celles dont' : 'et dont'}}</div>
+                    <div class="col-xs-8 col-lg-6">
+                        <div class="pill clickme" ng-click="conditions.splice(conditions.indexOf(condition), 1)">
+                            {{condition.display}}<span class="pill-delete">&times;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" ng-repeat="(key, value) in tp.filter() | omitEmptyKeys">
+                <div class="row">
+                    <div class="col-xs-4 text-right">{{$first && (conditions || []).length === 0 ? 'Ne garder que celles dont' : 'et dont'}} <strong ng-bind-html="getFilterDisplay(key, value).title | lowercase"></strong></div>
+                    <div class="col-xs-8">{{getFilterDisplay(key, value).link || 'contient'}} <span class="text-primary">{{getFilterDisplay(key, value).value}}</span></div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-xs-4 text-right">Total</div>
+                <div class="col-xs-8">
+                    <span class="text-primary">{{tp.total()}}</span> formations trouv&eacute;es
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table table-striped table-hover" ng-table-dynamic="tp with cols" show-filter="true">
+        <tr ng-repeat="trng in $data track by trng.trng_pk" hover-state="hover">
+            <td ng-repeat="col in $columns" ng-switch="col.id" class="clickme text-{{col.align || 'left'}} {{col.clazz}}" ng-class="{shrinkable: col.shrinkable}" ng-click="select(trng.trng_pk)"
+                width="{{col.width}}">
+                <span ng-switch-when="trng_start">{{trng.trng_start | date: 'dd/MM/yyyy'}}</span>
+                <span ng-switch-when="trng_end">{{trng.trng_date | date: 'dd/MM/yyyy'}}</span>
+                <span ng-switch-when="trng_outcome"><label class="label label-{{trng.trng_outcome === 'COMPLETED' ? 'success' : 'primary'}}">{{trng.trng_outcome === 'COMPLETED' ? 'R&eacute;alis&eacute;e' : 'Pr&eacute;vue'}}</label></span>
+                <span ng-switch-when="certs"><label ng-repeat="cert in trng.type.certificates" class="label label-{{trng.trng_outcome === 'COMPLETED' ? 'success' : 'primary'}}">{{cert.cert_short}}</label></span>
+                <span ng-switch-when="button">
+                    <button type="button" class="btn btn-{{col.clazz}} btn-xs" ng-disabled="!({{col.on}})">Voir</button>
+                </span>
+                <span ng-switch-default>{{::$eval(col.field, trng)}}</span>
+            </td>
+        </tr>
+    </table>
 </div>
 <div class="side-panel-container text-right" if-role="'trainer'">
     <a href="#/trainings/create" class="btn btn-success btn-raised side-panel-item"><span class="glyphicon glyphicon-plus"></span>&nbsp;Cr&eacute;er formation</a>

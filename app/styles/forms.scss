@@ -1,5 +1,5 @@
 .input-group-addon {
-    padding: 6px 15px;
+    padding: 8px 15px 6px 15px;
 }
 
 .form-group label.control-label.checkbox-label {
@@ -11,6 +11,10 @@
         margin-left: 5px;
         position: relative;
         top: -1px;
+    }
+    .checkbox-material {
+        top: .3em;
+        margin-right: 5px;
     }
 }
 

@@ -29,6 +29,10 @@ $screen-xs: 768px;
     }
 }
 
+label.label + label.label {
+    margin-left: 2px;
+}
+
 hr + hr {
     display: none;
 }

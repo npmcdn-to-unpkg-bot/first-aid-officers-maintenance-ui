@@ -147,7 +147,8 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
         $rootScope.alerts.push({
           type: 'success',
           msg: 'Mot de passe r&eacute;initialis&eacute;&nbsp: <strong><samp>' + password +
-            '</samp></strong><hr />Veuillez transmettre son nouveau mot de passe &agrave; l\'agent concern&eacute;.'
+            '</samp></strong><hr />Veuillez transmettre son nouveau mot de passe &agrave; l\'agent concern&eacute;.',
+          static: true
         });
       });
     });

@@ -1,24 +1,11 @@
 <div class="navbar-collapse collapse navbar-responsive-collapse">
     <ul class="nav navbar-nav">
-        <li class="dropdown" ng-class="{ active: isActive('/sites')}">
-            <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Sites&nbsp;<b class="caret"></b></a>
-            <ul class="dropdown-menu">
-                <li><a href="#/sites">Consulter sites</a></li>
-                <li><a href="#/sites/search">Recherche avanc&eacute;e</a></li>
-            </ul>
-        </li>
-        <li class="dropdown" ng-class="{ active: isActive('/employees')}">
-            <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Agents&nbsp;<b class="caret"></b></a>
-            <ul class="dropdown-menu">
-                <li><a href="#/employees">Consulter agents</a></li>
-                <li><a href="#/employees/search">Recherche avanc&eacute;e</a></li>
-            </ul>
-        </li>
+        <li ng-class="{ active: isActive('/sites')}"><a href="#/sites">Sites</a></li>
+        <li ng-class="{ active: isActive('/employees')}"><a href="#/employees">Agents</a></li>
         <li class="dropdown" ng-class="{ active: isActive('/trainings')}">
             <a href="javascript(void);" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Formations&nbsp;<b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li><a href="#/trainings">Consulter formations</a></li>
-                <li><a href="#/trainings/search">Recherche avanc&eacute;e</a></li>
                 <li class="divider" if-role="'trainer'"></li>
                 <li><a href="#/trainings/create" if-role="'trainer'">Cr&eacute;er formation</a></li>
                 <li><a href="#/trainings/stats" if-role="'trainer'">Dresser statistiques</a></li>

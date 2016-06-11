@@ -1,0 +1,42 @@
+.input-group-addon {
+    padding: 8px 15px 6px 15px;
+}
+
+.form-group label.control-label.checkbox-label {
+    padding-top: 6px;
+}
+
+.form-group.is-focused .checkbox label {
+    color: rgb(189, 189, 189);
+}
+
+.form-group .checkbox {
+    .checkbox-label {
+        margin-left: 5px;
+        position: relative;
+        top: -1px;
+    }
+    .checkbox-material {
+        top: .3em;
+        margin-right: 7px;
+    }
+}
+
+.form-group:not(.label-floating) {
+    margin: 0;
+    .checkbox label,
+    label.control-label {
+        font-size: 14px;
+    }
+    label.control-label {
+        margin-top: 8px;
+    }
+}
+
+.form-group.extra-padding {
+    padding-bottom: 30px;
+}
+
+.help-block.force-show {
+    display: block;
+}

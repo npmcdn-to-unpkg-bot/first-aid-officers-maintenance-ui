@@ -55,13 +55,13 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
   $scope.$watch('navbar.select', function (select) {
     if (select !== undefined) {
       if (select.site_pk) {
-        $location.path('/sites/' + select.site_pk);
+        $location.path('/sites/' + select.site_pk).search({});
         delete($scope.navbar.select);
       } else if (select.empl_pk) {
-        $location.path('/employees/' + select.empl_pk);
+        $location.path('/employees/' + select.empl_pk).search({});
         delete($scope.navbar.select);
       } else if (select.trng_pk) {
-        $location.path('/trainings/' + select.trng_pk);
+        $location.path('/trainings/' + select.trng_pk).search({});
         delete($scope.navbar.select);
       }
     }

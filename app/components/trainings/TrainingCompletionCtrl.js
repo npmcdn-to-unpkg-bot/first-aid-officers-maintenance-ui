@@ -81,7 +81,7 @@ module.exports = function ($scope, $routeParams, dataSvc, $location, ngDialog, t
       }).then(function () {
         busySvc.done('ongoingOperation');
         $scope.$emit('alert', { type: 'success', msg: 'Proc&egrave;s verbal de fin de session &eacute;dit&eacute;.' });
-        $location.path('/trainings/' + $scope.trng.trng_pk).search('force', true);
+        $location.path('/trainings/' + $scope.trng.trng_pk);
       });
     });
   };
@@ -96,7 +96,7 @@ module.exports = function ($scope, $routeParams, dataSvc, $location, ngDialog, t
       scope: dialogScope
     }).then(function () {
       busySvc.done('ongoingOperation');
-      $location.path('/trainings/' + $scope.trng.trng_pk).search('force', true);
+      $location.path('/trainings/' + $scope.trng.trng_pk);
     });
   };
 };

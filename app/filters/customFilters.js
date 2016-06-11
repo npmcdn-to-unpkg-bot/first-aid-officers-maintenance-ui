@@ -17,6 +17,8 @@ function summariseTrng(trng) {
   return trng.type.trty_name + ' - ' + trng.trng_displayDate;
 }
 
+customFilters.filter('omitEmptyKeys', _.constant(_.partialRight(_.omitBy, _.overSome(_.isNil, _.partial(_.isEqual, _, '')))));
+
 customFilters.filter('filterEmpl', function () {
   return function (employees, inputString) {
     inputString = inputString.toUpperCase();

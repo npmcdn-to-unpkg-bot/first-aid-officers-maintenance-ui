@@ -170,7 +170,7 @@ module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ng
       promise.then(function (trng_pk) {
         busySvc.done('ongoingOperation');
         $scope.$emit('alert', { type: 'success', msg: $scope.trng.trng_pk ? 'Formation mise &agrave; jour.' : 'Formation cr&eacute;&eacute;e.' });
-        $location.path('/trainings/' + ($scope.trng.trng_pk || trng_pk)).search('force', true);
+        $location.path('/trainings/' + ($scope.trng.trng_pk || trng_pk));
       });
     });
   };
@@ -185,9 +185,9 @@ module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ng
     }).then(function () {
       busySvc.done('ongoingOperation');
       if ($scope.trng && $scope.trng.trng_pk) {
-        $location.path('/trainings/' + $scope.trng.trng_pk).search('force', true);
+        $location.path('/trainings/' + $scope.trng.trng_pk);
       } else {
-        $location.path('/home').search('force', true);
+        $location.path('/home');
       }
     });
   };

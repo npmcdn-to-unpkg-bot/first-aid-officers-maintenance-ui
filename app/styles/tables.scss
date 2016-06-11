@@ -68,7 +68,8 @@ table.table {
     }
     .form-group {
         padding: 0;
-        input.form-control {
+        input.form-control,
+        select.form-control {
             margin: 0;
         }
     }

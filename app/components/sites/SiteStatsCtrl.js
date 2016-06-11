@@ -267,11 +267,13 @@ module.exports = function ($scope, $routeParams, dataSvc, busySvc) {
   $scope.from.setDate(1);
 
   Promise.all([dataSvc.getCertificates(), dataSvc.getSiteStatsHistory($routeParams.site_pk, $scope.from)]).then(function (results) {
-    $scope.initSvg();
-    $scope.certificates = _(results[0]).values().orderBy('cert_order').value();
-    $scope.data = results[1];
-    $scope.displayData(_($scope.certificates).map('cert_pk').head());
-    busySvc.done('siteStats');
+    setTimeout(function () {
+      $scope.initSvg();
+      $scope.certificates = _(results[0]).values().orderBy('cert_order').value();
+      $scope.data = results[1];
+      $scope.displayData(_($scope.certificates).map('cert_pk').head());
+      busySvc.done('siteStats');
+    }, 0);
   }, _.partial(busySvc.done, 'siteStats'));
 
   $scope.recompute = function () {

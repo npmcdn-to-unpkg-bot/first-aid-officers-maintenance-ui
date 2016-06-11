@@ -1,9 +1,0 @@
-<h3>Recherche {{searchType}} - <span class="text-primary" ng-bind-html="currentStep.title | lowercase"></span></h3>
-<br />
-<div class="row">
-    <div ng-include="currentStep.template"></div>
-</div>
-<div class="side-panel-container text-right">
-    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="search()"><span class="glyphicon glyphicon-search"></span>&nbsp;Lancer la recherche</button>
-    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="currentStep = steps[currentStep.step % 2]"><span class="glyphicon glyphicon-menu-{{currentStep.step === 1 ? 'right' : 'left'}}"></span>&nbsp;<span ng-bind-html="steps[currentStep.step % 2].title"></span></button>
-</div>

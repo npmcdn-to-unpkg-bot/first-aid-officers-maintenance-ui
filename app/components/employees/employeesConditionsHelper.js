@@ -28,6 +28,9 @@ var statusOptions = [{
 }];
 
 var certificatesConditions = [{
+  value: 'status',
+  display: 'Statut de l\'aptitude'
+}, {
   value: 'recent',
   display: 'Aptitude récemment expirée/obtenue'
 }, {
@@ -36,9 +39,6 @@ var certificatesConditions = [{
 }, {
   value: 'expiry',
   display: 'Expire sur une certaine période'
-}, {
-  value: 'status',
-  display: 'Statut de l\'aptitude'
 }];
 
 function getConditionDisplay(cert, params) {

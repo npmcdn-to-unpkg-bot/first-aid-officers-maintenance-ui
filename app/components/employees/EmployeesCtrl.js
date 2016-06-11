@@ -117,7 +117,7 @@ module.exports = function ($scope, $location, dataSvc, busySvc, NgTableParams, n
 
   busySvc.busy('employees');
   Promise.all([dataSvc.getCertificates(), dataSvc.getSites(), dataSvc.getEmployeesWithStats()]).then(_.spread(function (certificates, sites, employees) {
-    $scope.certificates = $scope.certificates = _.values(certificates);
+    $scope.certificates = _.values(certificates);
     $scope.sites = sites;
     $scope.employees = _.values(_.each(employees, function (empl) {
       empl.site = $scope.sites[empl.siem_site_fk];
@@ -136,7 +136,9 @@ module.exports = function ($scope, $location, dataSvc, busySvc, NgTableParams, n
 
     // Restore status from URL search parameters and initiliaze table parameters
     $scope.conditions = helper.fillUp(helper.fromURIComponent($location.search().conditions), certificates);
-    $scope.tp = new NgTableParams(_.omit(_.extend({ sorting: { empl_surname: 'asc' }, count: 10 }, $location.search()), 'conditions'), {
+    $scope.tp = new NgTableParams(_.mapValues(_.omit(_.extend({ sorting: { empl_surname: 'asc' }, count: 10 }, $location.search()), 'conditions'), function (val) {
+      return _.isString(val) ? decodeURI(val) : val;
+    }), {
       filterDelay: 0,
       defaultSort: 'asc'
     });

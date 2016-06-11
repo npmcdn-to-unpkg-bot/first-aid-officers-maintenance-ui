@@ -6,6 +6,10 @@
     padding-top: 6px;
 }
 
+.form-group.is-focused .checkbox label {
+    color: rgb(189, 189, 189);
+}
+
 .form-group .checkbox {
     .checkbox-label {
         margin-left: 5px;

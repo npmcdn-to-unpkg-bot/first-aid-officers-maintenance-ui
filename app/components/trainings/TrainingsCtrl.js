@@ -17,7 +17,7 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
     title: 'Type de formation',
     sortable: 'type.trty_order',
     filter: {
-      'type.trty_pk': 'select'
+      'type.trty_name': 'select'
     },
     field: 'type.trty_name',
     colspan: 2,
@@ -181,13 +181,15 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
     _.find($scope.cols, { field: 'type.trty_name' }).data = _.map(_.orderBy(trainingTypes, 'trty_order'), function (type) {
       return {
         title: type.trty_name,
-        id: type.trty_pk
+        id: type.trty_name
       };
     });
 
     $scope.certificates = _.values(certificates);
     $scope.trainingTypes = _.values(trainingTypes);
-    $scope.tp = new NgTableParams(_.omit(_.extend({ sorting: { trng_date: 'desc' }, count: 10 }, $location.search()), 'dates'), {
+    $scope.tp = new NgTableParams(_.mapValues(_.omit(_.extend({ sorting: { trng_date: 'desc' }, count: 10 }, $location.search()), ['dates', 'types'], function (val) {
+      return _.isString(val) ? decodeURI(val) : val;
+    })), {
       filterDelay: 0,
       defaultSort: 'asc',
       dataset: $scope.trainings

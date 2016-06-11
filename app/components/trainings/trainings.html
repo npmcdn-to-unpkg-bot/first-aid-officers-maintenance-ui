@@ -22,26 +22,30 @@
             <div class="form-group">
                 <div class="row">
                     <label class="col-xs-4 control-label checkbox-label">D&eacute;tails</label>
-                    <div class="col-xs-8" style="display: flex; flex-wrap: wrap;">
-                        <div class="checkbox" style="flex-basis: 200px;">
-                            <label>
-                                <input type="checkbox" ng-model="details.registered" />Inscrits
-                            </label>
+                    <div class="col-xs-8">
+                        <div class="row">
+                            <div class="col-xs-6 col-md-4 checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="details.registered" />Inscrits
+                                </label>
+                            </div>
+                            <div class="col-xs-6 col-md-4 checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="details.validated" />Valid&eacute;s
+                                </label>
+                            </div>
                         </div>
-                        <div class="checkbox" style="flex-basis: 200px;">
-                            <label>
-                                <input type="checkbox" ng-model="details.validated" />Valid&eacute;s
-                            </label>
-                        </div>
-                        <div class="checkbox" style="flex-basis: 200px;">
-                            <label>
-                                <input type="checkbox" ng-model="details.flunked" />Recal&eacute;s/absents
-                            </label>
-                        </div>
-                        <div class="checkbox" style="flex-basis: 200px;">
-                            <label>
-                                <input type="checkbox" ng-model="details.trng_start" />Date de d&eacute;but
-                            </label>
+                        <div class="row">
+                            <div class="col-xs-6 col-md-4 checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="details.flunked" />Recal&eacute;s/absents
+                                </label>
+                            </div>
+                            <div class="col-xs-6 col-md-4 checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="details.trng_start" />Date de d&eacute;but
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>

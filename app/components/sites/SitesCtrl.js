@@ -147,7 +147,7 @@ module.exports = function ($scope, $location, $cookies, dataSvc, busySvc, NgTabl
       var cookiesCheck = (_.find($cookies.getObject('stateSustain-' + 'certificates_checked') || {}, { cert_short: cert.cert_short }) || {}).checked;
       var urlCheck = _.some($scope.details[cert.cert_pk]);
       if (!urlCheck) {
-        $scope.details[cert.cert_pk] = _.extend($scope.details[cert.cert_pk], { cert: cookiesCheck });
+        $scope.details[cert.cert_pk] = _.extend($scope.details[cert.cert_pk], { cert: cookiesCheck || false });
       }
 
       return cert.checked = cookiesCheck || urlCheck, cert;
@@ -196,6 +196,16 @@ module.exports = function ($scope, $location, $cookies, dataSvc, busySvc, NgTabl
       $scope.$digest();
     }, 0);
   }), _.partial(busySvc.done, 'sites'));
+
+  $scope.getLink = function () {
+    $scope.$emit('alert', {
+      type: 'primary',
+      msg: 'Utilisez le lien ci-dessous (clic droit, puis <em>Copier l\'adresse du lien</em>) pour partager cette recherche ou y acc&eacute;der &agrave; tout moment,' +
+        ' et avoir des r&eacute;sultats <strong>toujours &agrave; jour</strong>.<br /><hr />Alternativement, ajoutez cette page &agrave; vos favoris (<kbd>Ctrl+D</kbd>) pour un acc&egrave;s rapide.<br /><br /><a href="' +
+        $location.absUrl() + '">R&eacute;sultats de la recherche</a>',
+      static: true
+    });
+  };
 
   $scope.select = function (site_pk) {
     $location.path('/sites/' + site_pk).search({});

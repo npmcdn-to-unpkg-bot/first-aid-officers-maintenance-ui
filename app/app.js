@@ -295,7 +295,7 @@ angular.module('faomaintenanceApp', [
     $rootScope.disconnect = function () {
       authSvc.logout();
       delete $rootScope.currentUser.info;
-      $location.path('/home');
+      $location.path('/home').search({});
     };
 
     busySvc.busy('auth-restore', true);

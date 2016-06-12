@@ -82,7 +82,7 @@ function filtersSection(conditions, filters) {
     table: {
       widths: ['*', '*'],
       body: [
-        [{ colSpan: 2, style: 'primary', alignment: 'center', text: decodeHtml('Ce document pr&eacute;sente les sites dont&nbsp;:') }, {}]
+        [{ colSpan: 2, style: 'primary', alignment: 'center', text: decodeHtml('Ce document pr&eacute;sente les sites dont') }, {}]
       ].concat(_.map(_.values(filters).concat(_.map(conditions, function (condition) {
         switch (condition.params.condition.value) {
           case 'number':

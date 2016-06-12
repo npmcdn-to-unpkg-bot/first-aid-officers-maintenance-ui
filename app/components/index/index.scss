@@ -83,8 +83,8 @@ header {
     }
 }
 
-// Adblock hides .alert.alert-warning
-.alert.uib-alert {
+// AdBlock hides .alert.alert-warning
+.alert.uib-alert.alert-warning {
     display: block !important;
     visibility: visible !important;
 }

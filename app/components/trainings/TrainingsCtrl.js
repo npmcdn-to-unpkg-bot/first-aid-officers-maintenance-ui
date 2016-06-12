@@ -187,9 +187,9 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
 
     $scope.certificates = _.values(certificates);
     $scope.trainingTypes = _.values(trainingTypes);
-    $scope.tp = new NgTableParams(_.mapValues(_.omit(_.extend({ sorting: { trng_date: 'desc' }, count: 10 }, $location.search()), ['dates', 'types'], function (val) {
+    $scope.tp = new NgTableParams(_.mapValues(_.omit(_.extend({ sorting: { trng_date: 'desc' }, count: 10 }, $location.search()), ['dates', 'types']), function (val) {
       return _.isString(val) ? decodeURI(val) : val;
-    })), {
+    }), {
       filterDelay: 0,
       defaultSort: 'asc',
       dataset: $scope.trainings

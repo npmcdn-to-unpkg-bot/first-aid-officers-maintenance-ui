@@ -52,7 +52,7 @@ function header() {
       widths: ['*', '*', '*'],
       body: [
         [
-          { text: 'Sites - extraction', style: ['title', 'primary'] },
+          { text: 'Extraction des Sites', style: ['title', 'primary'] },
           { image: imgs64.logo, alignment: 'center', width: 150, margin: [0, -10, 0, 0] },
           { text: [{ text: moment().format('dddd Do MMMM YYYY'), style: 'primary' }, { text: '\nTableau de bord' }], alignment: 'right' }
         ]

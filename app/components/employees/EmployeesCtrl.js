@@ -5,70 +5,16 @@ var _ = require('lodash');
 var helper = require('./employeesConditionsHelper.js');
 
 module.exports = function ($scope, $location, dataSvc, busySvc, NgTableParams, ngDialog) {
-  $scope.colsBase = [{
-    id: 'button',
-    clazz: 'primary',
-    on: '(hover && !siteHover)',
-    show: true
-  }, {
-    title: 'Matricule',
-    sortable: 'empl_pk',
-    filter: {
-      empl_pk: 'text'
-    },
-    field: 'empl_pk',
-    show: true,
-    width: '10%'
-  }, {
-    title: 'Titre',
-    sortable: 'empl_gender',
-    id: 'empl_gender',
-    align: 'right',
-    show: true
-  }, {
-    title: 'Nom',
-    sortable: 'empl_surname',
-    filter: {
-      empl_surname: 'text'
-    },
-    id: 'empl_surname',
-    shrinkable: true,
-    show: true,
-    width: '20%'
-  }, {
-    title: 'Pr&eacute;nom',
-    sortable: 'empl_firstname',
-    filter: {
-      empl_firstname: 'text'
-    },
-    id: 'empl_firstname',
-    shrinkable: true,
-    show: true,
-    width: '20%'
-  }, {
-    id: 'button',
-    clazz: 'primary',
-    on: 'siteHover',
-    siteHover: true,
-    show: true
-  }, {
-    title: 'Affectation',
-    sortable: 'site.site_name',
-    filter: {
-      'site.site_name': 'text'
-    },
-    id: 'site.site_name',
-    shrinkable: true,
-    siteHover: true,
-    show: true,
-    width: '40%'
-  }, {
-    title: 'Statut',
-    sortable: 'empl_permanent',
-    id: 'empl_permanent',
-    align: 'center',
-    show: true
-  }];
+  var colsBase = [
+    { id: 'button', clazz: 'primary', on: '(hover && !siteHover)', show: true },
+    { title: 'Matricule', sortable: 'empl_pk', filter: { empl_pk: 'text' }, field: 'empl_pk', show: true, width: '10%' },
+    { title: 'Titre', sortable: 'empl_gender', id: 'empl_gender', align: 'right', show: true },
+    { title: 'Nom', sortable: 'empl_surname', filter: { empl_surname: 'text' }, id: 'empl_surname', shrinkable: true, show: true, width: '20%' },
+    { title: 'Pr&eacute;nom', sortable: 'empl_firstname', filter: { empl_firstname: 'text' }, id: 'empl_firstname', shrinkable: true, show: true, width: '20%' },
+    { id: 'button', clazz: 'primary', on: 'siteHover', siteHover: true, show: true },
+    { title: 'Affectation', sortable: 'site.site_name', filter: { 'site.site_name': 'text' }, id: 'site.site_name', shrinkable: true, siteHover: true, show: true, width: '40%' },
+    { title: 'Statut', sortable: 'empl_permanent', id: 'empl_permanent', align: 'center', show: true }
+  ];
 
   $scope.conditions = [];
   $scope.addCondition = function (cert) {
@@ -123,15 +69,8 @@ module.exports = function ($scope, $location, dataSvc, busySvc, NgTableParams, n
       empl.site = $scope.sites[empl.siem_site_fk];
     }));
 
-    $scope.cols = $scope.colsBase.concat($scope.certificates.map(function (cert) {
-      return {
-        title: cert.cert_short,
-        sortable: 'stats.certificates[' + cert.cert_pk + '].expiryDate',
-        id: 'cert',
-        cert_pk: cert.cert_pk,
-        show: true,
-        align: 'center'
-      };
+    $scope.cols = colsBase.concat($scope.certificates.map(function (cert) {
+      return { title: cert.cert_short, sortable: 'stats.certificates[' + cert.cert_pk + '].expiryDate', id: 'cert', cert_pk: cert.cert_pk, show: true, align: 'center' };
     }));
 
     // Restore status from URL search parameters and initiliaze table parameters

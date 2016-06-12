@@ -99,6 +99,7 @@
                 <span ng-switch-when="site_name" ng-class="{'text-primary': hover}" ng-bind="site.site_name"></span>
                 <span ng-switch-when="count" ng-init="certStats = site.stats.certificates[col.cert_pk]" class="text-{{certStats.targetStatus}}">{{certStats.count}}</label></span>
                 <span ng-switch-when="remaining" ng-init="certStats = site.stats.certificates[col.cert_pk]" class="text-{{certStats.targetStatus}}">{{certStats.remaining}}</label></span>
+                <span ng-switch-when="target" ng-init="certStats = site.stats.certificates[col.cert_pk]">{{certStats.target}}</label></span>
                 <span ng-switch-when="cert" ng-init="certStats = site.stats.certificates[col.cert_pk]"><label class="label label-{{certStats.targetStatus}}">{{certStats.countPercentage}}%</label></span>
                 <span ng-switch-when="button">
                     <button type="button" class="btn btn-{{col.clazz}} btn-xs" ng-disabled="!({{col.on}})">Voir</button>

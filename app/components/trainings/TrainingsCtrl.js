@@ -7,78 +7,26 @@ var helper = require('./trainingsConditionsHelper.js');
 module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, ngDialog) {
   busySvc.busy('trainings');
 
-  $scope.cols = [{
-    id: 'button',
-    clazz: 'primary',
-    on: 'hover',
-    width: '1%',
-    show: true
-  }, {
-    title: 'Type de formation',
-    sortable: 'type.trty_order',
-    filter: {
-      'type.trty_name': 'select'
-    },
-    field: 'type.trty_name',
-    colspan: 2,
-    width: '20%',
-    show: true
-  }, {
-    id: 'certs',
-    align: 'right',
-    hideHeader: true,
-    width: '1%',
-    show: true
-  }, {
-    title: 'Date(s)',
-    sortable: 'trng_date',
-    field: 'trng_displayDate',
-    show: true
-  }, {
-    title: 'Date de d&eacute;but',
-    sortable: 'trng_start',
-    id: 'trng_start',
-    show: false
-  }, {
-    title: 'Date de fin',
-    sortable: 'trng_date',
-    id: 'trng_end',
-    show: false
-  }, {
-    title: 'Inscrits',
-    sortable: 'registered',
-    field: 'registered',
-    align: 'center',
-    width: '1%',
-    show: false
-  }, {
-    title: 'Valid&eacute;s',
-    sortable: 'validated',
-    field: 'validated',
-    clazz: 'text-success',
-    align: 'center',
-    width: '1%',
-    show: false
-  }, {
-    title: 'Recal&eacute;s',
-    sortable: 'flunked',
-    field: 'flunked',
-    clazz: 'text-danger',
-    align: 'center',
-    width: '1%',
-    show: false
-  }, {
-    title: '&Eacute;tat',
-    sortable: 'trng_outcome',
-    filter: {
-      trng_outcome: 'select'
-    },
-    data: [{ title: 'Réalisée', id: 'COMPLETED' }, { title: 'Prévue', id: 'SCHEDULED' }],
-    id: 'trng_outcome',
-    align: 'right',
-    width: '1%',
-    show: true
-  }];
+  $scope.cols = [
+    { id: 'button', clazz: 'primary', on: 'hover', width: '1%', show: true },
+    { title: 'Type de formation', sortable: 'type.trty_order', filter: { 'type.trty_name': 'select' }, field: 'type.trty_name', colspan: 2, width: '20%', show: true },
+    { id: 'certs', align: 'right', hideHeader: true, width: '1%', show: true },
+    { title: 'Date(s)', sortable: 'trng_date', field: 'trng_displayDate', show: true },
+    { title: 'Date de d&eacute;but', sortable: 'trng_start', id: 'trng_start', show: false },
+    { title: 'Date de fin', sortable: 'trng_date', id: 'trng_end', show: false },
+    { title: 'Inscrits', sortable: 'registered', field: 'registered', align: 'center', width: '1%', show: false },
+    { title: 'Valid&eacute;s', sortable: 'validated', field: 'validated', clazz: 'text-success', align: 'center', width: '1%', show: false },
+    { title: 'Recal&eacute;s', sortable: 'flunked', field: 'flunked', clazz: 'text-danger', align: 'center', width: '1%', show: false }, {
+      title: '&Eacute;tat',
+      sortable: 'trng_outcome',
+      filter: { trng_outcome: 'select' },
+      id: 'trng_outcome',
+      align: 'right',
+      width: '1%',
+      show: true,
+      data: [{ title: 'Réalisée', id: 'COMPLETED' }, { title: 'Prévue', id: 'SCHEDULED' }]
+    }
+  ];
 
   $scope.datesOptions = helper.datesOptions;
   $scope.addDateContition = function (dateOption) {

@@ -7,29 +7,11 @@ var helper = require('./sitesConditionsHelper.js');
 var generatePDF = require('./sitesPDFGenerator.js');
 
 module.exports = function ($scope, $location, $cookies, dataSvc, busySvc, NgTableParams, ngDialog) {
-  $scope.colsBase = [{
-    id: 'button',
-    clazz: 'primary',
-    on: 'hover',
-    width: '1%',
-    show: true
-  }, {
-    title: 'Nom',
-    sortable: 'site_name',
-    filter: {
-      'site_name': 'text'
-    },
-    id: 'site_name',
-    show: true
-  }, {
-    title: 'D&eacute;partement',
-    sortable: 'dept.dept_name',
-    filter: {
-      'dept.dept_id': 'select'
-    },
-    field: 'dept.dept_name',
-    show: true
-  }];
+  var colsBase = [
+    { id: 'button', clazz: 'primary', on: 'hover', width: '1%', show: true },
+    { title: 'Nom', sortable: 'site_name', filter: { 'site_name': 'text' }, id: 'site_name', show: true },
+    { title: 'D&eacute;partement', sortable: 'dept.dept_name', filter: { 'dept.dept_id': 'select' }, field: 'dept.dept_name', show: true }
+  ];
 
   $scope.conditions = [];
   $scope.addCondition = function (cert) {
@@ -91,48 +73,19 @@ module.exports = function ($scope, $location, $cookies, dataSvc, busySvc, NgTabl
 
   busySvc.busy('sites');
   Promise.all([dataSvc.getCertificates(), dataSvc.getDepartments(), dataSvc.getSitesWithStats()]).then(_.spread(function (certificates, departments, sites) {
-    _.find($scope.colsBase, { field: 'dept.dept_name' }).data = _.sortBy(_.map(departments, function (dept) {
+    _.find(colsBase, { field: 'dept.dept_name' }).data = _.sortBy(_.map(departments, function (dept) {
       return { title: dept.dept_name, id: dept.dept_id };
     }), function (dept) {
       return dept.id === 'NONE' ? 0 : dept.title;
     });
 
-    $scope.cols = _.flatten($scope.colsBase.concat(_.map(certificates, function (cert) {
-      return [{
-        title: cert.cert_short + '&nbsp;(%)',
-        sortable: 'stats.certificates[' + cert.cert_pk + '].countPercentage',
-        id: 'cert',
-        cert_pk: cert.cert_pk,
-        width: '1%',
-        show: false,
-        align: 'center'
-      }, {
-        title: cert.cert_short,
-        sortable: 'stats.certificates[' + cert.cert_pk + '].count',
-        field: 'stats.certificates[' + cert.cert_pk + '].count',
-        id: 'count',
-        cert_pk: cert.cert_pk,
-        width: '1%',
-        show: false,
-        align: 'center'
-      }, {
-        title: 'cible&nbsp;' + cert.cert_short,
-        sortable: 'stats.certificates[' + cert.cert_pk + '].target',
-        field: 'stats.certificates[' + cert.cert_pk + '].target',
-        id: 'target',
-        cert_pk: cert.cert_pk,
-        width: '1%',
-        show: false,
-        align: 'center'
-      }, {
-        title: cert.cert_short + '&nbsp;&agrave;&nbsp;former',
-        sortable: 'stats.certificates[' + cert.cert_pk + '].remaining',
-        id: 'remaining',
-        cert_pk: cert.cert_pk,
-        width: '1%',
-        show: false,
-        align: 'center'
-      }];
+    $scope.cols = _.flatten(colsBase.concat(_.map(certificates, function (cert) {
+      return _.each([
+        { title: cert.cert_short + '&nbsp;(%)', sortable: 'stats.certificates[' + cert.cert_pk + '].countPercentage', id: 'cert' },
+        { title: cert.cert_short, sortable: 'stats.certificates[' + cert.cert_pk + '].count', field: 'stats.certificates[' + cert.cert_pk + '].count', id: 'count' },
+        { title: 'cible&nbsp;' + cert.cert_short, sortable: 'stats.certificates[' + cert.cert_pk + '].target', id: 'target' },
+        { title: cert.cert_short + '&nbsp;&agrave;&nbsp;former', sortable: 'stats.certificates[' + cert.cert_pk + '].remaining', id: 'remaining' }
+      ], _.partial(_.extend, _, { cert_pk: cert.cert_pk, width: '1%', show: false, align: 'center' }));
     })));
 
     $scope.departments = departments;

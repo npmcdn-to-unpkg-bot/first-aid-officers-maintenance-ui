@@ -126,8 +126,8 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
     return _.extend({ title: col.title },
       (function () {
         switch (key) {
-          case 'type.trty_pk':
-            return { link: 'est', value: _.find($scope.trainingTypes, { trty_pk: value }).trty_name };
+          case 'type.trty_name':
+            return { link: 'est', value: value };
           case 'trng_outcome':
             return { link: 'est', value: _.find(col.data, { id: value }).title };
           default:

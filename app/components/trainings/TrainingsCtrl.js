@@ -74,8 +74,8 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
     return _.extend({ title: col.title },
       (function () {
         switch (key) {
-          case 'type.trty_pk':
-            return { link: 'est', value: _.find($scope.trainingTypes, { trty_pk: value }).trty_name };
+          case 'type.trty_name':
+            return { link: 'est', value: value };
           case 'trng_outcome':
             return { link: 'est', value: _.find(col.data, { id: value }).title };
           default:
@@ -135,9 +135,9 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
 
     $scope.certificates = _.values(certificates);
     $scope.trainingTypes = _.values(trainingTypes);
-    $scope.tp = new NgTableParams(_.mapValues(_.omit(_.extend({ sorting: { trng_date: 'desc' }, count: 10 }, $location.search()), ['dates', 'types'], function (val) {
+    $scope.tp = new NgTableParams(_.mapValues(_.omit(_.extend({ sorting: { trng_date: 'desc' }, count: 10 }, $location.search()), ['dates', 'types']), function (val) {
       return _.isString(val) ? decodeURI(val) : val;
-    })), {
+    }), {
       filterDelay: 0,
       defaultSort: 'asc',
       dataset: $scope.trainings

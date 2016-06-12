@@ -76,9 +76,16 @@
                             <option value="" selected></option>
                         </select>
                     </div>
-                    <div class="col-xs-4"></div>
+                </div>
+            </div>
+            <div class="form-group" ng-repeat="type in types">
+                <div class="row">
+                    <div class="col-xs-4 text-right" style="padding-top: 8px">
+                        <span ng-if="$first">Ne garder que celles dont <strong>le type</strong> est</span>
+                        <span ng-if="!$first">ou bien</span>
+                    </div>
                     <div class="col-xs-8 col-lg-6">
-                        <div class="pill clickme" ng-click="types.splice(types.indexOf(type), 1)" ng-repeat="type in types">
+                        <div class="pill clickme" ng-click="types.splice(types.indexOf(type), 1)">
                             {{type.trty_name}}<span class="pill-delete">&times;</span>
                         </div>
                     </div>

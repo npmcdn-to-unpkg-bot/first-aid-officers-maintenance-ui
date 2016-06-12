@@ -4,7 +4,7 @@ var _ = require('lodash');
 
 /* jshint camelcase: false */
 module.exports = function ($scope, updateSvc, dataSvc, busySvc, ngDialog, $route) {
-  $scope.round = Math.round;
+  $scope.round = Math.floor;
   busySvc.busy('certMgmt');
   Promise.all([dataSvc.getCertificates(), dataSvc.getTrainingTypes()]).then(_.spread(function (certificates, trainingTypes) {
     $scope.certificates = _.orderBy(_.values(certificates), 'cert_order');

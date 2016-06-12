@@ -48,8 +48,6 @@ module.exports = function ($scope, $location, $cookies, dataSvc, busySvc, NgTabl
     return _.extend({ title: col.title },
       (function () {
         switch (key) {
-          case 'type.trty_pk':
-            return { link: 'est', value: _.find($scope.trainingTypes, { trty_pk: value }).trty_name };
           case 'dept.dept_id':
             return { link: 'est', value: _.find(col.data, { id: value }).title };
           default:

@@ -87,6 +87,7 @@
     "angular-smart-table": "^2.1.6",
     "angular-ui-sortable": "^0.14.0",
     "bootstrap-switch": "^3.3.2",
+    "ccjmne-busy": "^0.9.1-BETA",
     "d3": "^3.5.16",
     "jquery": "^2.2.4",
     "jshint": "^2.9.1-rc2",

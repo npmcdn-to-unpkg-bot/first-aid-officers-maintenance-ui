@@ -55,7 +55,7 @@ angular.module('faomaintenanceApp', [
     require('angular-route'),
     require('angular-sanitize'),
     require('./filters/customFilters'),
-    require('./busy/busy.js'),
+    require('ccjmne-busy'),
     require('ng-dialog'),
     'ngTable',
     'ui.bootstrap',

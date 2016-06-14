@@ -1,0 +1,48 @@
+<form class="form form-horizontal panel panel-primary" ng-submit="callback(params, closeThisDialog)" name="form" autocomplete="off">
+    <div class="panel-heading">
+        Exporter au format&nbsp;&nbsp;
+        <div style="display: inline-table;">
+            <input bswitch="params.pdf" type="checkbox" data-on-color="primary" data-off-color="primary" data-on-text="PDF" data-off-text="XLSX" data-label-width="0" />
+        </div>
+        <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
+    </div>
+    <div class="panel-body">
+        <div class="form-group" ng-if="params.pdf">
+            <div class="row">
+                <label for="format" class="control-label col-md-4 col-sm-4">Format</label>
+                <div class="col-md-8 col-sm-8">
+                    <select id="format" class="form-control" ng-model="params.format" ng-init="params.format = 'A4'">
+                        <option value='A3'>A3</option>
+                        <option value='A4'>A4</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" ng-if="!params.pdf">
+            <div class="row">
+                <label for="columns" class="control-label col-md-4 col-sm-4">Colonnes</label>
+                <div class="col-md-8 col-sm-8">
+                    <select id="columns" class="form-control" ng-model="params.columns" ng-init="params.columns = 'shown'">
+                        <option value='all'>Toutes</option>
+                        <option value='shown'>Seulement celles affich&eacute;es</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" uib-collapse="!params.pdf">
+            <div class="row">
+                <label for="orientation" class="control-label col-md-4 col-sm-4">Orientation</label>
+                <div class="col-md-8 col-sm-8">
+                    <select id="orientation" class="form-control" ng-model="params.orientation" ng-init="params.orientation = 'portrait'">
+                        <option value="landscape">Paysage</option>
+                        <option value="portrait">Portrait</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer text-center">
+        <button type="submit" class="btn btn-primary" busy-disable busy-text="Export en cours..." busy-task="report">Exporter</button>
+        <button type="button" class="btn btn-default" ng-click="closeThisDialog()">Annuler</button>
+    </div>
+</form>

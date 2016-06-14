@@ -5,6 +5,8 @@
 var _ = require('lodash');
 var moment = require('moment');
 var pdfMake = require('pdfmake');
+var filesaverjs = require('filesaverjs');
+var XLSX = require('xlsx-browerify-shim');
 var imgs64 = require('../../img/imgs64.js');
 
 function decodeHtml(html) {
@@ -166,7 +168,52 @@ function coreSection(columns, data) {
   };
 }
 
-module.exports = function (format, metadata, conditions, filters, columns, data) {
+function createSheet(columns, data) {
+  /* jshint camelcase: false */
+  var worksheet = { '!ref': XLSX.utils.encode_range({ s: { c: 0, r: 0 }, e: { c: columns.length - 1, r: data.length - 1 } }) };
+  _.each(columns, function (col, c) {
+    worksheet[XLSX.utils.encode_cell({ c: c, r: 0 })] = { v: decodeHtml(col.title), t: 's' };
+  });
+
+  _.each(data, function (site, r) {
+    _.each(columns, function (col, c) {
+      worksheet[XLSX.utils.encode_cell({ c: c, r: r + 1 })] = (function (value) {
+        switch (col.id) {
+          case 'cert':
+            return { v: (value || 0) / 100, t: 'n', z: '0%' };
+          default:
+            return { v: value, t: _.isNumber(value) ? 'n' : 's' };
+        }
+      })(_.get(site, col.field) || _.get(site, col.sortable) || _.get(site, col.id));
+    });
+  });
+
+  return worksheet;
+}
+
+function generateXLSX(columns, data) {
+  return {
+    download: _.partial(filesaverjs.saveAs, new Blob([(function (s) {
+      /*jslint bitwise: true */
+      var buf = new ArrayBuffer(s.length);
+      var view = new Uint8Array(buf);
+      for (var i = 0; i !== s.length; ++i) {
+        view[i] = s.charCodeAt(i) & 0xFF;
+      }
+
+      return buf;
+    })(XLSX.write({
+      SheetNames: ['Page 1'],
+      Sheets: { 'Page 1': createSheet(columns, data) }
+    }, {
+      bookType: 'xlsx',
+      bookSST: false,
+      type: 'binary'
+    }))], { type: '' }))
+  };
+}
+
+function generatePDF(format, metadata, conditions, filters, columns, data) {
   var content = [center(coreSection(_.reject(_.filter(columns, 'show'), { id: 'button' }), data))];
   if (_.keys(filters).length || conditions.length) {
     content.splice(0, 0, center(filtersSection(conditions, filters)));
@@ -185,4 +232,9 @@ module.exports = function (format, metadata, conditions, filters, columns, data)
     },
     content: content
   });
+}
+
+module.exports = {
+  generatePDF: generatePDF,
+  generateXLSX: generateXLSX
 };

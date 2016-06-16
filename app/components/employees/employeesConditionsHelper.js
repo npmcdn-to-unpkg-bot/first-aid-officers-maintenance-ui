@@ -23,8 +23,8 @@ var statusOptions = [{
   value: 'danger',
   display: 'Expirée'
 }, {
-  value: 'blank',
-  display: 'Jamais obtenue'
+  value: 'any',
+  display: 'Antérieurement obtenue'
 }];
 
 var certificatesConditions = [{
@@ -50,7 +50,7 @@ function getConditionDisplay(cert, params) {
     case 'expiry':
       return cert.cert_short + ' expire entre le ' + moment(params.data.from).format('Do MMMM YYYY') + ' et le ' + moment(params.data.to).format('Do MMMM YYYY');
     case 'status':
-      return cert.cert_short + ' est ' + params.option.display.toLowerCase();
+      return cert.cert_short + (params.option.value === 'any' ? ' a été ' : ' est ') + params.option.display.toLowerCase();
   }
 }
 
@@ -110,14 +110,14 @@ module.exports = {
         return moment(certStats.expiryDate).isBetween(params.data.from, params.data.to, null, '[]');
       case 'status':
         if (!certStats) {
-          return params.option.value === 'blank';
+          return false;
         }
 
         if (params.option.value === 'success') {
           return certStats.validityStatus === 'warning' || certStats.validityStatus === 'success';
         }
 
-        return params.option.value === certStats.validityStatus;
+        return params.option.value === 'any' || params.option.value === certStats.validityStatus;
     }
   },
   stripDown: function (conditions) {
@@ -126,7 +126,7 @@ module.exports = {
         c: condition.params.condition.value,
         o: condition.params.option ? condition.params.option.value : undefined,
         d: condition.params.data,
-        cert: condition.cert
+        cert: condition.cert.cert_pk
       };
     });
   },
@@ -141,7 +141,7 @@ module.exports = {
       return {
         params: params,
         display: getConditionDisplay(certificates[condition.cert], params),
-        cert: condition.cert
+        cert: certificates[condition.cert]
       };
     });
   },

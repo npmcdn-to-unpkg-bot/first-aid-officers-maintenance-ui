@@ -47,7 +47,7 @@ module.exports = function ($scope, $location, dataSvc, busySvc, NgTableParams, n
           $scope.conditions.push({
             display: helper.getConditionDisplay(scope.cert, scope.params),
             params: scope.params,
-            cert: cert.cert_pk
+            cert: cert
           });
           scope.closeThisDialog();
         };
@@ -109,7 +109,7 @@ module.exports = function ($scope, $location, dataSvc, busySvc, NgTableParams, n
       $scope.tp.settings({
         dataset: _.filter($scope.employees, function (empl) {
           return _.every($scope.conditions, function (condition) {
-            return helper.testCondition(empl.stats.certificates[condition.cert], condition.params);
+            return helper.testCondition(empl.stats.certificates[condition.cert.cert_pk], condition.params);
           });
         })
       });

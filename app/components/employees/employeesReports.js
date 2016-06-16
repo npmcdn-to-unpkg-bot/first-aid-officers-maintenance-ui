@@ -81,12 +81,26 @@ function filtersSection(conditions, filters) {
         [{ colSpan: 2, style: 'primary', alignment: 'center', text: _.unescape('Ce document pr&eacute;sente les agents dont') }, {}]
       ].concat(_.map(_.values(filters).concat(_.map(conditions, function (condition) {
         switch (condition.params.condition.value) {
-          case 'number':
-            return { title: 'Nombre d\'agents ' + condition.cert.cert_short, value: condition.params.option.display + ' ' + condition.params.data, link: 'est' };
-          case 'percent':
-            return { title: 'Taux de ' + condition.cert.cert_short, value: condition.params.option.display + ' ' + condition.params.data + '%', link: 'est' };
-          case 'target':
-            return { title: 'Cible ' + condition.cert.cert_short, value: condition.params.option.display.toLowerCase(), link: 'est' };
+          case 'recent':
+            return {
+              title: 'Aptitude ' + condition.cert.cert_short,
+              value: 'il y a moins de ' + condition.params.data + ' mois',
+              link: 'a ' + _.unescape((condition.params.option.value === 'success' ? 'été obtenue/renouvelée' : 'expirée'))
+            };
+          case 'expiring':
+            return { title: 'Aptitude ' + condition.cert.cert_short, value: condition.params.data + ' mois', link: 'expire sous' };
+          case 'expiry':
+            return {
+              title: 'Aptitude ' + condition.cert.cert_short,
+              value: 'le ' + moment(condition.params.data.from).format('Do MMMM YYYY') + ' et le ' + moment(condition.params.data.to).format('Do MMMM YYYY'),
+              link: 'expire entre'
+            };
+          case 'status':
+            return {
+              title: 'Aptitude ' + condition.cert.cert_short,
+              value: condition.params.option.display.toLowerCase(),
+              link: condition.params.option.value === 'any' ? 'a été' : 'est'
+            };
         }
       })), function (filter, idx) {
         return [{
@@ -122,6 +136,7 @@ function coreSection(columns, data) {
                 case 'empl_gender':
                   return 'right';
                 case 'cert':
+                case 'empl_permanent':
                   return 'center';
                 default:
                   return 'left';
@@ -133,6 +148,8 @@ function coreSection(columns, data) {
                 case 'empl_firstname':
                 case 'empl_surname':
                   return 'em';
+                case 'empl_permanent':
+                  return empl.empl_permanent ? 'success' : 'warning';
                 case 'cert':
                   var certStats = empl.stats.certificates[col.cert_pk];
                   return certStats ? certStats.validityStatus : '';
@@ -144,6 +161,8 @@ function coreSection(columns, data) {
               switch (col.id) {
                 case 'empl_gender':
                   return empl.empl_gender ? 'M.' : 'Mme';
+                case 'empl_permanent':
+                  return empl.empl_permanent ? 'CDI' : 'CDD';
                 case 'cert':
                   var certStats = empl.stats.certificates[col.cert_pk];
                   return certStats ? moment(certStats.expiryDate).format('MMM YYYY') : '';
@@ -162,7 +181,7 @@ function coreSection(columns, data) {
 function createSheet(columns, data) {
   /* jshint camelcase: false */
   var worksheet = {
-    '!ref': XLSX.utils.encode_range({ s: { c: 0, r: 0 }, e: { c: columns.length - 1, r: data.length - 1 } }),
+    '!ref': XLSX.utils.encode_range({ s: { c: 0, r: 0 }, e: { c: columns.length - 1, r: data.length } }),
     '!cols': _.map(columns, function (col) {
       return {
         wch: (function (id) {

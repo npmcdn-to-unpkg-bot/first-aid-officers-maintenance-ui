@@ -121,8 +121,10 @@
         <tr ng-repeat="trng in $data track by trng.trng_pk" hover-state="hover">
             <td ng-repeat="col in $columns" ng-switch="col.id" class="clickme text-{{col.align || 'left'}} {{col.clazz}}" ng-class="{shrinkable: col.shrinkable}" ng-click="select(trng.trng_pk)"
                 width="{{col.width}}">
-                <span ng-switch-when="trng_start">{{trng.trng_start | date: 'dd/MM/yyyy'}}</span>
-                <span ng-switch-when="trng_end">{{trng.trng_date | date: 'dd/MM/yyyy'}}</span>
+                <span ng-switch-when="type" ng-class="{'text-primary': hover}">{{::$eval(col.field, trng)}}</span>
+                <span ng-switch-when="dates" ng-class="{'text-primary': hover}">{{::$eval(col.field, trng)}}</span>
+                <span ng-switch-when="trng_start" ng-class="{'text-primary': hover}">{{trng.trng_start | date: 'dd/MM/yyyy'}}</span>
+                <span ng-switch-when="trng_end" ng-class="{'text-primary': hover}">{{trng.trng_date | date: 'dd/MM/yyyy'}}</span>
                 <span ng-switch-when="trng_outcome"><label class="label label-{{trng.trng_outcome === 'COMPLETED' ? 'success' : 'primary'}}">{{trng.trng_outcome === 'COMPLETED' ? 'R&eacute;alis&eacute;e' : 'Pr&eacute;vue'}}</label></span>
                 <span ng-switch-when="certs"><label ng-repeat="cert in trng.type.certificates" class="label label-{{trng.trng_outcome === 'COMPLETED' ? 'success' : 'primary'}}">{{cert.cert_short}}</label></span>
                 <span ng-switch-when="button">
@@ -136,4 +138,5 @@
 <div class="side-panel-container text-right">
     <a href="#/trainings/create" class="btn btn-success btn-raised side-panel-item" if-role="'trainer'"><span class="glyphicon glyphicon-plus"></span>&nbsp;Cr&eacute;er formation</a>
     <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="getLink()"><span class="glyphicon glyphicon-link"></span>&nbsp;Sauver/partager recherche</button>
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="export()"><span class="glyphicon glyphicon-file"></span>&nbsp;Exporter listing</button>
 </div>

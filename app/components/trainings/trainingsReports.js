@@ -48,7 +48,7 @@ function header() {
       widths: ['*', '*', '*'],
       body: [
         [
-          { text: 'Extraction des Sites', style: ['title', 'primary'] },
+          { text: 'Extraction des Formations', style: ['title', 'primary'] },
           { image: imgs64.logo, alignment: 'center', width: 150, margin: [0, -10, 0, 0] },
           { text: [{ text: moment().format('dddd Do MMMM YYYY'), style: 'primary' }, { text: '\nTableau de bord' }], alignment: 'right' }
         ]
@@ -73,20 +73,24 @@ function footer(currentPage, pageCount) {
   };
 }
 
-function filtersSection(conditions, filters) {
+function filtersSection(datesCondition, filters) {
   return {
     table: {
       widths: ['*', '*'],
       body: [
-        [{ colSpan: 2, style: 'primary', alignment: 'center', text: _.unescape('Ce document pr&eacute;sente les sites dont') }, {}]
-      ].concat(_.map(_.values(filters).concat(_.map(conditions, function (condition) {
-        switch (condition.params.condition.value) {
-          case 'number':
-            return { title: 'Nombre d\'agents ' + condition.cert.cert_short, value: condition.params.option.display + ' ' + condition.params.data, link: 'est' };
-          case 'percent':
-            return { title: 'Taux de ' + condition.cert.cert_short, value: condition.params.option.display + ' ' + condition.params.data + '%', link: 'est' };
-          case 'target':
-            return { title: 'Cible ' + condition.cert.cert_short, value: condition.params.option.display.toLowerCase(), link: 'est' };
+        [{ colSpan: 2, style: 'primary', alignment: 'center', text: _.unescape('Ce document pr&eacute;sente les formations dont') }, {}]
+      ].concat(_.map(_.values(filters).concat(_.map([datesCondition], function (datesCondition) {
+        switch (datesCondition.option) {
+          case 'soon':
+            return { title: 'Prévue', value: datesCondition.data + ' prochains mois', link: 'dans les' };
+          case 'recent':
+            return { title: 'Prévue/réalisée', value: 'moins de ' + datesCondition.data + ' mois', link: 'il y a' };
+          case 'specific':
+            return {
+              title: 'Prévue/réalisée',
+              value: 'le ' + moment(datesCondition.from).format('DD/MM/YYYY') + ' et le ' + moment(datesCondition.from).format('DD/MM/YYYY'),
+              link: 'entre'
+            };
         }
       })), function (filter, idx) {
         return [{
@@ -103,7 +107,7 @@ function filtersSection(conditions, filters) {
     },
     layout: tableLayoutNoInnerLines,
     margin: [0, 0, 0, 20]
-  };
+  } //TODO
 }
 
 function coreSection(columns, data) {
@@ -114,15 +118,16 @@ function coreSection(columns, data) {
         _.map(columns, function (col) {
           return { style: 'primary', alignment: 'center', text: _.unescape(col.title) };
         })
-      ].concat(_.map(data, function (site, idx) {
+      ].concat(_.map(data, function (trng, idx) {
         return columns.map(function (col) {
           return {
             alignment: (function (type) {
               switch (type) {
-                case 'count':
-                case 'remaining':
-                case 'target':
-                case 'cert':
+                case 'registered':
+                case 'validated':
+                case 'flunked':
+                case 'trng_outcome':
+                case 'type':
                   return 'center';
                 default:
                   return 'left';
@@ -130,28 +135,33 @@ function coreSection(columns, data) {
             }(col.id)),
             style: [idx % 2 ? 'line-odd' : '', (function (type) {
               switch (type) {
-                case 'site_name':
+                case 'validated':
+                  return 'success';
+                case 'flunked':
+                  return 'danger';
+                case 'trng_date':
+                case 'trng_start':
+                case 'trng_end':
+                case 'type':
                   return 'em';
-                case 'count':
-                case 'remaining':
-                case 'cert':
-                  return site.stats.certificates[col.cert_pk].targetStatus;
+                case 'trng_outcome':
+                  return trng.trng_outcome ? 'success' : 'primary';
                 default:
                   return '';
               }
             }(col.id))],
             text: (function (col) {
               switch (col.id) {
-                case 'count':
-                  return site.stats.certificates[col.cert_pk].count.toString();
-                case 'remaining':
-                  return site.stats.certificates[col.cert_pk].remaining.toString();
-                case 'target':
-                  return site.stats.certificates[col.cert_pk].target.toString();
+                case 'trng_outcome':
+                  return _.unescape(trng.trng_outcome === 'COMPLETED' ? 'R&eacute;alis&eacute;e' : 'Pr&eacute;vue');
+                case 'trng_start':
+                case 'trng_end':
+                  return trng[col.sortable] ? moment(trng[col.sortable]).format('DD/MM/YYYY') : '';
                 case 'cert':
-                  return site.stats.certificates[col.cert_pk].countPercentage.toString() + '%';
+                  var certStats = trng.stats.certificates[col.cert_pk];
+                  return certStats ? moment(certStats.expiryDate).format('MMM YYYY') : '';
                 default:
-                  return _.get(site, col.field || col.id) || '';
+                  return _.get(trng, col.field || col.id) + '';
               }
             }(col))
           };
@@ -168,7 +178,14 @@ function createSheet(columns, data) {
     '!ref': XLSX.utils.encode_range({ s: { c: 0, r: 0 }, e: { c: columns.length - 1, r: data.length } }),
     '!cols': _.map(columns, function (col) {
       return {
-        wch: _.unescape(col.title).length
+        wch: (function (id) {
+          switch (id) {
+            case 'trng_outcome':
+              return _.unescape('R&eacute;alis&eacute;e').length;
+            default:
+              return _.unescape(col.title).length;
+          }
+        })(col.id)
       };
     })
   };
@@ -176,17 +193,24 @@ function createSheet(columns, data) {
     worksheet[XLSX.utils.encode_cell({ c: c, r: 0 })] = { v: _.unescape(col.title), t: 's' };
   });
 
-  _.each(data, function (site, r) {
+  _.each(data, function (entry, r) {
     _.each(columns, function (col, c) {
       worksheet[XLSX.utils.encode_cell({ c: c, r: r + 1 })] = (function (value) {
         switch (col.id) {
-          case 'cert':
-            return { v: (value || 0) / 100, t: 'n', z: '0%' };
+          case 'registered':
+          case 'validated':
+          case 'flunked':
+            return { v: value || 0, t: 'n' };
+          case 'trng_start':
+          case 'trng_end':
+            return { v: value || undefined, t: 'd' };
+          case 'trng_outcome':
+            return { v: _.unescape(value === 'COMPLETED' ? 'R&eacute;alis&eacute;e' : 'Pr&eacute;vue'), t: 's' };
           default:
             worksheet['!cols'][c].wch = Math.max(worksheet['!cols'][c].wch, _.size(value));
             return { v: value, t: _.isNumber(value) ? 'n' : 's' };
         }
-      })(_.get(site, col.field) || _.get(site, col.sortable) || _.get(site, col.id));
+      })(_.get(entry, col.field) || _.get(entry, col.sortable) || _.get(entry, col.id));
     });
   });
 
@@ -206,7 +230,8 @@ function generateXLSX(columns, data) {
       return buf;
     })(XLSX.write({
       SheetNames: ['Page 1'],
-      Sheets: { 'Page 1': createSheet(columns, data) }
+      Sheets: { 'Page 1': createSheet(columns, data) },
+      cellStyles: true
     }, {
       bookType: 'xlsx',
       bookSST: false,
@@ -215,10 +240,10 @@ function generateXLSX(columns, data) {
   };
 }
 
-function generatePDF(format, metadata, conditions, filters, columns, data) {
-  var content = [center(coreSection(_.reject(_.filter(columns, 'show'), { id: 'button' }), data))];
-  if (_.keys(filters).length || conditions.length) {
-    content.splice(0, 0, center(filtersSection(conditions, filters)));
+function generatePDF(format, metadata, datesCondition, filters, columns, data) {
+  var content = [center(coreSection(_(columns).filter('show').reject({ id: 'button' }).reject({ id: 'certs' }).value(), data))];
+  if (_.keys(filters).length || datesCondition) {
+    content.splice(0, 0, center(filtersSection(datesCondition, filters)));
   }
 
   return pdfMake.createPdf({

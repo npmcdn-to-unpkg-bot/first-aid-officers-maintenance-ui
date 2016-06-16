@@ -48,7 +48,7 @@ function header() {
       widths: ['*', '*', '*'],
       body: [
         [
-          { text: 'Extraction des Sites', style: ['title', 'primary'] },
+          { text: 'Extraction des Agents', style: ['title', 'primary'] },
           { image: imgs64.logo, alignment: 'center', width: 150, margin: [0, -10, 0, 0] },
           { text: [{ text: moment().format('dddd Do MMMM YYYY'), style: 'primary' }, { text: '\nTableau de bord' }], alignment: 'right' }
         ]
@@ -78,7 +78,7 @@ function filtersSection(conditions, filters) {
     table: {
       widths: ['*', '*'],
       body: [
-        [{ colSpan: 2, style: 'primary', alignment: 'center', text: _.unescape('Ce document pr&eacute;sente les sites dont') }, {}]
+        [{ colSpan: 2, style: 'primary', alignment: 'center', text: _.unescape('Ce document pr&eacute;sente les agents dont') }, {}]
       ].concat(_.map(_.values(filters).concat(_.map(conditions, function (condition) {
         switch (condition.params.condition.value) {
           case 'number':
@@ -114,14 +114,13 @@ function coreSection(columns, data) {
         _.map(columns, function (col) {
           return { style: 'primary', alignment: 'center', text: _.unescape(col.title) };
         })
-      ].concat(_.map(data, function (site, idx) {
+      ].concat(_.map(data, function (empl, idx) {
         return columns.map(function (col) {
           return {
             alignment: (function (type) {
               switch (type) {
-                case 'count':
-                case 'remaining':
-                case 'target':
+                case 'empl_gender':
+                  return 'right';
                 case 'cert':
                   return 'center';
                 default:
@@ -130,28 +129,26 @@ function coreSection(columns, data) {
             }(col.id)),
             style: [idx % 2 ? 'line-odd' : '', (function (type) {
               switch (type) {
-                case 'site_name':
+                case 'empl_gender':
+                case 'empl_firstname':
+                case 'empl_surname':
                   return 'em';
-                case 'count':
-                case 'remaining':
                 case 'cert':
-                  return site.stats.certificates[col.cert_pk].targetStatus;
+                  var certStats = empl.stats.certificates[col.cert_pk];
+                  return certStats ? certStats.validityStatus : '';
                 default:
                   return '';
               }
             }(col.id))],
             text: (function (col) {
               switch (col.id) {
-                case 'count':
-                  return site.stats.certificates[col.cert_pk].count.toString();
-                case 'remaining':
-                  return site.stats.certificates[col.cert_pk].remaining.toString();
-                case 'target':
-                  return site.stats.certificates[col.cert_pk].target.toString();
+                case 'empl_gender':
+                  return empl.empl_gender ? 'M.' : 'Mme';
                 case 'cert':
-                  return site.stats.certificates[col.cert_pk].countPercentage.toString() + '%';
+                  var certStats = empl.stats.certificates[col.cert_pk];
+                  return certStats ? moment(certStats.expiryDate).format('MMM YYYY') : '';
                 default:
-                  return _.get(site, col.field || col.id) || '';
+                  return _.get(empl, col.field || col.id) || '';
               }
             }(col))
           };
@@ -168,7 +165,18 @@ function createSheet(columns, data) {
     '!ref': XLSX.utils.encode_range({ s: { c: 0, r: 0 }, e: { c: columns.length - 1, r: data.length - 1 } }),
     '!cols': _.map(columns, function (col) {
       return {
-        wch: _.unescape(col.title).length
+        wch: (function (id) {
+          switch (id) {
+            case 'cert':
+              return 'DD/MM/YYYY'.length;
+            case 'empl_gender':
+              return 'Masculin'.length;
+            case 'empl_permanent':
+              return 'CDD'.length;
+            default:
+              return _.unescape(col.title).length;
+          }
+        })(col.id)
       };
     })
   };
@@ -176,17 +184,21 @@ function createSheet(columns, data) {
     worksheet[XLSX.utils.encode_cell({ c: c, r: 0 })] = { v: _.unescape(col.title), t: 's' };
   });
 
-  _.each(data, function (site, r) {
+  _.each(data, function (entry, r) {
     _.each(columns, function (col, c) {
       worksheet[XLSX.utils.encode_cell({ c: c, r: r + 1 })] = (function (value) {
         switch (col.id) {
           case 'cert':
-            return { v: (value || 0) / 100, t: 'n', z: '0%' };
+            return { v: value, t: 'd' };
+          case 'empl_gender':
+            return { v: value ? 'Masculin' : _.unescape('F&eacute;minin'), t: 's' };
+          case 'empl_permanent':
+            return { v: value ? 'CDI' : 'CDD', t: 's' };
           default:
             worksheet['!cols'][c].wch = Math.max(worksheet['!cols'][c].wch, _.size(value));
             return { v: value, t: _.isNumber(value) ? 'n' : 's' };
         }
-      })(_.get(site, col.field) || _.get(site, col.sortable) || _.get(site, col.id));
+      })(_.get(entry, col.field) || _.get(entry, col.sortable) || _.get(entry, col.id));
     });
   });
 
@@ -206,7 +218,8 @@ function generateXLSX(columns, data) {
       return buf;
     })(XLSX.write({
       SheetNames: ['Page 1'],
-      Sheets: { 'Page 1': createSheet(columns, data) }
+      Sheets: { 'Page 1': createSheet(columns, data) },
+      cellStyles: true
     }, {
       bookType: 'xlsx',
       bookSST: false,

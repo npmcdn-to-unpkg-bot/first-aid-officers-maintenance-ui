@@ -1,8 +1,9 @@
-<form class="form form-horizontal panel panel-primary" ng-submit="callback(params, closeThisDialog)" name="form" autocomplete="off">
+<form class="form form-horizontal panel panel-{{params.pdf && tooLong ? 'warning' : 'primary'}}" ng-submit="callback(params, closeThisDialog)" name="form" autocomplete="off">
     <div class="panel-heading">
         Exporter au format&nbsp;&nbsp;
         <div style="display: inline-table;">
-            <input bswitch="params.pdf" type="checkbox" data-on-color="primary" data-off-color="primary" data-on-text="PDF" data-off-text="XLSX" data-label-width="0" />
+            <input bswitch="params.pdf" type="checkbox" data-on-color="{{tooLong ? 'warning' : 'primary'}}" data-off-color="primary" data-on-text="PDF" data-off-text="XLSX" data-label-width="0"
+            />
         </div>
         <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
     </div>
@@ -40,9 +41,13 @@
                 </div>
             </div>
         </div>
+        <div class="text-warning text-justify" uib-collapse="!(params.pdf && tooLong)">
+            <hr />Beaucoup donn&eacute;es sont incluses dans cette extraction.
+            <br />L'export sera limit&eacute; aux <b>1000 premi&egrave;res lignes</b> de donn&eacute;es si vous choisissez de <b>continuer avec le format PDF</b>.
+        </div>
     </div>
     <div class="panel-footer text-center">
-        <button type="submit" class="btn btn-primary" busy-disable busy-text="Export en cours..." busy-task="report">Exporter</button>
+        <button type="submit" class="btn btn-{{params.pdf && tooLong ? 'warning' : 'primary'}}" busy-disable busy-text="Export en cours..." busy-task="report">Exporter</button>
         <button type="button" class="btn btn-default" ng-click="closeThisDialog()">Annuler</button>
     </div>
 </form>

@@ -48,8 +48,8 @@
             </div>
             <div class="form-group" ng-repeat="(key, value) in tp.filter() | omitEmptyKeys">
                 <div class="row">
-                    <div class="col-xs-4 text-right">{{$first && conditions.length === 0 ? 'Ne garder que ceux dont' : 'et dont'}} <strong ng-bind-html="colFor(key).title | lowercase"></strong></div>
-                    <div class="col-xs-8">contient <span class="text-primary">{{value}}</span></div>
+                    <div class="col-xs-4 text-right">{{$first && (conditions || []).length === 0 ? 'Ne garder que celles dont' : 'et dont'}} <strong ng-bind-html="getFilterDisplay(key, value).title | lowercase"></strong></div>
+                    <div class="col-xs-8">{{getFilterDisplay(key, value).link || 'contient'}} <span class="text-primary">{{getFilterDisplay(key, value).value}}</span></div>
                 </div>
             </div>
             <hr />
@@ -85,4 +85,5 @@
 </div>
 <div class="side-panel-container text-right">
     <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="getLink()"><span class="glyphicon glyphicon-link"></span>&nbsp;Sauver/partager recherche</button>
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="export()"><span class="glyphicon glyphicon-file"></span>&nbsp;Exporter listing</button>
 </div>

@@ -127,7 +127,6 @@ function coreSection(columns, data) {
                 case 'validated':
                 case 'flunked':
                 case 'trng_outcome':
-                case 'type':
                   return 'center';
                 default:
                   return 'left';
@@ -139,13 +138,11 @@ function coreSection(columns, data) {
                   return 'success';
                 case 'flunked':
                   return 'danger';
-                case 'trng_date':
-                case 'trng_start':
+                case 'dates':
                 case 'trng_end':
-                case 'type':
                   return 'em';
                 case 'trng_outcome':
-                  return trng.trng_outcome ? 'success' : 'primary';
+                  return trng.trng_outcome === 'COMPLETED' ? 'success' : 'primary';
                 default:
                   return '';
               }

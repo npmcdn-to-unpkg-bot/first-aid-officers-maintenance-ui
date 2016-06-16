@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body" ng-class="{'hover-trigger': !reorder}">
+        <div class="panel-body">
             <div class="col-xs-3 text-right">Cible</div>
             <div class="col-xs-9"><span class="text-primary">{{cert.cert_target}}</span>% de l'effectif</div>
             <div class="col-xs-3 text-right">Indicateurs</div>
@@ -36,9 +36,9 @@
             </div>
             <div class="row">
                 <div class="col-xs-12">
-                    <uib-progress class="progress progress-striped hover-target">
-                        <uib-bar value="round(cert.cert_target * 2/3)" type="danger"><span>&lt;&nbsp;{{round(cert.cert_target * 2/3)}}%</span></uib-bar>
-                        <uib-bar value="round(cert.cert_target * 1/3)" type="warning"></uib-bar>
+                    <uib-progress class="progress progress-striped">
+                        <uib-bar value="cert.cert_target * 2/3" type="danger"><span>&lt;&nbsp;{{round(cert.cert_target * 2/3)}}%</span></uib-bar>
+                        <uib-bar value="cert.cert_target * 1/3" type="warning"></uib-bar>
                         <uib-bar value="100 - cert.cert_target" type="success"><span>&ge;&nbsp;{{cert.cert_target}}%</span></uib-bar>
                     </uib-progress>
                 </div>

@@ -139,7 +139,8 @@ angular.module('faomaintenanceApp', [
         })
         .when('/employees/:empl_pk', {
           templateUrl: 'components/employees/employee.html',
-          controller: 'EmployeeCtrl'
+          controller: 'EmployeeCtrl',
+          reloadOnSearch: false
         })
 
       // Sites
@@ -225,7 +226,7 @@ angular.module('faomaintenanceApp', [
     require('./components/administration/certificates/CertificatesCtrl.js')
   ])
   .controller('DepartmentEditCtrl', ['$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/department_edit/DepartmentEditCtrl.js')])
-  .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc',
+  .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc', 'NgTableParams',
     require('./components/employees/EmployeeCtrl.js')
   ])
   .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/employees/EmployeesCtrl.js')])
@@ -292,6 +293,14 @@ angular.module('faomaintenanceApp', [
           </ul> \
       </div>'
     );
+
+    _.mixin({
+      unescape: function (html) {
+        var txt = document.createElement('textarea');
+        txt.innerHTML = html;
+        return txt.value;
+      }
+    }, { chain: false });
 
     $rootScope.currentUser = {};
 

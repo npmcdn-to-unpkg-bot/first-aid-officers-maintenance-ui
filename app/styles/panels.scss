@@ -37,11 +37,18 @@
             padding-top: 7px;
         }
     }
-    .btn-group {
-        margin: 0;
+    &.panel-heading-buttonsgroup {
+        .panel-heading-title {
+            margin: 5px 0;
+        }
+        .btn-group {
+            margin: 0;
+        }
     }
-    span.label {
-        position: relative;
-        top: -2px;
+}
+
+.panel-footer {
+    button.btn {
+        margin: 0;
     }
 }

@@ -1,13 +1,15 @@
 <form class="form form-horizontal panel panel-primary" ng-submit="callback(notes, closeThisDialog)" autocomplete="off">
     <div class="panel-heading">
-        {{empl.empl_gender ? 'M.' : 'Mme'}} {{empl.empl_surname + ' ' + empl.empl_firstname}}
+        {{_title}}
         <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
     </div>
     <div class="panel-body">
         <div class="form-group">
-            <label for="notes" class="control-label col-md-4 col-sm-4">Notes</label>
-            <div class="col-md-8 col-sm-8">
-                <textarea id="notes" rows="3" ng-model="notes" class="form-control vresize" ng-init="notes = empl.empl_notes"></textarea>
+            <div class="row">
+                <label for="notes" class="control-label col-md-4 col-sm-4">Notes</label>
+                <div class="col-md-8 col-sm-8">
+                    <textarea id="notes" rows="3" ng-model="notes" class="form-control vresize" ng-init="notes = empl.empl_notes"></textarea>
+                </div>
             </div>
         </div>
     </div>

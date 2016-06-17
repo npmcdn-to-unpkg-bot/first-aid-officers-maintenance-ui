@@ -150,7 +150,8 @@ angular.module('faomaintenanceApp', [
         })
         .when('/sites/:site_pk', {
           templateUrl: 'components/sites/site.html',
-          controller: 'SiteCtrl'
+          controller: 'SiteCtrl',
+          reloadOnSearch: false
         })
 
       // Trainings
@@ -232,7 +233,9 @@ angular.module('faomaintenanceApp', [
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
   .controller('LoginCtrl', ['$scope', '$rootScope', '$route', 'AuthSvc', 'BusySvc', require('./components/index/LoginCtrl.js')])
   .controller('RolesEditCtrl', ['$rootScope', '$scope', 'AdminSvc', 'ngDialog', require('./components/dialogs/roles_edit/RolesEditCtrl.js')])
-  .controller('SiteCtrl', ['$scope', '$routeParams', '$location', '$route', 'DataSvc', 'BusySvc', 'ngDialog', 'UpdateSvc', require('./components/sites/SiteCtrl.js')])
+  .controller('SiteCtrl', ['$scope', '$routeParams', '$location', '$route', 'DataSvc', 'BusySvc', 'ngDialog', 'UpdateSvc', 'NgTableParams',
+    require('./components/sites/SiteCtrl.js')
+  ])
   .controller('SiteStatsCtrl', ['$scope', '$routeParams', 'DataSvc', 'BusySvc', require('./components/sites/SiteStatsCtrl.js')])
   .controller('SitesCtrl', ['$scope', '$location', '$cookies', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/sites/SitesCtrl.js')])
   .controller('SitesAdministrationCtrl', ['$scope', 'DataSvc', 'ngDialog', '$route', 'BusySvc', require('./components/administration/sites/SitesAdministrationCtrl.js')])

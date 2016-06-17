@@ -1,6 +1,6 @@
 <div class="panel panel-{{_type ? _type : 'warning'}}">
     <div class="panel-heading">
-        {{_title ? _title : 'Attention'}}
+        <span ng-bind-html="_title ? _title : 'Attention'"></span>
         <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
     </div>
     <div class="panel-body text-center">

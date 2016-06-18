@@ -227,6 +227,6 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
   };
 
   $scope.select = function (trng_pk) {
-    $location.path('/trainings/' + trng_pk);
+    $location.path('/trainings/' + trng_pk).search({});
   };
 };

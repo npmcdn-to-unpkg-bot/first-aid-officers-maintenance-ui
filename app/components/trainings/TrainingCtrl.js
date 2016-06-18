@@ -1,26 +1,58 @@
 'use strict';
 /*jshint camelcase: false*/
 
-var _ = require('underscore');
+var _ = require('lodash');
 var moment = require('moment');
 var pdfMake = require('pdfmake');
 var imgs64 = require('../../img/imgs64.js');
 
-module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ngDialog, busySvc, dateFilter) {
-  busySvc.busy();
+module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ngDialog, busySvc, dateFilter, NgTableParams) {
+  busySvc.busy('training');
 
-  Promise.all([dataSvc.getTraining($routeParams.trng_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function (results) {
-    $scope.trng = results[0];
-    $scope.trng.type = results[1][results[0].trng_trty_fk];
-    $scope.trainees = _.values(results[0].trainees);
-    $scope.certificates = _.values(results[2]);
-    $scope.trng.expirationDate = moment($scope.trng.trng_date).add($scope.trng.type.trty_validity, 'months').format('YYYY-MM-DD');
-    $scope.trng.validity = moment.duration($scope.trng.type.trty_validity, 'months').asYears();
-    busySvc.done();
-    $scope.$apply();
-  }, function () {
-    busySvc.done();
-  });
+  $scope.cols = [
+    { id: 'button', clazz: 'primary', on: '(hover && !siteHover)', show: true, width: '1%' },
+    { title: 'Matricule', sortable: 'empl_pk', filter: { empl_pk: 'text' }, field: 'empl_pk', show: true, width: '10%' },
+    { title: 'Titre', sortable: 'empl_gender', id: 'empl_gender', align: 'right', show: true, width: '1%' },
+    { title: 'Nom', sortable: 'empl_surname', filter: { empl_surname: 'text' }, id: 'empl_surname', shrinkable: true, show: true, width: '20%' },
+    { title: 'Pr&eacute;nom', sortable: 'empl_firstname', filter: { empl_firstname: 'text' }, id: 'empl_firstname', shrinkable: true, show: true, width: '20%' },
+    { title: 'Commentaire', sortable: 'trem_comment', field: 'trem_comment', show: true }, {
+      id: 'trem_outcome',
+      title: 'R&eacute;sultat',
+      sortable: 'trem_outcome',
+      filter: {
+        trem_outcome: 'select'
+      },
+      data: [{ title: _.unescape('Valid&eacute;(e)'), id: 'VALIDATED' }, { title: _.unescape('Non valid&eacute;(e)'), id: 'FLUNKED' }, { title: 'En attente', id: 'SCHEDULED' }],
+      show: true,
+      width: '1%',
+      align: 'right'
+    }
+  ];
+
+  Promise.all([dataSvc.getTraining($routeParams.trng_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(_.spread(function (trng, trainingTypes, certificates) {
+    $scope.trng = _.extend(trng, {
+      type: trainingTypes[trng.trng_trty_fk],
+      expirationDate: moment(trng.trng_date).add(trainingTypes[trng.trng_trty_fk].trty_validity, 'months').format('YYYY-MM-DD'),
+      validity: moment.duration(trainingTypes[trng.trng_trty_fk].trty_validity, 'months').asYears()
+    });
+
+    $scope.tp = new NgTableParams(_({ sorting: { empl_surname: 'asc' }, count: 10 }).extend($location.search()).mapValues(function (val) {
+      return _.isString(val) ? decodeURI(val) : val;
+    }).value(), {
+      filterDelay: 0,
+      defaultSort: 'asc',
+      dataset: $scope.trainees = _.values(trng.trainees)
+    });
+
+    $scope.$watch(function () {
+      return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
+    }, function () {
+      $location.search(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI))).replace();
+    });
+
+    $scope.certificates = _.values(certificates);
+    busySvc.done('training');
+  }), _.partial(busySvc.done, 'training'));
 
   $scope.canComplete = function () {
     return $scope.trainees && $scope.trainees.length > 0 && moment($scope.trng.trng_date).isSameOrBefore(new Date());
@@ -243,15 +275,15 @@ module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ng
   };
 
   $scope.selectEmployee = function (empl_pk) {
-    $location.path('/employees/' + empl_pk);
+    $location.path('/employees/' + empl_pk).search({});
   };
 
   $scope.edit = function () {
-    $location.path('/trainings/' + $scope.trng.trng_pk + '/edit');
+    $location.path('/trainings/' + $scope.trng.trng_pk + '/edit').search({});
   };
 
   $scope.complete = function () {
-    $location.path('/trainings/' + $scope.trng.trng_pk + '/complete');
+    $location.path('/trainings/' + $scope.trng.trng_pk + '/complete').search({});
   };
 
   $scope.delete = function () {
@@ -268,7 +300,7 @@ module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ng
           msg: 'Formation effac&eacute;e.'
         });
 
-        $location.path('/trainings');
+        $location.path('/trainings').search({});
       });
     });
   };

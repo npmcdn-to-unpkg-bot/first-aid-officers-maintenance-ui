@@ -59,6 +59,7 @@ module.exports = function ($scope, $routeParams, $location, $route, dataSvc, bus
     ngDialog.open({
       template: 'components/dialogs/edit_notes.html',
       scope: _.extend($scope.$new(), {
+        notes: $scope.site.site_notes,
         _title: $scope.site.site_name,
         callback: function (notes, close) {
           updateSvc.createSite($scope.site.site_pk, $scope.site.site_name, $scope.site.site_dept_fk, notes).then(function () {

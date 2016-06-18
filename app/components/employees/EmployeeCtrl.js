@@ -69,6 +69,7 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
   $scope.editNotes = function () {
     ngDialog.open({
       scope: _.extend($scope.$new(false), {
+        notes: $scope.empl.empl_notes,
         _title: $scope.empl_gender ? 'M.' : 'Mme' + ' ' + $scope.empl.empl_surname + ' ' + $scope.empl.empl_firstname,
         callback: function (notes, closeThisDialog) {
           EmployeesNotesSvc.setNotes($scope.empl.empl_pk, notes).then(function () {

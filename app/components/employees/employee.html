@@ -70,7 +70,7 @@
     </div>
 </div>
 
-<div class="panel panel-primary">
+<div class="panel panel-primary" ng-show="trainings.length">
     <div class="panel-heading">Formations de l'agent</div>
     <table class="table table-striped table-hover" ng-table-dynamic="tp with cols">
         <tr ng-repeat="trng in $data track by trng.trng_pk" hover-state="hover" ng-click="selectTraining(trng.trng_pk)">

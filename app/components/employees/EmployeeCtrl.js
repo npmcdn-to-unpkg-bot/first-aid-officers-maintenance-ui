@@ -46,7 +46,7 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
     }).value(), {
       filterDelay: 0,
       defaultSort: 'asc',
-      dataset: _.map(trainings, function (trng) {
+      dataset: $scope.trainings = _.map(trainings, function (trng) {
         return trng.type = trainingTypes[trng.trng_trty_fk], trng;
       })
     });

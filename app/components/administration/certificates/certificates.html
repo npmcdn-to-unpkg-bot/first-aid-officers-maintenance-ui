@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body" ng-class="{'hover-trigger': !reorder}">
+        <div class="panel-body">
             <div class="col-xs-3 text-right">Cible</div>
             <div class="col-xs-9"><span class="text-primary">{{cert.cert_target}}</span>% de l'effectif</div>
             <div class="col-xs-3 text-right">Indicateurs</div>
@@ -36,9 +36,9 @@
             </div>
             <div class="row">
                 <div class="col-xs-12">
-                    <uib-progress class="progress progress-striped hover-target">
-                        <uib-bar value="round(cert.cert_target * 2/3)" type="danger"><span>&lt;&nbsp;{{round(cert.cert_target * 2/3)}}%</span></uib-bar>
-                        <uib-bar value="round(cert.cert_target * 1/3)" type="warning"></uib-bar>
+                    <uib-progress class="progress progress-striped">
+                        <uib-bar value="cert.cert_target * 2/3" type="danger"><span>&lt;&nbsp;{{round(cert.cert_target * 2/3)}}%</span></uib-bar>
+                        <uib-bar value="cert.cert_target * 1/3" type="warning"></uib-bar>
                         <uib-bar value="100 - cert.cert_target" type="success"><span>&ge;&nbsp;{{cert.cert_target}}%</span></uib-bar>
                     </uib-progress>
                 </div>
@@ -48,9 +48,9 @@
 </div>
 <div class="side-panel-container" ng-show="!reorder">
     <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="edit()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Cr&eacute;er nouvelle aptitude</button>
-    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="startReorder()"><span class="glyphicon glyphicon-glyphicon glyphicon-th-list"></span>&nbsp;R&eacute;organiser aptitudes</button>
+    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="startReorder()"><span class="glyphicon glyphicon-random"></span>&nbsp;R&eacute;organiser aptitudes</button>
 </div>
 <div class="side-panel-container" ng-show="reorder">
-    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="saveReorder()"><span class="glyphicon glyphicon-glyphicon glyphicon-ok"></span>&nbsp;Valider r&eacute;organisation</button>
-    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="cancelReorder()"><span class="glyphicon glyphicon-glyphicon glyphicon-remove"></span>&nbsp;Annuler r&eacute;organisation</button>
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="saveReorder()"><span class="glyphicon glyphicon-ok"></span>&nbsp;Valider r&eacute;organisation</button>
+    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="cancelReorder()"><span class="glyphicon glyphicon-remove"></span>&nbsp;Annuler r&eacute;organisation</button>
 </div>

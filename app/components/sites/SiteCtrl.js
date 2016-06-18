@@ -1,40 +1,74 @@
 'use strict';
 /*jshint camelcase: false*/
 
-var _ = require('underscore');
+var _ = require('lodash');
 var moment = require('moment');
 var pdfMake = require('pdfmake');
 var imgs64 = require('../../img/imgs64.js');
 
-module.exports = function ($scope, $routeParams, $location, $route, dataSvc, busySvc, ngDialog, updateSvc) {
-  busySvc.busy();
+module.exports = function ($scope, $routeParams, $location, $route, dataSvc, busySvc, ngDialog, updateSvc, NgTableParams) {
+  busySvc.busy('site');
+  var colsBase = [
+    { id: 'button', clazz: 'primary', on: '(hover && !siteHover)', show: true, width: '1%' },
+    { title: 'Matricule', sortable: 'empl_pk', filter: { empl_pk: 'text' }, field: 'empl_pk', show: true, width: '10%' },
+    { title: 'Titre', sortable: 'empl_gender', id: 'empl_gender', align: 'right', show: true, width: '1%' },
+    { title: 'Nom', sortable: 'empl_surname', filter: { empl_surname: 'text' }, id: 'empl_surname', shrinkable: true, show: true, width: '40%' },
+    { title: 'Pr&eacute;nom', sortable: 'empl_firstname', filter: { empl_firstname: 'text' }, id: 'empl_firstname', shrinkable: true, show: true, width: '40%' },
+    { title: 'Statut', sortable: 'empl_permanent', id: 'empl_permanent', align: 'center', show: true, width: '1%' }
+  ];
 
-  Promise.all([dataSvc.getSiteEmployeesWithStats($routeParams.site_pk), dataSvc.getSiteWithStats($routeParams.site_pk), dataSvc.getCertificates(), dataSvc.getLatestUpdate()]).then(
-    function (results) {
-      $scope.employees = _.values(results[0]);
-      $scope.site = results[1];
-      $scope.certificates = _.values(results[2]);
-      $scope.update = results[3];
-      busySvc.done();
-      $scope.$apply();
-    },
-    function () {
-      busySvc.done();
+  $scope.$watch('certificates', function (certificates) {
+    _.each(certificates, function (cert) {
+      _.find($scope.cols, { id: 'cert', cert_pk: cert.cert_pk }).show = cert.checked || false;
     });
+  }, true);
+
+  Promise.all([dataSvc.getSiteEmployeesWithStats($routeParams.site_pk), dataSvc.getSiteWithStats($routeParams.site_pk), dataSvc.getCertificates(), dataSvc.getLatestUpdate()])
+    .then(_.spread(function (employees, site, certificates, update) {
+      $scope.site = site;
+      $scope.certificates = _.values(certificates);
+      $scope.update = update;
+      $scope.cols = colsBase.concat(_.map(certificates, function (cert) {
+        return {
+          title: cert.cert_short,
+          sortable: 'stats.certificates[' + cert.cert_pk + '].expiryDate',
+          id: 'cert',
+          cert_pk: cert.cert_pk,
+          show: false,
+          align: 'center',
+          width: '1%'
+        };
+      }));
+
+      $scope.tp = new NgTableParams(_({ sorting: { empl_surname: 'asc' }, count: 10 }).extend($location.search()).mapValues(function (val) {
+        return _.isString(val) ? decodeURI(val) : val;
+      }).value(), {
+        filterDelay: 0,
+        defaultSort: 'asc',
+        dataset: _.values(employees)
+      });
+      $scope.$watch(function () {
+        return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
+      }, function () {
+        $location.search(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI))).replace();
+      });
+      busySvc.done('site');
+    }), _.partial(busySvc.done, 'site'));
 
   $scope.editNotes = function () {
-    var dialogScope = $scope.$new(false);
-    dialogScope.callback = function (notes, closeThisDialog) {
-      updateSvc.createSite($scope.site.site_pk, $scope.site.site_name, $scope.site.site_dept_fk, notes).then(function () {
-        closeThisDialog();
-        $route.reload();
-        $scope.$emit('alert', { type: 'success', msg: 'Informations mises &agrave; jour.' });
-      });
-    };
-
     ngDialog.open({
-      scope: dialogScope,
-      template: 'components/dialogs/edit_site_notes.html'
+      template: 'components/dialogs/edit_notes.html',
+      scope: _.extend($scope.$new(), {
+        notes: $scope.site.site_notes,
+        _title: $scope.site.site_name,
+        callback: function (notes, close) {
+          updateSvc.createSite($scope.site.site_pk, $scope.site.site_name, $scope.site.site_dept_fk, notes).then(function () {
+            close();
+            $route.reload();
+            $scope.$emit('alert', { type: 'success', msg: 'Informations mises &agrave; jour.' });
+          });
+        }
+      })
     });
   };
 
@@ -280,10 +314,6 @@ module.exports = function ($scope, $routeParams, $location, $route, dataSvc, bus
   };
 
   $scope.selectEmployee = function (empl_pk) {
-    $location.path('/employees/' + empl_pk);
-  };
-
-  $scope.select = function (site_pk) {
-    $location.path('/sites/' + site_pk);
+    $location.path('/employees/' + empl_pk).search({});
   };
 };

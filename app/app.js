@@ -139,7 +139,8 @@ angular.module('faomaintenanceApp', [
         })
         .when('/employees/:empl_pk', {
           templateUrl: 'components/employees/employee.html',
-          controller: 'EmployeeCtrl'
+          controller: 'EmployeeCtrl',
+          reloadOnSearch: false
         })
 
       // Sites
@@ -150,7 +151,8 @@ angular.module('faomaintenanceApp', [
         })
         .when('/sites/:site_pk', {
           templateUrl: 'components/sites/site.html',
-          controller: 'SiteCtrl'
+          controller: 'SiteCtrl',
+          reloadOnSearch: false
         })
 
       // Trainings
@@ -169,7 +171,8 @@ angular.module('faomaintenanceApp', [
         })
         .when('/trainings/:trng_pk', {
           templateUrl: 'components/trainings/training.html',
-          controller: 'TrainingCtrl'
+          controller: 'TrainingCtrl',
+          reloadOnSearch: false
         })
         .when('/trainings/:trng_pk/edit', {
           templateUrl: 'components/trainings/training_edit.html',
@@ -224,7 +227,7 @@ angular.module('faomaintenanceApp', [
     require('./components/administration/certificates/CertificatesCtrl.js')
   ])
   .controller('DepartmentEditCtrl', ['$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/department_edit/DepartmentEditCtrl.js')])
-  .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc',
+  .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc', 'NgTableParams',
     require('./components/employees/EmployeeCtrl.js')
   ])
   .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/employees/EmployeesCtrl.js')])
@@ -232,20 +235,22 @@ angular.module('faomaintenanceApp', [
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
   .controller('LoginCtrl', ['$scope', '$rootScope', '$route', 'AuthSvc', 'BusySvc', require('./components/index/LoginCtrl.js')])
   .controller('RolesEditCtrl', ['$rootScope', '$scope', 'AdminSvc', 'ngDialog', require('./components/dialogs/roles_edit/RolesEditCtrl.js')])
-  .controller('SiteCtrl', ['$scope', '$routeParams', '$location', '$route', 'DataSvc', 'BusySvc', 'ngDialog', 'UpdateSvc', require('./components/sites/SiteCtrl.js')])
+  .controller('SiteCtrl', ['$scope', '$routeParams', '$location', '$route', 'DataSvc', 'BusySvc', 'ngDialog', 'UpdateSvc', 'NgTableParams',
+    require('./components/sites/SiteCtrl.js')
+  ])
   .controller('SiteStatsCtrl', ['$scope', '$routeParams', 'DataSvc', 'BusySvc', require('./components/sites/SiteStatsCtrl.js')])
   .controller('SitesCtrl', ['$scope', '$location', '$cookies', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/sites/SitesCtrl.js')])
   .controller('SitesAdministrationCtrl', ['$scope', 'DataSvc', 'ngDialog', '$route', 'BusySvc', require('./components/administration/sites/SitesAdministrationCtrl.js')])
   .controller('SiteEditCtrl', ['$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/site_edit/SiteEditCtrl.js')])
   .controller('SiteCreationCtrl', ['$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/site_edit/SiteCreationCtrl.js')])
-  .controller('TrainingCtrl', ['$scope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'BusySvc', 'dateFilter',
+  .controller('TrainingCtrl', ['$scope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'BusySvc', 'dateFilter', 'NgTableParams',
     require('./components/trainings/TrainingCtrl.js')
   ])
   .controller('TrainingsCtrl', ['$scope', 'DataSvc', '$location', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/trainings/TrainingsCtrl.js')])
-  .controller('TrainingCompletionCtrl', ['$scope', '$routeParams', 'DataSvc', '$location', 'ngDialog', 'TrainingsSvc', 'BusySvc', 'dateFilter',
+  .controller('TrainingCompletionCtrl', ['$scope', '$routeParams', 'DataSvc', '$location', 'ngDialog', 'TrainingsSvc', 'BusySvc', 'dateFilter', 'NgTableParams',
     require('./components/trainings/TrainingCompletionCtrl.js')
   ])
-  .controller('TrainingEditCtrl', ['$scope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'dateFilter', 'BusySvc',
+  .controller('TrainingEditCtrl', ['$scope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'dateFilter', 'BusySvc', 'NgTableParams',
     require('./components/trainings/TrainingEditCtrl.js')
   ])
   .controller('TrainingsStatsCtrl', ['$scope', 'DataSvc', 'dateFilter', 'BusySvc', 'ngDialog', require('./components/trainings/TrainingsStatsCtrl')])

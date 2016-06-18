@@ -18,6 +18,7 @@ $screen-xs: 768px;
 @import 'styles/panels';
 @import 'styles/side_panel';
 @import 'styles/tables';
+@import 'styles/togglebuttons';
 @import 'styles/ui_sortable';
 @import 'components/dialogs/ngdialog-theme-gfs';
 @import 'components/home/home';
@@ -39,15 +40,12 @@ hr + hr {
 }
 
 .progress {
+    &.progress-large {
+        height: 20px;
+    }
     border-radius: 3px;
     margin: 20px 0 0 0;
     transition: height .2s ease;
-}
-
-.hover-trigger:hover .hover-target {
-    &.progress {
-        height: 20px;
-    }
 }
 
 .bootstrap-switch-danger {

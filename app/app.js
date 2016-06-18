@@ -250,7 +250,7 @@ angular.module('faomaintenanceApp', [
   .controller('TrainingCompletionCtrl', ['$scope', '$routeParams', 'DataSvc', '$location', 'ngDialog', 'TrainingsSvc', 'BusySvc', 'dateFilter', 'NgTableParams',
     require('./components/trainings/TrainingCompletionCtrl.js')
   ])
-  .controller('TrainingEditCtrl', ['$scope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'dateFilter', 'BusySvc',
+  .controller('TrainingEditCtrl', ['$scope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'dateFilter', 'BusySvc', 'NgTableParams',
     require('./components/trainings/TrainingEditCtrl.js')
   ])
   .controller('TrainingsStatsCtrl', ['$scope', 'DataSvc', 'dateFilter', 'BusySvc', 'ngDialog', require('./components/trainings/TrainingsStatsCtrl')])

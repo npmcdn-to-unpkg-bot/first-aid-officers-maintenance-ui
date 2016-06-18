@@ -18,9 +18,9 @@
                     <button type="button" class="btn btn-{{col.clazz}} btn-sm" ng-disabled="!({{col.on}})" ng-click="unregister(empl)">D&eacute;sinscrire</button>
                 </span>
                 <div ng-switch-when="empl_outcome" class="checkbox">
-                    <div class="togglebutton togglebutton-label-left togglebutton-{{empl.validated ? 'success' : 'danger'}}">
-                        <label>
-                            {{(empl.validated ? '' : 'Non&nbsp;') + 'Valid&eacute;(e)' | capitalize}}
+                    <div class="togglebutton togglebutton-label-left togglebutton-success-danger">
+                        <label class="text-{{empl.validated ? 'success' : 'danger'}}">
+                            <span>{{(empl.validated ? '' : 'Non&nbsp;') + 'Valid&eacute;(e)' | capitalize}}</span>
                             <input type="checkbox" ng-model="empl.validated" ng-disabled="datesCondition || types.length > 0" />
                         </label>
                     </div>

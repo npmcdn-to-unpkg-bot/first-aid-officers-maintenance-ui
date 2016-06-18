@@ -29,12 +29,6 @@ module.exports = function ($scope, $routeParams, dataSvc, $location, ngDialog, t
     }
   ];
 
-  $scope.$watch('trainees', function () {
-    _.each($scope.trainees, function (trainee) {
-      trainee.textClass = trainee.validated ? 'success' : 'danger'
-    })
-  }, true)
-
   Promise.all([dataSvc.getTraining($routeParams.trng_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(_.spread(function (trng, trainingTypes, certificates) {
     $scope.trng = _.extend(trng, {
       type: trainingTypes[trng.trng_trty_fk],

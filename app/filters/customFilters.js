@@ -17,6 +17,12 @@ function summariseTrng(trng) {
   return trng.type.trty_name + ' - ' + trng.trng_displayDate;
 }
 
+customFilters.filter('capitalize', function () {
+  return function (input) {
+    return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+  }
+});
+
 customFilters.filter('omitEmptyKeys', _.constant(_.partialRight(_.omitBy, _.overSome(_.isNil, _.partial(_.isEqual, _, '')))));
 
 customFilters.filter('filterEmpl', function () {

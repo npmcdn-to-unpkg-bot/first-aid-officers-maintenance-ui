@@ -89,6 +89,9 @@
                 <span ng-switch-when="empl_gender" ng-class="{'text-{{textClass}}': hover}">{{::empl.empl_gender ? 'M.' : 'Mme'}}</span>
                 <span ng-switch-when="empl_firstname" ng-class="{'text-{{textClass}}': hover}">{{::$eval(col.id, empl)}}</span>
                 <span ng-switch-when="empl_surname" ng-class="{'text-{{textClass}}': hover}">{{::$eval(col.id, empl)}}</span>
+                <span ng-switch-when="empl_permanent">
+                    <label class="label label-{{empl.empl_permanent ? 'success' : 'warning'}}">{{::empl.empl_permanent ? 'CDI' : 'CDD'}}</label>
+                </span>
                 <span ng-switch-when="button">
                     <button type="button" class="btn btn-{{textClass}} btn-xs" ng-disabled="!({{col.on}})">Voir</button>
                 </span>

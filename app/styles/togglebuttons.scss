@@ -1,0 +1,54 @@
+.togglebutton {
+    white-space: nowrap;
+    &.togglebutton-label-left label span.toggle {
+        margin: 0 10px;
+    }
+    &.togglebutton-success label {
+        color: $brand-success;
+        input[type=checkbox] {
+            & + .toggle {
+                background-color: darken($brand-success, 10%);
+            }
+            &:checked + .toggle {
+                background-color: lighten($brand-success, 30%);
+                &::after {
+                    background-color: $brand-success;
+                }
+            }
+            &[disabled]:checked + .toggle::after {
+                background-color: lighten($brand-success, 40%);
+            }
+        }
+    }
+    &.togglebutton-danger label {
+        color: $brand-danger;
+        input[type=checkbox] {
+            & + .toggle {
+                background-color: darken($brand-danger, 10%);
+            }
+            &:checked + .toggle {
+                background-color: lighten($brand-danger, 40%);
+                &::after {
+                    background-color: $brand-danger;
+                }
+            }
+            &[disabled]:checked + .toggle::after {
+                background-color: lighten($brand-danger, 40%);
+            }
+        }
+    }
+    label input[type=checkbox] {
+        & + .toggle {
+            background-color: darken($brand-primary, 10%);
+        }
+        &:checked + .toggle {
+            background-color: lighten($brand-primary, 40%);
+            &::after {
+                background-color: $brand-primary;
+            }
+        }
+        &[disabled]:checked + .toggle::after {
+            background-color: lighten($brand-primary, 40%);
+        }
+    }
+}

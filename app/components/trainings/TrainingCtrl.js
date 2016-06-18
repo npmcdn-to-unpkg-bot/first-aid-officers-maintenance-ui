@@ -10,11 +10,12 @@ module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ng
   busySvc.busy('training');
 
   $scope.cols = [
-    { id: 'button', clazz: 'primary', on: '(hover && !siteHover)', show: true, width: '1%' },
-    { title: 'Matricule', sortable: 'empl_pk', filter: { empl_pk: 'text' }, field: 'empl_pk', show: true, width: '10%' },
+    { id: 'button', clazz: 'primary', on: 'hover', show: true, width: '1%' },
+    { title: 'Matricule', sortable: 'empl_pk', filter: { empl_pk: 'text' }, field: 'empl_pk', show: true, width: '1%' },
     { title: 'Titre', sortable: 'empl_gender', id: 'empl_gender', align: 'right', show: true, width: '1%' },
-    { title: 'Nom', sortable: 'empl_surname', filter: { empl_surname: 'text' }, id: 'empl_surname', shrinkable: true, show: true, width: '20%' },
-    { title: 'Pr&eacute;nom', sortable: 'empl_firstname', filter: { empl_firstname: 'text' }, id: 'empl_firstname', shrinkable: true, show: true, width: '20%' },
+    { title: 'Nom', sortable: 'empl_surname', filter: { empl_surname: 'text' }, id: 'empl_surname', shrinkable: true, show: true, width: '15%' },
+    { title: 'Pr&eacute;nom', sortable: 'empl_firstname', filter: { empl_firstname: 'text' }, id: 'empl_firstname', shrinkable: true, show: true, width: '15%' },
+    { title: 'Statut', sortable: 'empl_permanent', id: 'empl_permanent', align: 'center', show: true, width: '1%' },
     { title: 'Commentaire', sortable: 'trem_comment', field: 'trem_comment', show: true }, {
       id: 'trem_outcome',
       title: 'R&eacute;sultat',

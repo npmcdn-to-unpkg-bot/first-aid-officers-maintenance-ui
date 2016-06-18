@@ -3,17 +3,6 @@
         background-color: rgba(255, 255, 255, 0.84);
         color: $brand-primary;
     }
-    .togglebutton label input[type=checkbox] {
-        & + .toggle {
-            background-color: darken($brand-primary, 10%);
-        }
-        &:checked + .toggle {
-            background-color: lighten($brand-primary, 40%);
-        }
-        &[disabled]:checked + .toggle::after {
-            background-color: lighten($brand-primary, 40%);
-        }
-    }
 }
 
 .panel {

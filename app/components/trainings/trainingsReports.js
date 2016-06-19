@@ -73,41 +73,72 @@ function footer(currentPage, pageCount) {
   };
 }
 
-function filtersSection(datesCondition, filters) {
+function filterRow(filter, idx) {
+  return [{
+    colSpan: 2,
+    style: idx % 2 ? 'line-odd' : '',
+    alignment: 'center',
+    text: [
+      { style: 'em', text: _.unescape(filter.title) },
+      { text: ' ' + (filter.link || 'contient') + ' ' },
+      { style: 'em', text: _.unescape(filter.value) }
+    ]
+  }, {}];
+}
+
+function filtersSection(datesCondition, filters, types) {
+  var firstChunk = datesCondition ? [
+    [{ colSpan: 2, style: 'primary', alignment: 'center', text: _.unescape('Ce document pr&eacute;sente les formations qui ont &eacute;t&eacute; / seront') }, {}]
+  ].concat([filterRow((function (datesCondition) {
+    switch (datesCondition.option) {
+      case 'soon':
+        return { title: 'Prévues', value: datesCondition.data + ' prochains mois', link: 'dans les' };
+      case 'recent':
+        return { title: 'Prévue/réalisées', value: 'moins de ' + datesCondition.data + ' mois', link: 'il y a' };
+      case 'specific':
+        return {
+          title: 'Prévue/réalisées',
+          value: 'le ' + moment(datesCondition.from).format('DD/MM/YYYY') + ' et le ' + moment(datesCondition.from).format('DD/MM/YYYY'),
+          link: 'entre'
+        };
+    }
+  })(datesCondition))]) : [];
+
+  var secondChunk = types.length ? [
+    [{
+      colSpan: 2,
+      margin: [0, datesCondition ? 10 : 0, 0, 0],
+      style: 'primary',
+      alignment: 'center',
+      text: datesCondition ? 'Et dont le type' : _.unescape('Ce document pr&eacute;sente les formations dont le type')
+    }, {}]
+  ].concat(_.map(types, function (type, idx) {
+    return [{ colSpan: 2, style: idx % 2 ? 'line-odd' : '', alignment: 'center', text: [{ text: idx ? 'ou bien ' : 'est ' }, { style: 'em', text: type.trty_name }] }, {}];
+  })) : [];
+
+  var thirdChunk = filters.length ? [
+    [{
+      colSpan: 2,
+      margin: [0, datesCondition || types.length ? 10 : 0, 0, 0],
+      style: 'primary',
+      alignment: 'center',
+      text: datesCondition || types.length ? 'Et dont' : _.unescape('Ce document pr&eacute;sente les formations dont')
+    }, {}]
+  ].concat(_.map(filters, filterRow)) : [];
+
   return {
     table: {
       widths: ['*', '*'],
-      body: [
-        [{ colSpan: 2, style: 'primary', alignment: 'center', text: _.unescape('Ce document pr&eacute;sente les formations dont') }, {}]
-      ].concat(_.map(_.values(filters).concat(_.map([datesCondition], function (datesCondition) {
-        switch (datesCondition.option) {
-          case 'soon':
-            return { title: 'Prévue', value: datesCondition.data + ' prochains mois', link: 'dans les' };
-          case 'recent':
-            return { title: 'Prévue/réalisée', value: 'moins de ' + datesCondition.data + ' mois', link: 'il y a' };
-          case 'specific':
-            return {
-              title: 'Prévue/réalisée',
-              value: 'le ' + moment(datesCondition.from).format('DD/MM/YYYY') + ' et le ' + moment(datesCondition.from).format('DD/MM/YYYY'),
-              link: 'entre'
-            };
-        }
-      })), function (filter, idx) {
-        return [{
-          colSpan: 2,
-          style: idx % 2 ? 'line-odd' : '',
-          alignment: 'center',
-          text: [
-            { style: 'em', text: _.unescape(filter.title) },
-            { text: ' ' + (filter.link || 'contient') + ' ' },
-            { style: 'em', text: _.unescape(filter.value) }
-          ]
-        }, {}];
-      }))
+      body: firstChunk.concat(secondChunk).concat(thirdChunk)
     },
-    layout: tableLayoutNoInnerLines,
+    layout: _.extend(_.clone(tableLayoutNoInnerLines), {
+      hLineWidth: function (i) {
+        return _.includes([1, firstChunk.length + 1, firstChunk.length + secondChunk.length + 1], i) ? 1 : 0;
+      },
+      hLineColor: _.constant(styles['primary'].color) // jshint ignore: line
+    }),
     margin: [0, 0, 0, 20]
-  } //TODO
+  };
 }
 
 function coreSection(columns, data) {
@@ -237,10 +268,10 @@ function generateXLSX(columns, data) {
   };
 }
 
-function generatePDF(format, metadata, datesCondition, filters, columns, data) {
+function generatePDF(format, metadata, datesCondition, filters, types, columns, data) {
   var content = [center(coreSection(_(columns).filter('show').reject({ id: 'button' }).reject({ id: 'certs' }).value(), data))];
-  if (_.keys(filters).length || datesCondition) {
-    content.splice(0, 0, center(filtersSection(datesCondition, filters)));
+  if (datesCondition || types.length || _.keys(filters).length) {
+    content.splice(0, 0, center(filtersSection(datesCondition, _.values(filters), types)));
   }
 
   return pdfMake.createPdf({

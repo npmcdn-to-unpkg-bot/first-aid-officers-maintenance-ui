@@ -187,7 +187,7 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
                 }, $scope.datesCondition, _.map(
                   _.omitBy($scope.tp.filter(), _.overSome(_.isNil, _.partial(_.isEqual, _, ''))),
                   _.rearg($scope.getFilterDisplay, [1, 0])),
-                $scope.cols, _.take(data, 1000));
+                $scope.types, $scope.cols, _.take(data, 1000));
             } else {
               report = reports.generateXLSX(
                 _($scope.cols).filter(params.columns === 'all' ? _.stubTrue : 'show').reject({ id: 'button' }).reject({ id: 'certs' }).value(), data);

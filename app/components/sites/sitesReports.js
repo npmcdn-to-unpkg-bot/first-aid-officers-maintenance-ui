@@ -39,18 +39,26 @@ var tableLayoutNoInnerLines = _.extend(_.clone(tableLayoutDefault), {
 });
 
 function center(content) {
-  return { columns: [{ width: '*', text: '' }, _.extend({ width: 'auto' }, content), { width: '*', text: '' }, ] };
+  if (_.isArray(content)) {
+    return {
+      columns: _.flattenDeep([{ width: '*', text: '' }, _.map(content, function (entry) {
+        return [_.extend({ width: 'auto' }, entry), { width: '*', text: '' }];
+      })])
+    };
+  }
+
+  return { columns: [{ width: '*', text: '' }, _.extend({ width: 'auto' }, content), { width: '*', text: '' }] };
 }
 
-function header() {
+function header(currentPage, pageCount, title, subtitle) {
   return {
     table: {
       widths: ['*', '*', '*'],
       body: [
         [
-          { text: 'Extraction des Sites', style: ['title', 'primary'] },
+          { text: title, style: ['title', 'primary'] },
           { image: imgs64.logo, alignment: 'center', width: 150, margin: [0, -10, 0, 0] },
-          { text: [{ text: moment().format('dddd Do MMMM YYYY'), style: 'primary' }, { text: '\nTableau de bord' }], alignment: 'right' }
+          { text: [{ text: moment().format('dddd Do MMMM YYYY'), style: 'primary' }, { text: '\n' + subtitle }], alignment: 'right' }
         ]
       ]
     },
@@ -59,11 +67,11 @@ function header() {
   };
 }
 
-function footer(currentPage, pageCount) {
+function footer(currentPage, pageCount, url) {
   return {
     columns: [{
       width: '*',
-      text: ['', { text: '', link: '', style: 'link' }]
+      text: url ? ['Consulter en ligne : ', { text: url, link: url, style: 'link' }] : ''
     }, {
       width: 'auto',
       text: ['page ', { text: currentPage.toString(), style: 'em' }, ' sur ', { text: pageCount.toString(), style: 'em' }],
@@ -193,6 +201,90 @@ function createSheet(columns, data) {
   return worksheet;
 }
 
+function dashboard(site, columns, certificates) {
+  return {
+    table: {
+      body: [
+        [{ text: 'Vue d\'ensemble', colSpan: 4, alignment: 'center', style: ['table-header', 'primary'] }, {}, {}, {}],
+        [
+          { text: 'Aptitude', colSpan: 2, alignment: 'center', style: 'primary' },
+          {},
+          { text: 'Agents formés', style: 'primary' },
+          { text: 'Cible', alignment: 'right', style: 'primary' }
+        ]
+      ].concat(_.filter(columns, { id: 'cert', show: true }).map(function (col, idx) {
+        var certStats = site.stats.certificates[col.cert_pk],
+          cert = certificates[col.cert_pk];
+        return [
+          { text: cert.cert_short, style: [idx % 2 ? 'line-odd' : '', certStats.targetStatus], alignment: 'right' },
+          { text: cert.cert_name, style: [idx % 2 ? 'line-odd' : '', certStats.targetStatus], },
+          { text: certStats.count + ' (' + certStats.countPercentage + '%)', style: [idx % 2 ? 'line-odd' : '', certStats.targetStatus], alignment: 'center' },
+          { text: certStats.target + ' (' + cert.cert_target + '%)', style: idx % 2 ? 'line-odd' : '', alignment: 'right' }
+        ];
+      }))
+    },
+    layout: _.extend(_.clone(tableLayoutNoInnerLines), {
+      hLineWidth: function (i) {
+        return i === 2 ? 1 : 0;
+      },
+      hLineColor: _.constant(styles['primary'].color) // jshint ignore: line
+    }),
+    margin: [0, 0, 0, 20]
+  };
+}
+
+function employeesList(employees, cert) {
+  return {
+    table: {
+      // headerRows BUGGED, won't work when more than one tables spread over several pages.
+      // headerRows: 2,
+      body: [
+        [{ text: cert.cert_name, colSpan: 3, alignment: 'center', style: ['table-header', 'primary'] }, {}, {}],
+        [
+          { text: 'Nom', style: 'primary' },
+          { text: 'Prénom', style: 'primary' },
+          { text: cert.cert_short + ' à renouveler en', alignment: 'center', style: 'primary' }
+        ]
+      ].concat(_(employees).filter(function (empl) {
+        return empl.stats.certificates[cert.cert_pk] && empl.stats.certificates[cert.cert_pk].valid;
+      }).map(function (empl, idx) {
+        var certStats = empl.stats.certificates[cert.cert_pk];
+        return [
+          { text: empl.empl_surname, style: ['em', idx % 2 ? 'line-odd' : ''] },
+          { text: empl.empl_firstname, style: ['em', idx % 2 ? 'line-odd' : ''] },
+          { text: moment(certStats.expiryDate).format('MMM YYYY'), alignment: 'right', style: [certStats.validityStatus, idx % 2 ? 'line-odd' : ''] }
+        ];
+      }).value())
+    },
+    layout: _.extend(_.clone(tableLayoutNoInnerLines), {
+      hLineWidth: function (i) {
+        return i === 2 ? 1 : 0;
+      },
+      hLineColor: _.constant(styles['primary'].color) // jshint ignore: line
+    })
+  };
+
+}
+
+function generateDashboard(format, metadata, url, site, employees, columns, certificates) {
+  var content = [center(dashboard(site, columns, certificates))];
+  content.push(center(_.map(_.filter(certificates, 'checked'), _.partial(employeesList, employees))));
+
+  return pdfMake.createPdf({
+    info: metadata,
+    pageSize: format.format,
+    pageOrientation: format.orientation,
+    pageMargins: [40, 90, 40, 60],
+    header: _.partialRight(header, site.site_name, 'Tableau de bord'),
+    footer: _.partialRight(footer, url),
+    styles: styles,
+    defaultStyle: {
+      color: 'grey'
+    },
+    content: content
+  });
+}
+
 function generateXLSX(columns, data) {
   return {
     download: _.partial(filesaverjs.saveAs, new Blob([(function (s) {
@@ -226,7 +318,7 @@ function generatePDF(format, metadata, conditions, filters, columns, data) {
     pageSize: format.format,
     pageOrientation: format.orientation,
     pageMargins: [40, 90, 40, 60],
-    header: header,
+    header: _.partialRight(header, 'Extraction des Sites', ''),
     footer: footer,
     styles: styles,
     defaultStyle: {
@@ -237,6 +329,7 @@ function generatePDF(format, metadata, conditions, filters, columns, data) {
 }
 
 module.exports = {
+  generateDashboard: generateDashboard,
   generatePDF: generatePDF,
   generateXLSX: generateXLSX
 };

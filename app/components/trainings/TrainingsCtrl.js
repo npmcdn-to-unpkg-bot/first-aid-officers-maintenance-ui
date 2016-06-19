@@ -13,7 +13,7 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
     { id: 'button', clazz: 'primary', on: 'hover', width: '1%', show: true },
     { title: 'Type de formation', id: 'type', sortable: 'type.trty_order', filter: { 'type.trty_name': 'select' }, field: 'type.trty_name', colspan: 2, width: '20%', show: true },
     { id: 'certs', align: 'right', hideHeader: true, width: '1%', show: true },
-    { title: 'Date(s)', id: 'dates', sortable: 'trng_date', field: 'trng_displayDate', show: true },
+    { title: 'Date(s)', id: 'dates', sortable: 'trng_date', filter: { 'dates': 'text' }, field: 'trng_displayDate', show: true },
     { title: 'Date de d&eacute;but', sortable: 'trng_start', id: 'trng_start', show: false },
     { title: 'Date de fin', sortable: 'trng_date', id: 'trng_end', show: false },
     { title: 'Inscrits', sortable: 'registered', field: 'registered', id: 'registered', align: 'center', width: '1%', show: false },
@@ -98,7 +98,7 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
   }
 
   function updateSearch() {
-    $location.search(_($scope.tp.url()).mapKeys(_.flow(_.nthArg(1), decodeURI)).extend({
+    $location.search(_($scope.tp.url()).mapKeys(_.flow(_.nthArg(1), decodeURI)).mapValues(decodeURIComponent).extend({
       dates: helper.toURIComponent($scope.datesCondition),
       types: _.map($scope.types, function (trty) {
         return trty.trty_pk;
@@ -123,9 +123,12 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
   }
 
   Promise.all([dataSvc.getTrainings(), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(_.spread(function (trainings, trainingTypes, certificates) {
-    $scope.trainings = _.values(trainings);
-    _.each(trainings, function (training) {
-      training.type = trainingTypes[training.trng_trty_fk];
+    $scope.trainings = _.map(trainings, function (trng) {
+      return _.extend(trng, {
+        type: trainingTypes[trng.trng_trty_fk],
+        dates: trng.trng_displayDate + ' ' + moment(trng.trng_date).format('DD/MM/YYYY') + ' ' + (trng.trng_start ? moment(trng.trng_start).format('DD/MM/YYYY') :
+          '')
+      });
     });
 
     _.find($scope.cols, { field: 'type.trty_name' }).data = _.map(_.orderBy(trainingTypes, 'trty_order'), function (type) {

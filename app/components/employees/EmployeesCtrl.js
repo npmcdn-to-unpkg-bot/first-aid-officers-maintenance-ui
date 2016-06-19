@@ -79,7 +79,9 @@ module.exports = function ($scope, $location, dataSvc, busySvc, NgTableParams, n
   };
 
   function updateSearch() {
-    $location.search(_.extend(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), { conditions: helper.toURIComponent(helper.stripDown($scope.conditions)) })).replace();
+    $location.search(_.extend(_.mapValues(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), decodeURIComponent), {
+      conditions: helper.toURIComponent(helper.stripDown($scope.conditions))
+    })).replace();
   }
 
   busySvc.busy('employees');

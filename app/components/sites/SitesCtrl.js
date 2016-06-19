@@ -57,8 +57,9 @@ module.exports = function ($scope, $location, $cookies, dataSvc, busySvc, NgTabl
   };
 
   function updateSearch() {
-    $location.search(_.extend(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), { conditions: helper.toURIComponent(helper.stripDown($scope.conditions)) }))
-      .search('details', helper.toURIComponent($scope.details)).replace();
+    $location.search(_.extend(_.mapValues(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), decodeURIComponent), {
+      conditions: helper.toURIComponent(helper.stripDown($scope.conditions))
+    })).search('details', helper.toURIComponent($scope.details)).replace();
   }
 
   $scope.check = function (cert) {

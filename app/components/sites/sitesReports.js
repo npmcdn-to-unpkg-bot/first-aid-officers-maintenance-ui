@@ -263,7 +263,6 @@ function employeesList(employees, cert) {
       hLineColor: _.constant(styles['primary'].color) // jshint ignore: line
     })
   };
-
 }
 
 function generateDashboard(format, metadata, url, site, employees, columns, certificates) {

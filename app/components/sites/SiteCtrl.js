@@ -4,8 +4,6 @@
 var _ = require('lodash');
 var moment = require('moment');
 var sitesReports = require('./sitesReports.js');
-var pdfMake = require('pdfmake');
-var imgs64 = require('../../img/imgs64.js');
 
 module.exports = function ($scope, $routeParams, $location, $route, dataSvc, busySvc, ngDialog, updateSvc, NgTableParams) {
   busySvc.busy('site');
@@ -110,7 +108,7 @@ module.exports = function ($scope, $routeParams, $location, $route, dataSvc, bus
         }
       })
     });
-  }
+  };
 
   $scope.selectEmployee = function (empl_pk) {
     $location.path('/employees/' + empl_pk).search({});

@@ -42,15 +42,15 @@ function center(content) {
   return { columns: [{ width: '*', text: '' }, _.extend({ width: 'auto' }, content), { width: '*', text: '' }, ] };
 }
 
-function header() {
+function header(currentPage, pageCount, title, subtitle) {
   return {
     table: {
       widths: ['*', '*', '*'],
       body: [
         [
-          { text: 'Extraction des Agents', style: ['title', 'primary'] },
+          { text: title, style: ['title', 'primary'] },
           { image: imgs64.logo, alignment: 'center', width: 150, margin: [0, -10, 0, 0] },
-          { text: [{ text: moment().format('dddd Do MMMM YYYY'), style: 'primary' }, { text: '\nTableau de bord' }], alignment: 'right' }
+          { text: [{ text: moment().format('dddd Do MMMM YYYY'), style: 'primary' }, { text: '\n' + subtitle }], alignment: 'right' }
         ]
       ]
     },
@@ -258,7 +258,7 @@ function generatePDF(format, metadata, conditions, filters, columns, data) {
     pageSize: format.format,
     pageOrientation: format.orientation,
     pageMargins: [40, 90, 40, 60],
-    header: header,
+    header: _.partialRight(header, 'Extraction des Agents', ''),
     footer: footer,
     styles: styles,
     defaultStyle: {

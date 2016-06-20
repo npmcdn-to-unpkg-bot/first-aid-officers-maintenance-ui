@@ -38,19 +38,36 @@ var tableLayoutNoInnerLines = _.extend(_.clone(tableLayoutDefault), {
   }
 });
 
+function extraPadding(layout) {
+  return _.extend(_.clone(layout), {
+    paddingTop: function (i) {
+      return i === 0 ? 4 : 10;
+    },
+    paddingBottom: function (i) {
+      return i === 0 ? 4 : 10;
+    },
+    paddingLeft: function (i) {
+      return i === 0 ? 4 : 6;
+    },
+    paddingRight: function (i, node) {
+      return i === node.table.widths.length - 1 ? 4 : 6;
+    }
+  });
+}
+
 function center(content) {
   return { columns: [{ width: '*', text: '' }, _.extend({ width: 'auto' }, content), { width: '*', text: '' }, ] };
 }
 
-function header() {
+function header(currentPage, pageCount, title, subtitle, displayDate) {
   return {
     table: {
       widths: ['*', '*', '*'],
       body: [
         [
-          { text: 'Extraction des Formations', style: ['title', 'primary'] },
+          { text: title, style: ['title', 'primary'] },
           { image: imgs64.logo, alignment: 'center', width: 150, margin: [0, -10, 0, 0] },
-          { text: [{ text: moment().format('dddd Do MMMM YYYY'), style: 'primary' }, { text: '\nTableau de bord' }], alignment: 'right' }
+          { text: [{ text: displayDate ? displayDate : moment().format('dddd Do MMMM YYYY'), style: 'primary' }, { text: '\n' + subtitle }], alignment: 'right' }
         ]
       ]
     },
@@ -59,11 +76,11 @@ function header() {
   };
 }
 
-function footer(currentPage, pageCount) {
+function footer(currentPage, pageCount, url) {
   return {
     columns: [{
       width: '*',
-      text: ['', { text: '', link: '', style: 'link' }]
+      text: url ? ['Consulter en ligne : ', { text: url, link: url, style: 'link' }] : ''
     }, {
       width: 'auto',
       text: ['page ', { text: currentPage.toString(), style: 'em' }, ' sur ', { text: pageCount.toString(), style: 'em' }],
@@ -245,6 +262,89 @@ function createSheet(columns, data) {
   return worksheet;
 }
 
+function trainingOverview(trng, completed) {
+  return {
+    table: {
+      widths: ['*', '*'],
+      body: [
+        [{
+          text: ['Formateur(s) :\n'].concat(_.map(trng.trainers, function (trainer) {
+            return { text: trainer.empl_surname + ' ' + trainer.empl_firstname + '\n', style: 'primary' };
+          })),
+        }, {
+          table: {
+            widths: ['*'],
+            body: [
+              [{ text: 'Signature du/des formateur(s)', alignment: 'center', margin: [0, 0, 0, 50] }]
+            ]
+          }
+        }],
+        [{ text: '', margin: [0, 0, 0, 20], colSpan: 2 }, {}],
+        [
+          { text: [{ text: 'Notes :\n' }, { text: trng.trng_comment || '\n', style: 'em' }], margin: [0, 0, 0, 20] }, {
+            text: completed ? [
+              { text: trng.registered + ' agents inscrits', style: 'em' },
+              { text: ', dont\n' },
+              { text: trng.validated + ' validés', style: 'success' },
+              { text: ' et ' },
+              { text: trng.flunked + ' recalés/absents', style: 'danger' }
+            ] : '',
+            alignment: 'right'
+          }
+        ]
+      ]
+    },
+    layout: 'noBorders'
+  };
+}
+
+function employeesTable(trainees, completed) {
+  return {
+    table: {
+      widths: ['auto', 'auto', 'auto', 'auto', '*', 'auto'],
+      body: [
+        [
+          { text: 'Matricule', style: 'primary' },
+          { text: 'Titre', style: 'primary' },
+          { text: 'Nom', style: 'primary' },
+          { text: 'Prénom', style: 'primary' },
+          { text: completed ? 'Commentaire' : 'Émargement', style: 'primary', alignment: 'center', colSpan: completed ? 1 : 2 },
+          { text: 'Résultat', style: 'primary', alignment: 'right' }
+        ]
+      ].concat(_.map(trainees, function (empl, idx) {
+        var outcome = empl.trem_outcome === 'VALIDATED';
+        return [
+          { text: empl.empl_pk, style: idx % 2 ? 'line-odd' : '' },
+          { text: empl.empl_gender ? 'M.' : 'Mme', style: ['em', idx % 2 ? 'line-odd' : ''], alignment: 'right' },
+          { text: empl.empl_surname, style: ['em', idx % 2 ? 'line-odd' : ''] },
+          { text: empl.empl_firstname, style: ['em', idx % 2 ? 'line-odd' : ''] },
+          { text: completed ? empl.trem_comment : '', style: idx % 2 ? 'line-odd' : '', colSpan: completed ? 1 : 2 },
+          { text: _.unescape(outcome ? 'Valid&eacute;(e)' : 'Non valid&eacute;(e)'), style: [outcome ? 'success' : 'danger', idx % 2 ? 'line-odd' : ''], alignment: 'right' }
+        ];
+      }))
+    },
+    layout: completed ? tableLayoutNoInnerLines : extraPadding(tableLayoutNoInnerLines)
+  };
+}
+
+function generateSignInSheet(format, metadata, url, trng, trainees) {
+  var content = [trainingOverview(trng, trng.trng_outcome === 'COMPLETED'), employeesTable(trainees, trng.trng_outcome === 'COMPLETED')];
+
+  return pdfMake.createPdf({
+    info: metadata,
+    pageSize: format.format,
+    pageOrientation: format.orientation,
+    pageMargins: [40, 90, 40, 60],
+    header: _.partialRight(header, trng.type.trty_name, _.unescape(trng.trng_outcome === 'COMPLETED' ? 'Proc&egrave;s Verbal' : 'Feuille d\'&eacute;margement'), trng.displayDate),
+    footer: _.partialRight(footer, url),
+    styles: styles,
+    defaultStyle: {
+      color: 'grey'
+    },
+    content: content
+  });
+}
+
 function generateXLSX(columns, data) {
   return {
     download: _.partial(filesaverjs.saveAs, new Blob([(function (s) {
@@ -279,7 +379,7 @@ function generatePDF(format, metadata, datesCondition, filters, types, columns, 
     pageSize: format.format,
     pageOrientation: format.orientation,
     pageMargins: [40, 90, 40, 60],
-    header: header,
+    header: _.partialRight(header, 'Extraction des Formations', ''),
     footer: footer,
     styles: styles,
     defaultStyle: {
@@ -290,6 +390,7 @@ function generatePDF(format, metadata, datesCondition, filters, types, columns, 
 }
 
 module.exports = {
+  generateSignInSheet: generateSignInSheet,
   generatePDF: generatePDF,
   generateXLSX: generateXLSX
 };

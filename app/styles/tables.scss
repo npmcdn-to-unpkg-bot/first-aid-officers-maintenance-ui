@@ -13,6 +13,9 @@ table.table {
             padding-bottom: 0;
         }
         thead tr.ng-table-filters th {
+            .filter-cell {
+                position: relative;
+            }
             border-top: 0;
             padding-top: 0;
         }

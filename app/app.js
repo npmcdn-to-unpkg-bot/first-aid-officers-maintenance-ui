@@ -266,7 +266,11 @@ angular.module('faomaintenanceApp', [
   function ($rootScope, $location, $route, $cookies, $http, ngDialog, busySvc, authSvc, $templateCache) {
     // Placeholder
     $templateCache.put('ng-table/filters/text.html',
-      '<input type="text" name="{{name}}" placeholder="Rechercher..." ng-disabled="$filterRow.disabled" ng-model="params.filter()[name]" class="input-filter form-control" placeholder="{{getFilterPlaceholderValue(filter, name)}}"/> '
+      '<input type="text" name="{{name}}" placeholder="Rechercher..." ng-disabled="$filterRow.disabled" ng-model="params.filter()[name]" class="input-filter form-control" placeholder="{{getFilterPlaceholderValue(filter, name)}}"/>'
+    );
+
+    $templateCache.put('ng-table/filters/autocomplete.html',
+      '<input type="text" name="{{name}}" placeholder="Rechercher..." ng-disabled="$filterRow.disabled" ng-model="params.filter()[name]" class="input-filter form-control" placeholder="{{getFilterPlaceholderValue(filter, name)}}" uib-typeahead="select for select in $column.data | filter:$viewValue | limitTo:8" />'
     );
 
     // colspan + hideHeader
@@ -276,7 +280,7 @@ angular.module('faomaintenanceApp', [
 
     // colspan + hideHeader
     $templateCache.put('ng-table/filterRow.html',
-      '<tr ng-show="show_filter" class="ng-table-filters"> <th colspan="{{$column.colspan}}" data-title-text="{{$column.titleAlt(this) || $column.title(this)}}" ng-repeat="$column in $columns" ng-if="$column.show(this) && !$column.hideHeader" class="filter {{$column.class(this)}}" ng-class="params.settings().filterOptions.filterLayout===\'horizontal\' ? \'filter-horizontal\' : \'\'"> <div ng-repeat="(name, filter) in $column.filter(this)" ng-include="config.getTemplateUrl(filter)" class="filter-cell" ng-class="[getFilterCellCss($column.filter(this), params.settings().filterOptions.filterLayout), $last ? \'last\' : \'\']"> </div> </th> </tr> '
+      '<tr ng-show="show_filter" class="ng-table-filters"> <th colspan="{{$column.colspan}}" data-title-text="{{$column.titleAlt(this) || $column.title(this)}}" ng-repeat="$column in $columns" ng-if="$column.show(this) && !$column.hideHeader" class="filter {{$column.class(this)}}" ng-class="params.settings().filterOptions.filterLayout===\'horizontal\' ? \'filter-horizontal\' : \'\'"> <div ng-repeat="(name, filter) in $column.filter(this)" ng-include="config.getTemplateUrl(filter)" class="filter-cell" ng-class="[getFilterCellCss($column.filter(this), params.settings().filterOptions.filterLayout), $last ? \'last\' : \'\']"> </div> </th> </tr>'
     );
 
     /* jshint multistr: true */

@@ -40,7 +40,7 @@
                         <div class="row">
                             <div class="col-xs-6 col-md-4 checkbox">
                                 <label>
-                                    <input type="checkbox" ng-model="details[cert.cert_pk].target" /><span class="text-muted">cible</span> {{cert.cert_short}} <span class="text-muted">(nombre)</span>
+                                    <input type="checkbox" ng-model="details[cert.cert_pk].target" /><span class="text-muted">Cible</span> {{cert.cert_short}} <span class="text-muted">(nombre)</span>
                                 </label>
                             </div>
                             <div class="col-xs-6 col-md-4 checkbox">
@@ -99,6 +99,7 @@
                 <span ng-switch-when="site_name" ng-class="{'text-primary': hover}" ng-bind="site.site_name"></span>
                 <span ng-switch-when="count" ng-init="certStats = site.stats.certificates[col.cert_pk]" class="text-{{certStats.targetStatus}}">{{certStats.count}}</label></span>
                 <span ng-switch-when="remaining" ng-init="certStats = site.stats.certificates[col.cert_pk]" class="text-{{certStats.targetStatus}}">{{certStats.remaining}}</label></span>
+                <span ng-switch-when="target" ng-init="certStats = site.stats.certificates[col.cert_pk]">{{certStats.target}}</label></span>
                 <span ng-switch-when="cert" ng-init="certStats = site.stats.certificates[col.cert_pk]"><label class="label label-{{certStats.targetStatus}}">{{certStats.countPercentage}}%</label></span>
                 <span ng-switch-when="button">
                     <button type="button" class="btn btn-{{col.clazz}} btn-xs" ng-disabled="!({{col.on}})">Voir</button>
@@ -110,4 +111,5 @@
 </div>
 <div class="side-panel-container text-right">
     <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="getLink()"><span class="glyphicon glyphicon-link"></span>&nbsp;Sauver/partager recherche</button>
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="export()"><span class="glyphicon glyphicon-file"></span>&nbsp;Exporter listing</button>
 </div>

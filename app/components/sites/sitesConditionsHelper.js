@@ -89,7 +89,7 @@ module.exports = {
         c: condition.params.condition.value,
         o: condition.params.option ? condition.params.option.value : undefined,
         d: condition.params.data,
-        cert: condition.cert
+        cert: condition.cert.cert_pk
       };
     });
   },
@@ -105,7 +105,7 @@ module.exports = {
       return {
         params: params,
         display: getConditionDisplay(certificates[condition.cert], params),
-        cert: condition.cert
+        cert: certificates[condition.cert]
       };
     });
   },

@@ -6,26 +6,32 @@
     </div>
     <div class="panel-body form-horizontal">
         <div class="form-group">
-            <label class="control-label col-xs-4">Nom</label>
-            <div class="col-xs-8">
-                <input type="text" class="form-control" ng-model="type.trty_name" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-xs-4">Dur&eacute;e de validit&eacute;</label>
-            <div class="col-xs-8">
-                <div class="input-group">
-                    <input type="number" min="0" class="form-control" ng-model="type.trty_validity" />
-                    <div class="input-group-addon">mois</div>
+            <div class="row">
+                <label class="control-label col-xs-4">Nom</label>
+                <div class="col-xs-8">
+                    <input type="text" class="form-control" ng-model="type.trty_name" />
                 </div>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-xs-4">Aptitudes octroy&eacute;es</label>
-            <div class="col-xs-8">
-                <select class="form-control" ng-model="cert" ng-options="cert as cert.cert_short + ' - ' + cert.cert_name for cert in remaining" ng-change="accept(cert)">
-                    <option value="" selected></option>
-                </select>
+            <div class="row">
+                <label class="control-label col-xs-4">Dur&eacute;e de validit&eacute;</label>
+                <div class="col-xs-8">
+                    <div class="input-group">
+                        <input type="number" min="0" class="form-control" ng-model="type.trty_validity" />
+                        <div class="input-group-addon">mois</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="control-label col-xs-4">Aptitudes octroy&eacute;es</label>
+                <div class="col-xs-8">
+                    <select class="form-control" ng-model="cert" ng-options="cert as cert.cert_short + ' - ' + cert.cert_name for cert in remaining" ng-change="accept(cert)">
+                        <option value="" selected></option>
+                    </select>
+                </div>
             </div>
             <div class="row">
                 <div class="col-xs-4"></div>

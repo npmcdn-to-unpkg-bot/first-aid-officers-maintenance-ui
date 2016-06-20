@@ -31,6 +31,7 @@ module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ng
   Promise.all([dataSvc.getSites(), dataSvc.getEmployees(), dataSvc.getTrainingTypes()].concat($routeParams.trng_pk ? [dataSvc.getTraining($routeParams.trng_pk)] : []))
     .then(_.spread(function (sites, employees, trainingTypes, trng) {
       $scope.employees = employees;
+      $scope.sites = sites;
       $scope.trainingTypes = _.values(trainingTypes);
       if (trng) {
         $scope.trng = _.extend(trng, {

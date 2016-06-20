@@ -60,7 +60,7 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
     $scope.$watch(function () {
       return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
     }, function () {
-      $location.search(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI))).replace();
+      $location.search(_.mapValues(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), decodeURIComponent)).replace();
     });
 
     busySvc.done('employee');

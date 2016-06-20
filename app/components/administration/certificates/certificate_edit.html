@@ -6,23 +6,29 @@
     </div>
     <div class="panel-body form-horizontal">
         <div class="form-group">
-            <label class="control-label col-xs-4">Nom</label>
-            <div class="col-xs-8">
-                <input type="text" class="form-control" ng-model="cert.cert_name" />
+            <div class="row">
+                <label class="control-label col-xs-4">Nom</label>
+                <div class="col-xs-8">
+                    <input type="text" class="form-control" ng-model="cert.cert_name" />
+                </div>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-xs-4">Abbr&eacute;viation</label>
-            <div class="col-xs-8">
-                <input type="text" class="form-control" ng-model="cert.cert_short" />
+            <div class="row">
+                <label class="control-label col-xs-4">Abbr&eacute;viation</label>
+                <div class="col-xs-8">
+                    <input type="text" class="form-control" ng-model="cert.cert_short" />
+                </div>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-xs-4">Effectif cible</label>
-            <div class="col-xs-8">
-                <div class="input-group">
-                    <input type="number" class="form-control" min="0" max="100" ng-model="cert.cert_target" />
-                    <span class="input-group-addon">%</span>
+            <div class="row">
+                <label class="control-label col-xs-4">Effectif cible</label>
+                <div class="col-xs-8">
+                    <div class="input-group">
+                        <input type="number" class="form-control" min="0" max="100" ng-model="cert.cert_target" />
+                        <span class="input-group-addon">%</span>
+                    </div>
                 </div>
             </div>
         </div>

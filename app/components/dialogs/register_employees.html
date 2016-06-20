@@ -8,22 +8,30 @@
     </div>
     <div class="panel-body">
         <div class="form-group" ng-show="!mode">
-            <label for="inputSite" class="control-label col-md-4 col-sm-4">Site</label>
-            <div class="col-md-8 col-sm-8">
-                <input id="inputSite" type="text" class="form-control" ng-model="site" placeholder="Rechercher..." uib-typeahead="site as site.summary for site in sites | filterSite:$viewValue | limitTo:8" />
+            <div class="row">
+                <label for="inputSite" class="control-label col-md-4 col-sm-4">Site</label>
+                <div class="col-md-8 col-sm-8">
+                    <input id="inputSite" type="text" class="form-control" ng-model="site" placeholder="Rechercher..." uib-typeahead="site as site.summary for site in sites | filterSite:$viewValue | limitTo:8"
+                    />
+                </div>
             </div>
         </div>
         <div class="form-group" ng-show="mode">
-            <label for="inputEmpl" class="control-label col-md-4 col-sm-4">Agent</label>
-            <div class="col-md-8 col-sm-8">
-                <input id="inputEmpl" type="text" class="form-control" ng-model="empl" placeholder="Rechercher..." class="form-control" uib-typeahead="empl as empl.summary for empl in employees | filterEmpl:$viewValue | limitTo:8" />
-                <p class="help-block text-danger" ng-show="alreadyRegistered && empl.empl_pk">D&eacute;j&agrave; enregistr&eacute;(e)</p>
+            <div class="row">
+                <label for="inputEmpl" class="control-label col-md-4 col-sm-4">Agent</label>
+                <div class="col-md-8 col-sm-8">
+                    <input id="inputEmpl" type="text" class="form-control" ng-model="empl" placeholder="Rechercher..." class="form-control" uib-typeahead="empl as empl.summary for empl in employees | filterEmpl:$viewValue | limitTo:8"
+                    />
+                    <p class="help-block text-danger" ng-show="alreadyRegistered && empl.empl_pk">D&eacute;j&agrave; enregistr&eacute;(e)</p>
+                </div>
             </div>
         </div>
         <hr />
-        <div class="col-xs-4 text-right">Agents inscrits</div>
-        <div class="col-xs-8">
-            <strong class="text-primary">{{trainees.length}}</strong>
+        <div class="row">
+            <div class="col-xs-4 text-right">Agents inscrits</div>
+            <div class="col-xs-8">
+                <strong class="text-primary">{{trainees.length}}</strong>
+            </div>
         </div>
     </div>
     <div class="panel-footer text-center" ng-switch="mode">

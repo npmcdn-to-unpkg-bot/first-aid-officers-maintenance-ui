@@ -257,7 +257,7 @@ module.exports = function ($scope, $routeParams, dataSvc, busySvc) {
 
         highlightAbscissaTick.select('text').text(focusTimeFormat(d.date));
       });
-  };
+  }
 
   busySvc.busy('siteStats', true);
   $scope.from = new Date();

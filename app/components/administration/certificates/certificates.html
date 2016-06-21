@@ -9,7 +9,7 @@
                     <span ng-switch-when="true" class="text-{{cert.idx === cert.cert_order ? 'default' : 'warning'}}">&nbsp;&rarr;&nbsp;
                         <label class="label label-{{cert.idx === cert.cert_order ? 'default' : 'warning'}}">{{cert.idx}}</label>
                     </span>
-                    <span ng-switch-when="false"> - <label class="label label-default">{{cert.cert_short}}</label></span> - {{cert.cert_name}}
+                    <span ng-switch-default> - <label class="label label-default">{{cert.cert_short}}</label></span> - {{cert.cert_name}}
                 </div>
                 <div class="col-xs-4 text-right">
                     <button type="button" class="btn btn-warning no-margin" ng-click="edit(cert)" ng-disabled="reorder">Modifier</button>
@@ -17,22 +17,30 @@
             </div>
         </div>
         <div class="panel-body">
-            <div class="col-xs-3 text-right">Cible</div>
-            <div class="col-xs-9"><span class="text-primary">{{cert.cert_target}}</span>% de l'effectif</div>
-            <div class="col-xs-3 text-right">Indicateurs</div>
-            <div class="col-xs-9">
-                <label class="label label-success">vert</label> - cible <span class="text-success">atteinte</span>
-                <span class="pull-right">au-dessus de <span class="text-success">{{cert.cert_target}}</span>%</span>
+            <div class="row">
+                <div class="col-xs-3 text-right">Cible</div>
+                <div class="col-xs-9"><span class="text-primary">{{cert.cert_target}}</span>% de l'effectif</div>
             </div>
-            <div class="col-xs-3"></div>
-            <div class="col-xs-9">
-                <label class="label label-warning">orange</label> - cible <span class="text-warning">presque atteinte</span>
-                <span class="pull-right">entre <span class="text-warning">{{round(cert.cert_target * 2/3)}}</span> et <span class="text-warning">{{cert.cert_target}}</span>%</span>
+            <div class="row">
+                <div class="col-xs-3 text-right">Indicateurs</div>
+                <div class="col-xs-9">
+                    <label class="label label-success">vert</label> - cible <span class="text-success">atteinte</span>
+                    <span class="pull-right">au-dessus de <span class="text-success">{{cert.cert_target}}</span>%</span>
+                </div>
             </div>
-            <div class="col-xs-3"></div>
-            <div class="col-xs-9">
-                <label class="label label-danger">rouge</label> - cible <span class="text-danger">non atteinte</span>
-                <span class="pull-right">en-dessous de <span class="text-danger">{{round(cert.cert_target * 2/3)}}</span>%</span>
+            <div class="row">
+                <div class="col-xs-3"></div>
+                <div class="col-xs-9">
+                    <label class="label label-warning">orange</label> - cible <span class="text-warning">presque atteinte</span>
+                    <span class="pull-right">entre <span class="text-warning">{{round(cert.cert_target * 2/3)}}</span> et <span class="text-warning">{{cert.cert_target}}</span>%</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3"></div>
+                <div class="col-xs-9">
+                    <label class="label label-danger">rouge</label> - cible <span class="text-danger">non atteinte</span>
+                    <span class="pull-right">en-dessous de <span class="text-danger">{{round(cert.cert_target * 2/3)}}</span>%</span>
+                </div>
             </div>
             <div class="row">
                 <div class="col-xs-12">

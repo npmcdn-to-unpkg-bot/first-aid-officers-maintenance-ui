@@ -62,7 +62,7 @@ module.exports = function ($scope, $routeParams, dataSvc, busySvc) {
   // SVG CREATION
   // ---------------------------------------------------------
 
-  $scope.initSvg = function () {
+  function initSvg(placeholder) {
     var margin = {
       top: 20,
       right: 100,
@@ -70,7 +70,6 @@ module.exports = function ($scope, $routeParams, dataSvc, busySvc) {
       left: 50
     };
 
-    var placeholder = d3.select('svg.siteStats');
     width = placeholder.attr('width') - margin.left - margin.right;
     height = placeholder.attr('height') - margin.top - margin.bottom;
 
@@ -267,13 +266,18 @@ module.exports = function ($scope, $routeParams, dataSvc, busySvc) {
   $scope.from.setDate(1);
 
   Promise.all([dataSvc.getCertificates(), dataSvc.getSiteStatsHistory($routeParams.site_pk, $scope.from)]).then(function (results) {
-    setTimeout(function () {
-      $scope.initSvg();
-      $scope.certificates = _(results[0]).values().orderBy('cert_order').value();
-      $scope.data = results[1];
-      $scope.displayData(_($scope.certificates).map('cert_pk').head());
-      busySvc.done('siteStats');
-    }, 0);
+    (function trySelectPlaceholder() {
+      var placeholder;
+      if ((placeholder = d3.select('svg.siteStats')).empty()) {
+        setTimeout(trySelectPlaceholder, 100);
+      } else {
+        initSvg(placeholder);
+        $scope.certificates = _(results[0]).values().orderBy('cert_order').value();
+        $scope.data = results[1];
+        $scope.displayData(_($scope.certificates).map('cert_pk').head());
+        busySvc.done('siteStats');
+      }
+    })();
   }, _.partial(busySvc.done, 'siteStats'));
 
   $scope.recompute = function () {

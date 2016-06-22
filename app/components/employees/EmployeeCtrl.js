@@ -57,6 +57,7 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
       });
     }
 
+    $scope.$apply(); // force $location to sync with the browser
     $scope.$watch(function () {
       return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
     }, function () {

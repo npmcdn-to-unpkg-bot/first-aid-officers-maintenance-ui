@@ -152,6 +152,7 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
     $scope.$watchCollection('types', filterTrainings);
     $scope.$watch('details', showColumns, true);
 
+    $scope.$apply(); // force $location to sync with the browser
     $scope.$watch('details', updateSearch, true);
     $scope.$watch('datesCondition', updateSearch);
     $scope.$watchCollection('types', updateSearch);

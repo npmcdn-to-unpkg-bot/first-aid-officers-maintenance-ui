@@ -58,6 +58,7 @@ module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ng
       dataset: $scope.trainees = _.values(trng.trainees)
     });
 
+    $scope.$apply(); // force $location to sync with the browser
     $scope.$watch(function () {
       return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
     }, function () {

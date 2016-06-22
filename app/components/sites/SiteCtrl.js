@@ -3,7 +3,7 @@
 
 var _ = require('lodash');
 var moment = require('moment');
-var sitesReports = require('./sitesReports.js');
+var sitesReports = require('../reports/sitesReports');
 
 module.exports = function ($scope, $routeParams, $location, $route, dataSvc, busySvc, ngDialog, updateSvc, NgTableParams) {
   busySvc.busy('site');

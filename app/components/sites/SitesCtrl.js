@@ -136,6 +136,7 @@ module.exports = function ($scope, $location, $cookies, dataSvc, busySvc, NgTabl
       });
     });
 
+    $scope.$apply(); // force $location to sync with the browser
     // Update url search parameters
     $scope.$watch('details', updateSearch, true);
     $scope.$watchCollection('conditions', updateSearch);

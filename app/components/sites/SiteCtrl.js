@@ -46,6 +46,8 @@ module.exports = function ($scope, $routeParams, $location, $route, dataSvc, bus
         defaultSort: 'asc',
         dataset: _.values(employees)
       });
+
+      $scope.$apply(); // force $location to sync with the browser
       $scope.$watch(function () {
         return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
       }, function () {

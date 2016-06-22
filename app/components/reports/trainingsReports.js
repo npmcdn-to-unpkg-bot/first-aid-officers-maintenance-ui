@@ -4,39 +4,7 @@
 
 var _ = require('lodash');
 var moment = require('moment');
-var pdfMake = require('pdfmake');
-var filesaverjs = require('filesaverjs');
-var XLSX = require('xlsx-browerify-shim');
-var imgs64 = require('../../img/imgs64.js');
-
-var styles = {
-  'title': { fontSize: 16, color: 'black' },
-  'em': { color: 'black' },
-  'table-header': { bold: true, fontSize: 13 },
-  'link': { decoration: 'underline', color: 'black' },
-  'primary': { color: '#337ab7' },
-  'success': { color: 'green' },
-  'danger': { color: '#e51c23' },
-  'warning': { color: '#ff9800' },
-  'line-odd': { fillColor: '#f0f0f0' }
-};
-
-var tableLayoutDefault = {
-  hLineWidth: function (i, node) {
-    return i === 0 || i === node.table.body.length ? 0 : 1;
-  },
-  vLineWidth: _.constant(0),
-  hLineColor: function (i) {
-    return (i === 1) ? styles['primary'].color : 'grey'; // jshint ignore:line
-  },
-  vLineColor: _.constant('grey')
-};
-
-var tableLayoutNoInnerLines = _.extend(_.clone(tableLayoutDefault), {
-  hLineWidth: function (i) {
-    return i === 1 ? 1 : 0;
-  }
-});
+var reportsHelper = require('./reportsHelper.js');
 
 function extraPadding(layout) {
   return _.extend(_.clone(layout), {
@@ -53,41 +21,6 @@ function extraPadding(layout) {
       return i === node.table.widths.length - 1 ? 4 : 6;
     }
   });
-}
-
-function center(content) {
-  return { columns: [{ width: '*', text: '' }, _.extend({ width: 'auto' }, content), { width: '*', text: '' }, ] };
-}
-
-function header(currentPage, pageCount, title, subtitle, displayDate) {
-  return {
-    table: {
-      widths: ['*', '*', '*'],
-      body: [
-        [
-          { text: title, style: ['title', 'primary'] },
-          { image: imgs64.logo, alignment: 'center', width: 150, margin: [0, -10, 0, 0] },
-          { text: [{ text: displayDate ? displayDate : moment().format('dddd Do MMMM YYYY'), style: 'primary' }, { text: '\n' + subtitle }], alignment: 'right' }
-        ]
-      ]
-    },
-    layout: 'noBorders',
-    margin: [30, 20]
-  };
-}
-
-function footer(currentPage, pageCount, url) {
-  return {
-    columns: [{
-      width: '*',
-      text: url ? ['Consulter en ligne : ', { text: url, link: url, style: 'link' }] : ''
-    }, {
-      width: 'auto',
-      text: ['page ', { text: currentPage.toString(), style: 'em' }, ' sur ', { text: pageCount.toString(), style: 'em' }],
-      alignment: 'right'
-    }],
-    margin: [20, 20, 20, 0]
-  };
 }
 
 function filterRow(filter, idx) {
@@ -148,11 +81,10 @@ function filtersSection(datesCondition, filters, types) {
       widths: ['*', '*'],
       body: firstChunk.concat(secondChunk).concat(thirdChunk)
     },
-    layout: _.extend(_.clone(tableLayoutNoInnerLines), {
+    layout: _.extend(_.clone(reportsHelper.layouts.primary), {
       hLineWidth: function (i) {
         return _.includes([1, firstChunk.length + 1, firstChunk.length + secondChunk.length + 1], i) ? 1 : 0;
-      },
-      hLineColor: _.constant(styles['primary'].color) // jshint ignore: line
+      }
     }),
     margin: [0, 0, 0, 20]
   };
@@ -213,53 +145,8 @@ function coreSection(columns, data) {
         });
       }))
     },
-    layout: tableLayoutNoInnerLines
+    layout: reportsHelper.layouts.primary
   };
-}
-
-function createSheet(columns, data) {
-  /* jshint camelcase: false */
-  var worksheet = {
-    '!ref': XLSX.utils.encode_range({ s: { c: 0, r: 0 }, e: { c: columns.length - 1, r: data.length } }),
-    '!cols': _.map(columns, function (col) {
-      return {
-        wch: (function (id) {
-          switch (id) {
-            case 'trng_outcome':
-              return _.unescape('R&eacute;alis&eacute;e').length;
-            default:
-              return _.unescape(col.title).length;
-          }
-        })(col.id)
-      };
-    })
-  };
-  _.each(columns, function (col, c) {
-    worksheet[XLSX.utils.encode_cell({ c: c, r: 0 })] = { v: _.unescape(col.title), t: 's' };
-  });
-
-  _.each(data, function (entry, r) {
-    _.each(columns, function (col, c) {
-      worksheet[XLSX.utils.encode_cell({ c: c, r: r + 1 })] = (function (value) {
-        switch (col.id) {
-          case 'registered':
-          case 'validated':
-          case 'flunked':
-            return { v: value || 0, t: 'n' };
-          case 'trng_start':
-          case 'trng_end':
-            return { v: value || undefined, t: 'd' };
-          case 'trng_outcome':
-            return { v: _.unescape(value === 'COMPLETED' ? 'R&eacute;alis&eacute;e' : 'Pr&eacute;vue'), t: 's' };
-          default:
-            worksheet['!cols'][c].wch = Math.max(worksheet['!cols'][c].wch, _.size(value));
-            return { v: value, t: _.isNumber(value) ? 'n' : 's' };
-        }
-      })(_.get(entry, col.field) || _.get(entry, col.sortable) || _.get(entry, col.id));
-    });
-  });
-
-  return worksheet;
 }
 
 function trainingOverview(trng, completed) {
@@ -323,74 +210,49 @@ function employeesTable(trainees, completed) {
         ];
       }))
     },
-    layout: completed ? tableLayoutNoInnerLines : extraPadding(tableLayoutNoInnerLines)
+    layout: completed ? reportsHelper.layouts.primary : extraPadding(reportsHelper.layouts.primary)
   };
-}
-
-function generateSignInSheet(format, metadata, url, trng, trainees) {
-  var content = [trainingOverview(trng, trng.trng_outcome === 'COMPLETED'), employeesTable(trainees, trng.trng_outcome === 'COMPLETED')];
-
-  return pdfMake.createPdf({
-    info: metadata,
-    pageSize: format.format,
-    pageOrientation: format.orientation,
-    pageMargins: [40, 90, 40, 60],
-    header: _.partialRight(header, trng.type.trty_name, _.unescape(trng.trng_outcome === 'COMPLETED' ? 'Proc&egrave;s Verbal' : 'Feuille d\'&eacute;margement'), trng.displayDate),
-    footer: _.partialRight(footer, url),
-    styles: styles,
-    defaultStyle: {
-      color: 'grey'
-    },
-    content: content
-  });
-}
-
-function generateXLSX(columns, data) {
-  return {
-    download: _.partial(filesaverjs.saveAs, new Blob([(function (s) {
-      /*jslint bitwise: true */
-      var buf = new ArrayBuffer(s.length);
-      var view = new Uint8Array(buf);
-      for (var i = 0; i !== s.length; ++i) {
-        view[i] = s.charCodeAt(i) & 0xFF;
-      }
-
-      return buf;
-    })(XLSX.write({
-      SheetNames: ['Page 1'],
-      Sheets: { 'Page 1': createSheet(columns, data) },
-      cellStyles: true
-    }, {
-      bookType: 'xlsx',
-      bookSST: false,
-      type: 'binary'
-    }))], { type: '' }))
-  };
-}
-
-function generatePDF(format, metadata, datesCondition, filters, types, columns, data) {
-  var content = [center(coreSection(_(columns).filter('show').reject({ id: 'button' }).reject({ id: 'certs' }).value(), data))];
-  if (datesCondition || types.length || _.keys(filters).length) {
-    content.splice(0, 0, center(filtersSection(datesCondition, _.values(filters), types)));
-  }
-
-  return pdfMake.createPdf({
-    info: metadata,
-    pageSize: format.format,
-    pageOrientation: format.orientation,
-    pageMargins: [40, 90, 40, 60],
-    header: _.partialRight(header, 'Extraction des Formations', ''),
-    footer: footer,
-    styles: styles,
-    defaultStyle: {
-      color: 'grey'
-    },
-    content: content
-  });
 }
 
 module.exports = {
-  generateSignInSheet: generateSignInSheet,
-  generatePDF: generatePDF,
-  generateXLSX: generateXLSX
+  generateSignInSheet: function generateSignInSheet(format, metadata, url, trng, trainees) {
+    return reportsHelper.generatePDF({
+      info: metadata,
+      pageSize: format.format,
+      pageOrientation: format.orientation,
+      header: _.partialRight(reportsHelper.header, trng.type.trty_name, _.unescape(trng.trng_outcome === 'COMPLETED' ? 'Proc&egrave;s Verbal' :
+        'Feuille d\'&eacute;margement'), trng.displayDate),
+      footer: _.partialRight(reportsHelper.footer, url)
+    }, [trainingOverview(trng, trng.trng_outcome === 'COMPLETED'), employeesTable(trainees, trng.trng_outcome === 'COMPLETED')]);
+  },
+  generatePDF: function (format, metadata, datesCondition, filters, types, columns, data) {
+    var content = [reportsHelper.center(coreSection(_(columns).filter('show').reject({ id: 'button' }).reject({ id: 'certs' }).value(), data))];
+    if (datesCondition || types.length || _.keys(filters).length) {
+      content.splice(0, 0, reportsHelper.center(filtersSection(datesCondition, _.values(filters), types)));
+    }
+
+    return reportsHelper.generatePDF({
+      info: metadata,
+      pageSize: format.format,
+      pageOrientation: format.orientation,
+      header: _.partialRight(reportsHelper.header, 'Extraction des Formations', '')
+    }, content);
+  },
+  generateXLSX: function (columns, data) {
+    return reportsHelper.generateXLSX(reportsHelper.createSheet(columns, data, function (col, value) {
+      switch (col.id) {
+        case 'registered':
+        case 'validated':
+        case 'flunked':
+          return { v: value || 0, t: 'n' };
+        case 'trng_start':
+        case 'trng_end':
+          return { v: value || undefined, t: 'd' };
+        case 'trng_outcome':
+          return { v: _.unescape(value === 'COMPLETED' ? 'R&eacute;alis&eacute;e' : 'Pr&eacute;vue'), t: 's' };
+        default:
+          return { v: value, t: _.isNumber(value) ? 'n' : 's' };
+      }
+    }));
+  }
 };

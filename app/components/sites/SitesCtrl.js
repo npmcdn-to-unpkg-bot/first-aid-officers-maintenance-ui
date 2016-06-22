@@ -4,7 +4,7 @@
 var _ = require('lodash');
 var moment = require('moment');
 var helper = require('./sitesConditionsHelper.js');
-var sitesReports = require('./sitesReports');
+var sitesReports = require('../reports/sitesReports');
 
 module.exports = function ($scope, $location, $cookies, dataSvc, busySvc, NgTableParams, ngDialog) {
   var colsBase = [

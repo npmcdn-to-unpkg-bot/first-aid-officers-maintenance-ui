@@ -4,7 +4,7 @@
 var _ = require('lodash');
 var moment = require('moment');
 var helper = require('./trainingsConditionsHelper.js');
-var reports = require('./trainingsReports.js');
+var reports = require('../reports/trainingsReports.js');
 
 module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, ngDialog) {
   busySvc.busy('trainings');

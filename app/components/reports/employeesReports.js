@@ -4,7 +4,7 @@
 
 var _ = require('lodash');
 var moment = require('moment');
-var reportsHelper = require('../../reportsHelper.js');
+var reportsHelper = require('./reportsHelper.js');
 
 function filtersSection(conditions, filters) {
   return {

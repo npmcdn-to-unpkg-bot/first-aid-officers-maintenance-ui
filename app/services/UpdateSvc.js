@@ -3,23 +3,6 @@
 
 module.exports = function ($http, $q, apiSvc) {
   return {
-    getMatrix: function (file, pageNumber, pageName) {
-      var deferred = $q.defer();
-      var formData = new FormData();
-      formData.append('file', file);
-
-      $http.post(apiSvc.updateEndpoint + 'parse?pageNumber=' + (pageNumber || '') + '&pageName=' + (pageName || ''), formData, {
-        headers: {
-          'Content-Type': undefined
-        }
-      }).success(function (data) {
-        deferred.resolve(data);
-      }).error(function (response) {
-        deferred.reject(response);
-      });
-
-      return deferred.promise;
-    },
     update: function (employees) {
       return apiSvc.post(apiSvc.updateEndpoint, employees);
     },

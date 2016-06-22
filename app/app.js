@@ -257,7 +257,7 @@ angular.module('faomaintenanceApp', [
   .controller('TrainingTypesCtrl', ['$scope', 'UpdateSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
     require('./components/administration/certificates/TrainingTypesCtrl.js')
   ])
-  .controller('UpdateCtrl', ['$scope', 'UpdateSvc', 'DataSvc', 'ngDialog', 'BusySvc', require('./components/administration/update/UpdateCtrl.js')])
+  .controller('UpdateCtrl', ['$scope', 'UpdateSvc', 'DataSvc', 'ngDialog', 'BusySvc', 'NgTableParams', require('./components/administration/update/UpdateCtrl.js')])
   .controller('UsersAdministrationCtrl', ['$rootScope', '$scope', 'DataSvc', 'AdminSvc', 'ngDialog', '$route', '$location', 'BusySvc',
     require('./components/administration/users/UsersAdministrationCtrl.js')
   ])

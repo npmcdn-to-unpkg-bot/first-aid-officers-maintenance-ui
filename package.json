@@ -1,5 +1,6 @@
 {
-  "name": "ccjmne-angular-seed",
+  "name": "nclsdevelopment-orca",
+  "version": "1.4.0",
   "description": "An AngularJS project with Gulp, JSHint, Browserify and a LiveReload server.",
   "scripts": {
     "start": "gulp dev build serve watch"
@@ -95,7 +96,7 @@
     "lodash": "^4.6.0",
     "lz-string": "^1.4.4",
     "moment": "^2.13.0",
-    "ng-dialog": "^0.5.6",
+    "ng-dialog": "=0.5.6",
     "underscore": "^1.8.3",
     "xlsx-browerify-shim": "0.0.2"
   }

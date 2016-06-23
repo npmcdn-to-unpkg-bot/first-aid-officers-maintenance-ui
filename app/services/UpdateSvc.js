@@ -9,12 +9,27 @@ module.exports = function ($http, $q, apiSvc) {
     deleteSite: function (site_pk) {
       return apiSvc.delete(encodeURI(apiSvc.updateEndpoint + 'sites/' + site_pk));
     },
-    createSite: function (site_pk, site_name, site_dept_fk, site_notes, new_pk) {
-      return apiSvc.put(encodeURI(apiSvc.updateEndpoint + 'sites/' + site_pk), {
-        site_pk: new_pk || site_pk,
-        site_name: site_name,
-        site_dept_fk: site_dept_fk,
-        site_notes: site_notes
+    editSite: function (site) {
+      return apiSvc.put(encodeURI(apiSvc.updateEndpoint + 'sites/' + (site.site_pk || site.new_pk)), {
+        site_pk: site.new_pk || site.site_pk,
+        site_name: site.site_name,
+        site_dept_fk: site.site_dept_fk.toString(),
+        site_notes: site.site_notes
+      });
+    },
+    deleteDept: function (dept_pk) {
+      return apiSvc.delete(apiSvc.updateEndpoint + 'departments/' + dept_pk);
+    },
+    editDept: function (dept) {
+      return apiSvc.put(apiSvc.updateEndpoint + 'departments/' + dept.dept_pk, {
+        dept_name: dept.dept_name,
+        dept_id: dept.dept_id
+      });
+    },
+    createDept: function (dept) {
+      return apiSvc.post(apiSvc.updateEndpoint + 'departments', {
+        dept_name: dept.dept_name,
+        dept_id: dept.dept_id
       });
     },
     reorderCerts: function (certsOrder) {
@@ -57,15 +72,6 @@ module.exports = function ($http, $q, apiSvc) {
         trty_name: trty_name,
         trty_validity: trty_validity,
         certificates: certificates
-      });
-    },
-    deleteDept: function (dept_pk) {
-      return apiSvc.delete(apiSvc.updateEndpoint + 'departments/' + dept_pk);
-    },
-    updateDept: function (dept_pk, dept_name, dept_id) {
-      return apiSvc.put(apiSvc.updateEndpoint + 'departments/' + dept_pk, {
-        dept_name: dept_name,
-        dept_id: dept_id
       });
     }
   };

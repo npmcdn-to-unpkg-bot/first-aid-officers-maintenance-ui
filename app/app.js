@@ -226,7 +226,6 @@ angular.module('faomaintenanceApp', [
   .controller('CertificatesCtrl', ['$scope', 'UpdateSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
     require('./components/administration/certificates/CertificatesCtrl.js')
   ])
-  .controller('DepartmentEditCtrl', ['$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/department_edit/DepartmentEditCtrl.js')])
   .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc', 'NgTableParams',
     require('./components/employees/EmployeeCtrl.js')
   ])
@@ -240,9 +239,9 @@ angular.module('faomaintenanceApp', [
   ])
   .controller('SiteStatsCtrl', ['$scope', '$routeParams', 'DataSvc', 'BusySvc', require('./components/sites/SiteStatsCtrl.js')])
   .controller('SitesCtrl', ['$scope', '$location', '$cookies', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/sites/SitesCtrl.js')])
-  .controller('SitesAdministrationCtrl', ['$scope', 'DataSvc', 'ngDialog', '$route', 'BusySvc', require('./components/administration/sites/SitesAdministrationCtrl.js')])
-  .controller('SiteEditCtrl', ['$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/site_edit/SiteEditCtrl.js')])
-  .controller('SiteCreationCtrl', ['$scope', 'UpdateSvc', 'ngDialog', '$route', require('./components/dialogs/site_edit/SiteCreationCtrl.js')])
+  .controller('SitesAdministrationCtrl', ['$scope', 'DataSvc', 'ngDialog', '$route', 'BusySvc', 'UpdateSvc', 'NgTableParams',
+    require('./components/administration/sites/SitesAdministrationCtrl.js')
+  ])
   .controller('TrainingCtrl', ['$scope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'BusySvc', 'dateFilter', 'NgTableParams',
     require('./components/trainings/TrainingCtrl.js')
   ])

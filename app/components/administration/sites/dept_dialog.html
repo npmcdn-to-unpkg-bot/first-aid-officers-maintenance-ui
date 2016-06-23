@@ -1,0 +1,32 @@
+<form class="form form-horizontal panel panel-primary" ng-submit="callback(dept, closeThisDialog)" autocomplete="off">
+    <div class="panel-heading">
+        <span ng-if="dept.dept_pk">Modifier <strong>{{::dept.dept_name}}</strong></span>
+        <span ng-if="!dept.dept_pk">Nouveau d&eacute;partement</span>
+        <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <div class="row">
+                <label for="dept_name" class="control-label col-xs-4">Nom</label>
+                <div class="col-xs-8">
+                    <input id="dept_name" type="text" class="form-control" ng-model="dept.dept_name"></input>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label for="dept_id" class="control-label col-xs-4">Identifiant</label>
+                <div class="col-xs-8">
+                    <input id="dept_id" type="text" class="form-control" ng-model="dept.dept_id"></input>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer text-center">
+        <div ng-if="dept.dept_pk">
+            <button type="submit" class="btn btn-primary" ng-disabled="!dept.dept_name || !dept.dept_id">Modifier</button>
+            <button type="button" ng-click="delete(closeThisDialog)" class="btn btn-danger">Supprimer</button>
+        </div>
+        <button ng-if="!dept.dept_pk" type="submit" class="btn btn-primary" ng-disabled="!dept.dept_name || !dept.dept_id">Cr&eacute;er</button>
+    </div>
+</form>

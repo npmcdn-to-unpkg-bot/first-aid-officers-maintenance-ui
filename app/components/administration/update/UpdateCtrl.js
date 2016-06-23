@@ -4,6 +4,8 @@ var _ = require('lodash');
 var moment = require('moment');
 var XLSX = require('xlsx-browerify-shim');
 
+/* jshint camelcase: false */
+
 module.exports = function ($scope, updateSvc, dataSvc, ngDialog, busySvc, NgTableParams) {
   $scope.headers = [];
   $scope.data = [
@@ -113,7 +115,7 @@ module.exports = function ($scope, updateSvc, dataSvc, ngDialog, busySvc, NgTabl
       setTimeout(function () {
         $scope.employees = _.map($scope.data, function (entry, idx) {
           var res = _.mapValues($scope.step2.template, function (field) {
-            return entry[field.source] ? entry[field.source].trim() : ''
+            return entry[field.source] ? entry[field.source].trim() : '';
           });
 
           res.line = idx + 1;
@@ -137,11 +139,7 @@ module.exports = function ($scope, updateSvc, dataSvc, ngDialog, busySvc, NgTabl
 
         $scope.invalidEmployees = _.filter($scope.employees, { valid: false });
         $scope.currentStep = $scope.steps[2];
-        $scope.step3.tp = new NgTableParams({ sorting: { empl_surname: 'asc' }, count: 10 }, {
-          filterDelay: 0,
-          defaultSort: 'asc',
-          dataset: $scope.invalidEmployees
-        });
+        $scope.step3.tp = new NgTableParams({ sorting: { empl_surname: 'asc' }, count: 10 }, { filterDelay: 0, defaultSort: 'asc', dataset: $scope.invalidEmployees });
         busySvc.done();
         $scope.$apply();
       }, 100);

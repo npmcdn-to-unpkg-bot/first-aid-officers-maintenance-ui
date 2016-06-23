@@ -1,58 +1,50 @@
-<div st-table="shown" st-safe-src="sites" st-set-sort="orderByNullLast">
-    <form class="form-horizontal">
-        <div class="form-group">
-            <label for="pageSize" class="control-label col-xs-4 col-md-2">Sites par page</label>
-            <div class="col-xs-8 col-md-2">
-                <select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
-            </div>
-        </div>
-    </form>
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-primary">
-                <div class="panel-heading">Sites</div>
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th width="50%">
-                                <div class="st-sort" st-sort="site_name" st-skip-natural="true" st-sort-default="true">Nom</div>
-                                <input st-search="site_name" placeholder="Rechercher..." class="form-control" type="text" />
-                            </th>
-                            <th></th>
-                            <th width="50%">
-                                <div class="st-sort" st-sort="dept.dept_name" st-skip-natural="true">D&eacute;partement</div>
-                                <input st-search="dept.dept_name" placeholder="Rechercher..." class="form-control" type="text" />
-                            </th>
-                            <th class="last vtop" ng-repeat="cert in certificates | filter: {'checked': true}">
-                                <div class="st-sort" st-sort="stats.certificates[{{cert.cert_pk}}].countPercentage" st-skip-natural="true">{{cert.cert_short}}</div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="site in shown" class="clickme" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
-                            <td ng-click="editSite(site.site_pk)">
-                                <button type="button" class="btn btn-primary btn-xs" ng-disabled="!(hover && !deptHover)">MODIFIER</button>
-                            </td>
-                            <td class="shrinkable" ng-class="{'text-primary': hover && !deptHover}" ng-click="editSite(site.site_pk)">{{::site.site_name}}</td>
-                            <td ng-click="editDept(site.dept.dept_pk)" ng-mouseenter="deptHover=true" ng-mouseleave="deptHover=false">
-                                <button type="button" class="btn btn-primary btn-xs" ng-disabled="!deptHover">MODIFIER</button>
-                            </td>
-                            <td class="shrinkable" ng-mouseenter="deptHover=true" ng-mouseleave="deptHover=false" ng-class="{'text-primary': deptHover}" ng-click="editDept(site.dept.dept_pk)">
-                                {{::site.dept.dept_name}}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="panel-footer text-center">
-                    <td colspan="5" class="text-center">
-                        <div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
+<h3>Sites et d&eacute;partements</h3>
+<br />
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-{{selected ? 'default' : 'primary'}}">
+            <div class="panel-heading">D&eacute;partements</div>
+            <table class="table table-striped table-hover" ng-table-dynamic="deptTable with deptCols">
+                <tr ng-repeat="dept in $data track by dept.dept_pk" hover-state="hover" class="clickme" ng-class="{'warning': dept.dept_pk === selected.dept_pk}">
+                    <td ng-repeat="col in $columns" ng-switch="col.id" width="{{col.width}}" class="text-{{col.align || 'left'}}" ng-click="col.id !== 'open' ? editDept(dept) : ''" ng-class="{shrinkable: col.shrinkable}">
+                        <span ng-switch-when="dept_name" ng-class="{'text-warning': hover}">{{::dept.dept_name}}</span>
+                        <span ng-switch-when="open">
+                            <button type="button" class="btn btn-{{dept.count ? (hover ? 'primary': 'default') : 'danger'}} btn-sm" ng-click="open(dept)">{{selected.dept_pk === dept.dept_pk ? 'Fermer' : dept.count + ' sites'}}</button>
+                        </span>
+                        <span ng-switch-when="modify">
+                            <button type="button" class="btn btn-warning btn-xs" ng-disabled="!hover">Modifier</button>
+                        </span>
                     </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-{{selected ? 'warning' : 'primary'}}">
+            <div class="panel-heading">Sites<span ng-if="selected"> de <strong>{{selected.dept_name}}</strong></span></div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-4 text-right">Nombre de sites</div>
+                    <div class="col-xs-8 text-primary">{{siteTable.settings().dataset.length}}</div>
                 </div>
             </div>
+            <table class="table table-striped table-hover" ng-table-dynamic="siteTable with siteCols">
+                <tr ng-repeat="site in $data track by site.site_pk" hover-state="hover" class="clickme" ng-click="editSite(site)">
+                    <td ng-repeat="col in $columns" ng-switch="col.id" width="{{col.width}}" class="text-{{col.align || 'left'}}" ng-class="{shrinkable: col.shrinkable}">
+                        <span ng-switch-when="site_name" ng-class="{'text-warning': hover}">{{::site.site_name}}</span>
+                        <span ng-switch-when="employees" ng-class="{'text-danger': !site.count}">{{::site.count}}&nbsp;agents</span>
+                        <span ng-switch-when="modify">
+                            <button type="button" class="btn btn-warning btn-xs" ng-disabled="!hover">Modifier</button>
+                        </span>
+                        <span ng-switch-default ng-class="{'text-warning': hover}">{{::$eval(col.field, site)}}</span>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>
-<div class="side-panel-container text-right" if-role="'admin'">
-    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="create()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Cr&eacute;er site</button>
+
+<div class="side-panel-container text-right">
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="editSite()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nouveau site</button>
+    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="editDept()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nouveau d&eacute;partement</button>
 </div>

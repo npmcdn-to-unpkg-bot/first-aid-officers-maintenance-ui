@@ -1,41 +1,47 @@
 <div class="col-md-8 col-md-offset-2">
-	<form class="panel panel-primary form-horizontal" ng-submit="step1.upload()" autocomplete="off">
-		<div class="panel-heading">T&eacute;l&eacute;chargement du fichier source</div>
-		<div class="panel-body">
-			<ol>
-				<li>
-					Assurez-vous de disposer d'un fichier au format <span class="text-primary">.xls</span> ou <span class="text-primary">.xlsx</span>.
-				</li>
-				<li>
-					S&eacute;lectionnez votre fichier.
-					<div class="form-group">
-			      <label for="inputFile" class="col-xs-2 control-label">Fichier</label>
-
-			      <div class="col-xs-10">
-			        <input type="text" readonly="" class="form-control" placeholder="Parcourir...">
-			        <input type="file" id="inputFile" fileread="step1.file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
-			      </div>
-			    </div>
-				</li>
-				<li>
-					Indiquez le <span class="text-primary">num&eacute;ro</span> <strong>ou</strong> le <span class="text-primary">libell&eacute;</span> de la page qui liste les effectifs mis &agrave; jour.
-					<div class="form-group row">
-						<label for="pageNumber" class="col-xs-2 control-label">Num&eacute;ro</label>
-						<div class="col-xs-10">
-							<input class="form-control" id="pageNumber" type="number" min="1" ng-model="step1.pageNumber" placeholder="Num&eacute;ro de page" ng-disabled="step1.pageName" />
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="pageName" class="col-xs-2 control-label">Libell&eacute;</label>
-						<div class="col-xs-10">
-							<input class="form-control" id="pageName" type="text" ng-model="step1.pageName" placeholder="Nom de l'onglet" ng-disabled="step1.pageNumber" />
-						</div>
-					</div>
-				</li>
-			</ol>
-		</div>
-		<div class="panel-footer text-center">
-			<button type="submit" class="btn btn-primary" ng-disabled="!step1.file || !(step1.pageNumber > 0  || step1.pageName && step1.pageName !== '') || form.$invalid" loading="busy" loading-text="Chargement...">Charger le fichier</button>
-		</div>
-	</form>
+    <form class="panel panel-primary form-horizontal" ng-submit="step1.next()" autocomplete="off">
+        <div class="panel-heading">Chargement du fichier source</div>
+        <div class="panel-body">
+            <div class="text-justify">
+                Assurez-vous de disposer d'un fichier au format <span class="text-primary">.xlsx</span> contenant un export des agents et de leurs affectations, puis s&eacute;lectionnez
+                la page qui liste les effectifs mis &agrave; jour.
+            </div>
+            <hr />
+            <div class="form-group">
+                <div class="row">
+                    <label for="inputFile" class="col-xs-4 control-label">Fichier XLSX</label>
+                    <div class="col-xs-8">
+                        <input type="text" readonly="" class="form-control" placeholder="Parcourir..." ng-disabled="step1.workbook">
+                        <input type="file" id="inputFile" fileread="step1.file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ng-disabled="step1.workbook" />
+                    </div>
+                </div>
+            </div>
+            <div uib-collapse="!step1.workbook">
+                <!-- <busy busy-task="step1.readfile"> -->
+                <div class="form-group">
+                    <div class="row">
+                        <label for="sheetName" class="col-xs-4 control-label">Libell&eacute; de la page</label>
+                        <div class="col-xs-8">
+                            <select id="sheetName" class="form-control" ng-model="step1.sheetName" ng-options="sheetName for sheetName in step1.workbook.SheetNames"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-xs-4 control-label checkbox-label">Contient une ligne d'en-t&ecirc;te</label>
+                        <div class="col-xs-8 checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="step1.header" />{{step1.header ? 'Oui' : 'Non'}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- </busy> -->
+            </div>
+        </div>
+        <div class="panel-footer text-center">
+            <button type="button" ng-hide="step1.workbook" class="btn btn-primary" ng-disabled="!step1.file" busy-text="Chargement..." busy-disable busy-task="step1.readfile" ng-click="step1.readfile(step1.file)">Charger le fichier</button>
+            <button type="submit" ng-show="step1.workbook" class="btn btn-primary" ng-disabled="!step1.sheetName">&Eacute;tape suivante</button>
+        </div>
+    </form>
 </div>

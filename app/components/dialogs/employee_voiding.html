@@ -8,19 +8,23 @@
     </div>
     <div class="panel-body">
         <div class="form-group">
-            <label for="notes" class="control-label col-md-4 col-sm-4">Dispositif</label>
-            <div class="col-md-8 col-sm-8">
-                <select class="form-control" ng-model="cert" ng-options="cert as cert.cert_name for cert in (optout ? availableVoidings : currentVoidings)"></select>
+            <div class="row">
+                <label for="notes" class="control-label col-md-4 col-sm-4">Dispositif</label>
+                <div class="col-md-8 col-sm-8">
+                    <select class="form-control" ng-model="cert" ng-options="cert as cert.cert_name for cert in (optout ? availableVoidings : currentVoidings)"></select>
+                </div>
             </div>
         </div>
         <div class="form-group" uib-collapse="!optout">
-            <label for="notes" class="control-label col-md-4 col-sm-4">Date de sortie</label>
-            <div class="col-md-8 col-sm-8">
-                <div class="input-group">
-                    <input id="from" type="text" ng-model="date" class="form-control" uib-datepicker-popup="dd/MM/yyyy" datepicker-mode="'month'" is-open="datepicker" show-button-bar="false" starting-day="1"
-                        show-weeks="false" placeholder="JJ/MM/AAAA" />
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="datepicker=true"><span class="glyphicon glyphicon-calendar"></span></button>
+            <div class="row">
+                <label for="notes" class="control-label col-md-4 col-sm-4">Date de sortie</label>
+                <div class="col-md-8 col-sm-8">
+                    <div class="input-group">
+                        <input id="from" type="text" ng-model="date" class="form-control" uib-datepicker-popup="dd/MM/yyyy" datepicker-mode="'month'" is-open="datepicker" show-button-bar="false" starting-day="1"
+                            show-weeks="false" placeholder="JJ/MM/AAAA" />
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="datepicker=true"><span class="glyphicon glyphicon-calendar"></span></button>
+                        </div>
                     </div>
                 </div>
             </div>

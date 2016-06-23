@@ -1,0 +1,64 @@
+<h3>Aptitudes<small> - <a href="#/administration/training_types">types de formation</a></small></h3>
+<br />
+<div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start;" ui-sortable="{disabled: !reorder}" ng-model="certificates">
+    <div class="panel panel-primary" ng-repeat="cert in certificates track by cert.cert_pk" style="flex-basis: 500px;" ng-class="{'grabbable': reorder}">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-8" style="margin-top: 9px;" ng-switch="reorder">
+                    <label class="label label-default">{{cert.cert_order}}</label>
+                    <span ng-switch-when="true" class="text-{{cert.idx === cert.cert_order ? 'default' : 'warning'}}">&nbsp;&rarr;&nbsp;
+                        <label class="label label-{{cert.idx === cert.cert_order ? 'default' : 'warning'}}">{{cert.idx}}</label>
+                    </span>
+                    <span ng-switch-default> - <label class="label label-default">{{cert.cert_short}}</label></span> - {{cert.cert_name}}
+                </div>
+                <div class="col-xs-4 text-right">
+                    <button type="button" class="btn btn-warning no-margin" ng-click="edit(cert)" ng-disabled="reorder">Modifier</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-3 text-right">Cible</div>
+                <div class="col-xs-9"><span class="text-primary">{{cert.cert_target}}</span>% de l'effectif</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3 text-right">Indicateurs</div>
+                <div class="col-xs-9">
+                    <label class="label label-success">vert</label> - cible <span class="text-success">atteinte</span>
+                    <span class="pull-right">au-dessus de <span class="text-success">{{cert.cert_target}}</span>%</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3"></div>
+                <div class="col-xs-9">
+                    <label class="label label-warning">orange</label> - cible <span class="text-warning">presque atteinte</span>
+                    <span class="pull-right">entre <span class="text-warning">{{round(cert.cert_target * 2/3)}}</span> et <span class="text-warning">{{cert.cert_target}}</span>%</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3"></div>
+                <div class="col-xs-9">
+                    <label class="label label-danger">rouge</label> - cible <span class="text-danger">non atteinte</span>
+                    <span class="pull-right">en-dessous de <span class="text-danger">{{round(cert.cert_target * 2/3)}}</span>%</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <uib-progress class="progress progress-striped">
+                        <uib-bar value="cert.cert_target * 2/3" type="danger"><span>&lt;&nbsp;{{round(cert.cert_target * 2/3)}}%</span></uib-bar>
+                        <uib-bar value="cert.cert_target * 1/3" type="warning"></uib-bar>
+                        <uib-bar value="100 - cert.cert_target" type="success"><span>&ge;&nbsp;{{cert.cert_target}}%</span></uib-bar>
+                    </uib-progress>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="side-panel-container" ng-show="!reorder">
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="edit()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Cr&eacute;er nouvelle aptitude</button>
+    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="startReorder()"><span class="glyphicon glyphicon-random"></span>&nbsp;R&eacute;organiser aptitudes</button>
+</div>
+<div class="side-panel-container" ng-show="reorder">
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="saveReorder()"><span class="glyphicon glyphicon-ok"></span>&nbsp;Valider r&eacute;organisation</button>
+    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="cancelReorder()"><span class="glyphicon glyphicon-remove"></span>&nbsp;Annuler r&eacute;organisation</button>
+</div>

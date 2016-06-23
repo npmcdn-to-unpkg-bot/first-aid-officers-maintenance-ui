@@ -1,289 +1,118 @@
 'use strict';
 /*jshint camelcase: false*/
 
-var _ = require('underscore');
+var _ = require('lodash');
 var moment = require('moment');
-var pdfMake = require('pdfmake');
-var imgs64 = require('../../img/imgs64.js');
+var sitesReports = require('../reports/sitesReports');
 
-module.exports = function ($rootScope, $scope, $routeParams, $location, $route, dataSvc, busySvc, ngDialog, updateSvc) {
-  busySvc.busy();
+module.exports = function ($scope, $routeParams, $location, $route, dataSvc, busySvc, ngDialog, updateSvc, NgTableParams) {
+  busySvc.busy('site');
+  var colsBase = [
+    { id: 'button', clazz: 'primary', on: '(hover && !siteHover)', show: true, width: '1%' },
+    { title: 'Matricule', sortable: 'empl_pk', filter: { empl_pk: 'text' }, field: 'empl_pk', show: true, width: '10%' },
+    { title: 'Titre', sortable: 'empl_gender', id: 'empl_gender', align: 'right', show: true, width: '1%' },
+    { title: 'Nom', sortable: 'empl_surname', filter: { empl_surname: 'text' }, id: 'empl_surname', shrinkable: true, show: true, width: '40%' },
+    { title: 'Pr&eacute;nom', sortable: 'empl_firstname', filter: { empl_firstname: 'text' }, id: 'empl_firstname', shrinkable: true, show: true, width: '40%' },
+    { title: 'Statut', sortable: 'empl_permanent', id: 'empl_permanent', align: 'center', show: true, width: '1%' }
+  ];
 
-  Promise.all([dataSvc.getSiteEmployeesWithStats($routeParams.site_pk), dataSvc.getSiteWithStats($routeParams.site_pk), dataSvc.getCertificates(), dataSvc.getLatestUpdate()]).then(
-    function (results) {
-      $scope.employees = _.values(results[0]);
-      $scope.site = results[1];
-      $scope.certificates = _.values(results[2]);
-      $scope.update = results[3];
-      busySvc.done();
-      $scope.$apply();
-    },
-    function () {
-      busySvc.done();
+  $scope.$watch('certificates', function (certificates) {
+    _.each(certificates, function (cert) {
+      _.find($scope.cols, { id: 'cert', cert_pk: cert.cert_pk }).show = cert.checked || false;
     });
+  }, true);
+
+  Promise.all([dataSvc.getSiteEmployeesWithStats($routeParams.site_pk), dataSvc.getSiteWithStats($routeParams.site_pk), dataSvc.getCertificates(), dataSvc.getLatestUpdate()])
+    .then(_.spread(function (employees, site, certificates, update) {
+      $scope.site = site;
+      $scope.certificates = _.values(certificates);
+      $scope.update = update;
+      $scope.cols = colsBase.concat(_.map(certificates, function (cert) {
+        return {
+          title: cert.cert_short,
+          sortable: 'stats.certificates[' + cert.cert_pk + '].expiryDate',
+          id: 'cert',
+          cert_pk: cert.cert_pk,
+          show: false,
+          align: 'center',
+          width: '1%'
+        };
+      }));
+
+      $scope.tp = new NgTableParams(_({ sorting: { empl_surname: 'asc' }, count: 10 }).extend($location.search()).mapValues(function (val) {
+        return _.isString(val) ? decodeURI(val) : val;
+      }).value(), {
+        filterDelay: 0,
+        defaultSort: 'asc',
+        dataset: _.values(employees)
+      });
+
+      $scope.$apply(); // force $location to sync with the browser
+      $scope.$watch(function () {
+        return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
+      }, function () {
+        $location.search(_.mapValues(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), decodeURIComponent)).replace();
+      });
+      busySvc.done('site');
+    }), _.partial(busySvc.done, 'site'));
 
   $scope.editNotes = function () {
-    var dialogScope = $scope.$new(false);
-    dialogScope.callback = function (notes, closeThisDialog) {
-      updateSvc.createSite($scope.site.site_pk, $scope.site.site_name, $scope.site.site_dept_fk, notes).then(function () {
-        closeThisDialog();
-        $route.reload();
-        $rootScope.alerts.push({ type: 'success', msg: 'Informations mises &agrave; jour.' });
-      });
-    };
-
     ngDialog.open({
-      scope: dialogScope,
-      template: 'components/dialogs/edit_site_notes.html'
+      template: 'components/dialogs/edit_notes.html',
+      scope: _.extend($scope.$new(), {
+        notes: $scope.site.site_notes,
+        _title: $scope.site.site_name,
+        callback: function (notes, close) {
+          updateSvc.createSite($scope.site.site_pk, $scope.site.site_name, $scope.site.site_dept_fk, notes).then(function () {
+            close();
+            $route.reload();
+            $scope.$emit('alert', { type: 'success', msg: 'Informations mises &agrave; jour.' });
+          });
+        }
+      })
     });
   };
 
-  $scope.openDashboardOptions = function () {
+  $scope.getFilterDisplay = function (key, value) {
+    var col = _.find($scope.cols, function (col) {
+      return _.find(col, key);
+    });
+
+    return _.extend({ title: col.title },
+      (function () {
+        switch (key) {
+          case 'dept.dept_id':
+            return { link: 'est', value: _.find(col.data, { id: value }).title };
+          default:
+            return { value: value };
+        }
+      })());
+  };
+
+  $scope.export = function () {
+    var data = $scope.tp.settings().getData(new NgTableParams($scope.tp.parameters(), {
+      dataOptions: { applyPaging: false, applyFilter: false },
+      dataset: $scope.tp.settings().dataset
+    }));
+
     ngDialog.open({
-      template: './components/dialogs/dashboard_options.html',
-      scope: $scope.$new(false),
-      controller: ['$scope', 'ngDialog', function ($scope, ngDialog) {
-        $scope.generateDashboardDocument = function () {
-          ngDialog.closeAll();
-          pdfMake.createPdf({
-            info: {
-              title: $scope.site.site_name,
+      template: './components/dialogs/export_options_pdf.html',
+      scope: _.extend($scope.$new(false), {
+        callback: function (params, close) {
+          busySvc.busy('report', true);
+          sitesReports.generateDashboard(params, {
+              title: $scope.site.site_name + ' - ' + moment().format('DD/MM/YYYY'),
               author: 'Generated by ' + $location.host()
-            },
-            pageSize: $scope.format,
-            pageOrientation: $scope.orientation,
-            pageMargins: [40, 90, 40, 60],
-            content: [{
-              columns: [{
-                width: '*',
-                text: ''
-              }, {
-                width: 'auto',
-                table: {
-                  headerRows: 1,
-                  body: [
-                    [{
-                      text: 'Aptitude',
-                      colSpan: 2,
-                      alignment: 'center',
-                      style: 'table-header'
-                    }, {}, {
-                      text: 'Agents formés',
-                      style: 'table-header'
-                    }, {
-                      text: 'Cible',
-                      alignment: 'right',
-                      style: 'table-header'
-                    }]
-                  ].concat(_.where($scope.certificates, {
-                    checked: true
-                  }).map(function (cert) {
-                    var certStats = $scope.site.stats.certificates[cert.cert_pk];
-                    return [{
-                      text: cert.cert_short,
-                      style: certStats.targetStatus,
-                      alignment: 'right'
-                    }, {
-                      text: cert.cert_name,
-                      style: certStats.targetStatus
-                    }, {
-                      text: certStats.count + ' (' + certStats.countPercentage + '%)',
-                      style: certStats.targetStatus,
-                      alignment: 'center'
-                    }, {
-                      text: certStats.target + ' (' + cert.cert_target + '%)',
-                      alignment: 'right'
-                    }];
-                  }))
-                },
-                margin: [0, 0, 0, 30],
-                layout: {
-                  hLineWidth: function (i, node) {
-                    if (i === 0 || i === node.table.body.length) {
-                      return 0;
-                    }
-
-                    return 1;
-                  },
-                  vLineWidth: function () {
-                    return 0;
-                  },
-                  hLineColor: function (i) {
-                    return (i === 1) ? 'black' : 'grey';
-                  },
-                  vLineColor: function () {
-                    return 'grey';
-                  }
-                }
-              }, {
-                width: '*',
-                text: ''
-              }]
-            }, {
-              columns: [{
-                width: '*',
-                text: ''
-              }].concat(_.flatten(_.where($scope.certificates, {
-                checked: true
-              }).map(function (cert) {
-                var employees = _.sortBy(_.filter($scope.employees, function (empl) {
-                  return empl.stats.certificates[cert.cert_pk] && empl.stats.certificates[cert.cert_pk].valid;
-                }), 'empl_surname');
-                return [{
-                  width: 'auto',
-                  table: {
-                    headerRows: 2,
-                    body: [
-                      [{
-                        text: cert.cert_name,
-                        colSpan: 3,
-                        alignment: 'center',
-                        style: 'table-header'
-                      }, {}, {}],
-                      [{
-                        text: 'Nom',
-                        style: 'table-header'
-                      }, {
-                        text: 'Prénom',
-                        style: 'table-header'
-                      }, {
-                        text: cert.cert_short + ' à renouveler en',
-                        alignment: 'center',
-                        style: 'table-header'
-                      }]
-                    ].concat(employees.map(function (empl) {
-                      return [{
-                        text: empl.empl_surname,
-                        style: 'em'
-                      }, {
-                        text: empl.empl_firstname,
-                        style: 'em'
-                      }, {
-                        text: moment(empl.stats.certificates[cert.cert_pk].expiryDate).format('MMM YYYY'),
-                        alignment: 'right'
-                      }];
-                    }))
-                  },
-                  layout: {
-                    hLineWidth: function () {
-                      return 1;
-                    },
-                    vLineWidth: function (i, node) {
-                      if (i === 0 || i === node.table.widths.length) {
-                        return 1;
-                      }
-
-                      return 0;
-                    },
-                    hLineColor: function (i) {
-                      return (i === 2) ? 'black' : 'grey';
-                    },
-                    vLineColor: function () {
-                      return 'grey';
-                    }
-                  }
-                }, {
-                  width: '*',
-                  text: ''
-                }];
-              }), true))
-            }],
-            header: function () {
-              return {
-                table: {
-                  widths: ['*', '*', '*'],
-                  body: [
-                    [{
-                      text: $scope.site.site_name,
-                      style: 'title'
-                    }, {
-                      image: imgs64.logo,
-                      alignment: 'center',
-                      width: 150,
-                      margin: [0, -10, 0, 0]
-                    }, {
-                      text: [{
-                        text: moment(new Date()).format('dddd Do MMMM YYYY'),
-                        style: 'em'
-                      }, {
-                        text: '\nTableau de bord'
-                      }],
-                      alignment: 'right'
-                    }]
-                  ]
-                },
-                layout: 'noBorders',
-                margin: [30, 20]
-              };
-            },
-            footer: function (currentPage, pageCount) {
-              return {
-                columns: [{
-                  width: '*',
-                  text: [
-                    'Fiche site : ', {
-                      text: $location.absUrl(),
-                      link: $location.absUrl(),
-                      style: 'link'
-                    }
-                  ]
-                }, {
-                  width: 'auto',
-                  text: [
-                    'page ', {
-                      text: currentPage.toString(),
-                      style: 'em'
-                    },
-                    ' sur ', {
-                      text: pageCount.toString(),
-                      style: 'em'
-                    }
-                  ],
-                  alignment: 'right'
-                }],
-                margin: [20, 20, 20, 0]
-              };
-            },
-            styles: {
-              'title': {
-                fontSize: 16,
-                color: 'black'
-              },
-              'em': {
-                color: 'black'
-              },
-              'table-header': {
-                bold: true,
-                fontSize: 13
-              },
-              'link': {
-                decoration: 'underline',
-                color: 'black'
-              },
-              'danger': {
-                color: '#e51c23'
-              },
-              'warning': {
-                color: '#ff9800'
-              },
-              'success': {
-                color: 'green'
-              }
-            },
-            defaultStyle: {
-              color: 'grey'
-            }
-          }).open();
-        };
-      }]
+            }, $location.absUrl().substring(0, $location.absUrl().indexOf('?')), $scope.site, data, $scope.cols, _.keyBy($scope.certificates, 'cert_pk'))
+            .download(moment().format('YYYY-MM-DD') + ' - ' + $scope.site.site_name + '.pdf');
+          busySvc.done('report');
+          close();
+        }
+      })
     });
   };
 
   $scope.selectEmployee = function (empl_pk) {
-    $location.path('/employees/' + empl_pk);
-  };
-
-  $scope.select = function (site_pk) {
-    $location.path('/sites/' + site_pk);
+    $location.path('/employees/' + empl_pk).search({});
   };
 };

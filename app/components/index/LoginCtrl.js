@@ -11,7 +11,7 @@ module.exports = function ($scope, $rootScope, $route, authSvc, busySvc) {
 
   function error() {
     busySvc.done('auth-pending');
-    $rootScope.alerts.push({
+    $scope.$emit('alert', {
       type: 'danger',
       msg: '<strong>&Eacute;chec d\'authentification</strong>&nbsp;: ' +
         'Le matricule et/ou le mot de passe que vous avez entr&eacute; est invalide.<br />' +

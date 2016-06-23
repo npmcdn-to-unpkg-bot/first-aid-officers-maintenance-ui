@@ -1,61 +1,115 @@
-<div st-persist="sites" st-table="shown" st-safe-src="sites" st-set-sort="orderByNullLast">
-    <form class="form-horizontal">
-        <div class="form-group">
-            <label for="pageSize" class="control-label col-xs-4 col-md-2">Sites par page</label>
-            <div class="col-xs-8 col-md-2">
-                <select class="form-control" id="pageSize" ng-model="pageSize" ng-init="pageSize = 25" ng-options="size for size in [5, 10, 25, 100]"></select>
+<h3>Liste des <span class="text-primary">sites</span></h3>
+<br />
+<div class="panel panel-primary">
+    <div class="panel-heading panel-heading-togglebutton">
+        <div class="row">
+            <div class="col-xs-4 checkbox">
+                <span class="togglebutton">
+                    <label>
+                        <input type="checkbox" ng-model="advancedSearch" ng-disabled="conditions.length > 0" />Recherche avanc&eacute;e
+                    </label>
+                </span>
             </div>
-        </div>
-    </form>
-
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-xs-2">Sites</div>
-                <div class="col-xs-10 text-right">
-                    <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
-                        <div class="btn-group">
-                            <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
-                        </div>
-                    </state-sustain>
-                </div>
+            <div class="col-xs-8 text-right panel-heading-buttons">
+                <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
+                    <div class="btn-group">
+                        <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" ng-click="check(cert)" uib-btn-checkbox ng-repeat="cert in certificates | orderBy: 'cert_order'">{{cert.cert_short}}</label>
+                    </div>
+                </state-sustain>
             </div>
-        </div>
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th class="vtop"></th>
-                    <th width="50%">
-                        <div class="st-sort" st-sort="site_name" st-skip-natural="true" st-sort-default="true">Nom</div>
-                        <input st-search="site_name" placeholder="Rechercher..." class="form-control" type="text" />
-                    </th>
-                    <th width="50%">
-                        <div class="st-sort" st-sort="dept.dept_name" st-skip-natural="true">D&eacute;partement</div>
-                        <input st-search="dept.dept_name" placeholder="Rechercher..." class="form-control" type="text" />
-                    </th>
-                    <th class="last vtop" ng-repeat="cert in certificates | filter: {'checked': true}">
-                        <div class="st-sort" st-sort="stats.certificates[{{cert.cert_pk}}].countPercentage" st-skip-natural="true">{{cert.cert_short}}</div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="site in shown" ng-click="select(site.site_pk);" class="clickme" ng-mouseenter="hover=true" ng-mouseleave="hover = false">
-                    <td>
-                        <button type="button" class="btn btn-primary btn-xs" ng-disabled="!hover">VOIR</button>
-                    </td>
-                    <td class="shrinkable" ng-class="{'text-primary': hover}">{{ site.site_name }}</td>
-                    <td class="shrinkable">{{ site.dept.dept_name }}</td>
-                    <td class="shrinkable text-center" ng-repeat="cert in certificates | filter: {'checked': true}" ng-init="certStats = site.stats.certificates[cert.cert_pk]">
-                        <span class="label" ng-class="'label-' + certStats.targetStatus">{{certStats.countPercentage}}%</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="panel-footer text-center">
-            <td colspan="5" class="text-center">
-                <div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="7"></div>
-            </td>
         </div>
     </div>
+    <div style="border-bottom: 1px solid #ddd;" uib-collapse="!advancedSearch">
+        <form class="panel-body form-horizontal" autocomplete="off">
+            <div class="form-group" ng-repeat="cert in certificates | filter: { checked: true } | orderBy: 'cert_order'">
+                <div class="row">
+                    <label class="col-xs-4 control-label checkbox-label">D&eacute;tails <strong>{{cert.cert_short}}</strong></label>
+                    <div class="col-xs-8">
+                        <div class="row">
+                            <div class="col-xs-6 col-md-4 checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="details[cert.cert_pk].cert" />{{cert.cert_short}} <span class="text-muted">form&eacute;s (taux)</span>
+                                </label>
+                            </div>
+                            <div class="col-xs-6 col-md-4 checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="details[cert.cert_pk].count" />{{cert.cert_short}} <span class="text-muted">form&eacute;s</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-md-4 checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="details[cert.cert_pk].target" /><span class="text-muted">Cible</span> {{cert.cert_short}} <span class="text-muted">(nombre)</span>
+                                </label>
+                            </div>
+                            <div class="col-xs-6 col-md-4 checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="details[cert.cert_pk].remaining" />{{cert.cert_short}} <span class="text-muted"> &agrave; former</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-xs-4 control-label">Ajouter filtre</label>
+                    <div class="col-xs-8 col-lg-6 input-group">
+                        <div class="input-group-addon">Selon aptitude</div>
+                        <select class="form-control" ng-model="cert" ng-options="cert as cert.cert_short + ' - ' + cert.cert_name for cert in certificates | orderBy: 'cert_order'">
+                            <option value=""></option>
+                        </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="button" ng-disabled="!cert" ng-click="addCondition(cert)">D&eacute;finir</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="form-group" ng-repeat="condition in conditions">
+                <div class="row">
+                    <div class="col-xs-4 text-right" style="padding-top: 8px">{{$first ? 'Ne garder que ceux dont' : 'et dont'}}</div>
+                    <div class="col-xs-8 col-lg-6">
+                        <div class="pill clickme" ng-click="conditions.splice(conditions.indexOf(condition), 1)">
+                            {{condition.display}}<span class="pill-delete">&times;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" ng-repeat="(key, value) in tp.filter() | omitEmptyKeys">
+                <div class="row">
+                    <div class="col-xs-4 text-right">{{$first && (conditions || []).length === 0 ? 'Ne garder que celles dont' : 'et dont'}} <strong ng-bind-html="getFilterDisplay(key, value).title | lowercase"></strong></div>
+                    <div class="col-xs-8">{{getFilterDisplay(key, value).link || 'contient'}} <span class="text-primary">{{getFilterDisplay(key, value).value}}</span></div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-xs-4 text-right">Total</div>
+                <div class="col-xs-8">
+                    <span class="text-primary">{{tp.total()}}</span> sites trouv&eacute;s
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table table-striped table-hover" ng-table-dynamic="tp with cols" show-filter="true">
+        <tr ng-repeat="site in $data track by site.site_pk" hover-state="hover">
+            <td ng-repeat="col in $columns" ng-switch="col.id" class="clickme text-{{col.align || 'left'}}" ng-class="{shrinkable: col.shrinkable}" ng-click="select(site.site_pk)" width="{{col.width}}">
+                <span ng-switch-when="site_name" ng-class="{'text-primary': hover}" ng-bind="site.site_name"></span>
+                <span ng-switch-when="count" ng-init="certStats = site.stats.certificates[col.cert_pk]" class="text-{{certStats.targetStatus}}">{{certStats.count}}</label></span>
+                <span ng-switch-when="remaining" ng-init="certStats = site.stats.certificates[col.cert_pk]" class="text-{{certStats.targetStatus}}">{{certStats.remaining}}</label></span>
+                <span ng-switch-when="target" ng-init="certStats = site.stats.certificates[col.cert_pk]">{{certStats.target}}</label></span>
+                <span ng-switch-when="cert" ng-init="certStats = site.stats.certificates[col.cert_pk]"><label class="label label-{{certStats.targetStatus}}">{{certStats.countPercentage}}%</label></span>
+                <span ng-switch-when="button">
+                    <button type="button" class="btn btn-{{col.clazz}} btn-xs" ng-disabled="!({{col.on}})">Voir</button>
+                </span>
+                <span ng-switch-default>{{::$eval(col.field, site)}}</span>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="side-panel-container text-right">
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="getLink()"><span class="glyphicon glyphicon-link"></span>&nbsp;Sauver/partager recherche</button>
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="export()"><span class="glyphicon glyphicon-file"></span>&nbsp;Exporter listing</button>
 </div>

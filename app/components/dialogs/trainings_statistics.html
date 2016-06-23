@@ -29,7 +29,8 @@
             <div class="form-group">
                 <label for="interval" class="col-xs-4 control-label">Bilans interm&eacute;diaires</label>
                 <div class="col-xs-8">
-                    <select id="interval" class="form-control" ng-model="interval" ng-options="interval as 'sur chaque ' + getIntervalDisplay(interval) for interval in params.availableIntervals" ng-change="interval ? params.intervals.push(interval) : ''">
+                    <select id="interval" class="form-control" ng-model="interval" ng-options="interval as 'sur chaque ' + getIntervalDisplay(interval) for interval in params.availableIntervals | orderBy: '-'"
+                        ng-change="interval ? params.intervals.push(interval) : ''">
                         <option value="" disabled selected="true">Ajouter bilans interm&eacute;diaires...</option>
                     </select>
                 </div>
@@ -37,7 +38,7 @@
             <div class="form-group">
                 <div class="col-xs-4"></div>
                 <div class="col-xs-8">
-                    <div ng-repeat="interval in params.intervals | orderBy" class="pill clickme" ng-click="params.intervals.splice(params.intervals.indexOf(interval), 1)">
+                    <div ng-repeat="interval in params.intervals | orderBy: '-'" class="pill clickme" ng-click="params.intervals.splice(params.intervals.indexOf(interval), 1)">
                         sur chaque {{getIntervalDisplay(interval)}}<span class="pill-delete">&times;</span>
                     </div>
                 </div>

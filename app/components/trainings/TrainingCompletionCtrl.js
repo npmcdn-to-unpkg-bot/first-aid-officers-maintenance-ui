@@ -1,41 +1,69 @@
 'use strict';
 /*jshint camelcase: false*/
 
-var _ = require('underscore');
+var _ = require('lodash');
 var moment = require('moment');
 
-module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location, ngDialog, trainingsSvc, busySvc, dateFilter) {
-  busySvc.busy();
+module.exports = function ($scope, $routeParams, dataSvc, $location, ngDialog, trainingsSvc, busySvc, dateFilter, NgTableParams) {
+  busySvc.busy('trainingCompletion');
+  busySvc.busy('ongoingOperation', true);
 
-  Promise.all([dataSvc.getTraining($routeParams.trng_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function (results) {
-    $scope.trng = results[0];
-    $scope.firstTime = ($scope.trng.trng_outcome === 'SCHEDULED');
-    $scope.trng.type = results[1][results[0].trng_trty_fk];
-    $scope.trainees = _.values(results[0].trainees);
-    $scope.certificates = _.values(results[2]);
-    $scope.trng.expirationDate = moment($scope.trng.trng_date).add($scope.trng.type.trty_validity, 'months').format('YYYY-MM-DD');
-    $scope.trng.validity = moment.duration($scope.trng.type.trty_validity, 'months').asYears();
-    busySvc.done();
-    $scope.$apply();
-  }, function () {
-    busySvc.done();
-  });
+  $scope.cols = [
+    { id: 'button', clazz: 'danger', on: 'hover', show: true, width: '1%' },
+    { title: 'Matricule', sortable: 'empl_pk', filter: { empl_pk: 'text' }, field: 'empl_pk', show: true, width: '1%' },
+    { title: 'Titre', sortable: 'empl_gender', id: 'empl_gender', align: 'right', show: true, width: '1%' },
+    { title: 'Nom', sortable: 'empl_surname', filter: { empl_surname: 'text' }, id: 'empl_surname', shrinkable: true, show: true, width: '15%' },
+    { title: 'Pr&eacute;nom', sortable: 'empl_firstname', filter: { empl_firstname: 'text' }, id: 'empl_firstname', shrinkable: true, show: true, width: '15%' },
+    { title: 'Statut', sortable: 'empl_permanent', id: 'empl_permanent', align: 'center', show: true, width: '1%' },
+    { title: 'Commentaire', sortable: 'trem_comment', id: 'trem_comment', field: 'trem_comment', show: true }, {
+      id: 'empl_outcome',
+      title: 'R&eacute;sultat',
+      sortable: 'validated',
+      filter: {
+        validated: 'select'
+      },
+      data: [{ title: _.unescape('Valid&eacute;(e)'), id: true }, { title: _.unescape('Non valid&eacute;(e)'), id: false }],
+      show: true,
+      width: '1%',
+      align: 'right'
+    }
+  ];
+
+  Promise.all([dataSvc.getTraining($routeParams.trng_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(_.spread(function (trng, trainingTypes, certificates) {
+    $scope.trng = _.extend(trng, {
+      type: trainingTypes[trng.trng_trty_fk],
+      expirationDate: moment(trng.trng_date).add(trainingTypes[trng.trng_trty_fk].trty_validity, 'months').format('YYYY-MM-DD'),
+      validity: moment.duration(trainingTypes[trng.trng_trty_fk].trty_validity, 'months').asYears()
+    });
+
+    $scope.tp = new NgTableParams(_({ sorting: { empl_surname: 'asc' }, count: 10 }).extend($location.search()).mapValues(function (val) {
+      return _.isString(val) ? decodeURI(val) : val;
+    }).value(), {
+      filterDelay: 0,
+      defaultSort: 'asc',
+      dataset: $scope.trainees = _.map(trng.trainees, function (trainee) {
+        return trainee.validated = trainee.trem_outcome === 'VALIDATED', trainee;
+      })
+    });
+
+    $scope.certificates = _.values(certificates);
+    busySvc.done('trainingCompletion');
+  }), _.partial(busySvc.done, 'trainingCompletion'));
 
   $scope.unregister = function (empl) {
-    var empl_display = (empl.empl_gender ? 'M.' : 'Mme') + ' ' + empl.empl_surname + ' ' + empl.empl_firstname;
-    var msg = '<b>' + empl_display +
-      '</b> a &eacute;t&eacute; d&eacute;sinscrit(e) de la formation.';
-    $rootScope.alerts.push({
-      type: 'warning',
-      msg: msg,
+    $scope.$emit('alert', {
+      type: 'primary',
+      msg: '<b>' + (empl.empl_gender ? 'M.' : 'Mme') + ' ' + empl.empl_surname + ' ' + empl.empl_firstname +
+        '</b> a &eacute;t&eacute; d&eacute;sinscrit(e) de la formation.',
       callback: function () {
         $scope.trainees.push(empl);
-        $scope.trng.trainees[empl.empl_pk] = empl;
-        return true;
+        $scope.tp.reload();
+        return true; // close alert
       }
     });
+
     $scope.trainees.splice($scope.trainees.indexOf(empl), 1);
-    delete $scope.trng.trainees[empl.empl_pk];
+    $scope.tp.reload();
   };
 
   $scope.getDisplayDate = function () {
@@ -54,18 +82,16 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location,
   };
 
   $scope.validateAll = function () {
-    _.each($scope.trainees, function (trainee) {
-      trainee.validated = true;
-    });
+    _.each($scope.trainees, _.partial(_.set, _, 'validated', true));
   };
 
   $scope.save = function () {
-    var dialogScope = $scope.$new(true);
-    var highlighted = $scope.firstTime ? '&eacute;diter le' : 'enregistrer les modifications apport&eacute;es au';
-    dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning"> ' + highlighted + ' Proc&egrave;s&nbsp;Verbal</span> de cette formation&nbsp?';
     ngDialog.openConfirm({
       template: 'components/dialogs/warning.html',
-      scope: dialogScope
+      scope: _.extend($scope.$new(true), {
+        innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning"> ' + ($scope.trng.trng_outcome === 'SCHEDULED' ?
+          '&eacute;diter le' : 'enregistrer les modifications apport&eacute;es au') + ' Proc&egrave;s&nbsp;Verbal</span> de cette formation&nbsp?'
+      })
     }).then(function () {
       trainingsSvc.updateTraining($scope.trng.trng_pk, {
         trng_trty_fk: $scope.trng.type.trty_pk,
@@ -73,27 +99,29 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, $location,
         trng_date: $scope.trng.trng_date,
         trng_outcome: 'COMPLETED',
         trng_comment: $scope.trng.trng_comment && $scope.trng.trng_comment.length > 0 ? $scope.trng.trng_comment : null,
-        trainers: _.pluck($scope.trng.trainers, 'empl_pk'),
-        trainees: _.each($scope.trng.trainees, function (trainee) {
+        trainers: _.map($scope.trng.trainers, 'empl_pk'),
+        trainees: _.keyBy(_.each($scope.trainees, function (trainee) {
           trainee.trem_outcome = trainee.validated ? 'VALIDATED' : 'FLUNKED';
-        })
+        }), 'empl_pk')
       }).then(function () {
-        $rootScope.alerts.push({ type: 'success', msg: 'Proc&egrave;s verbal de fin de session &eacute;dit&eacute;.' });
-        $location.path('/trainings/' + $scope.trng.trng_pk).search('force', true);
+        busySvc.done('ongoingOperation');
+        $scope.$emit('alert', { type: 'success', msg: 'Proc&egrave;s verbal de fin de session &eacute;dit&eacute;.' });
+        $location.path('/trainings/' + $scope.trng.trng_pk);
       });
     });
   };
 
   $scope.cancel = function () {
-    var dialogScope = $scope.$new(true);
-    var highlighted = $scope.firstTime ? 'l\'&eacute;dition' : 'la modification';
-    dialogScope.innerHtml = '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">annuler ' + highlighted +
-      ' du Proc&egrave;s&nbsp;Verbal</span> de cette formation&nbsp?<hr />En confirmant, toutes les modifications qui n\'ont pas &eacute;t&eacute; sauvegard&eacute;es seront perdues.';
     ngDialog.openConfirm({
       template: 'components/dialogs/warning.html',
-      scope: dialogScope
+      scope: _.extend($scope.$new(true), {
+        innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">annuler ' + ($scope.trng.trng_outcome ===
+            'SCHEDULED' ? 'l\'&eacute;dition' : 'la modification') +
+          ' du Proc&egrave;s&nbsp;Verbal</span> de cette formation&nbsp?<hr />En confirmant, toutes les modifications qui n\'ont pas &eacute;t&eacute; sauvegard&eacute;es seront perdues.'
+      })
     }).then(function () {
-      $location.path('/trainings/' + $scope.trng.trng_pk).search('force', true);
+      busySvc.done('ongoingOperation');
+      $location.path('/trainings/' + $scope.trng.trng_pk);
     });
   };
 };

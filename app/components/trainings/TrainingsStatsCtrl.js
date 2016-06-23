@@ -4,7 +4,7 @@
 var _ = require('lodash');
 var moment = require('moment');
 
-module.exports = function ($scope, $rootScope, dataSvc, dateFilter, busySvc, ngDialog) {
+module.exports = function ($scope, dataSvc, dateFilter, busySvc, ngDialog) {
   $scope.params = {
     beginning: undefined,
     end: undefined,
@@ -14,8 +14,8 @@ module.exports = function ($scope, $rootScope, dataSvc, dateFilter, busySvc, ngD
 
   busySvc.busy();
   Promise.all([dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function (results) {
-    $scope.trainingTypes = results[0];
-    $scope.certificates = results[1];
+    $scope.trainingTypes = _.values(results[0]);
+    $scope.certificates = _.values(results[1]);
     busySvc.done();
   }, function () {
     busySvc.done();
@@ -75,22 +75,24 @@ module.exports = function ($scope, $rootScope, dataSvc, dateFilter, busySvc, ngD
   $scope.generate = function () {
     ngDialog.closeAll();
     busySvc.busy();
-    dataSvc.getTrainingsStats(dateFilter($scope.params.beginning, 'yyyy-MM-dd'), dateFilter($scope.params.end, 'yyyy-MM-dd'), [0].concat($scope.params.intervals)).then(function (results) {
-      var stats = _(results).map(function (stats, interval) {
-        return { stats: stats, interval: parseInt(interval) };
-      }).orderBy('interval', 'desc').value();
+    dataSvc.getTrainingsStats(dateFilter($scope.params.beginning, 'yyyy-MM-dd'), dateFilter($scope.params.end, 'yyyy-MM-dd'), [0].concat($scope.params.intervals)).then(
+      function (results) {
+        var stats = _(results).map(function (stats, interval) {
+          return { stats: stats, interval: parseInt(interval) };
+        }).orderBy('interval', 'desc').value();
 
-      stats = [_.last(stats)].concat(_.take(stats, stats.length - 1));
-      $scope.columns = _.last(stats).stats.length;
-      var smallestInterval = _.last(stats).interval;
-      $scope.stats = _.map(stats, function (stats) {
-        return _.extend({ colSpan: stats.interval / smallestInterval }, stats);
+        stats = [_.last(stats)].concat(_.take(stats, stats.length - 1));
+        $scope.columns = _.last(stats).stats.length;
+        var smallestInterval = _.last(stats).interval;
+        $scope.stats = _.map(stats, function (stats) {
+          return _.extend({ colSpan: stats.interval / smallestInterval }, stats);
+        });
+
+        busySvc.done();
+      },
+      function () {
+        busySvc.done();
       });
-
-      busySvc.done();
-    }, function () {
-      busySvc.done();
-    });
   };
 
   $scope.$watchCollection('params.intervals', function (intervals) {

@@ -1,0 +1,50 @@
+<form class="form form-horizontal panel panel-primary" ng-submit="callback(site, closeThisDialog)" autocomplete="off">
+    <div class="panel-heading">
+        <span ng-if="site.site_pk">Modifier <strong>{{::site.site_name}}</strong></span>
+        <span ng-if="!site.site_pk">Nouveau site</span>
+        <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <div class="row">
+                <label for="site_pk" class="control-label col-xs-4">Code Aurore</label>
+                <div class="col-xs-8">
+                    <input id="site_pk" type="text" class="form-control" ng-model="site.new_pk" ng-init="site.new_pk = site.site_pk"></input>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label for="site_name" class="control-label col-xs-4">Nom du site</label>
+                <div class="col-xs-8">
+                    <input id="site_name" type="text" class="form-control" ng-model="site.site_name"></input>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label for="site_dept_fk" class="control-label col-xs-4">D&eacute;partement</label>
+                <div class="col-xs-8">
+                    <select id="site_dept_fk" class="form-control" ng-options="dept.dept_pk as dept.dept_name for (dept_pk, dept) in departments" ng-model="site.site_dept_fk">
+                        <option disabled="disabled" selected="selected" value="">Selectionner un d&eacute;partement...</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label for="notes" class="control-label col-xs-4">Autres informations</label>
+                <div class="col-xs-8">
+                    <textarea id="notes" rows="3" ng-model="site.site_notes" class="form-control vresize"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer text-center">
+        <div ng-if="site.site_pk">
+            <button type="submit" class="btn btn-primary" ng-disabled="!site.new_pk || !site.site_name || !site.site_dept_fk">Modifier</button>
+            <button type="button" ng-click="delete(closeThisDialog)" class="btn btn-danger">Supprimer</button>
+        </div>
+        <button ng-if="!site.site_pk" type="submit" class="btn btn-primary" ng-disabled="!site.new_pk || !site.site_name || !site.site_dept_fk">Cr&eacute;er</button>
+    </div>
+</form>

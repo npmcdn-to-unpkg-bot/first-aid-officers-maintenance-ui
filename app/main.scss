@@ -1,5 +1,6 @@
 @import url('//fonts.googleapis.com/css?family=Roboto:300,400,500,700');
 $brand-primary: #337ab7 !default;
+$brand-success: #4caf50 !default;
 $brand-danger: #e51c23 !default;
 $brand-warning: #ff9800 !default;
 $brand-info: $brand-primary !default;
@@ -8,12 +9,17 @@ $screen-xs: 768px;
 @import url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
 @import 'bower_components/bootstrap-material-design/sass/bootstrap-material-design';
 @import 'bower_components/bootstrap-material-design/sass/ripples';
+//@import 'bower_components/ng-table/dist/ng-table.min';
 @import 'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min';
+@import 'node_modules/ccjmne-busy/styles/ccjmne-busy';
 @import 'node_modules/ng-dialog/css/ngDialog-theme-default.min';
 @import 'node_modules/ng-dialog/css/ngDialog.min';
-@import 'busy/busy';
-@import 'styles/tables';
+@import 'styles/forms';
+@import 'styles/panels';
 @import 'styles/side_panel';
+@import 'styles/tables';
+@import 'styles/togglebuttons';
+@import 'styles/ui_sortable';
 @import 'components/dialogs/ngdialog-theme-gfs';
 @import 'components/home/home';
 @import 'components/index/index';
@@ -25,24 +31,29 @@ $screen-xs: 768px;
     }
 }
 
-.panel .table {
-    margin-bottom: 0;
+label.label + label.label {
+    margin-left: 2px;
 }
 
-.form-group label.control-label.checkbox-label {
-    padding-top: 6px;
+hr + hr {
+    display: none;
+}
+
+.progress {
+    &.progress-large {
+        height: 20px;
+    }
+    border-radius: 3px;
+    margin: 20px 0 0 0;
+    transition: height .2s ease;
 }
 
 .bootstrap-switch-danger {
     background-color: $brand-danger !important;
 }
 
-.form-group .checkbox {
-    .checkbox-label {
-        margin-left: 5px;
-        position: relative;
-        top: -1px;
-    }
+.bswitch-label {
+    padding-top: 2px !important;
 }
 
 @media (min-resolution: 192dpi) {
@@ -50,15 +61,6 @@ $screen-xs: 768px;
         width: 100%;
         padding: 0;
     }
-}
-
-.panel-heading span.label {
-    position: relative;
-    top: -2px;
-}
-
-.panel .panel-body + table {
-    border-top: 1px solid #ddd;
 }
 
 li.divider {
@@ -101,44 +103,6 @@ textarea.vresize {
     }
 }
 
-.contact-us,
-.contact-us:focus,
-.contact-us:hover {
-    color: darken(white, 10%);
-}
-
-.bswitch-label {
-    padding-top: 2px !important;
-}
-
-.uib-datepicker .text-info {
-    color: rgba(0, 0, 0, 0.87);
-}
-
-.uib-datepicker button[disabled] .text-info {
-    color: rgba(0, 0, 0, 0.26);
-}
-
-.form-group:not(.label-floating) label.control-label {
-    margin-top: 8px;
-}
-
-.form-group:not(.label-floating) {
-    margin: 0;
-    .checkbox label,
-    label.control-label {
-        font-size: 14px;
-    }
-}
-
-.form-group.extra-padding {
-    padding-bottom: 30px;
-}
-
-.help-block.force-show {
-    display: block;
-}
-
 .breadcrumb > li + li:before {
     padding: 0 5px 0 13px;
 }
@@ -152,15 +116,6 @@ a[disabled]:hover {
 
 ul {
     margin: 0;
-}
-
-body {
-    background-color: $brand-primary;
-    font-weight: 400;
-}
-
-h3.pull-left {
-    margin-bottom: 30px;
 }
 
 .clear {
@@ -187,14 +142,6 @@ h3.pull-left {
     pointer-events: none;
 }
 
-.navbar .uib-typeahead .dropdown-menu li>a {
-    padding: 3px 20px;
-    font-size: 14px;
-    &:hover {
-        background: $brand-primary;
-    }
-}
-
 .shrinkable {
     max-width: 40px;
     overflow: hidden;
@@ -210,19 +157,18 @@ h3.pull-left {
     cursor: pointer;
 }
 
+.uib-datepicker {
+    .text-info {
+        color: rgba(0, 0, 0, 0.87);
+    }
+    button[disabled] .text-info {
+        color: rgba(0, 0, 0, 0.26);
+    }
+}
+
 .uib-datepicker .btn,
 .uib-datepicker-popup .btn {
     margin: 0;
     padding: 5px 10px;
     background: transparent;
-}
-
-.vtop {
-    vertical-align: top!important;
-}
-
-.panel-heading {
-    .btn-group {
-        margin: 0;
-    }
 }

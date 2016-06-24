@@ -20,12 +20,15 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
   };
 
   $rootScope._alerts = [];
-  $rootScope.$on('alert', _.flow(_.nthArg(1), _.bind(Array.prototype.push, $rootScope._alerts)));
-  $rootScope.$on('error', _.bind(Array.prototype.push, $rootScope._alerts, {
-    type: 'danger',
-    msg: 'Une erreur est survenue. Merci de bien vouloir r&eacute;essayer ult&eacute;rieurement.\nSi le probl&egrave;me persiste, contactez un administrateur de la solution.',
-    static: true
-  }));
+  $rootScope.$on('alert', function (event, alert) { $rootScope._alerts.push(_.extend(alert, { id: $rootScope._alerts.length })); });
+  $rootScope.$on('error', function () {
+    $rootScope._alerts.push({
+      type: 'danger',
+      msg: 'Une erreur est survenue. Merci de bien vouloir r&eacute;essayer ult&eacute;rieurement.\nSi le probl&egrave;me persiste, contactez un administrateur de la solution.',
+      static: true,
+      id: $rootScope._alerts.length
+    });
+  });
 
   $scope.refreshIndex = function () {
     Promise.all([dataSvc.getTrainings(), dataSvc.getTrainingTypes()]).then(_.spread(function (trainings, trainingTypes) {

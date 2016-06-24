@@ -103,8 +103,11 @@ textarea.vresize {
     }
 }
 
-.breadcrumb > li + li:before {
-    padding: 0 5px 0 13px;
+ul.breadcrumb {
+    margin-bottom: 0;
+    > li + li:before {
+        padding: 0 5px 0 13px;
+    }
 }
 
 a[disabled],

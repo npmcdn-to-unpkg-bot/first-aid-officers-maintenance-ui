@@ -63,7 +63,7 @@ module.exports = function ($scope, $routeParams, $location, $route, dataSvc, bus
         notes: $scope.site.site_notes,
         _title: $scope.site.site_name,
         callback: function (notes, close) {
-          updateSvc.createSite($scope.site.site_pk, $scope.site.site_name, $scope.site.site_dept_fk, notes).then(function () {
+          updateSvc.editSite(_.extend(_.cloneDeep($scope.site), { site_notes: notes })).then(function () {
             close();
             $route.reload();
             $scope.$emit('alert', { type: 'success', msg: 'Informations mises &agrave; jour.' });

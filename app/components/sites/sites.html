@@ -52,7 +52,7 @@
                     </div>
                 </div>
             </div>
-            <hr />
+            <hr ng-if="(certificates | filter: { checked: true }).length" />
             <div class="form-group">
                 <div class="row">
                     <label class="col-xs-4 control-label">Ajouter filtre</label>

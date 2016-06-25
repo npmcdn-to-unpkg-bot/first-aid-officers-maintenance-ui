@@ -1,20 +1,24 @@
-<form class="form-horizontal" autocomplete="off" ng-submit="closeThisDialog(); addTypesFor(certMode, cert || trty)">
+<form class="form-horizontal" autocomplete="off" ng-submit="submit(cert.cert_pk || trty); closeThisDialog()">
     <div class="panel panel-primary">
         <div class="panel-heading">
             Ajouter type de formation
             <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
         </div>
         <div class="panel-body">
-            <div class="form-group" ng-show="certMode">
-                <label for="cert" class="col-xs-4 control-label">Octroyant l'aptitude</label>
-                <div class="col-xs-8">
-                    <select id="cert" class="form-control" ng-model="cert" ng-options="cert as cert.cert_name for cert in certificates | orderBy: 'cert_order'"></select>
+            <div class="form-group" ng-show="typeOption === 'cert'">
+                <div class="row">
+                    <label for="cert" class="col-xs-4 control-label">Octroyant l'aptitude</label>
+                    <div class="col-xs-8">
+                        <select id="cert" class="form-control" ng-model="cert" ng-options="cert as cert.cert_name for cert in certificates | orderBy: 'cert_order'"></select>
+                    </div>
                 </div>
             </div>
-            <div class="form-group" ng-show="!certMode">
-                <label for="trty" class="col-xs-4 control-label">Type de formation</label>
-                <div class="col-xs-8">
-                    <select id="trty" class="form-control" ng-model="trty" ng-options="trty as trty.trty_name for trty in trainingTypes | orderBy: 'trty_order'"></select>
+            <div class="form-group" ng-show="typeOption === 'trty'">
+                <div class="row">
+                    <label for="trty" class="col-xs-4 control-label">Type de formation</label>
+                    <div class="col-xs-8">
+                        <select id="trty" class="form-control" ng-model="trty" ng-options="trty as trty.trty_name for trty in trainingTypes | orderBy: 'trty_order'"></select>
+                    </div>
                 </div>
             </div>
         </div>

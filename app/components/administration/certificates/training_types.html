@@ -1,7 +1,7 @@
-<h3><a href="#/administration/certificates">Aptitudes</a> et types de formation<small> - Types de formation</small></h3>
+<h3>Types de formation<small> - <a href="#/administration/certificates">aptitudes</a></small></h3>
 <br />
 <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: center;" ui-sortable="{disabled: !reorder}" ng-model="trainingTypes">
-    <div class="panel panel-primary" ng-repeat="type in trainingTypes" style="flex-basis: 500px;" ng-class="{'ui-sortable-handle': reorder}">
+    <div class="panel panel-primary" ng-repeat="type in trainingTypes" style="flex-basis: 500px;" ng-class="{'grabbable': reorder}">
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-8" style="margin-top: 9px;">
@@ -36,9 +36,9 @@
 </div>
 <div class="side-panel-container" ng-show="!reorder">
     <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="edit()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nouveau type de formation</button>
-    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="startReorder()"><span class="glyphicon glyphicon-glyphicon glyphicon-th-list"></span>&nbsp;R&eacute;organiser types</button>
+    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="startReorder()"><span class="glyphicon glyphicon-random"></span>&nbsp;R&eacute;organiser types</button>
 </div>
 <div class="side-panel-container" ng-show="reorder">
-    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="saveReorder()"><span class="glyphicon glyphicon-glyphicon glyphicon-ok"></span>&nbsp;Valider r&eacute;organisation</button>
-    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="cancelReorder()"><span class="glyphicon glyphicon-glyphicon glyphicon-remove"></span>&nbsp;Annuler r&eacute;organisation</button>
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="saveReorder()"><span class="glyphicon glyphicon-ok"></span>&nbsp;Valider r&eacute;organisation</button>
+    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="cancelReorder()"><span class="glyphicon glyphicon-remove"></span>&nbsp;Annuler r&eacute;organisation</button>
 </div>

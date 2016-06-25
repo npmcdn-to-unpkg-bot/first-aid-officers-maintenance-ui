@@ -1,257 +1,111 @@
 'use strict';
 /*jshint camelcase: false*/
 
-var _ = require('underscore');
+var _ = require('lodash');
 var moment = require('moment');
-var pdfMake = require('pdfmake');
-var imgs64 = require('../../img/imgs64.js');
+var reports = require('../reports/trainingsReports.js');
 
-module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $location, ngDialog, busySvc, dateFilter) {
-  busySvc.busy();
+module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ngDialog, busySvc, dateFilter, NgTableParams) {
+  busySvc.busy('training');
 
-  Promise.all([dataSvc.getTraining($routeParams.trng_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(function (results) {
-    $scope.trng = results[0];
-    $scope.trng.type = results[1][results[0].trng_trty_fk];
-    $scope.trainees = _.values(results[0].trainees);
-    $scope.certificates = _.values(results[2]);
-    $scope.trng.expirationDate = moment($scope.trng.trng_date).add($scope.trng.type.trty_validity, 'months').format('YYYY-MM-DD');
-    $scope.trng.validity = moment.duration($scope.trng.type.trty_validity, 'months').asYears();
-    busySvc.done();
-    $scope.$apply();
-  }, function () {
-    busySvc.done();
-  });
+  $scope.cols = [
+    { id: 'button', clazz: 'primary', on: 'hover', show: true, width: '1%' },
+    { title: 'Matricule', sortable: 'empl_pk', filter: { empl_pk: 'text' }, field: 'empl_pk', show: true, width: '1%' },
+    { title: 'Titre', sortable: 'empl_gender', id: 'empl_gender', align: 'right', show: true, width: '1%' },
+    { title: 'Nom', sortable: 'empl_surname', filter: { empl_surname: 'text' }, id: 'empl_surname', shrinkable: true, show: true, width: '15%' },
+    { title: 'Pr&eacute;nom', sortable: 'empl_firstname', filter: { empl_firstname: 'text' }, id: 'empl_firstname', shrinkable: true, show: true, width: '15%' },
+    { title: 'Statut', sortable: 'empl_permanent', id: 'empl_permanent', align: 'center', show: true, width: '1%' },
+    { title: 'Commentaire', sortable: 'trem_comment', field: 'trem_comment', show: true }, {
+      id: 'trem_outcome',
+      title: 'R&eacute;sultat',
+      sortable: 'trem_outcome',
+      filter: {
+        trem_outcome: 'select'
+      },
+      data: [{ title: _.unescape('Valid&eacute;(e)'), id: 'VALIDATED' }, { title: _.unescape('Non valid&eacute;(e)'), id: 'FLUNKED' }, { title: 'En attente', id: 'SCHEDULED' }],
+      show: true,
+      width: '1%',
+      align: 'right'
+    }
+  ];
+
+  Promise.all([dataSvc.getTraining($routeParams.trng_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(_.spread(function (trng, trainingTypes, certificates) {
+    $scope.trng = _.extend(trng, {
+      type: trainingTypes[trng.trng_trty_fk],
+      expirationDate: moment(trng.trng_date).add(trainingTypes[trng.trng_trty_fk].trty_validity, 'months').format('YYYY-MM-DD'),
+      validity: moment.duration(trainingTypes[trng.trng_trty_fk].trty_validity, 'months').asYears(),
+      displayDate: (function () {
+        if (trng.trng_start) {
+          var dateFromFormat;
+          if (dateFilter(trng.trng_start, 'yyyy') !== dateFilter(trng.trng_date, 'yyyy')) {
+            dateFromFormat = 'longDate';
+          } else {
+            dateFromFormat = dateFilter(trng.trng_start, 'M') === dateFilter(trng.trng_date, 'M') ? 'd' : 'd MMMM';
+          }
+
+          return 'du ' + dateFilter(trng.trng_start, dateFromFormat) + ' au ' + dateFilter(trng.trng_date, 'longDate');
+        }
+
+        return dateFilter(trng.trng_date, 'fullDate');
+      })()
+    });
+
+    $scope.tp = new NgTableParams(_({ sorting: { empl_surname: 'asc' }, count: 10 }).extend($location.search()).mapValues(function (val) {
+      return _.isString(val) ? decodeURI(val) : val;
+    }).value(), {
+      filterDelay: 0,
+      defaultSort: 'asc',
+      dataset: $scope.trainees = _.values(trng.trainees)
+    });
+
+    $scope.$apply(); // force $location to sync with the browser
+    $scope.$watch(function () {
+      return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
+    }, function () {
+      $location.search(_.mapValues(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), decodeURIComponent)).replace();
+    });
+
+    $scope.certificates = _.values(certificates);
+    busySvc.done('training');
+  }), _.partial(busySvc.done, 'training'));
 
   $scope.canComplete = function () {
     return $scope.trainees && $scope.trainees.length > 0 && moment($scope.trng.trng_date).isSameOrBefore(new Date());
   };
 
-  $scope.getDisplayDate = function () {
-    if ($scope.trng.trng_start) {
-      var dateFromFormat;
-      if (dateFilter($scope.trng.trng_start, 'yyyy') !== dateFilter($scope.trng.trng_date, 'yyyy')) {
-        dateFromFormat = 'longDate';
-      } else {
-        dateFromFormat = dateFilter($scope.trng.trng_start, 'M') === dateFilter($scope.trng.trng_date, 'M') ? 'd' : 'd MMMM';
-      }
+  $scope.export = function () {
+    var exportType = ' - ' + _.unescape($scope.trng.trng_outcome === 'COMPLETED' ? 'Proc&egrave;s Verbal' : 'Feuille d\'&eacute;margement');
+    var data = $scope.tp.settings().getData(new NgTableParams($scope.tp.parameters(), {
+      dataOptions: { applyPaging: false, applyFilter: false },
+      dataset: $scope.tp.settings().dataset
+    }));
 
-      return 'du ' + dateFilter($scope.trng.trng_start, dateFromFormat) + ' au ' + dateFilter($scope.trng.trng_date, 'longDate');
-    }
-
-    return dateFilter($scope.trng.trng_date, 'fullDate');
-  };
-
-  $scope.generateSignInSheet = function () {
-    pdfMake.createPdf({
-      info: {
-        title: $scope.trng.type.trty_name + ' - ' + $scope.getDisplayDate(),
-        author: 'Generated by ' + $location.host()
-      },
-      header: function () {
-        return {
-          table: {
-            widths: ['*', '*', '*'],
-            body: [
-              [{
-                text: $scope.trng.type.trty_name,
-                style: 'title'
-              }, {
-                image: imgs64.logo,
-                alignment: 'center',
-                width: 150,
-                margin: [0, -10, 0, 0]
-              }, {
-                text: [{
-                  text: $scope.getDisplayDate(),
-                  style: 'em'
-                }, {
-                  text: ($scope.trng.trng_outcome === 'COMPLETED' ? '\nProcès Verbal' : '\nFiche d\'émargement')
-                }],
-                alignment: 'right'
-              }]
-            ]
-          },
-          layout: 'noBorders',
-          margin: [30, 20]
-        };
-      },
-      footer: function (currentPage, pageCount) {
-        return {
-          columns: [{
-            width: '*',
-            text: [
-              'Fiche formation : ', {
-                text: $location.absUrl(),
-                link: $location.absUrl(),
-                style: 'link'
-              }
-            ]
-          }, {
-            width: 'auto',
-            text: [
-              'page ', {
-                text: currentPage.toString(),
-                style: 'em'
-              },
-              ' sur ', {
-                text: pageCount.toString(),
-                style: 'em'
-              }
-            ],
-            alignment: 'right'
-          }],
-          margin: [30, 20]
-        };
-      },
-      content: [{
-        layout: 'noBorders',
-        table: {
-          widths: ['*', '*'],
-          body: [
-            [{
-              text: [
-                'Formateur(s) :\n'
-              ].concat(
-                _.map($scope.trng.trainers, function (trainer) {
-                  return {
-                    text: trainer.empl_surname + ' ' + trainer.empl_firstname + '\n',
-                    style: 'em'
-                  };
-                }))
-            }, {
-              table: {
-                widths: ['*'],
-                body: [
-                  [{ text: 'Signature du/des formateur(s)', alignment: 'center', margin: [0, 0, 0, 50] }]
-                ]
-              }
-            }],
-            [{ text: 'Lieu de formation :', colSpan: 2, margin: [0, 0, 0, 20] }, {}],
-            [{
-              text: [{ text: 'Notes :\n' }, {
-                text: $scope.trng.trng_comment || '\n',
-                style: 'em'
-              }],
-              margin: [0, 0, 0, 20]
-            }, {
-              text: $scope.trng.trng_outcome === 'COMPLETED' ? $scope.trainees.length + ' agents inscrits, dont :\n' + _.filter($scope.trainees, { trem_outcome: 'VALIDATED' })
-                .length + ' validés et ' + _.reject($scope.trainees, { trem_outcome: 'VALIDATED' }).length + ' recalés/absents' : '',
-              style: 'em',
-              alignment: 'right'
-            }]
-          ]
-        },
-      }, {
-        table: {
-          headerRows: 1,
-          widths: ['auto', 'auto', 'auto', 'auto', '*', 'auto'],
-          body: [
-            [{
-              text: 'Matricule',
-              style: 'table-header'
-            }, {
-              text: 'Titre',
-              style: 'table-header'
-            }, {
-              text: 'Nom',
-              style: 'table-header'
-            }, {
-              text: 'Prénom',
-              style: 'table-header'
-            }, {
-              text: $scope.trng.trng_outcome === 'COMPLETED' ? 'Commentaire' : 'Émargement',
-              style: 'table-header',
-              alignment: 'center'
-            }, {
-              text: $scope.trng.trng_outcome === 'COMPLETED' ? 'Validation' : '',
-              style: 'table-header',
-              alignment: 'right'
-            }]
-          ].concat(_.map(_.sortBy($scope.trainees, 'empl_surname'), function (empl) {
-            return [empl.empl_pk, {
-              text: empl.empl_gender ? 'M.' : 'Mme',
-              style: 'em',
-              alignment: 'right'
-            }, {
-              text: empl.empl_surname,
-              style: 'em'
-            }, {
-              text: empl.empl_firstname,
-              style: 'em'
-            }, {
-              text: $scope.trng.trng_outcome === 'COMPLETED' ? empl.trem_comment : ''
-            }, {
-              text: $scope.trng.trng_outcome === 'COMPLETED' ? (empl.trem_outcome === 'VALIDATED' ? 'VALIDÉ(E)' : 'NON VALIDÉ(E)') : '',
-              style: 'em',
-              alignment: 'right'
-            }];
-          }))
-        },
-        layout: {
-          hLineWidth: function (i, node) {
-            if (i === 0 || i === node.table.body.length) {
-              return 0;
-            }
-
-            return (i === 1) ? 2 : 1;
-          },
-          vLineWidth: function () {
-            return 0;
-          },
-          hLineColor: function (i) {
-            return (i === 1) ? 'black' : 'grey';
-          },
-          vLineColor: function () {
-            return 'grey';
-          },
-          paddingTop: function (i) {
-            return i === 0 ? 4 : 10;
-          },
-          paddingBottom: function (i) {
-            return i === 0 ? 4 : 10;
-          },
-          paddingLeft: function (i) {
-            return i === 0 ? 0 : 6;
-          },
-          paddingRight: function (i, node) {
-            return i === node.table.widths.length - 1 ? 0 : 6;
-          }
+    ngDialog.open({
+      template: './components/dialogs/export_options_pdf.html',
+      scope: _.extend($scope.$new(false), {
+        callback: function (params, close) {
+          busySvc.busy('report', true);
+          reports
+            .generateSignInSheet(params, { title: $scope.trng.type.trty_name + ' - ' + $scope.trng.displayDate + exportType, author: 'Generated by ' + $location.host() },
+              $location.absUrl().substring(0, $location.absUrl().indexOf('?')), $scope.trng, data)
+            .download(moment($scope.trng.trng_date).format('YYYY-MM-DD') + ' - ' + $scope.trng.type.trty_name + exportType + '.pdf');
+          busySvc.done('report');
+          close();
         }
-      }],
-      pageMargins: [40, 85, 40, 60],
-      styles: {
-        'em': {
-          color: 'black'
-        },
-        'link': {
-          decoration: 'underline',
-          color: 'black'
-        },
-        'title': {
-          fontSize: 16,
-          color: 'black'
-        },
-        'table-header': {
-          bold: true,
-          fontSize: 13
-        }
-      },
-      defaultStyle: {
-        color: 'grey'
-      }
-    }).open();
+      })
+    });
   };
 
   $scope.selectEmployee = function (empl_pk) {
-    $location.path('/employees/' + empl_pk);
+    $location.path('/employees/' + empl_pk).search({});
   };
 
   $scope.edit = function () {
-    $location.path('/trainings/' + $scope.trng.trng_pk + '/edit');
+    $location.path('/trainings/' + $scope.trng.trng_pk + '/edit').search({});
   };
 
   $scope.complete = function () {
-    $location.path('/trainings/' + $scope.trng.trng_pk + '/complete');
+    $location.path('/trainings/' + $scope.trng.trng_pk + '/complete').search({});
   };
 
   $scope.delete = function () {
@@ -263,12 +117,12 @@ module.exports = function ($scope, $rootScope, $routeParams, dataSvc, trngSvc, $
       scope: dialogScope
     }).then(function () {
       trngSvc.deleteTraining($scope.trng.trng_pk).then(function () {
-        $rootScope.alerts.push({
+        $scope.$emit('alert', {
           type: 'success',
           msg: 'Formation effac&eacute;e.'
         });
 
-        $location.path('/trainings');
+        $location.path('/trainings').search({});
       });
     });
   };

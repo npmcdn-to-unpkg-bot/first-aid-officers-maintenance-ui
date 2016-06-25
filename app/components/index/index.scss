@@ -1,3 +1,22 @@
+body {
+    background-color: $brand-primary;
+    font-weight: 400;
+}
+
+.contact-us,
+.contact-us:focus,
+.contact-us:hover {
+    color: darken(white, 10%);
+}
+
+.navbar .uib-typeahead .dropdown-menu li>a {
+    padding: 3px 20px;
+    font-size: 14px;
+    &:hover {
+        background: $brand-primary;
+    }
+}
+
 .top-panel {
     background: #fff;
     padding: 20px 0;
@@ -62,6 +81,12 @@ header {
     .navbar {
         margin: 0 !important;
     }
+}
+
+// AdBlock hides .alert.alert-warning
+.alert.uib-alert.alert-warning {
+    display: block !important;
+    visibility: visible !important;
 }
 
 .alert.ng-enter {

@@ -1,0 +1,43 @@
+.panel-primary .panel-heading {
+    label.label-default {
+        background-color: rgba(255, 255, 255, 0.84);
+        color: $brand-primary;
+    }
+}
+
+.panel {
+    .panel-body + table {
+        border-top: 1px solid #ddd;
+    }
+    .table {
+        margin-bottom: 0;
+    }
+}
+
+.panel-heading {
+    &.panel-heading-togglebutton {
+        .togglebutton {
+            padding-left: 5px;
+            label {
+                color: rgba(255, 255, 255, 0.84);
+            }
+        }
+        .panel-heading-buttons {
+            padding-top: 7px;
+        }
+    }
+    &.panel-heading-buttonsgroup {
+        .panel-heading-title {
+            margin: 5px 0;
+        }
+    }
+    .btn-group {
+        margin: 0;
+    }
+}
+
+.panel-footer {
+    button.btn {
+        margin: 0;
+    }
+}

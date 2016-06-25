@@ -1,9 +1,12 @@
 'use strict';
 
-var _ = require('underscore');
+var _ = require('lodash');
 var moment = require('moment');
+var XLSX = require('xlsx-browerify-shim');
 
-module.exports = function ($scope, $rootScope, updateSvc, dataSvc, ngDialog, busySvc) {
+/* jshint camelcase: false */
+
+module.exports = function ($scope, updateSvc, dataSvc, ngDialog, busySvc, NgTableParams) {
   $scope.headers = [];
   $scope.data = [
     []
@@ -18,37 +21,78 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, ngDialog, bus
     busySvc.done();
   });
 
-  $scope.steps = [{
-    step: 1,
-    title: 'Chargement des donn&eacute;es',
-    template: 'components/administration/update/step1.html'
-  }, {
-    step: 2,
-    title: 'Analyse du fichier',
-    template: 'components/administration/update/step2.html'
-  }, {
-    step: 3,
-    title: 'Import de la mise &agrave; jour',
-    template: 'components/administration/update/step3.html'
-  }];
+  $scope.steps = [
+    { step: 1, title: 'Chargement des donn&eacute;es', template: 'components/administration/update/step1.html' },
+    { step: 2, title: 'Analyse du fichier', template: 'components/administration/update/step2.html' },
+    { step: 3, title: 'Import de la mise &agrave; jour', template: 'components/administration/update/step3.html' }
+  ];
   $scope.currentStep = $scope.steps[0];
+
+  function numdate(v) {
+    var date = XLSX.SSF.parse_date_code(v);
+    var val = new Date();
+    val.setUTCDate(date.d);
+    val.setUTCMonth(date.m - 1);
+    val.setUTCFullYear(date.y);
+    val.setUTCHours(date.H);
+    val.setUTCMinutes(date.M);
+    val.setUTCSeconds(date.S);
+    return val;
+  }
+
+  function parseSheet(sheet) {
+    var data = [];
+    var range = XLSX.utils.decode_range(sheet['!ref']);
+    for (var r = range.s.r; r <= range.e.r; r++) {
+      var row = [];
+      for (var c = range.s.c; c <= range.e.c; c++) {
+        var cell = sheet[XLSX.utils.encode_cell({ r: r, c: c })];
+        if (cell) {
+          if (cell.t === 'n' && cell.w.indexOf('/') !== -1) {
+            row.push(moment(numdate(cell.v)).format('YYYY-MM-DD'));
+          } else {
+            row.push(cell.v.toString());
+          }
+        } else {
+          row.push('');
+        }
+      }
+
+      data.push(row);
+    }
+    return data;
+  }
 
   $scope.step1 = {
     file: undefined,
     pageNumber: undefined,
     pageName: undefined,
-    upload: function () {
+    readfile: function (file) {
+      busySvc.busy('step1.readfile', true);
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $scope.step1.workbook = XLSX.read(e.target.result, { type: 'binary' });
+        busySvc.done('step1.readfile');
+      };
+
+      reader.readAsBinaryString(file);
+    },
+    next: function () {
       busySvc.busy();
-      updateSvc.getMatrix($scope.step1.file, $scope.step1.pageNumber - 1, $scope.step1.pageName)
-        .then(function (data) {
-          $scope.headers = data[0];
-          $scope.data = data.slice(1);
-          $scope.currentStep = $scope.steps[1];
-          busySvc.done();
-        }, function () {
-          busySvc.done();
-          $rootScope.alerts.push({ type: 'danger', msg: '<strong>Erreur&nbsp;:</strong> Le fichier selectionn&eacute; n\'a pas pu &ecirc;tre lu.<hr />Assurez-vous de disposer d\'un document au format <strong>.xls</strong> ou <strong>.xlsx</strong> et que le nom (ou le num&eacute;ro) de la page &agrave; charger est correctement reseign&eacute;.' });
+      var data = parseSheet($scope.step1.workbook.Sheets[$scope.step1.sheetName]);
+      if ($scope.step1.header) {
+        $scope.headers = data[0];
+        $scope.data = data.slice(1);
+      } else {
+        $scope.headers = _.range(data[0].length).map(function (idx) {
+          return 'Colonne ' + (idx > 25 ? _.get('0ABCDEFGHIJKLMNOPQRSTUVWXYZ', Math.floor(idx / 26)) : '') + _.get('ABCDEFGHIJKLMNOPQRSTUVWXYZ', idx % 26);
         });
+
+        $scope.data = data;
+      }
+
+      $scope.currentStep = $scope.steps[1];
+      busySvc.done();
     }
   };
 
@@ -70,11 +114,11 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, ngDialog, bus
       busySvc.busy();
       setTimeout(function () {
         $scope.employees = _.map($scope.data, function (entry, idx) {
-          var res = _.object(_.map($scope.step2.template, function (field, name) {
-            return [name, entry[field.source] ? entry[field.source].trim() : ''];
-          }));
+          var res = _.mapValues($scope.step2.template, function (field) {
+            return entry[field.source] ? entry[field.source].trim() : '';
+          });
 
-          res.line = idx;
+          res.line = idx + 1;
           _.each($scope.step2.template, function (field, name) {
             if (!$scope.step3.validate(name, entry[field.source] ? entry[field.source].trim() : '')) {
               if (res.error) {
@@ -93,8 +137,9 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, ngDialog, bus
           return res;
         });
 
-        $scope.invalidEmployees = _.where($scope.employees, { valid: false });
+        $scope.invalidEmployees = _.filter($scope.employees, { valid: false });
         $scope.currentStep = $scope.steps[2];
+        $scope.step3.tp = new NgTableParams({ sorting: { empl_surname: 'asc' }, count: 10 }, { filterDelay: 0, defaultSort: 'asc', dataset: $scope.invalidEmployees });
         busySvc.done();
         $scope.$apply();
       }, 100);
@@ -143,15 +188,23 @@ module.exports = function ($scope, $rootScope, updateSvc, dataSvc, ngDialog, bus
   };
 
   $scope.step3 = {
+    cols: [
+      { id: 'button' },
+      { title: 'Ligne', sortable: 'line', filter: { line: 'text' }, field: 'line', width: '1%' },
+      { title: 'Matricule', sortable: 'empl_pk', filter: { empl_pk: 'text' }, field: 'empl_pk', width: '10%' },
+      { title: 'Nom', sortable: 'empl_surname', filter: { empl_surname: 'text' }, id: 'empl_surname', shrinkable: true, width: '30%' },
+      { title: 'Pr&eacute;nom', sortable: 'empl_firstname', filter: { empl_firstname: 'text' }, id: 'empl_firstname', shrinkable: true, width: '30%' },
+      { title: 'Erreur(s)', id: 'error', width: '30%' }
+    ],
     update: function () {
-      busySvc.busy();
+      busySvc.busy('actualUpdate', true);
       updateSvc.update($scope.employees).then(function () {
-        $rootScope.alerts.push({ type: 'success', msg: 'Mise &agrave; jour effectu&eacute;e avec succ&egrave;s.' });
-        $rootScope.$emit('update');
-        busySvc.done();
+        $scope.$emit('alert', { type: 'success', msg: 'Mise &agrave; jour effectu&eacute;e avec succ&egrave;s.' });
+        $scope.$emit('update');
+        busySvc.done('actualUpdate');
         window.history.back();
       }, function () {
-        busySvc.done();
+        busySvc.done('actualUpdate');
       });
     },
     validate: function (name, value) {

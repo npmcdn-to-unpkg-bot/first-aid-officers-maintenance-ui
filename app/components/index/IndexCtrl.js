@@ -30,16 +30,33 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
     });
   });
 
-  $scope.refreshIndex = function () {
-    Promise.all([dataSvc.getTrainings(), dataSvc.getTrainingTypes()]).then(_.spread(function (trainings, trainingTypes) {
-      $scope.trainingsIndex = _.sortBy(_.each(_.values(trainings), function (training) {
-        training.type = trainingTypes[training.trng_trty_fk];
-      }), function (training) {
-        return training.trng_date;
-      }).reverse();
+  $rootScope.hasRole = function (role) {
+    if (!($rootScope.currentUser && $rootScope.currentUser.info && $rootScope.currentUser.info.roles)) {
+      return false
+    }
 
-      $scope.globalIndex = $scope.sitesIndex.concat($scope.employeesIndex).concat($scope.trainingsIndex);
-    }));
+    var test = /(!)?([a-z]+)(\d)?$/.exec(role);
+    var res = (function (roles, role, level) {
+      return roles[role] && (level ? roles[role] >= level : true);
+    })($rootScope.currentUser.info.roles, test[2], test[3]);
+
+    return test[1] ? !res : !!res;
+  };
+
+  $scope.refreshIndex = function () {
+    if ($rootScope.hasRole('access4')) {
+      Promise.all([dataSvc.getTrainings(), dataSvc.getTrainingTypes()]).then(_.spread(function (trainings, trainingTypes) {
+        $scope.trainingsIndex = _.sortBy(_.each(_.values(trainings), function (training) {
+          training.type = trainingTypes[training.trng_trty_fk];
+        }), function (training) {
+          return training.trng_date;
+        }).reverse();
+
+        $scope.globalIndex = $scope.sitesIndex.concat($scope.employeesIndex).concat($scope.trainingsIndex);
+      }));
+    } else {
+      $scope.globalIndex = $scope.sitesIndex.concat($scope.employeesIndex);
+    }
   };
 
   $scope.refreshEntireIndex = function () {

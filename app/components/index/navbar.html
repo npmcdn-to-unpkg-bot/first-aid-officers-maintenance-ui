@@ -1,14 +1,15 @@
 <div class="navbar-collapse collapse navbar-responsive-collapse">
     <ul class="nav navbar-nav">
-        <li ng-class="{ active: isActive('/sites')}"><a href="#/sites">Sites</a></li>
+        <li ng-class="{ active: isActive('/sites')}" if-role="['access2']"><a href="#/sites">Sites</a></li>
+        <li ng-class="{ active: isActive('/sites')}" if-role="['access1', '!access2']"><a href="#/sites/{{currentUser.info.restrictions.accessibleSites[0]}}">Site</a></li>
         <li ng-class="{ active: isActive('/employees')}"><a href="#/employees">Agents</a></li>
-        <li class="dropdown" ng-class="{ active: isActive('/trainings')}">
+        <li class="dropdown" ng-class="{ active: isActive('/trainings')}" if-role="'access4'">
             <a href="" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Formations&nbsp;<b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li><a href="#/trainings">Consulter formations</a></li>
-                <li class="divider" if-role="'trainer'"></li>
+                <li class="divider"></li>
                 <li><a href="#/trainings/create" if-role="'trainer'">Cr&eacute;er formation</a></li>
-                <li><a href="#/trainings/stats" if-role="'trainer'">Dresser statistiques</a></li>
+                <li><a href="#/trainings/stats">Dresser statistiques</a></li>
             </ul>
         </li>
     </ul>

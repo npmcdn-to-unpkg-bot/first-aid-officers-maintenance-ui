@@ -26,46 +26,47 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
     }
   ];
 
-  Promise.all([dataSvc.getEmployee($routeParams.empl_pk), dataSvc.getEmployeeTrainings($routeParams.empl_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates(),
-    dataSvc.getEmployeeSite($routeParams.empl_pk), dataSvc.getEmployeeCertificatesVoiding($routeParams.empl_pk)
-  ]).then(_.spread(function (employee, trainings, trainingTypes, certificates, site, certificatesVoiding) {
-    $scope.empl = employee;
-    $scope.site = site;
-    $scope.certificates = _.values(certificates);
-    $scope.certificatesVoiding = _.each(certificatesVoiding, function (voiding) {
-      voiding.cert = certificates[voiding.emce_cert_fk];
-      voiding.date = new Date(voiding.emce_date);
-    });
-
-    _.find($scope.cols, { id: 'type' }).data = _.map(_.orderBy(trainingTypes, 'trty_order'), function (type) {
-      return { title: type.trty_name, id: type.trty_name };
-    });
-
-    $scope.tp = new NgTableParams(_({ sorting: { trng_date: 'desc' }, count: 10 }).extend($location.search()).mapValues(function (val) {
-      return _.isString(val) ? decodeURI(val) : val;
-    }).value(), {
-      filterDelay: 0,
-      defaultSort: 'asc',
-      dataset: $scope.trainings = _.map(trainings, function (trng) {
-        return trng.type = trainingTypes[trng.trng_trty_fk], trng;
-      })
-    });
-
-    if ($scope.empl.empl_pk !== $rootScope.currentUser.info.empl_pk) {
-      adminSvc.getUserInfo($scope.empl.empl_pk).then(function (info) {
-        $scope.canResetPassword = info.roles.indexOf('user') !== -1;
+  Promise.all([dataSvc.getEmployee($routeParams.empl_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates(),
+      dataSvc.getEmployeeSite($routeParams.empl_pk), dataSvc.getEmployeeCertificatesVoiding($routeParams.empl_pk)
+    ].concat($scope.hasRole('access4') ? [dataSvc.getEmployeeTrainings($routeParams.empl_pk)] : []))
+    .then(_.spread(function (employee, trainingTypes, certificates, site, certificatesVoiding, trainings) {
+      $scope.empl = employee;
+      $scope.site = site;
+      $scope.certificates = _.values(certificates);
+      $scope.certificatesVoiding = _.each(certificatesVoiding, function (voiding) {
+        voiding.cert = certificates[voiding.emce_cert_fk];
+        voiding.date = new Date(voiding.emce_date);
       });
-    }
 
-    $scope.$apply(); // force $location to sync with the browser
-    $scope.$watch(function () {
-      return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
-    }, function () {
-      $location.search(_.mapValues(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), decodeURIComponent)).replace();
-    });
+      _.find($scope.cols, { id: 'type' }).data = _.map(_.orderBy(trainingTypes, 'trty_order'), function (type) {
+        return { title: type.trty_name, id: type.trty_name };
+      });
 
-    busySvc.done('employee');
-  }), _.partial(busySvc.done, 'employee'));
+      $scope.tp = new NgTableParams(_({ sorting: { trng_date: 'desc' }, count: 10 }).extend($location.search()).mapValues(function (val) {
+        return _.isString(val) ? decodeURI(val) : val;
+      }).value(), {
+        filterDelay: 0,
+        defaultSort: 'asc',
+        dataset: $scope.trainings = _.map(trainings || [], function (trng) {
+          return trng.type = trainingTypes[trng.trng_trty_fk], trng;
+        })
+      });
+
+      if ($scope.empl.empl_pk !== $rootScope.currentUser.info.empl_pk) {
+        adminSvc.getUserInfo($scope.empl.empl_pk).then(function (info) {
+          $scope.canResetPassword = info.roles.indexOf('user') !== -1;
+        });
+      }
+
+      $scope.$apply(); // force $location to sync with the browser
+      $scope.$watch(function () {
+        return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
+      }, function () {
+        $location.search(_.mapValues(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), decodeURIComponent)).replace();
+      });
+
+      busySvc.done('employee');
+    }), _.partial(busySvc.done, 'employee'));
 
   $scope.editNotes = function () {
     ngDialog.open({

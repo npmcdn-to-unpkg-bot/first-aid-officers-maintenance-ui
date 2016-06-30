@@ -1,131 +1,73 @@
 'use strict';
 /*jshint camelcase: false*/
 
-var _ = require('underscore');
+var _ = require('lodash');
 
-module.exports = function ($rootScope, $scope, dataSvc, adminSvc, ngDialog, $route, $location, busySvc) {
-  function updateUsersCount() {
-    $scope.usersCount = _.filter($scope.users, function (user) {
-      return _.contains(user.roles, 'user');
-    }).length;
-    $scope.adminsCount = _.filter($scope.users, function (user) {
-      return _.contains(user.roles, 'admin');
-    }).length;
-    $scope.trainersCount = _.filter($scope.users, function (user) {
-      return _.contains(user.roles, 'trainer');
-    }).length;
-  }
+module.exports = function ($rootScope, $scope, dataSvc, adminSvc, ngDialog, $route, $location, busySvc, NgTableParams) {
+  $scope.typeFor = function (level) {
+    switch (level) {
+      case 1:
+        return 'danger';
+      case 2:
+        return 'warning';
+      case 3:
+        return 'primary';
+      case 4:
+        return 'success';
+    }
+  };
 
-  function ownRolesChanged() {
-    adminSvc.getInfo().then(function (updated) {
-      if (!_.contains(updated.roles, 'admin')) {
-        $route.reload();
-        $location.path('/home');
-      } else {
-        $route.reload();
-      }
-    }, function () {
-      ngDialog.openConfirm({
-        template: 'components/dialogs/locked_out.html'
-      }).then(function () {
-        $rootScope.disconnect();
-      });
+  $scope.cols = [
+    { id: 'button', clazz: 'primary', on: '(hover && !siteHover)', show: true, width: '1%' },
+    { title: 'Matricule', sortable: 'empl_pk', filter: { empl_pk: 'text' }, field: 'empl_pk', show: true, width: '10%' },
+    { title: 'Titre', sortable: 'empl_gender', id: 'empl_gender', align: 'right', show: true, width: '1%' },
+    { title: 'Nom', sortable: 'empl_surname', filter: { empl_surname: 'text' }, id: 'empl_surname', shrinkable: true, show: true, width: '40%' },
+    { title: 'Pr&eacute;nom', sortable: 'empl_firstname', filter: { empl_firstname: 'text' }, id: 'empl_firstname', shrinkable: true, show: true, width: '40%' },
+    { title: 'Acc&egrave;s', sortable: 'roles.access', id: 'roleLevel', field: 'roles.access', show: true, width: '1%', align: 'center' },
+    { title: 'Gestion&nbsp;de&nbsp;formation', sortable: 'roles.trainer', id: 'roleTrainer', field: 'roles.trainer', show: true, width: '1%', align: 'center' },
+    { title: 'Administration', sortable: 'roles.admin', id: 'roleLevel', field: 'roles.admin', show: true, width: '1%', align: 'center' }
+  ];
+
+  busySvc.busy('usersAdministration');
+  Promise.all([dataSvc.getEmployees(), adminSvc.getTrainerlevels(), adminSvc.getUsers()]).then(_.spread(function (employees, trainerlevels, users) {
+    $scope.employees = _.values(employees);
+    $scope.trainerlevels = trainerlevels;
+    $scope.tp = new NgTableParams(_({ sorting: { empl_surname: 'asc' }, count: 10 }).extend($location.search()).mapValues(function (val) {
+      return _.isString(val) ? decodeURI(val) : val;
+    }).value(), {
+      filterDelay: 0,
+      defaultSort: 'asc',
+      dataset: _.values(users)
     });
-  }
 
-  busySvc.busy();
-  Promise.all([dataSvc.getEmployees(), adminSvc.getAvailableRoles(), adminSvc.getUsers()]).then(function (results) {
-    $scope.employees = _.values(results[0]);
-    $scope.roles = _.object(_.pluck(results[1], 'role_name'), results[1]);
-    $scope.users = results[2];
-    updateUsersCount();
-    busySvc.done();
-    $scope.$apply();
-  }, function () {
-    busySvc.done();
+    $scope.$apply(); // force $location to sync with the browser
+    $scope.$watch(function () {
+      return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
+    }, function () {
+      $location.search(_.mapValues(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), decodeURIComponent)).replace();
+      setTimeout(function () {
+        $scope.$apply(); // force $location to sync with the browser
+      }, 0);
+    });
+    busySvc.done('usersAdministration');
+  }), function () {
+    busySvc.done('usersAdministration');
   });
 
-  $scope.edit = function (user) {
-    var dialogScope = $scope.$new(false);
-    dialogScope.empl = user;
-    _.each(dialogScope.roles, function (role) {
-      role.checked = _.contains(user.roles, role.role_name);
-    });
-
-    dialogScope.callback = function () {
-      if ($rootScope.currentUser.info.empl_pk === user.empl_pk) {
-        ownRolesChanged();
-      }
-
-      adminSvc.getUserInfo(user.empl_pk).then(function (updated) {
-        if (updated.roles.length === 0) {
-          $scope.users = _.reject($scope.users, function (tmp) {
-            return tmp.empl_pk === user.empl_pk;
-          });
-        } else {
-          _.findWhere($scope.users, { empl_pk: user.empl_pk }).roles = updated.roles;
-        }
-
-        updateUsersCount();
-      });
-    };
-
-    ngDialog.open({
-      templateUrl: 'components/dialogs/roles_edit/roles_edit.html',
-      scope: dialogScope,
-      controller: 'RolesEditCtrl'
-    });
-  };
-
-  $scope.resetPassword = function (empl) {
-    var dialogScope = $scope.$new(true);
-    dialogScope.innerHtml =
-      '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">r&eacute;initialiser le mot de passe</span> de<br /><span class="text-warning">' + (empl.empl_gender ?
-        'M.' : 'Mme') + '&nbsp;' + empl.empl_surname + '&nbsp;' + empl.empl_firstname +
-      '</span>&nbsp;? Cette modification est irr&eacute;versible et prend effet imm&eacute;diatement.';
-    ngDialog.openConfirm({
-      template: 'components/dialogs/warning.html',
-      scope: dialogScope
-    }).then(function () {
-      adminSvc.resetUserPassword(empl.empl_pk).then(function (password) {
-        $scope.$emit('alert', {
-          type: 'success',
-          msg: 'Mot de passe r&eacute;initialis&eacute;&nbsp: <strong><samp>' + password +
-            '</samp></strong><hr />Veuillez transmettre son nouveau mot de passe &agrave; l\'agent concern&eacute;.',
-          static: true
-        });
-      });
-    });
-  };
-
   $scope.create = function () {
-    _.each($scope.roles, function (role) {
-      delete role.checked;
-    });
-
-    var dialogScope = $scope.$new(false);
-    dialogScope.mode = 'create';
-    dialogScope.callback = function (user) {
-      if ($rootScope.currentUser.info.empl_pk === user.empl_pk) {
-        ownRolesChanged();
-      }
-
-      adminSvc.getUserInfo(user.empl_pk).then(function (updated) {
-        var existing = _.findWhere($scope.users, { empl_pk: user.empl_pk });
-        if (existing) {
-          existing.roles = updated.roles;
-        } else {
-          $scope.users.push(updated);
-        }
-
-        updateUsersCount();
-      });
-    };
-
     ngDialog.open({
-      templateUrl: 'components/dialogs/roles_edit/roles_edit.html',
-      scope: dialogScope,
-      controller: 'RolesEditCtrl'
+      template: './components/administration/users/employee_pick.html',
+      scope: _.extend($scope.$new(), {
+        employees: $scope.employees,
+        callback: function (empl, close) {
+          $scope.select(empl.empl_pk);
+          close();
+        }
+      })
     });
+  };
+
+  $scope.select = function (empl_pk) {
+    $location.path('administration/users/' + empl_pk).search({});
   };
 };

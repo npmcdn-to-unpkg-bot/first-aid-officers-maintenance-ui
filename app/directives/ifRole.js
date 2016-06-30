@@ -8,7 +8,7 @@ module.exports = function ($rootScope, ngIfDirective) {
   function testRole(roles, role) {
     var test = /(!)?([a-z]+)(\d)?$/.exec(role);
     var res = (function (roles, role, level) {
-      return roles[role] && (level ? roles[role] >= level : true);
+      return !_.isNil(roles[role]) && (level ? roles[role] >= level : true);
     })(roles, test[2], test[3]);
 
     return test[1] ? !res : !!res;

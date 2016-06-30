@@ -31,12 +31,21 @@ $screen-xs: 768px;
     }
 }
 
+// fix uib-collapse unsettling assymetric easing function
+.collapsing[uib-collapse] {
+    transition: all .35s ease !important;
+}
+
 label.label + label.label {
     margin-left: 2px;
 }
 
 hr + hr {
     display: none;
+}
+
+.popover {
+    max-width: 350px;
 }
 
 .progress {

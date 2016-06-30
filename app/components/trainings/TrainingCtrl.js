@@ -63,6 +63,9 @@ module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ng
       return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
     }, function () {
       $location.search(_.mapValues(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), decodeURIComponent)).replace();
+      setTimeout(function () {
+        $scope.$apply(); // force $location to sync with the browser
+      }, 0);
     });
 
     $scope.certificates = _.values(certificates);

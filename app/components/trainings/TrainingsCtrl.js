@@ -106,6 +106,9 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
     }).omitBy(_.isEmpty).extendWith($scope.details, function (unused, bool) {
       return bool || null;
     }).value()).replace();
+    setTimeout(function () {
+      $scope.$apply(); // force $location to sync with the browser
+    }, 0);
   }
 
   function filterTrainings() {

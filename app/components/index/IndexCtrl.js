@@ -32,7 +32,7 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
 
   $rootScope.hasRole = function (role) {
     if (!($rootScope.currentUser && $rootScope.currentUser.info && $rootScope.currentUser.info.roles)) {
-      return false
+      return !role;
     }
 
     var test = /(!)?([a-z]+)(\d)?$/.exec(role);

@@ -43,7 +43,7 @@
                         <hr /> Permet de g&eacute;rer les formations des types suivants&nbsp;:
                         <ul>
                             <li ng-repeat="type in trainer.types | orderBy: 'trty_order'">{{type.trty_name}}
-                                <span class="pull-right">
+                                <span class="pull-right text-right">
                                     <label class="label label-success" ng-repeat="cert in type.certificates">{{cert.cert_short}}</label>
                                 </span>
                             </li>

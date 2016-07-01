@@ -52,6 +52,9 @@ module.exports = function ($scope, $routeParams, $location, $route, dataSvc, bus
         return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
       }, function () {
         $location.search(_.mapValues(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), decodeURIComponent)).replace();
+        setTimeout(function () {
+          $scope.$apply(); // force $location to sync with the browser
+        }, 0);
       });
       busySvc.done('site');
     }), _.partial(busySvc.done, 'site'));

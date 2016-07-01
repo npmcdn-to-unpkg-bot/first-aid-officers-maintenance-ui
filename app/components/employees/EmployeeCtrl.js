@@ -4,7 +4,7 @@
 var _ = require('lodash');
 var moment = require('moment');
 
-module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, $location, ngDialog, $route, busySvc, EmployeesNotesSvc, NgTableParams) {
+module.exports = function ($rootScope, $scope, $routeParams, dataSvc, $location, ngDialog, $route, busySvc, EmployeesNotesSvc, NgTableParams) {
   busySvc.busy('employee');
 
   $scope.cols = [
@@ -26,46 +26,44 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
     }
   ];
 
-  Promise.all([dataSvc.getEmployee($routeParams.empl_pk), dataSvc.getEmployeeTrainings($routeParams.empl_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates(),
-    dataSvc.getEmployeeSite($routeParams.empl_pk), dataSvc.getEmployeeCertificatesVoiding($routeParams.empl_pk)
-  ]).then(_.spread(function (employee, trainings, trainingTypes, certificates, site, certificatesVoiding) {
-    $scope.empl = employee;
-    $scope.site = site;
-    $scope.certificates = _.values(certificates);
-    $scope.certificatesVoiding = _.each(certificatesVoiding, function (voiding) {
-      voiding.cert = certificates[voiding.emce_cert_fk];
-      voiding.date = new Date(voiding.emce_date);
-    });
-
-    _.find($scope.cols, { id: 'type' }).data = _.map(_.orderBy(trainingTypes, 'trty_order'), function (type) {
-      return { title: type.trty_name, id: type.trty_name };
-    });
-
-    $scope.tp = new NgTableParams(_({ sorting: { trng_date: 'desc' }, count: 10 }).extend($location.search()).mapValues(function (val) {
-      return _.isString(val) ? decodeURI(val) : val;
-    }).value(), {
-      filterDelay: 0,
-      defaultSort: 'asc',
-      dataset: $scope.trainings = _.map(trainings, function (trng) {
-        return trng.type = trainingTypes[trng.trng_trty_fk], trng;
-      })
-    });
-
-    if ($scope.empl.empl_pk !== $rootScope.currentUser.info.empl_pk) {
-      adminSvc.getUserInfo($scope.empl.empl_pk).then(function (info) {
-        $scope.canResetPassword = info.roles.indexOf('user') !== -1;
+  Promise.all([dataSvc.getEmployee($routeParams.empl_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates(),
+      dataSvc.getEmployeeSite($routeParams.empl_pk), dataSvc.getEmployeeCertificatesVoiding($routeParams.empl_pk)
+    ].concat($scope.hasRole('access4') ? [dataSvc.getEmployeeTrainings($routeParams.empl_pk)] : []))
+    .then(_.spread(function (employee, trainingTypes, certificates, site, certificatesVoiding, trainings) {
+      $scope.empl = employee;
+      $scope.site = site;
+      $scope.certificates = _.values(certificates);
+      $scope.certificatesVoiding = _.each(certificatesVoiding, function (voiding) {
+        voiding.cert = certificates[voiding.emce_cert_fk];
+        voiding.date = new Date(voiding.emce_date);
       });
-    }
 
-    $scope.$apply(); // force $location to sync with the browser
-    $scope.$watch(function () {
-      return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
-    }, function () {
-      $location.search(_.mapValues(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), decodeURIComponent)).replace();
-    });
+      _.find($scope.cols, { id: 'type' }).data = _.map(_.orderBy(trainingTypes, 'trty_order'), function (type) {
+        return { title: type.trty_name, id: type.trty_name };
+      });
 
-    busySvc.done('employee');
-  }), _.partial(busySvc.done, 'employee'));
+      $scope.tp = new NgTableParams(_({ sorting: { trng_date: 'desc' }, count: 10 }).extend($location.search()).mapValues(function (val) {
+        return _.isString(val) ? decodeURI(val) : val;
+      }).value(), {
+        filterDelay: 0,
+        defaultSort: 'asc',
+        dataset: $scope.trainings = _.map(trainings || [], function (trng) {
+          return trng.type = trainingTypes[trng.trng_trty_fk], trng;
+        })
+      });
+
+      $scope.$apply(); // force $location to sync with the browser
+      $scope.$watch(function () {
+        return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
+      }, function () {
+        $location.search(_.mapValues(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), decodeURIComponent)).replace();
+        setTimeout(function () {
+          $scope.$apply(); // force $location to sync with the browser
+        }, 0);
+      });
+
+      busySvc.done('employee');
+    }), _.partial(busySvc.done, 'employee'));
 
   $scope.editNotes = function () {
     ngDialog.open({
@@ -130,50 +128,6 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, adminSvc, 
           });
         }
       })
-    });
-  };
-
-  $scope.editRoles = function () {
-    adminSvc.getUserRoles($scope.empl.empl_pk).then(function (roles) {
-      var dialogScope = $scope.$new(false);
-      dialogScope.roles = _.keyBy(roles, 'role_name');
-      dialogScope.callback = function (empl) {
-        $route.reload();
-        if (empl.empl_pk === $scope.currentUser.info.empl_pk) {
-          adminSvc.getInfo().then(null, function () {
-            ngDialog.openConfirm({
-              template: 'components/dialogs/locked_out.html'
-            }).then(function () {
-              $rootScope.disconnect();
-            });
-          });
-        }
-      };
-
-      ngDialog.open({
-        template: 'components/dialogs/roles_edit/roles_edit.html',
-        scope: dialogScope,
-        controller: 'RolesEditCtrl'
-      });
-    });
-  };
-
-  $scope.resetPassword = function () {
-    var dialogScope = $scope.$new(true);
-    dialogScope.innerHtml =
-      '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">r&eacute;initialiser le mot de passe</span> de cet agent&nbsp;? Cette modification est irr&eacute;versible et prend effet imm&eacute;diatement.';
-    ngDialog.openConfirm({
-      template: 'components/dialogs/warning.html',
-      scope: dialogScope
-    }).then(function () {
-      adminSvc.resetUserPassword($scope.empl.empl_pk).then(function (password) {
-        $rootScope.alerts.push({
-          type: 'success',
-          msg: 'Mot de passe r&eacute;initialis&eacute;&nbsp: <strong><samp>' + password +
-            '</samp></strong><hr />Veuillez transmettre son nouveau mot de passe &agrave; l\'agent concern&eacute;.',
-          static: true
-        });
-      });
     });
   };
 

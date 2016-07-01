@@ -18,7 +18,7 @@
                         <a href="#/home" class="logo"><img src="./img/logo.png" alt="Pole emploi" /></a>
                     </div>
                     <div class="col-md-4 col-sm-6 connection-status">
-                        <div if-role="'user'"><span ng-bind="'Connect&eacute;(e) en tant que'"></span> <span class="text-primary" ng-bind="userInfo.empl_firstname + ' ' + userInfo.empl_surname"></span>
+                        <div ng-if="userInfo"><span ng-bind="'Connect&eacute;(e) en tant que'"></span> <span class="text-primary" ng-bind="userInfo.empl_firstname + ' ' + userInfo.empl_surname"></span>
                             <br />
                             <button type="button" class="btn btn-danger btn-sm" ng-click="disconnect()" ng-bind="'Se d&eacute;connecter'"></button>
                         </div>

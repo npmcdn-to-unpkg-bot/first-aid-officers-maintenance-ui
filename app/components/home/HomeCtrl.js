@@ -3,6 +3,8 @@
 var _ = require('lodash');
 
 module.exports = function ($scope, ngDialog, busySvc) {
+  $scope.loggedIn = $scope.currentUser.info !== undefined;
+
   $scope.login = function () {
     ngDialog.closeAll();
     busySvc.busy('auth', true);

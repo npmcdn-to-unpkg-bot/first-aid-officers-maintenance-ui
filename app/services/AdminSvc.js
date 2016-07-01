@@ -1,53 +1,63 @@
 'use strict';
 /*jshint camelcase: false*/
 
-var _ = require('underscore');
-
 module.exports = function ($http, $q, apiSvc) {
 
-	var adminSvc = {};
+  var adminSvc = {};
 
-	adminSvc.resetUserPassword = function (empl_pk) {
-		return apiSvc.delete(apiSvc.adminEndpoint + 'users/' + empl_pk + '/password');
-	};
+  adminSvc.resetUserPassword = function (empl_pk) {
+    return apiSvc.delete(apiSvc.adminEndpoint + 'users/' + empl_pk + '/password');
+  };
 
-	adminSvc.setPassword = function (pwd_current, pwd_new) {
-		return apiSvc.put(apiSvc.accountEndpoint + 'password', {
-			pwd_current: pwd_current,
-			pwd_new: pwd_new
-		});
-	};
+  adminSvc.setPassword = function (pwd_current, pwd_new) {
+    return apiSvc.put(apiSvc.accountEndpoint + 'password', {
+      pwd_current: pwd_current,
+      pwd_new: pwd_new
+    });
+  };
 
-	adminSvc.getInfo = function () {
-		return apiSvc.get(apiSvc.accountEndpoint);
-	};
+  adminSvc.getInfo = function () {
+    return Promise.all([apiSvc.get(apiSvc.accountEndpoint), apiSvc.get(apiSvc.accountEndpoint + 'trainerlevel')]).then(function (results) {
+      var user = results[0];
+      if (user.roles['trainer'] !== undefined) { // jshint ignore: line
+        user.roles['trainer'] = results[1]; // jshint ignore: line
+      }
 
-	adminSvc.getUsers = function () {
-		return apiSvc.get(apiSvc.adminEndpoint + 'users/');
-	};
+      return user;
+    });
+  };
 
-	adminSvc.getUserInfo = function (empl_pk) {
-		return apiSvc.get(apiSvc.adminEndpoint + 'users/' + empl_pk);
-	};
+  adminSvc.getUsers = function () {
+    return apiSvc.get(apiSvc.adminEndpoint + 'users/');
+  };
 
-	adminSvc.getUserRoles = function (empl_pk) {
-		var deferred = $q.defer();
-  		Promise.all([adminSvc.getAvailableRoles(), apiSvc.get(apiSvc.adminEndpoint + 'users/' + empl_pk)]).then(function (results) {
-			deferred.resolve(_.each(results[0], function (role) {
-				return role.checked = _.contains(results[1].roles, role.role_name), role;
-  			}));
-  		});
+  adminSvc.getUserInfo = function (empl_pk) {
+    return apiSvc.get(apiSvc.adminEndpoint + 'users/' + empl_pk);
+  };
 
-  		return deferred.promise;
-	};
+  adminSvc.updateUser = function (empl_pk, roles) {
+    return $http.put(apiSvc.adminEndpoint + 'users/' + empl_pk, roles);
+  };
 
-	adminSvc.setUserRoles = function (empl_pk, roles) {
-		return $http.put(apiSvc.adminEndpoint + 'users/' + empl_pk + '/roles', roles);
-	};
+  adminSvc.deleteUser = function (empl_pk) {
+    return $http.delete(apiSvc.adminEndpoint + 'users/' + empl_pk);
+  };
 
-	adminSvc.getAvailableRoles = function () {
-		return apiSvc.get(apiSvc.accountEndpoint + 'roles');
-	};
+  adminSvc.getTrainerProfiles = function () {
+    return apiSvc.get(apiSvc.adminEndpoint + 'trainerlevels');
+  };
 
-	return adminSvc;
+  adminSvc.postTrainerProfile = function (trainerProfile) {
+    return apiSvc.post(apiSvc.adminEndpoint + 'trainerlevels', trainerProfile);
+  };
+
+  adminSvc.putTrainerProfile = function (trlv_pk, trainerProfile) {
+    return apiSvc.put(apiSvc.adminEndpoint + 'trainerlevels/' + trlv_pk, trainerProfile);
+  };
+
+  adminSvc.deleteTrainerProfile = function (trlv_pk) {
+    return apiSvc.delete(apiSvc.adminEndpoint + 'trainerlevels/' + trlv_pk);
+  };
+
+  return adminSvc;
 };

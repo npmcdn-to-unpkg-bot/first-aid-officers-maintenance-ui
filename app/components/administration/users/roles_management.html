@@ -135,8 +135,7 @@
                             <div class="col-xs-8">
                                 <div class="btn-group">
                                     <label class="btn btn-raised btn-{{role.level === level ? colorFor(level) : 'default'}} btn-sm" ng-click="role.level=level" ng-repeat="level in [1, 2, 3, 4]" ng-disabled="disabled(role, level)"
-                                        uib-popover-template="disabled(role, level) ? ('popover_' + role.type + '' + level + '.html') : none" popover-placement="left" popover-animation="false"
-                                        popover-trigger="mouseenter">niv. {{level}}</label>
+                                        uib-popover-template="disabled(role, level) ? ('popover_' + role.type + '' + level + '.html') : none" popover-append-to-body="true" popover-trigger="mouseenter">niv. {{level}}</label>
                                 </div>
                             </div>
                         </div>

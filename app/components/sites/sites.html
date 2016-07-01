@@ -13,7 +13,8 @@
             <div class="col-xs-8 text-right panel-heading-buttons">
                 <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
                     <div class="btn-group">
-                        <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" ng-click="check(cert)" uib-btn-checkbox ng-repeat="cert in certificates | orderBy: 'cert_order'">{{cert.cert_short}}</label>
+                        <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" ng-click="check(cert)" uib-btn-checkbox ng-repeat="cert in certificates | orderBy: 'cert_order'" uib-popover="{{cert.cert_name}}"
+                            popover-trigger="mouseenter" popover-append-to-body="true">{{cert.cert_short}}</label>
                     </div>
                 </state-sustain>
             </div>

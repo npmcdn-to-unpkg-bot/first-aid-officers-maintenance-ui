@@ -25,6 +25,7 @@ module.exports = function ($scope, $location, $cookies, dataSvc, busySvc, NgTabl
       }),
       preCloseCallback: function () {
         delete $scope.cert;
+        $scope.$digest();
       },
       controller: ['$scope', function (scope) {
         scope.params = {};

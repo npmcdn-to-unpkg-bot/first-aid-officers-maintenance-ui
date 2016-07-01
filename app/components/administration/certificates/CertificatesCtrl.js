@@ -63,7 +63,7 @@ module.exports = function ($scope, updateSvc, dataSvc, busySvc, ngDialog, $route
         }
 
         $scope.exec = function () {
-          if ($scope.cert.cert_pk) {
+          if ($scope.cert.cert_pk !== undefined) {
             confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">modifier</span> l\'aptitude <span class="text-warning">' + $scope.cert.cert_name +
               '</span>&nbsp?',
               function () {

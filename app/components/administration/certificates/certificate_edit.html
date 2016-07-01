@@ -1,6 +1,6 @@
-<form class="panel panel-{{edit ? 'primary' : 'success'}}" ng-init="edit = cert.cert_pk" autocomplete="off" ng-submit="exec()">
+<form class="panel panel-{{edit ? 'primary' : 'success'}}" ng-init="edit = cert.cert_pk !== undefined" autocomplete="off" ng-submit="exec()">
     <div class="panel-heading">
-        <span ng-if="edit"><label class="label label-default">{{cert.cert_short}}</label> - {{cert.cert_name}}</span>
+        <span ng-if="edit"><label class="label label-default">{{::cert.cert_short}}</label> - {{::cert.cert_name}}</span>
         <span ng-if="!edit">Nouvelle aptitude</span>
         <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
     </div>

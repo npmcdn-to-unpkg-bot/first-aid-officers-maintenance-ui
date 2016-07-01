@@ -1,4 +1,4 @@
-<h3>Gestion des utilisateurs</h3>
+<h3>Gestion des utilisateurs<small> - <a href="#/administration/trainer_profiles">Profils formateurs</a></small></h3>
 <br />
 <div class="panel panel-primary">
     <div class="panel-heading">Liste des utilisateurs</div>
@@ -14,7 +14,7 @@
                 <span ng-switch-when="roleLevel">
                     <label ng-if="$eval(col.field, empl)" class="label label-{{typeFor($eval(col.field, empl))}}">Niveau {{::$eval(col.field, empl)}}</label>
                 </span>
-                <span ng-switch-when="roleTrainer" class="text-primary">{{::trainerlevels[empl.roles.trainer].trlv_id}}</span>
+                <span ng-switch-when="roleTrainer">{{::trainerProfiles[empl.roles.trainer].trlv_id}}</span>
                 <span ng-switch-default>{{::$eval(col.field, empl)}}</span>
             </td>
         </tr>

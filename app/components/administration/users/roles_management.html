@@ -105,7 +105,7 @@
                             <div class="row">
                                 <label class="col-xs-4 control-label">Profil</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control" ng-model="role.profile" ng-options="trlv as trlv.trlv_id for trlv in trainerlevels"></select>
+                                    <select class="form-control" ng-model="role.profile" ng-options="trlv as trlv.trlv_id for trlv in trainerProfiles"></select>
                                 </div>
                             </div>
                         </div>
@@ -157,7 +157,7 @@
         </form>
         <div uib-collapse="!role.checked">
             <div class="panel-footer text-center" ng-if="role.type === 'user'">
-                <button type="button" class="btn btn-warning">R&eacute;initialiser MDP.</button>
+                <button type="button" class="btn btn-warning" ng-click="reset()">R&eacute;initialiser MDP.</button>
             </div>
         </div>
     </div>

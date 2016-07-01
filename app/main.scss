@@ -31,6 +31,10 @@ $screen-xs: 768px;
     }
 }
 
+.text-muted {
+    color: #BDBDBD;
+}
+
 // fix uib-collapse unsettling assymetric easing function
 .collapsing[uib-collapse] {
     transition: all .35s ease !important;

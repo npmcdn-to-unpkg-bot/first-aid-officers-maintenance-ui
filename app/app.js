@@ -192,6 +192,10 @@ angular.module('faomaintenanceApp', [
           templateUrl: 'components/administration/sites/sites_administration.html',
           controller: 'SitesAdministrationCtrl'
         })
+        .when('/administration/trainer_profiles', {
+          templateUrl: 'components/administration/users/trainer_profiles.html',
+          controller: 'TrainerProfilesCtrl'
+        })
         .when('/administration/training_types', {
           templateUrl: 'components/administration/certificates/training_types.html',
           controller: 'TrainingTypesCtrl'
@@ -231,7 +235,7 @@ angular.module('faomaintenanceApp', [
   .controller('CertificatesCtrl', ['$scope', 'UpdateSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
     require('./components/administration/certificates/CertificatesCtrl.js')
   ])
-  .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc', 'NgTableParams',
+  .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc', 'NgTableParams',
     require('./components/employees/EmployeeCtrl.js')
   ])
   .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/employees/EmployeesCtrl.js')])
@@ -249,6 +253,9 @@ angular.module('faomaintenanceApp', [
   .controller('SitesCtrl', ['$scope', '$location', '$cookies', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/sites/SitesCtrl.js')])
   .controller('SitesAdministrationCtrl', ['$scope', 'DataSvc', 'ngDialog', '$route', 'BusySvc', 'UpdateSvc', 'NgTableParams',
     require('./components/administration/sites/SitesAdministrationCtrl.js')
+  ])
+  .controller('TrainerProfilesCtrl', ['$scope', 'AdminSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
+    require('./components/administration/users/TrainerProfilesCtrl.js')
   ])
   .controller('TrainingCtrl', ['$scope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'BusySvc', 'dateFilter', 'NgTableParams',
     require('./components/trainings/TrainingCtrl.js')

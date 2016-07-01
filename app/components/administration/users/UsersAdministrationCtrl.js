@@ -24,14 +24,14 @@ module.exports = function ($rootScope, $scope, dataSvc, adminSvc, ngDialog, $rou
     { title: 'Nom', sortable: 'empl_surname', filter: { empl_surname: 'text' }, id: 'empl_surname', shrinkable: true, show: true, width: '40%' },
     { title: 'Pr&eacute;nom', sortable: 'empl_firstname', filter: { empl_firstname: 'text' }, id: 'empl_firstname', shrinkable: true, show: true, width: '40%' },
     { title: 'Acc&egrave;s', sortable: 'roles.access', id: 'roleLevel', field: 'roles.access', show: true, width: '1%', align: 'center' },
-    { title: 'Gestion&nbsp;de&nbsp;formation', sortable: 'roles.trainer', id: 'roleTrainer', field: 'roles.trainer', show: true, width: '1%', align: 'center' },
-    { title: 'Administration', sortable: 'roles.admin', id: 'roleLevel', field: 'roles.admin', show: true, width: '1%', align: 'center' }
+    { title: 'Profil&nbsp;formateur', sortable: 'roles.trainer', id: 'roleTrainer', field: 'roles.trainer', show: true, width: '1%' },
+    { title: 'Administration', sortable: 'roles.admin', id: 'roleLevel', field: 'roles.admin', show: true, width: '1%', align: 'right' }
   ];
 
   busySvc.busy('usersAdministration');
-  Promise.all([dataSvc.getEmployees(), adminSvc.getTrainerlevels(), adminSvc.getUsers()]).then(_.spread(function (employees, trainerlevels, users) {
+  Promise.all([dataSvc.getEmployees(), adminSvc.getTrainerProfiles(), adminSvc.getUsers()]).then(_.spread(function (employees, trainerProfiles, users) {
     $scope.employees = _.values(employees);
-    $scope.trainerlevels = trainerlevels;
+    $scope.trainerProfiles = trainerProfiles;
     $scope.tp = new NgTableParams(_({ sorting: { empl_surname: 'asc' }, count: 10 }).extend($location.search()).mapValues(function (val) {
       return _.isString(val) ? decodeURI(val) : val;
     }).value(), {

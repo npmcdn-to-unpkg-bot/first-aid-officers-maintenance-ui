@@ -81,7 +81,7 @@ module.exports = function ($rootScope, $scope, $route, $routeParams, busySvc, da
     }
 
     if (trainer.checked) {
-      $scope.roles[2].profile = trainer.profile ? trainer.profile : $scope.trainerlevels[0]; // 0 -> default trainer profile.
+      $scope.roles[2].profile = trainer.profile ? trainer.profile : $scope.trainerProfiles[0]; // 0 -> default trainer profile.
     }
 
     if (admin.checked) {
@@ -91,12 +91,12 @@ module.exports = function ($rootScope, $scope, $route, $routeParams, busySvc, da
 
   busySvc.busy('rolesManagement');
   busySvc.busy('ongoingOperation', true);
-  Promise.all([adminSvc.getUserInfo($routeParams.empl_pk), adminSvc.getTrainerlevels(), dataSvc.getTrainingTypes(), dataSvc.getCertificates()])
-    .then(_.spread(function (empl, trainerlevels, trainingtypes, certificates) {
+  Promise.all([adminSvc.getUserInfo($routeParams.empl_pk), adminSvc.getTrainerProfiles(), dataSvc.getTrainingTypes(), dataSvc.getCertificates()])
+    .then(_.spread(function (empl, trainerProfiles, trainingtypes, certificates) {
       $scope.trainingtypes = trainingtypes;
       $scope.certificates = certificates;
       $scope.empl = _.extend(empl, { fullname: (empl.empl_gender ? 'M.' : 'Mme') + ' ' + empl.empl_surname + ' ' + empl.empl_firstname });
-      $scope.trainerlevels = _.each(trainerlevels, function (profile) {
+      $scope.trainerProfiles = _.each(trainerProfiles, function (profile) {
         profile.types = _.map(profile.types, _.partial(_.get, trainingtypes));
       });
 
@@ -111,7 +111,7 @@ module.exports = function ($rootScope, $scope, $route, $routeParams, busySvc, da
               role.level = empl.roles[role.type];
               break;
             case 'trainer':
-              role.profile = trainerlevels[empl.roles[role.type]];
+              role.profile = trainerProfiles[empl.roles[role.type]];
           }
           role.checked = !_.isUndefined(empl.roles[role.type]);
         });
@@ -155,7 +155,8 @@ module.exports = function ($rootScope, $scope, $route, $routeParams, busySvc, da
     ngDialog.openConfirm({
       template: './components/dialogs/warning.html',
       scope: _.extend($scope.$new(), {
-        innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">fermer le compte</span> de ' + $scope.empl.fullname + '&nbsp;?'
+        _type: 'danger',
+        innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-danger">fermer le compte</span> de ' + $scope.empl.fullname + '&nbsp;?'
       })
     }).then(function () {
       adminSvc.deleteUser($scope.empl.empl_pk).then(function () {
@@ -168,5 +169,23 @@ module.exports = function ($rootScope, $scope, $route, $routeParams, busySvc, da
 
   $scope.cancel = function () {
     window.history.back();
+  };
+
+  $scope.reset = function () {
+    ngDialog.openConfirm({
+      template: 'components/dialogs/warning.html',
+      scope: _.extend($scope.$new(), {
+        innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">r&eacute;initialiser le mot de passe</span> de cet agent&nbsp;? Cette modification est irr&eacute;versible et prend effet imm&eacute;diatement.'
+      })
+    }).then(function () {
+      adminSvc.resetUserPassword($scope.empl.empl_pk).then(function (password) {
+        $scope.$emit('alert', {
+          type: 'success',
+          msg: 'Mot de passe r&eacute;initialis&eacute;&nbsp: <strong><samp>' + password +
+            '</samp></strong><hr />Veuillez transmettre son nouveau mot de passe &agrave; l\'agent concern&eacute;.',
+          static: true
+        });
+      });
+    });
   };
 };

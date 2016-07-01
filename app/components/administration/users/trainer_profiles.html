@@ -1,0 +1,32 @@
+<h3>Profils formateurs<small> - <a href="#/administration/users">Gestion des utilisateurs</a></small></h3>
+<br />
+<div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start;">
+    <div class="panel panel-primary" ng-repeat="profile in trainerProfiles track by profile.trlv_pk" style="flex-basis: 500px;">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-8" style="margin-top: 9px;">{{profile.trlv_id}}</div>
+                <div class="col-xs-4 text-right">
+                    <button type="button" class="btn btn-warning no-margin" ng-click="edit(profile)">Modifier</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-4 text-right text-muted">
+                    Formations g&eacute;rables
+                </div>
+                <div class="col-xs-8">
+                    <div ng-repeat="type in profile.types | orderBy: 'trty_order'">
+                        {{type.trty_name}}
+                        <span class="pull-right">
+                            <label class="label label-success" ng-repeat="cert in type.certificates">{{cert.cert_short}}</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="side-panel-container">
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="edit()"><span class="glyphicon glyphicon-plus"></span>&nbsp;Nouveau profil</button>
+</div>

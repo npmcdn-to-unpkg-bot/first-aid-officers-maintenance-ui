@@ -242,7 +242,6 @@ angular.module('faomaintenanceApp', [
   .controller('HomeCtrl', ['$scope', 'ngDialog', 'BusySvc', require('./components/home/HomeCtrl.js')])
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
   .controller('LoginCtrl', ['$scope', '$rootScope', '$route', 'AuthSvc', 'BusySvc', require('./components/index/LoginCtrl.js')])
-  .controller('RolesEditCtrl', ['$rootScope', '$scope', 'AdminSvc', 'ngDialog', require('./components/dialogs/roles_edit/RolesEditCtrl.js')])
   .controller('RolesManagementCtrl', ['$rootScope', '$scope', '$route', '$routeParams', 'BusySvc', 'DataSvc', 'AdminSvc', 'ngDialog',
     require('./components/administration/users/RolesManagementCtrl.js')
   ])

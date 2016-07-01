@@ -33,16 +33,13 @@ module.exports = function ($http, $q, apiSvc) {
       });
     },
     reorderCerts: function (certsOrder) {
-      return apiSvc.post(apiSvc.updateEndpoint + 'certificates/reorder', certsOrder);
-    },
-    reorderTrtys: function (typesOrder) {
-      return apiSvc.post(apiSvc.updateEndpoint + 'trainingtypes/reorder', typesOrder);
+      return apiSvc.post(apiSvc.certificatesEndpoint + 'reorder', certsOrder);
     },
     deleteCert: function (cert_pk) {
-      return apiSvc.delete(apiSvc.updateEndpoint + 'certificates/' + cert_pk);
+      return apiSvc.delete(apiSvc.certificatesEndpoint + cert_pk);
     },
     createCert: function (cert_name, cert_short, cert_target) {
-      return apiSvc.post(apiSvc.updateEndpoint + 'certificates', {
+      return apiSvc.post(apiSvc.certificatesEndpoint, {
         cert_name: cert_name,
         cert_short: cert_short,
         cert_target: cert_target,
@@ -50,25 +47,28 @@ module.exports = function ($http, $q, apiSvc) {
       });
     },
     updateCert: function (cert_pk, cert_name, cert_short, cert_target) {
-      return apiSvc.put(apiSvc.updateEndpoint + 'certificates/' + cert_pk, {
+      return apiSvc.put(apiSvc.certificatesEndpoint + cert_pk, {
         cert_name: cert_name,
         cert_short: cert_short,
         cert_target: cert_target,
         cert_permanentonly: true
       });
     },
+    reorderTrtys: function (typesOrder) {
+      return apiSvc.post(apiSvc.certificatesEndpoint + 'trainingtypes/reorder', typesOrder);
+    },
     deleteTrty: function (trty_pk) {
-      return apiSvc.delete(apiSvc.updateEndpoint + 'trainingtypes/' + trty_pk);
+      return apiSvc.delete(apiSvc.certificatesEndpoint + 'trainingtypes/' + trty_pk);
     },
     createTrty: function (trty_name, trty_validity, certificates) {
-      return apiSvc.post(apiSvc.updateEndpoint + 'trainingtypes', {
+      return apiSvc.post(apiSvc.certificatesEndpoint + 'trainingtypes', {
         trty_name: trty_name,
         trty_validity: trty_validity,
         certificates: certificates
       });
     },
     updateTrty: function (trty_pk, trty_name, trty_validity, certificates) {
-      return apiSvc.put(apiSvc.updateEndpoint + 'trainingtypes/' + trty_pk, {
+      return apiSvc.put(apiSvc.certificatesEndpoint + 'trainingtypes/' + trty_pk, {
         trty_name: trty_name,
         trty_validity: trty_validity,
         certificates: certificates

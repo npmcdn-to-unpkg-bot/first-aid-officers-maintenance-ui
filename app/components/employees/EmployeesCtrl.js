@@ -38,7 +38,9 @@ module.exports = function ($scope, $location, dataSvc, busySvc, NgTableParams, n
       }),
       preCloseCallback: function () {
         delete $scope.cert;
-        $scope.$digest();
+        if (!$scope.$$phase) {
+          $scope.$digest();
+        }
       },
       controller: ['$scope', function (scope) {
         scope.params = {};

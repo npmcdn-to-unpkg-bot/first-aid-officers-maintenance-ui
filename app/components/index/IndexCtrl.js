@@ -24,13 +24,13 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
   };
 
   $rootScope._alerts = [];
-  $rootScope.$on('alert', function (event, alert) { $rootScope._alerts.push(_.extend(alert, { id: $rootScope._alerts.length })); });
+  $rootScope.$on('alert', function (event, alert) { $rootScope._alerts.push(_.extend(alert, { id: (_.maxBy($rootScope._alerts, 'id') || { id: 0 }).id + 1 })); });
   $rootScope.$on('error', function () {
     $rootScope._alerts.push({
       type: 'danger',
       msg: 'Une erreur est survenue. Merci de bien vouloir r&eacute;essayer ult&eacute;rieurement.\nSi le probl&egrave;me persiste, contactez un administrateur de la solution.',
       static: true,
-      id: $rootScope._alerts.length
+      id: (_.maxBy($rootScope._alerts, 'id') || { id: 0 }).id + 1
     });
   });
 

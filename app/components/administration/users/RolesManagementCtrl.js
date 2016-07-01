@@ -137,14 +137,27 @@ module.exports = function ($rootScope, $scope, $route, $routeParams, busySvc, da
       return $scope.close();
     }
 
+    var creation = _.isEmpty($scope.empl.roles);
     ngDialog.openConfirm({
       template: './components/dialogs/warning.html',
       scope: _.extend($scope.$new(), {
-        innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">modifier les privil&egrave;ges</span> de ' + $scope.empl.fullname + '&nbsp;?'
+        innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">' + (creation ? 'cr&eacute;er un compte</span> pour ' :
+          'modifier les privil&egrave;ges</span> de ') + $scope.empl.fullname + '&nbsp;?'
       })
     }).then(function () {
-      adminSvc.updateUser($scope.empl.empl_pk, _($scope.roles).filter('checked').keyBy('type').mapValues(roleMapper).value()).then(function () {
-        $scope.$emit('alert', { type: 'success', msg: 'Privil&egrave;ges de ' + $scope.empl.fullname + ' mis &agrave; jour.' });
+      (creation ? adminSvc.createUser : adminSvc.updateUser)($scope.empl.empl_pk, _($scope.roles).filter('checked').keyBy('type').mapValues(roleMapper).value())
+      .then(function (response) {
+        if (creation) {
+          $scope.$emit('alert', {
+            type: 'success',
+            msg: 'Mot de passe g&eacute;n&eacute;r&eacute;&nbsp: <strong><samp>' + response.data +
+              '</samp></strong><hr />Veuillez transmettre son nouveau mot de passe &agrave; ' + $scope.empl.fullname + '.',
+            static: true
+          });
+        } else {
+          $scope.$emit('alert', { type: 'success', msg: 'Privil&egrave;ges de ' + $scope.empl.fullname + ' mis &agrave; jour.' });
+
+        }
         busySvc.done('ongoingOperation');
         window.history.back();
       }, _.partial($scope.$emit, 'error'));

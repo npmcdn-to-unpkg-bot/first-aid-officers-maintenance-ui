@@ -39,6 +39,10 @@ module.exports = function ($http, $q, apiSvc) {
     return $http.put(apiSvc.adminEndpoint + 'users/' + empl_pk, roles);
   };
 
+  adminSvc.createUser = function (empl_pk, roles) {
+    return $http.post(apiSvc.adminEndpoint + 'users/' + empl_pk, roles);
+  };
+
   adminSvc.deleteUser = function (empl_pk) {
     return $http.delete(apiSvc.adminEndpoint + 'users/' + empl_pk);
   };

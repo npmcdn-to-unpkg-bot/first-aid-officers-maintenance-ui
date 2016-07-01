@@ -7,7 +7,7 @@ module.exports = function ($scope, dataSvc, adminSvc, ngDialog, busySvc) {
   busySvc.busy('account');
   Promise.all([adminSvc.getInfo(), dataSvc.getTrainingTypes()]).then(_.spread(function (empl, trainingTypes) {
     if (empl.roles['trainer']) { //jshint ignore: line
-      empl.roles['trainer'].types = _.map(empl.roles['trainer'].types, _.partial(_.get, trainingTypes));
+      empl.roles['trainer'].types = _.map(empl.roles['trainer'].types, _.partial(_.get, trainingTypes)); // jshint ignore: line
     }
 
     $scope.empl = empl;
@@ -42,7 +42,7 @@ module.exports = function ($scope, dataSvc, adminSvc, ngDialog, busySvc) {
     ngDialog.openConfirm({
       template: 'components/dialogs/warning.html',
       scope: $scope.$new(),
-      controller: ['$rootScope', '$scope', 'AdminSvc', function ($rootScope, $scope, adminSvc, auth, $location) {
+      controller: ['$scope', 'AdminSvc', function ($scope, adminSvc) {
         $scope.innerHtml = '<div class="text-center">' +
           '<p>&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">modifier votre mot de passe</span>&nbsp;?<hr />' +
           'Cette action est irr&eacute;versible et prend effet imm&eacute;diatement.' +

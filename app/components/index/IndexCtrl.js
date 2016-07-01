@@ -95,16 +95,20 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
     return viewLocation === '/' ? viewLocation === $location.path() : $location.path().indexOf(viewLocation) === 0;
   };
 
-  $scope.disconnect = function () {
+  $scope.disconnect = function (force) {
     ngDialog.closeAll();
-    ngDialog.openConfirm({
-      template: 'components/dialogs/warning.html',
-      scope: _.extend($scope.$new(false), {
-        _title: 'D&eacute;connection',
-        innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">vous d&eacute;connecter</span>&nbsp;?'
-      })
-    }).then(function () {
+    if (force) {
       $rootScope.disconnect();
-    });
+    } else {
+      ngDialog.openConfirm({
+        template: 'components/dialogs/warning.html',
+        scope: _.extend($scope.$new(false), {
+          _title: 'D&eacute;connection',
+          innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">vous d&eacute;connecter</span>&nbsp;?'
+        })
+      }).then(function () {
+        $rootScope.disconnect();
+      });
+    }
   };
 };

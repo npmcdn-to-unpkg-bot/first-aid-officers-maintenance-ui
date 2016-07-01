@@ -3,6 +3,9 @@
 
 var _ = require('lodash');
 
+// TODO: reject deferred promises on fail
+// OR SIMPLY NOT USE $q.defer()
+// SEE http://www.codelord.net/2015/09/24/$q-dot-defer-youre-doing-it-wrong/
 module.exports = function ($http, $q, apiSvc, $filter) {
 
   var dataSvc = {};

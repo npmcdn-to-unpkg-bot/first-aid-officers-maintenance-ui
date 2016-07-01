@@ -231,7 +231,7 @@ angular.module('faomaintenanceApp', [
   .factory('TrainingsSvc', ['ApiSvc', require('./services/TrainingsSvc.js')])
   .factory('UpdateSvc', ['$http', '$q', 'ApiSvc', require('./services/UpdateSvc.js')])
 
-.controller('AccountCtrl', ['$scope', '$rootScope', 'AdminSvc', 'ngDialog', 'BusySvc', require('./components/account/AccountCtrl.js')])
+.controller('AccountCtrl', ['$scope', 'DataSvc', 'AdminSvc', 'ngDialog', 'BusySvc', require('./components/account/AccountCtrl.js')])
   .controller('CertificatesCtrl', ['$scope', 'UpdateSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
     require('./components/administration/certificates/CertificatesCtrl.js')
   ])

@@ -17,7 +17,14 @@ module.exports = function ($http, $q, apiSvc) {
   };
 
   adminSvc.getInfo = function () {
-    return apiSvc.get(apiSvc.accountEndpoint);
+    return Promise.all([apiSvc.get(apiSvc.accountEndpoint), apiSvc.get(apiSvc.accountEndpoint + 'trainerlevel')]).then(function (results) {
+      var user = results[0];
+      if (user.roles['trainer'] !== undefined) { // jshint ignore: line
+        user.roles['trainer'] = results[1]; // jshint ignore: line
+      }
+
+      return user;
+    });
   };
 
   adminSvc.getUsers = function () {

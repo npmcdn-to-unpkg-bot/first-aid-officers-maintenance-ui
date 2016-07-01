@@ -76,39 +76,4 @@ table.table {
             margin: 0;
         }
     }
-    thead th {
-        &.st-sort,
-        .st-sort {
-            cursor: pointer;
-            &:before {
-                font-family: 'Glyphicons Halflings';
-                opacity: 0.25;
-                content: "\e150";
-                padding-right: 5px;
-                position: relative;
-                font-size: 18px;
-                top: 3px;
-            }
-        }
-        &.st-sort-descent:before,
-        .st-sort-descent:before {
-            font-family: 'Glyphicons Halflings';
-            opacity: 0.5;
-            content: "\e156";
-            padding-right: 5px;
-            position: relative;
-            font-size: 18px;
-            top: 4px;
-        }
-        &.st-sort-ascent:before,
-        .st-sort-ascent:before {
-            font-family: 'Glyphicons Halflings';
-            opacity: 0.5;
-            content: "\e155";
-            padding-right: 5px;
-            position: relative;
-            font-size: 18px;
-            top: 4px;
-        }
-    }
 }

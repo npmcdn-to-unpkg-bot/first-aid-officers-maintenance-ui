@@ -85,7 +85,6 @@
     "angular-i18n": "^1.4.8",
     "angular-route": "^1.4.8",
     "angular-sanitize": "^1.4.8",
-    "angular-smart-table": "^2.1.6",
     "angular-ui-sortable": "^0.14.0",
     "bootstrap-switch": "^3.3.2",
     "ccjmne-busy": "^0.9.1-BETA",

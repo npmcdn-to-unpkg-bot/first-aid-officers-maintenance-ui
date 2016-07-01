@@ -30,6 +30,7 @@ module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ng
   ];
 
   Promise.all([dataSvc.getTraining($routeParams.trng_pk), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(_.spread(function (trng, trainingTypes, certificates) {
+    $scope.editable = _.includes($scope.getUserInfo().restrictions.manageableTypes, trng.trng_trty_fk);
     $scope.trng = _.extend(trng, {
       type: trainingTypes[trng.trng_trty_fk],
       expirationDate: moment(trng.trng_date).add(trainingTypes[trng.trng_trty_fk].trty_validity, 'months').format('YYYY-MM-DD'),
@@ -63,6 +64,9 @@ module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ng
       return JSON.stringify(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)));
     }, function () {
       $location.search(_.mapValues(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), decodeURIComponent)).replace();
+      setTimeout(function () {
+        $scope.$apply(); // force $location to sync with the browser
+      }, 0);
     });
 
     $scope.certificates = _.values(certificates);

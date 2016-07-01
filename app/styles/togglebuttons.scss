@@ -1,4 +1,36 @@
 .togglebutton {
+    &.text-right label input[type=checkbox] + .toggle {
+        margin-right: 7px;
+    }
+    @at-root .panel.panel-default .panel-heading & {
+        label input[type=checkbox] + .toggle {
+            background-color: lighten(black, 40%);
+        }
+    }
+    @at-root .panel.panel-danger .panel-heading & {
+        label input[type=checkbox]:checked + .toggle {
+            background-color: rgba(255, 255, 255, 0.84);
+            &::after {
+                background-color: lighten($brand-danger, 0%);
+            }
+        }
+    }
+    @at-root .panel.panel-warning .panel-heading & {
+        label input[type=checkbox]:checked + .toggle {
+            background-color: rgba(255, 255, 255, 0.84);
+            &::after {
+                background-color: lighten($brand-warning, 0%);
+            }
+        }
+    }
+    @at-root .panel.panel-success .panel-heading & {
+        label input[type=checkbox]:checked + .toggle {
+            background-color: rgba(255, 255, 255, 0.84);
+            &::after {
+                background-color: lighten($brand-success, 0%);
+            }
+        }
+    }
     white-space: nowrap;
     &.togglebutton-label-left label span.toggle {
         margin: 0 10px;

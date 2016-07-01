@@ -1,59 +1,57 @@
-<div class="panel panel-primary">
+<form class="panel panel-primary form-horizontal" ng-submit="generate()" autocomplete="off">
     <div class="panel-heading">Param&egrave;tres<span class="clickme pull-right" ng-click="closeThisDialog()" ng-if="closeThisDialog">&nbsp;<span class="glyphicon glyphicon-remove"></span></div>
     <div class="panel-body">
-        <form class="form-horizontal" autocomplete="off">
-            <div class="form-group">
-                <div class="row">
-                    <label for="beginning" class="col-xs-4 control-label">D&eacute;but de p&eacute;riode</label>
-                    <div class="col-xs-8">
-                        <div class="input-group">
-                            <input id="beginning" type="text" max-date="params.end" ng-model="params.beginning" class="form-control" uib-datepicker-popup="dd/MM/yyyy" datepicker-mode="'year'" is-open="startpicker"
-                                show-button-bar="false" starting-day="1" date-disabled="disabled(date, mode)" show-weeks="false" placeholder="JJ/MM/AAAA">
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="startpicker=true"><span class="glyphicon glyphicon-calendar"></span></button>
-                            </div>
+        <div class="form-group">
+            <div class="row">
+                <label for="beginning" class="col-xs-4 control-label">D&eacute;but de p&eacute;riode</label>
+                <div class="col-xs-8">
+                    <div class="input-group">
+                        <input id="beginning" type="text" max-date="params.end" ng-model="params.beginning" class="form-control" uib-datepicker-popup="dd/MM/yyyy" datepicker-mode="'year'" is-open="startpicker"
+                            show-button-bar="false" starting-day="1" date-disabled="disabled(date, mode)" show-weeks="false" placeholder="JJ/MM/AAAA">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="startpicker=true"><span class="glyphicon glyphicon-calendar"></span></button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="row">
-                    <label for="end" class="col-xs-4 control-label">Fin de p&eacute;riode</label>
-                    <div class="col-xs-8">
-                        <div class="input-group">
-                            <input id="end" type="text" min-date="params.beginning || null" ng-model="params.end" class="form-control" uib-datepicker-popup="dd/MM/yyyy" datepicker-mode="'year'" is-open="datepicker"
-                                show-button-bar="false" starting-day="1" date-disabled="disabled(date, mode)" show-weeks="false" placeholder="JJ/MM/AAAA">
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="datepicker=true"><span class="glyphicon glyphicon-calendar"></span></button>
-                            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label for="end" class="col-xs-4 control-label">Fin de p&eacute;riode</label>
+                <div class="col-xs-8">
+                    <div class="input-group">
+                        <input id="end" type="text" min-date="params.beginning || null" ng-model="params.end" class="form-control" uib-datepicker-popup="dd/MM/yyyy" datepicker-mode="'year'" is-open="datepicker"
+                            show-button-bar="false" starting-day="1" date-disabled="disabled(date, mode)" show-weeks="false" placeholder="JJ/MM/AAAA">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="datepicker=true"><span class="glyphicon glyphicon-calendar"></span></button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="row">
-                    <label for="interval" class="col-xs-4 control-label">Bilans interm&eacute;diaires</label>
-                    <div class="col-xs-8">
-                        <select id="interval" class="form-control" ng-model="interval" ng-options="interval as 'sur chaque ' + getIntervalDisplay(interval) for interval in params.availableIntervals | orderBy: '-'"
-                            ng-change="interval ? params.intervals.push(interval) : ''">
-                            <option value="" disabled selected="true">Ajouter bilans interm&eacute;diaires...</option>
-                        </select>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label for="interval" class="col-xs-4 control-label">Bilans interm&eacute;diaires</label>
+                <div class="col-xs-8">
+                    <select id="interval" class="form-control" ng-model="interval" ng-options="interval as 'sur chaque ' + getIntervalDisplay(interval) for interval in params.availableIntervals | orderBy: '-'"
+                        ng-change="interval ? params.intervals.push(interval) : ''">
+                        <option value="" disabled selected="true">Ajouter bilans interm&eacute;diaires...</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-8">
+                    <div ng-repeat="interval in params.intervals | orderBy: '-'" class="pill clickme" ng-click="params.intervals.splice(params.intervals.indexOf(interval), 1)">
+                        sur chaque {{getIntervalDisplay(interval)}}<span class="pill-delete">&times;</span>
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-4"></div>
-                    <div class="col-xs-8">
-                        <div ng-repeat="interval in params.intervals | orderBy: '-'" class="pill clickme" ng-click="params.intervals.splice(params.intervals.indexOf(interval), 1)">
-                            sur chaque {{getIntervalDisplay(interval)}}<span class="pill-delete">&times;</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
     <div class="panel-footer text-center">
-        <button type="button" class="btn btn-primary" ng-click="generate()" ng-disabled="!params.beginning || !params.end">Dresser statistiques</button>
+        <button type="submit" class="btn btn-primary" ng-disabled="!params.beginning || !params.end">Dresser statistiques</button>
     </div>
-</div>
+</form>

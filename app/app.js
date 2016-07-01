@@ -192,13 +192,22 @@ angular.module('faomaintenanceApp', [
           templateUrl: 'components/administration/sites/sites_administration.html',
           controller: 'SitesAdministrationCtrl'
         })
+        .when('/administration/trainer_profiles', {
+          templateUrl: 'components/administration/users/trainer_profiles.html',
+          controller: 'TrainerProfilesCtrl'
+        })
         .when('/administration/training_types', {
           templateUrl: 'components/administration/certificates/training_types.html',
           controller: 'TrainingTypesCtrl'
         })
         .when('/administration/users', {
           templateUrl: 'components/administration/users/users_administration.html',
-          controller: 'UsersAdministrationCtrl'
+          controller: 'UsersAdministrationCtrl',
+          reloadOnSearch: false
+        })
+        .when('/administration/users/:empl_pk', {
+          templateUrl: 'components/administration/users/roles_management.html',
+          controller: 'RolesManagementCtrl'
         })
         .when('/administration/update', {
           templateUrl: 'components/administration/update/update.html',
@@ -222,11 +231,11 @@ angular.module('faomaintenanceApp', [
   .factory('TrainingsSvc', ['ApiSvc', require('./services/TrainingsSvc.js')])
   .factory('UpdateSvc', ['$http', '$q', 'ApiSvc', require('./services/UpdateSvc.js')])
 
-.controller('AccountCtrl', ['$scope', '$rootScope', 'AdminSvc', 'ngDialog', 'BusySvc', require('./components/account/AccountCtrl.js')])
+.controller('AccountCtrl', ['$scope', 'DataSvc', 'AdminSvc', 'ngDialog', 'BusySvc', require('./components/account/AccountCtrl.js')])
   .controller('CertificatesCtrl', ['$scope', 'UpdateSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
     require('./components/administration/certificates/CertificatesCtrl.js')
   ])
-  .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', 'AdminSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc', 'NgTableParams',
+  .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc', 'NgTableParams',
     require('./components/employees/EmployeeCtrl.js')
   ])
   .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/employees/EmployeesCtrl.js')])
@@ -234,6 +243,9 @@ angular.module('faomaintenanceApp', [
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
   .controller('LoginCtrl', ['$scope', '$rootScope', '$route', 'AuthSvc', 'BusySvc', require('./components/index/LoginCtrl.js')])
   .controller('RolesEditCtrl', ['$rootScope', '$scope', 'AdminSvc', 'ngDialog', require('./components/dialogs/roles_edit/RolesEditCtrl.js')])
+  .controller('RolesManagementCtrl', ['$rootScope', '$scope', '$route', '$routeParams', 'BusySvc', 'DataSvc', 'AdminSvc', 'ngDialog',
+    require('./components/administration/users/RolesManagementCtrl.js')
+  ])
   .controller('SiteCtrl', ['$scope', '$routeParams', '$location', '$route', 'DataSvc', 'BusySvc', 'ngDialog', 'UpdateSvc', 'NgTableParams',
     require('./components/sites/SiteCtrl.js')
   ])
@@ -241,6 +253,9 @@ angular.module('faomaintenanceApp', [
   .controller('SitesCtrl', ['$scope', '$location', '$cookies', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/sites/SitesCtrl.js')])
   .controller('SitesAdministrationCtrl', ['$scope', 'DataSvc', 'ngDialog', '$route', 'BusySvc', 'UpdateSvc', 'NgTableParams',
     require('./components/administration/sites/SitesAdministrationCtrl.js')
+  ])
+  .controller('TrainerProfilesCtrl', ['$scope', 'AdminSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
+    require('./components/administration/users/TrainerProfilesCtrl.js')
   ])
   .controller('TrainingCtrl', ['$scope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'BusySvc', 'dateFilter', 'NgTableParams',
     require('./components/trainings/TrainingCtrl.js')
@@ -257,7 +272,7 @@ angular.module('faomaintenanceApp', [
     require('./components/administration/certificates/TrainingTypesCtrl.js')
   ])
   .controller('UpdateCtrl', ['$scope', 'UpdateSvc', 'DataSvc', 'ngDialog', 'BusySvc', 'NgTableParams', require('./components/administration/update/UpdateCtrl.js')])
-  .controller('UsersAdministrationCtrl', ['$rootScope', '$scope', 'DataSvc', 'AdminSvc', 'ngDialog', '$route', '$location', 'BusySvc',
+  .controller('UsersAdministrationCtrl', ['$rootScope', '$scope', 'DataSvc', 'AdminSvc', 'ngDialog', '$route', '$location', 'BusySvc', 'NgTableParams',
     require('./components/administration/users/UsersAdministrationCtrl.js')
   ])
 

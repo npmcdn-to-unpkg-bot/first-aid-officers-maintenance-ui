@@ -1,0 +1,61 @@
+<form class="panel panel-{{edit ? 'primary' : 'success'}}" ng-init="edit = profile.trlv_pk !== undefined" autocomplete="off" ng-submit="exec()">
+    <div class="panel-heading">
+        <span ng-if="edit">{{::profile.trlv_id}}</span>
+        <span ng-if="!edit">Nouveau profil formateur</span>
+        <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
+    </div>
+    <div class="panel-body form-horizontal">
+        <div class="form-group">
+            <div class="row">
+                <label class="control-label col-xs-4">Identifiant</label>
+                <div class="col-xs-8">
+                    <input type="text" class="form-control" ng-model="profile.trlv_id" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group" ng-if="!edit || profile.trlv_pk > 0">
+            <div class="row">
+                <label class="control-label col-xs-4">Formations g&eacute;rables</label>
+                <div class="col-xs-8">
+                    <select class="form-control" ng-model="type" ng-options="type as type.trty_name for type in remaining | orderBy: 'trty_order'" ng-change="accept(type)">
+                        <option value="" selected></option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-8">
+                    <div class="pill clickme" ng-click="profile.types.splice(profile.types.indexOf(type), 1)" ng-repeat="type in profile.types | orderBy: 'trty_order'">
+                        {{type.trty_name}}<span class="pill-delete">&times;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="profile.trlv_pk === 0">
+            <div class="row" ng-repeat="type in profile.types | orderBy: 'trty_order'">
+                <div class="col-xs-4 text-right text-muted"><span ng-if="$first">Formations g&eacute;rables</span></div>
+                <div class="col-xs-8">
+                    {{type.trty_name}}
+                    <span class="pull-right">
+                        <label class="label label-primary" ng-repeat="cert in type.certificates">{{cert.cert_short}}</label>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <hr ng-if="profile.trlv_pk === 0" />
+        <div class="text-justify" ng-if="profile.trlv_pk === 0">
+            Il s'agit du profil formateur utilis&eacute; par d&eacute;faut. Il permet de g&eacute;rer <strong>tous</strong> les types de formations sans exception.
+            <br /> Seul son <strong>identifiant</strong> peut &ecirc;tre modifi&eacute; et il ne peut pas &ecirc;tre supprim&eacute;.
+        </div>
+    </div>
+    <div class="panel-footer text-center">
+        <div ng-if="edit">
+            <button type="submit" class="btn btn-primary" ng-disabled="!profile.trlv_id">Sauvegarder</button>
+            <button type="button" class="btn btn-danger" ng-click="delete()" ng-disabled="profile.trlv_pk === 0">Supprimer</button>
+        </div>
+        <div ng-if="!edit">
+            <button type="submit" class="btn btn-success" ng-disabled="!profile.trlv_id">Sauvegarder</button>
+            <button type="button" class="btn btn-default" ng-click="closeThisDialog()">Annuler</button>
+        </div>
+    </div>
+</form>

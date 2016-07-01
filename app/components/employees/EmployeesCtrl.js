@@ -82,6 +82,9 @@ module.exports = function ($scope, $location, dataSvc, busySvc, NgTableParams, n
     $location.search(_.extend(_.mapValues(_.mapKeys($scope.tp.url(), _.flow(_.nthArg(1), decodeURI)), decodeURIComponent), {
       conditions: helper.toURIComponent(helper.stripDown($scope.conditions))
     })).replace();
+    setTimeout(function () {
+      $scope.$apply(); // force $location to sync with the browser
+    }, 0);
   }
 
   busySvc.busy('employees');

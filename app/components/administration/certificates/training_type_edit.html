@@ -1,6 +1,6 @@
-<form class="panel panel-{{edit ? 'primary' : 'success'}}" ng-init="edit = type.trty_pk" autocomplete="off" ng-submit="exec()">
+<form class="panel panel-{{edit ? 'primary' : 'success'}}" ng-init="edit = type.trty_pk !== undefined" autocomplete="off" ng-submit="exec()">
     <div class="panel-heading">
-        <span ng-if="edit">{{type.trty_name}}</span>
+        <span ng-if="edit">{{::type.trty_name}}</span>
         <span ng-if="!edit">Nouveau type de formation</span>
         <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
     </div>

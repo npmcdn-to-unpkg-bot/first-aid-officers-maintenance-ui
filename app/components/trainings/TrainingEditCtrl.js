@@ -32,7 +32,9 @@ module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ng
     .then(_.spread(function (sites, employees, trainingTypes, trng) {
       $scope.employees = employees;
       $scope.sites = sites;
-      $scope.trainingTypes = _.values(trainingTypes);
+      $scope.trainingTypes = _(trainingTypes).filter(function (type) {
+        return _.includes($scope.getUserInfo().restrictions.manageableTypes, type.trty_pk);
+      }).value();
       if (trng) {
         $scope.trng = _.extend(trng, {
           type: trainingTypes[trng.trng_trty_fk],

@@ -24,33 +24,38 @@ var statusOptions = [{
   display: 'Expirée'
 }, {
   value: 'any',
-  display: 'Antérieurement obtenue'
+  display: 'Obtenue - indépendamment de son statut actuel'
 }];
 
 var certificatesConditions = [{
   value: 'status',
-  display: 'Statut de l\'aptitude'
+  display: 'Selon statut actuel'
 }, {
   value: 'recent',
-  display: 'Aptitude récemment expirée/obtenue'
+  display: 'Récemment expirée/obtenue'
+}, {
+  value: 'obtained',
+  display: 'Obtenue sur une certaine période'
 }, {
   value: 'expiring',
-  display: 'Expire prochainement'
+  display: 'Expirant prochainement'
 }, {
   value: 'expiry',
-  display: 'Expire sur une certaine période'
+  display: 'Expirant sur une certaine période'
 }];
 
 function getConditionDisplay(cert, params) {
   switch (params.condition.value) {
+    case 'status':
+      return cert.cert_short + (params.option.value === 'any' ? ' a été ' : ' est ') + params.option.display.toLowerCase();
     case 'recent':
       return cert.cert_short + ' a ' + (params.option.value === 'success' ? 'été obtenue/renouvelée' : 'expirée') + ' il y a moins de ' + params.data + ' mois';
+    case 'obtained':
+      return cert.cert_short + ' a été obtenue/renouvelée entre le ' + moment(params.data.from).format('DD/MM/YYYY') + ' et le ' + moment(params.data.to).format('DD/MM/YYYY');
     case 'expiring':
       return cert.cert_short + ' expire sous ' + params.data + ' mois';
     case 'expiry':
-      return cert.cert_short + ' expire entre le ' + moment(params.data.from).format('Do MMMM YYYY') + ' et le ' + moment(params.data.to).format('Do MMMM YYYY');
-    case 'status':
-      return cert.cert_short + (params.option.value === 'any' ? ' a été ' : ' est ') + params.option.display.toLowerCase();
+      return cert.cert_short + ' expire entre le ' + moment(params.data.from).format('DD/MM/YYYY') + ' et le ' + moment(params.data.to).format('DD/MM/YYYY');
   }
 }
 
@@ -65,7 +70,7 @@ module.exports = {
       return false;
     }
 
-    if (params.condition.value !== 'expiring' && params.condition.value !== 'expiry') {
+    if (params.condition.value !== 'expiring' && params.condition.value !== 'obtained' && params.condition.value !== 'expiry') {
       res = params.option !== undefined;
     }
 
@@ -73,7 +78,7 @@ module.exports = {
       res = res && params.data !== undefined && params.data !== null;
     }
 
-    if (params.condition.value === 'expiry') {
+    if (params.condition.value === 'obtained' || params.condition.value === 'expiry') {
       res = res && params.data && params.data.from;
       res = res && params.data.to && !isNaN(params.data.from.getTime()) && !isNaN(params.data.to.getTime());
     }
@@ -94,6 +99,14 @@ module.exports = {
 
         return _.some(certStats.trainings, function (trng) {
           return trng.trem_outcome === 'VALIDATED' && moment(trng.trng_date).isBetween(xMonthsAgo, new Date());
+        });
+      case 'obtained':
+        if (!certStats) {
+          return false;
+        }
+
+        return _.some(certStats.trainings, function (trng) {
+          return trng.trem_outcome === 'VALIDATED' && moment(trng.trng_date).isBetween(params.data.from, params.data.to, null, '[]');
         });
       case 'expiring':
         if (!certStats) {

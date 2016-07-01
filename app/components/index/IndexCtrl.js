@@ -19,6 +19,10 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
     return $rootScope._alerts[index].callback();
   };
 
+  $rootScope.getUserInfo = function () {
+    return $rootScope.currentUser.info;
+  };
+
   $rootScope._alerts = [];
   $rootScope.$on('alert', function (event, alert) { $rootScope._alerts.push(_.extend(alert, { id: $rootScope._alerts.length })); });
   $rootScope.$on('error', function () {

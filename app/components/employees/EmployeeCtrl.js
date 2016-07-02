@@ -114,7 +114,10 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, $location,
           }).then(function () {
             ngDialog.closeAll();
             if (optout) {
-              Promise.all([EmployeesNotesSvc.setNotes($scope.empl.empl_pk, notes), EmployeesNotesSvc.optOut($scope.empl.empl_pk, cert.cert_pk, date)])
+              Promise.all([
+                  EmployeesNotesSvc.setNotes($scope.empl.empl_pk, $scope.empl.empl_notes + '\n' + notes),
+                  EmployeesNotesSvc.optOut($scope.empl.empl_pk, cert.cert_pk, date)
+                ])
                 .then(function () {
                   $route.reload();
                   $scope.$emit('alert', { type: 'success', msg: empl_display + ' a &eacute;t&eacute; sorti(e) du dispositif ' + cert.cert_short + '.' });

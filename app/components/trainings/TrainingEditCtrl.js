@@ -46,6 +46,8 @@ module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ng
         $scope.trng = { trainers: [], trainees: [] };
       }
 
+      _.find($scope.cols, { id: 'trem_outcome' }).show = trng && trng.trng_outcome === 'COMPLETED';
+
       $scope.tp = new NgTableParams(_({ sorting: { empl_surname: 'asc' }, count: 10 }).extend($location.search()).mapValues(function (val) {
         return _.isString(val) ? decodeURI(val) : val;
       }).value(), {

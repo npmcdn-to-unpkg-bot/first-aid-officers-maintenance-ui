@@ -6,13 +6,15 @@
         </div>
         <div class="panel-body">
             <div class="form-group">
-                <label for="{{cert.cert_pk}}-condition" class="col-xs-4 control-label">{{cert.cert_short}}</label>
-                <div class="col-xs-8">
-                    <select id="{{cert.cert_pk}}-condition" class="form-control" ng-model="params.condition" ng-options="condition as condition.display for condition in certificatesConditions" ng-change="params.option = undefined; params.data = undefined;"></select>
+                <div class="row">
+                    <label for="{{cert.cert_pk}}-condition" class="col-xs-4 control-label">{{cert.cert_short}}</label>
+                    <div class="col-xs-8">
+                        <select id="{{cert.cert_pk}}-condition" class="form-control" ng-model="params.condition" ng-options="condition as condition.display for condition in certificatesConditions" ng-change="params.option = undefined; params.data = undefined;"></select>
+                    </div>
                 </div>
             </div>
             <div uib-collapse="!params.condition.value">
-                <div ng-switch="params.condition.value">
+                <div ng-switch="params.condition.value" class="row">
                     <div ng-switch-when="number">
                         <div class="col-xs-4"></div>
                         <div class="col-xs-5">

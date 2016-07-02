@@ -1,4 +1,4 @@
-<form class="form form-horizontal panel panel-{{optout ? 'danger' : 'success'}}" ng-submit="callback(optout, cert, date)" autocomplete="off" ng-init="optout=true">
+<form class="form form-horizontal panel panel-{{optout ? 'danger' : 'success'}}" ng-submit="callback(optout, cert, date, optout ? reason : notes)" autocomplete="off" ng-init="optout=true">
     <div class="panel-heading">
         <div style="display: inline-table;">
             <input bswitch="optout" type="checkbox" data-on-color="danger" data-off-color="success" data-on-text="Sortir" data-off-text="R&eacute;int&eacute;grer" data-label-width="0" />
@@ -15,23 +15,44 @@
                 </div>
             </div>
         </div>
-        <div class="form-group" uib-collapse="!optout">
-            <div class="row">
-                <label for="notes" class="control-label col-md-4 col-sm-4">Date de sortie</label>
-                <div class="col-md-8 col-sm-8">
-                    <div class="input-group">
-                        <input id="from" type="text" ng-model="date" class="form-control" uib-datepicker-popup="dd/MM/yyyy" datepicker-mode="'month'" is-open="datepicker" show-button-bar="false" starting-day="1"
-                            show-weeks="false" placeholder="JJ/MM/AAAA" />
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-default" ng-click="datepicker=true"><span class="glyphicon glyphicon-calendar"></span></button>
+        <div uib-collapse="optout">
+            <div class="form-group">
+                <div class="row">
+                    <label for="notes" class="control-label col-md-4 col-sm-4">Notes</label>
+                    <div class="col-md-8 col-sm-8">
+                        <textarea id="notes" rows="3" ng-model="notes" class="form-control vresize"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div uib-collapse="!optout">
+            <div class="form-group">
+                <div class="row">
+                    <label for="notes" class="control-label col-md-4 col-sm-4">Date de sortie</label>
+                    <div class="col-md-8 col-sm-8">
+                        <div class="input-group">
+                            <input id="from" type="text" ng-model="date" class="form-control" uib-datepicker-popup="dd/MM/yyyy" datepicker-mode="'month'" is-open="datepicker" show-button-bar="false" starting-day="1"
+                                show-weeks="false" placeholder="JJ/MM/AAAA" />
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="datepicker=true"><span class="glyphicon glyphicon-calendar"></span></button>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label for="notes" class="control-label col-md-4 col-sm-4">Origine</label>
+                    <div class="col-md-8 col-sm-8">
+                        <textarea id="notes" rows="3" ng-model="reason" class="form-control vresize"></textarea>
+                        <p class="help-block force-show">Veuillez indiquer, concernant l'origine de la demande&nbsp;: ses motif, date et demandeur.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="panel-footer text-center">
-        <button type="submit" class="btn btn-{{optout ? 'danger' : 'success'}}" ng-disabled="!isValid(optout, cert, date)">Confirmer</button>
+        <button type="submit" class="btn btn-{{optout ? 'danger' : 'success'}}" ng-disabled="!isValid(optout, cert, date, optout ? reason : notes)">Confirmer</button>
         <button type="button" class="btn btn-default" ng-click="closeThisDialog()">Annuler</button>
     </div>
 </form>

@@ -43,7 +43,7 @@
                         <hr /> Permet de g&eacute;rer les formations des types suivants&nbsp;:
                         <ul>
                             <li ng-repeat="type in trainer.types | orderBy: 'trty_order'">{{type.trty_name}}
-                                <span class="pull-right">
+                                <span class="pull-right text-right">
                                     <label class="label label-success" ng-repeat="cert in type.certificates">{{cert.cert_short}}</label>
                                 </span>
                             </li>
@@ -75,25 +75,31 @@
             <div class="panel-heading">S&eacute;curit&eacute;</div>
             <div class="panel-body">
                 <div class="form-group" ng-class="{ 'has-error': form.password_current.$dirty && form.password_current.$error.required }">
-                    <label for="password_current" class="col-xs-6 col-sm-4 control-label">Mot de passe actuel</label>
-                    <div class="col-xs-6 col-sm-8">
-                        <input type="password" name="password_current" id="password_current" class="form-control" ng-model="password_current" required />
-                        <span ng-show="form.password_current.$dirty && form.password_current.$error.required" class="help-block">Mot de passe requis</span>
+                    <div class="row">
+                        <label for="password_current" class="col-xs-6 col-sm-4 control-label">Mot de passe actuel</label>
+                        <div class="col-xs-6 col-sm-8">
+                            <input type="password" name="password_current" id="password_current" class="form-control" ng-model="password_current" required />
+                            <span ng-show="form.password_current.$dirty && form.password_current.$error.required" class="help-block">Mot de passe requis</span>
+                        </div>
                     </div>
                 </div>
                 <hr />
                 <div class="form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
-                    <label for="password" class="col-xs-6 col-sm-4 control-label">Nouveau mot de passe</label>
-                    <div class="col-xs-6 col-sm-8">
-                        <input type="password" name="password" id="password" class="form-control" ng-model="password" required />
-                        <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Mot de passe requis</span>
+                    <div class="row">
+                        <label for="password" class="col-xs-6 col-sm-4 control-label">Nouveau mot de passe</label>
+                        <div class="col-xs-6 col-sm-8">
+                            <input type="password" name="password" id="password" class="form-control" ng-model="password" required />
+                            <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Mot de passe requis</span>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group" ng-class="{ 'has-error': form.password_confirm.$dirty && (form.password_confirm.$error.required || password_confirm !== password) }">
-                    <label for="password_confirm" class="col-xs-6 col-sm-4 control-label">Confirmer le mot de passe</label>
-                    <div class="col-xs-6 col-sm-8">
-                        <input type="password" name="password_confirm" id="password_confirm" class="form-control" required ng-model="password_confirm" ng-disabled="!password" />
-                        <span ng-show="form.password_confirm.$dirty && (form.password_confirm.$error.required || password_confirm !== password)" class="help-block">Les deux mots de passe doivent correspondre</span>
+                    <div class="row">
+                        <label for="password_confirm" class="col-xs-6 col-sm-4 control-label">Confirmer le mot de passe</label>
+                        <div class="col-xs-6 col-sm-8">
+                            <input type="password" name="password_confirm" id="password_confirm" class="form-control" required ng-model="password_confirm" ng-disabled="!password" />
+                            <span ng-show="form.password_confirm.$dirty && (form.password_confirm.$error.required || password_confirm !== password)" class="help-block">Les deux mots de passe doivent correspondre</span>
+                        </div>
                     </div>
                 </div>
             </div>

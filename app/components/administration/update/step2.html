@@ -21,10 +21,10 @@
             <tbody>
                 <tr ng-repeat="header in $parent.headers track by $index">
                     <td class="shrinkable">
-                        <span ng-bind="header" tooltip="{{header}}" />
+                        <span ng-bind="header" />
                     </td>
                     <td class="text-primary shrinkable">
-                        <span ng-bind="data[step2.current][$index]" tooltip="{{data[step2.current][$index]}}" />
+                        <span ng-bind="data[step2.current][$index]" />
                     </td>
                 </tr>
             </tbody>

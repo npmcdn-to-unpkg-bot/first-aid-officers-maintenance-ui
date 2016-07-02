@@ -5,7 +5,6 @@ var angular = require('angular');
 var _ = require('lodash');
 require('angular-bootstrap-templates');
 require('angular-i18n-fr');
-require('angular-smart-table');
 require('angular-ui-sortable');
 require('bootstrap_material_design');
 require('bootstrap-switch');
@@ -36,18 +35,6 @@ $(function () {
     window.onresize = trianglify;
   }
 });
-angular.module('smart-table').run(['$templateCache', function ($templateCache) {
-  $templateCache.put('template/smart-table/pagination.html',
-    '    <nav ng-if="numPages && pages.length > 1">' +
-    '        <ul class="pagination">' +
-    '            <li ng-click="selectPage(1)" ng-class="{\'disabled\': currentPage == 1}"><a href="javascript:void(0)">&laquo;</a></li>' +
-    '            <li ng-click="selectPage(currentPage - 1)" ng-class="{\'disabled\': currentPage == 1}"><a href="javascript:void(0)">&lsaquo;</a></li>' +
-    '            <li ng-repeat="page in pages" ng-class="{\'active\': page == currentPage}" ng-click="selectPage(page)"><a href="javascript:void(0)">{{page}}</a></li>' +
-    '            <li ng-click="selectPage(currentPage + 1)" ng-class="{\'disabled\': currentPage == numPages}"><a href="javascript:void(0)">&rsaquo;</a></li>' +
-    '            <li ng-click="selectPage(numPages)" ng-class="{\'disabled\': currentPage == numPages}"><a href="javascript:void(0)">&raquo;</a></li>' +
-    '        </ul>' +
-    '    </nav>');
-}]);
 
 angular.module('faomaintenanceApp', [
     require('angular-cookies'),
@@ -59,8 +46,7 @@ angular.module('faomaintenanceApp', [
     require('ng-dialog'),
     'ngTable',
     'ui.bootstrap',
-    'ui.sortable',
-    'smart-table'
+    'ui.sortable'
   ]).config(['$routeProvider', 'ngDialogProvider', 'uibButtonConfig', '$httpProvider', '$provide',
     function ($routeProvider, ngDialogProvider, uibButtonConfig, $httpProvider, $provide) {
       $provide.decorator('orderByFilter', ['$delegate', '$parse', function ($delegate, $parse) {
@@ -242,7 +228,6 @@ angular.module('faomaintenanceApp', [
   .controller('HomeCtrl', ['$scope', 'ngDialog', 'BusySvc', require('./components/home/HomeCtrl.js')])
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
   .controller('LoginCtrl', ['$scope', '$rootScope', '$route', 'AuthSvc', 'BusySvc', require('./components/index/LoginCtrl.js')])
-  .controller('RolesEditCtrl', ['$rootScope', '$scope', 'AdminSvc', 'ngDialog', require('./components/dialogs/roles_edit/RolesEditCtrl.js')])
   .controller('RolesManagementCtrl', ['$rootScope', '$scope', '$route', '$routeParams', 'BusySvc', 'DataSvc', 'AdminSvc', 'ngDialog',
     require('./components/administration/users/RolesManagementCtrl.js')
   ])

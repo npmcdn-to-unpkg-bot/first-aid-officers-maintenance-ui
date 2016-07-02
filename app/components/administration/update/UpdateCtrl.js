@@ -7,6 +7,7 @@ var XLSX = require('xlsx-browerify-shim');
 /* jshint camelcase: false */
 
 module.exports = function ($scope, updateSvc, dataSvc, ngDialog, busySvc, NgTableParams) {
+  busySvc.busy('ongoingOperation', true);
   $scope.headers = [];
   $scope.data = [
     []
@@ -202,6 +203,7 @@ module.exports = function ($scope, updateSvc, dataSvc, ngDialog, busySvc, NgTabl
         $scope.$emit('alert', { type: 'success', msg: 'Mise &agrave; jour effectu&eacute;e avec succ&egrave;s.' });
         $scope.$emit('update');
         busySvc.done('actualUpdate');
+        busySvc.done('ongoingOperation');
         window.history.back();
       }, function () {
         busySvc.done('actualUpdate');

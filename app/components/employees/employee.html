@@ -9,7 +9,9 @@
                     <div class="col-sm-8 col-xs-12 text-right">
                         <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
                             <div class="btn-group">
-                                <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates | orderBy: 'cert_order'" tooltip="{{cert.cert_name}}">{{cert.cert_short}}</label>
+                                <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates | orderBy: 'cert_order'" uib-popover="{{cert.cert_name}}" popover-trigger="mouseenter"
+                                    popover-append-to-body="true">{{cert.cert_short}}
+                                </label>
                             </div>
                         </state-sustain>
                     </div>
@@ -93,6 +95,6 @@
 </div>
 
 <div class="side-panel-container text-right">
-    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="editNotes()" if-role="'admin1'"><span class="glyphicon glyphicon-pencil"></span>&nbsp;{{empl.empl_notes ? 'Modifier' : 'Prendre'}} notes</button>
-    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="addVoiding()" if-role="'admin1'"><span class="glyphicon glyphicon-lock"></span>&nbsp;Exclusion des dispositifs</button>
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="editNotes()" if-role="'admin1'"><span class="glyphicon glyphicon-pencil"></span>&nbsp;{{empl.empl_notes ? 'Modifier' : 'Prendre'}} notes</button>
+    <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="addVoiding()" if-role="'admin1'"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Sortie des dispositifs</button>
 </div>

@@ -43,6 +43,9 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
       }),
       preCloseCallback: function () {
         delete $scope.dateOption;
+        if (!$scope.$$phase) {
+          $scope.$digest();
+        }
       }
     });
   };
@@ -64,6 +67,9 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
       }),
       preCloseCallback: function () {
         delete $scope.typeOption;
+        if (!$scope.$$phase) {
+          $scope.$digest();
+        }
       }
     });
   };

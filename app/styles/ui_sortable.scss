@@ -4,7 +4,8 @@
     cursor: -moz-grab;
     cursor: -webkit-grab;
     &.ui-sortable-helper {
-        opacity: .8;
+        transition: transform .2s;
+        transform: rotate(5deg);
         cursor: grabbing;
         cursor: -moz-grabbing;
         cursor: -webkit-grabbing;

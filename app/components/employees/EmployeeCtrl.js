@@ -115,7 +115,7 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, $location,
             ngDialog.closeAll();
             if (optout) {
               Promise.all([
-                  EmployeesNotesSvc.setNotes($scope.empl.empl_pk, $scope.empl.empl_notes + '\n' + notes),
+                  EmployeesNotesSvc.setNotes($scope.empl.empl_pk, ($scope.empl.empl_notes ? $scope.empl.empl_notes + '\n\n' : '') + notes),
                   EmployeesNotesSvc.optOut($scope.empl.empl_pk, cert.cert_pk, date)
                 ])
                 .then(function () {

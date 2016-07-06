@@ -41,9 +41,11 @@
                     </div>
                 </div>
                 <hr ng-if="empl.empl_notes || certificatesVoiding.length > 0" />
-                <div class="row" ng-repeat="voiding in certificatesVoiding">
+                <div class="row" ng-repeat="voiding in certificatesVoiding | orderBy: 'cert.cert_order'">
                     <div class="col-xs-4 text-right">Dispositif {{voiding.cert.cert_short}}</div>
                     <div class="col-xs-8 text-danger">Sorti(e) du dispositif {{voiding.cert.cert_short}} depuis le {{voiding.date | date: 'fullDate'}}</div>
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-8">{{voiding.emce_reason}}</div>
                 </div>
                 <div class="row" ng-if="empl.empl_notes">
                     <div class="col-xs-4 text-right">Notes</div>

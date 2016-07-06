@@ -93,14 +93,14 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, $location,
         currentVoidings: _.intersectionBy($scope.certificates, $scope.certificatesVoiding, function (cert) {
           return cert.cert_pk || cert.emce_cert_fk;
         }),
-        isValid: function (optout, cert, date, notes) {
+        isValid: function (optout, cert, date, reason) {
           if (optout) {
-            return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime()) && cert && notes && notes.length;
+            return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime()) && cert && reason && reason.length;
           }
 
           return cert;
         },
-        callback: function (optout, cert, date, notes) {
+        callback: function (optout, cert, date, reason) {
           var empl_display = ($scope.empl.empl_gender ? 'M.' : 'Mme') + ' ' + $scope.empl.empl_surname + ' ' + $scope.empl.empl_firstname;
           var innerHtml = optout ?
             'Exclure un agent d\'un certain dispositif rend son aptitude correspondante <span class="text-warning">invalide</span> &agrave; compter de la date de sortie.<hr />' :
@@ -114,16 +114,13 @@ module.exports = function ($rootScope, $scope, $routeParams, dataSvc, $location,
           }).then(function () {
             ngDialog.closeAll();
             if (optout) {
-              Promise.all([
-                  EmployeesNotesSvc.setNotes($scope.empl.empl_pk, ($scope.empl.empl_notes ? $scope.empl.empl_notes + '\n\n' : '') + notes),
-                  EmployeesNotesSvc.optOut($scope.empl.empl_pk, cert.cert_pk, date)
-                ])
+              EmployeesNotesSvc.optOut($scope.empl.empl_pk, cert.cert_pk, date, reason)
                 .then(function () {
                   $route.reload();
                   $scope.$emit('alert', { type: 'success', msg: empl_display + ' a &eacute;t&eacute; sorti(e) du dispositif ' + cert.cert_short + '.' });
                 });
             } else {
-              Promise.all([EmployeesNotesSvc.setNotes($scope.empl.empl_pk, notes), EmployeesNotesSvc.optIn($scope.empl.empl_pk, cert.cert_pk)])
+              EmployeesNotesSvc.optIn($scope.empl.empl_pk, cert.cert_pk)
                 .then(function () {
                   $route.reload();
                   $scope.$emit('alert', { type: 'success', msg: empl_display + ' a r&eacute;int&eacute;gr&eacute; le dispositif ' + cert.cert_short + '.' });

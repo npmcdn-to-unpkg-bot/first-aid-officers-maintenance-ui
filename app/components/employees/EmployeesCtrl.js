@@ -7,6 +7,7 @@ var helper = require('./employeesConditionsHelper.js');
 var reports = require('../reports/employeesReports.js');
 
 module.exports = function ($scope, $location, dataSvc, busySvc, NgTableParams, ngDialog) {
+  var init = true;
   var colsBase = [
     { id: 'button', clazz: 'primary', on: '(hover && !siteHover)', show: true },
     { title: 'Matricule', sortable: 'empl_pk', filter: { empl_pk: 'text' }, field: 'empl_pk', show: true, width: '10%' },
@@ -112,6 +113,7 @@ module.exports = function ($scope, $location, dataSvc, busySvc, NgTableParams, n
 
     // Manually filter employees according to defined conditions
     $scope.$watchCollection('conditions', function () {
+      var page = $scope.tp.parameters().page;
       $scope.tp.settings({
         dataset: _.filter($scope.employees, function (empl) {
           return _.every($scope.conditions, function (condition) {
@@ -119,6 +121,10 @@ module.exports = function ($scope, $location, dataSvc, busySvc, NgTableParams, n
           });
         })
       });
+
+      if (init) {
+        $scope.tp.parameters({ page: page });
+      }
     });
 
     $scope.$apply(); // force $location to sync with the browser
@@ -133,6 +139,7 @@ module.exports = function ($scope, $location, dataSvc, busySvc, NgTableParams, n
     setTimeout(function () {
       $scope.advancedSearch = $scope.conditions.length > 0;
       $scope.$digest();
+      init = false;
     }, 0);
   }), _.partial(busySvc.done, 'employees'));
 

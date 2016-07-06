@@ -8,6 +8,7 @@ var reports = require('../reports/trainingsReports.js');
 
 module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, ngDialog) {
   busySvc.busy('trainings');
+  var init = true;
 
   $scope.cols = [
     { id: 'button', clazz: 'primary', on: 'hover', width: '1%', show: true },
@@ -106,6 +107,7 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
   }
 
   function filterTrainings() {
+    var page = $scope.tp.parameters().page;
     $scope.tp.settings({
       dataset: _($scope.trainings).thru(function (trainings) {
         return $scope.types.length === 0 ? trainings : _.filter(trainings, function (trng) {
@@ -117,6 +119,10 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
         return $scope.datesCondition ? _.filter(trainings, _.partial(helper.testCondition, _, $scope.datesCondition)) : trainings;
       }).value()
     });
+
+    if (init) {
+      $scope.tp.parameters({ page: page });
+    }
   }
 
   Promise.all([dataSvc.getTrainings(), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(_.spread(function (trainings, trainingTypes, certificates) {
@@ -170,6 +176,7 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
     setTimeout(function () {
       $scope.advancedSearch = !_.isUndefined($scope.datesCondition) || $scope.types.length > 0;
       $scope.$apply();
+      init = false;
     }, 0);
   }), _.partial(busySvc.done, 'trainings'));
 

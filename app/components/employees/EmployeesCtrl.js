@@ -32,8 +32,6 @@ module.exports = function ($scope, $location, dataSvc, busySvc, NgTableParams, n
       template: './components/dialogs/employees_params_certificate.html',
       scope: _.extend($scope.$new(), {
         cert: cert,
-        recentOptions: helper.recentOptions,
-        statusOptions: helper.statusOptions,
         certificatesConditions: helper.certificatesConditions,
       }),
       preCloseCallback: function () {

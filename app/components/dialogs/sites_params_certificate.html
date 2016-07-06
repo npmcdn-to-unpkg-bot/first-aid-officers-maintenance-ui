@@ -1,15 +1,16 @@
 <form class="form-horizontal" autocomplete="off" ng-submit="add()">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            Nouvelle condition - {{cert.cert_name}}
+            Nouvelle condition
             <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
         </div>
         <div class="panel-body">
             <div class="form-group">
                 <div class="row">
-                    <label for="{{cert.cert_pk}}-condition" class="col-xs-4 control-label">{{cert.cert_short}}</label>
+                    <label for="{{cert.cert_pk}}-condition" class="col-xs-4 control-label">Aptitude <strong>{{cert.cert_short}}</strong></label>
                     <div class="col-xs-8">
-                        <select id="{{cert.cert_pk}}-condition" class="form-control" ng-model="params.condition" ng-options="condition as condition.display for condition in certificatesConditions" ng-change="params.option = undefined; params.data = undefined;"></select>
+                        <select id="{{cert.cert_pk}}-condition" class="form-control" ng-model="params.condition" ng-options="condition as condition.display group by condition.group for condition in certificatesConditions"
+                            ng-change="params.option = undefined; params.data = undefined;"></select>
                     </div>
                 </div>
             </div>
@@ -36,17 +37,11 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-switch-when="target">
-                        <div class="col-xs-4"></div>
-                        <div class="col-xs-8">
-                            <select class="form-control" ng-model="params.option" ng-options="option as option.display for option in targetOptions"></select>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
         <div class="panel-footer text-center">
-            <button type="submit" class="btn btn-primary" ng-click="add()" ng-disabled="!(params.condition && params.option && (params.condition.value === 'target' || params.data !== undefined))">Ok</button>
+            <button type="submit" class="btn btn-primary" ng-click="add()" ng-disabled="!isValid()">Ok</button>
             <button type="button" class="btn btn-default" ng-click="closeThisDialog()">Annuler</button>
         </div>
     </div>

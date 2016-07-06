@@ -39,6 +39,7 @@ module.exports = function ($scope, $location, $cookies, dataSvc, busySvc, NgTabl
           });
           scope.closeThisDialog();
         };
+        scope.isValid = _.partial(helper.isValid, scope.params);
       }]
     });
   };

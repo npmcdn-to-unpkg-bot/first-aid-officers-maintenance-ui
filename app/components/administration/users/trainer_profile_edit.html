@@ -1,6 +1,6 @@
-<form class="panel panel-{{edit ? 'primary' : 'success'}}" ng-init="edit = profile.trlv_pk !== undefined" autocomplete="off" ng-submit="exec()">
+<form class="panel panel-{{edit ? 'primary' : 'success'}}" ng-init="edit = profile.trpr_pk !== undefined" autocomplete="off" ng-submit="exec()">
     <div class="panel-heading">
-        <span ng-if="edit">{{::profile.trlv_id}}</span>
+        <span ng-if="edit">{{::profile.trpr_id}}</span>
         <span ng-if="!edit">Nouveau profil formateur</span>
         <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
     </div>
@@ -9,11 +9,11 @@
             <div class="row">
                 <label class="control-label col-xs-4">Identifiant</label>
                 <div class="col-xs-8">
-                    <input type="text" class="form-control" ng-model="profile.trlv_id" />
+                    <input type="text" class="form-control" ng-model="profile.trpr_id" />
                 </div>
             </div>
         </div>
-        <div class="form-group" ng-if="!edit || profile.trlv_pk > 0">
+        <div class="form-group" ng-if="!edit || profile.trpr_pk > 0">
             <div class="row">
                 <label class="control-label col-xs-4">Formations g&eacute;rables</label>
                 <div class="col-xs-8">
@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <div ng-if="profile.trlv_pk === 0">
+        <div ng-if="profile.trpr_pk === 0">
             <div class="row" ng-repeat="type in profile.types | orderBy: 'trty_order'">
                 <div class="col-xs-4 text-right text-muted"><span ng-if="$first">Formations g&eacute;rables</span></div>
                 <div class="col-xs-8">
@@ -42,19 +42,19 @@
                 </div>
             </div>
         </div>
-        <hr ng-if="profile.trlv_pk === 0" />
-        <div class="text-justify" ng-if="profile.trlv_pk === 0">
+        <hr ng-if="profile.trpr_pk === 0" />
+        <div class="text-justify" ng-if="profile.trpr_pk === 0">
             Il s'agit du profil formateur utilis&eacute; par d&eacute;faut. Il permet de g&eacute;rer <strong>tous</strong> les types de formations sans exception.
             <br /> Seul son <strong>identifiant</strong> peut &ecirc;tre modifi&eacute; et il ne peut pas &ecirc;tre supprim&eacute;.
         </div>
     </div>
     <div class="panel-footer text-center">
         <div ng-if="edit">
-            <button type="submit" class="btn btn-primary" ng-disabled="!profile.trlv_id">Sauvegarder</button>
-            <button type="button" class="btn btn-danger" ng-click="delete()" ng-disabled="profile.trlv_pk === 0">Supprimer</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="!profile.trpr_id">Sauvegarder</button>
+            <button type="button" class="btn btn-danger" ng-click="delete()" ng-disabled="profile.trpr_pk === 0">Supprimer</button>
         </div>
         <div ng-if="!edit">
-            <button type="submit" class="btn btn-success" ng-disabled="!profile.trlv_id">Sauvegarder</button>
+            <button type="submit" class="btn btn-success" ng-disabled="!profile.trpr_id">Sauvegarder</button>
             <button type="button" class="btn btn-default" ng-click="closeThisDialog()">Annuler</button>
         </div>
     </div>

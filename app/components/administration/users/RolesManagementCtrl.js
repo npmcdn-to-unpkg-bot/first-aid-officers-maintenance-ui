@@ -127,7 +127,7 @@ module.exports = function ($rootScope, $scope, $route, $routeParams, busySvc, da
       case 'admin':
         return role.level;
       case 'trainer':
-        return role.profile.trlv_pk;
+        return role.profile.trpr_pk;
     }
   }
 

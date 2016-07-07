@@ -13,26 +13,36 @@ function filtersSection(conditions, filters) {
       body: [
         [{ colSpan: 2, style: 'primary', alignment: 'center', text: _.unescape('Ce document pr&eacute;sente les agents dont') }, {}]
       ].concat(_.map(_.values(filters).concat(_.map(conditions, function (condition) {
+        var cert = condition.cert.cert_short;
+        var data = condition.params.data;
         switch (condition.params.condition.value) {
-          case 'recent':
+          case 'status-success':
+            return { title: 'Aptitude ' + cert, value: 'valide', link: 'est actuellement' };
+          case 'status-danger':
+            return { title: 'Aptitude ' + cert, value: 'expirée', link: 'est actuellement' };
+          case 'status-any':
+            return { title: 'Dispositif ' + cert, value: 'intégré', link: 'a été' };
+          case 'status-blank':
+            return { title: 'Dispositif ' + cert, value: 'jamais été intégré', link: 'n\'a' };
+          case 'obtained-recent':
+            return { title: 'Aptitude ' + cert, value: 'il y a moins de ' + data + ' mois', link: 'a été obtenue/renouvelée' };
+          case 'expiring-recent':
+            return { title: 'Aptitude ' + cert, value: 'il y a moins de ' + data + ' mois', link: 'a expiré' };
+          case 'expiring-soon':
+            return { title: 'Aptitude ' + cert, value: 'dans moins de ' + data + ' mois', link: 'expire' };
+          case 'obtained-period':
             return {
-              title: 'Aptitude ' + condition.cert.cert_short,
-              value: 'il y a moins de ' + condition.params.data + ' mois',
-              link: 'a ' + _.unescape((condition.params.option.value === 'success' ? 'été obtenue/renouvelée' : 'expirée'))
+              title: 'Aptitude ' + cert,
+              value: 'entre le ' + moment(data.from).format('DD/MM/YYYY') + ' et le ' + moment(data.to).format(
+                'DD/MM/YYYY'),
+              link: 'a été obtenue/renouvelée'
             };
-          case 'expiring':
-            return { title: 'Aptitude ' + condition.cert.cert_short, value: condition.params.data + ' mois', link: 'expire sous' };
-          case 'expiry':
+          case 'expiring-period':
             return {
-              title: 'Aptitude ' + condition.cert.cert_short,
-              value: 'le ' + moment(condition.params.data.from).format('Do MMMM YYYY') + ' et le ' + moment(condition.params.data.to).format('Do MMMM YYYY'),
-              link: 'expire entre'
-            };
-          case 'status':
-            return {
-              title: 'Aptitude ' + condition.cert.cert_short,
-              value: condition.params.option.display.toLowerCase(),
-              link: condition.params.option.value === 'any' ? 'a été' : 'est'
+              title: 'Aptitude ' + cert,
+              value: 'entre le ' + moment(data.from).format('DD/MM/YYYY') + ' et le ' + moment(data.to).format(
+                'DD/MM/YYYY'),
+              link: 'expire'
             };
         }
       })), function (filter, idx) {

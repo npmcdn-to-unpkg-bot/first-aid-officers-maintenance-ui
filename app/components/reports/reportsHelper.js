@@ -98,7 +98,15 @@ function createSheet(columns, data, createCell) {
 
   _.each(data, function (entry, r) {
     _.each(columns, function (col, c) {
-      var value = _.get(entry, col.field) || _.get(entry, col.sortable) || _.get(entry, col.id);
+      var value = _.get(entry, col.field);
+      if (_.isNil(value)) {
+        value = _.get(entry, col.sortable);
+      }
+
+      if (_.isNil(value)) {
+        value = _.get(entry, col.id);
+      }
+
       worksheet['!cols'][c].wch = Math.max(worksheet['!cols'][c].wch, _.size(value));
       worksheet[XLSX.utils.encode_cell({ c: c, r: r + 1 })] = createCell(col, value);
     });

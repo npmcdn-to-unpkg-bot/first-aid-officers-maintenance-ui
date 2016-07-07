@@ -105,14 +105,14 @@
                             <div class="row">
                                 <label class="col-xs-4 control-label">Profil</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control" ng-model="role.profile" ng-options="trlv as trlv.trlv_id for trlv in trainerProfiles"></select>
+                                    <select class="form-control" ng-model="role.profile" ng-options="trpr as trpr.trpr_id for trpr in trainerProfiles"></select>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <hr />
                     <div class="text-justify">
-                        Le profil <span class="text-primary">{{role.profile.trlv_id}}</span> permet de g&eacute;rer les formations des types suivants&nbsp;:
+                        Le profil <span class="text-primary">{{role.profile.trpr_id}}</span> permet de g&eacute;rer les formations des types suivants&nbsp;:
                         <ul>
                             <li ng-repeat="type in role.profile.types | orderBy: 'trty_order'">{{type.trty_name}}
                                 <span class="pull-right text-right">

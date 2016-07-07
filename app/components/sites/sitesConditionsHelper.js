@@ -5,61 +5,65 @@ var _ = require('lodash');
 var lzString = require('lz-string');
 
 var comparisonOptions = [{
-  value: 'lt',
-  short: '<',
+  value: 'le',
+  short: '≤',
   display: 'inférieur à'
 }, {
   value: 'eq',
   short: '=',
   display: 'égal à'
 }, {
-  value: 'gt',
-  short: '>',
+  value: 'ge',
+  short: '≥',
   display: 'supérieur à'
 }];
 
-var targetOptions = [{
-  value: 'success',
-  display: 'Atteinte'
-}, {
-  value: 'warning',
-  display: 'Atteinte aux deux tiers'
-}, {
-  value: 'danger',
-  display: 'Non atteinte'
-}];
-
 var certificatesConditions = [{
-  value: 'target',
-  display: 'Par rapport à la cible'
+  value: 'target-success',
+  display: 'Atteinte',
+  group: 'Cible'
 }, {
-  value: 'number',
-  display: 'Nombre d\'agents formés'
+  value: 'target-warning',
+  display: 'Presque atteinte',
+  group: 'Cible'
+}, {
+  value: 'target-danger',
+  display: 'Non atteinte',
+  group: 'Cible'
 }, {
   value: 'percent',
-  display: 'Taux d\'agents formés'
+  display: 'Taux',
+  group: 'Agents formés'
+}, {
+  value: 'number',
+  display: 'Nombre',
+  group: 'Agents formés'
 }];
 
 function getConditionDisplay(cert, params) {
   switch (params.condition.value) {
     case 'number':
-      return 'Agents ' + cert.cert_short + ' ' + params.option.short + ' ' + params.data;
+      return 'Nombre d\'agents ' + cert.cert_short + ' ' + params.option.short + ' ' + params.data;
     case 'percent':
-      return 'Taux ' + cert.cert_short + ' ' + params.option.short + ' ' + params.data + '%';
-    case 'target':
-      return 'Cible ' + cert.cert_short + ' est ' + params.option.display.toLowerCase();
+      return 'Taux d\'agents' + cert.cert_short + ' ' + params.option.short + ' ' + params.data + '%';
+    case 'target-success':
+      return 'Cible ' + cert.cert_short + ' est atteinte';
+    case 'target-warning':
+      return 'Cible ' + cert.cert_short + ' est presque atteinte';
+    case 'target-danger':
+      return 'Cible ' + cert.cert_short + ' n\'est pas atteinte';
   }
 }
 
 function testComparison(value, params) {
   if (params) {
     switch (params.option.value) {
-      case 'lt':
-        return value < params.data;
+      case 'le':
+        return value <= params.data;
       case 'eq':
         return value === params.data;
-      case 'gt':
-        return value > params.data;
+      case 'ge':
+        return value >= params.data;
     }
   }
 
@@ -68,9 +72,20 @@ function testComparison(value, params) {
 
 module.exports = {
   comparisonOptions: comparisonOptions,
-  targetOptions: targetOptions,
   certificatesConditions: certificatesConditions,
   getConditionDisplay: getConditionDisplay,
+
+  isValid: function (params) {
+    if (!params || !params.condition) {
+      return false;
+    }
+
+    if (params.condition.value === 'number' || params.condition.value === 'percent') {
+      return params.option && _.isNumber(params.data);
+    }
+
+    return true;
+  },
 
   testCondition: function (certStats, params) {
     switch (params.condition.value) {
@@ -78,8 +93,12 @@ module.exports = {
         return testComparison(certStats.count, params);
       case 'percent':
         return testComparison(certStats.countPercentage, params);
-      case 'target':
-        return params.option.value === 'danger' ? certStats.targetStatus !== 'success' : certStats.targetStatus === params.option.value;
+      case 'target-success':
+        return certStats.targetStatus === 'success';
+      case 'target-warning':
+        return certStats.targetStatus === 'warning';
+      case 'target-danger':
+        return certStats.targetStatus !== 'success';
     }
   },
 
@@ -98,7 +117,7 @@ module.exports = {
     return _.map(conditions, function (condition) {
       var params = {
         condition: _(certificatesConditions).find({ value: condition.c }),
-        option: condition.c === 'target' ? _(targetOptions).find({ value: condition.o }) : _(comparisonOptions).find({ value: condition.o }),
+        option: _(comparisonOptions).find({ value: condition.o }),
         data: condition.d
       };
 

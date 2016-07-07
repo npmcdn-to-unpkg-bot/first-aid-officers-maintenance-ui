@@ -38,7 +38,7 @@ module.exports = function ($scope, $routeParams, dataSvc, trngSvc, $location, ng
       if (trng) {
         $scope.trng = _.extend(trng, {
           type: trainingTypes[trng.trng_trty_fk],
-          trng_start: $scope.dateRange = !!trng.trng_start ? new Date(trng.trng_start) : undefined,
+          trng_start: ($scope.dateRange = !!trng.trng_start) ? new Date(trng.trng_start) : undefined,
           trng_date: new Date(trng.trng_date),
           trainees: _.values(trng.trainees)
         });

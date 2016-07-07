@@ -8,6 +8,7 @@ var reports = require('../reports/trainingsReports.js');
 
 module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, ngDialog) {
   busySvc.busy('trainings');
+  var init = true;
 
   $scope.cols = [
     { id: 'button', clazz: 'primary', on: 'hover', width: '1%', show: true },
@@ -54,24 +55,12 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
   };
 
   $scope.types = [];
-  $scope.addTypes = function (typeOption) {
-    ngDialog.open({
-      template: './components/dialogs/trainings_types_selection.html',
-      scope: _.extend($scope.$new(), {
-        typeOption: typeOption,
-        submit: function (type) {
-          $scope.types = _.sortBy(_.uniq($scope.types.concat(typeOption === 'trty' ? [type] : _.filter($scope.trainingTypes, function (trty) {
-            return _.find(trty.certificates, { cert_pk: type });
-          }))), 'trty_order');
-        }
-      }),
-      preCloseCallback: function () {
-        delete $scope.typeOption;
-        if (!$scope.$$phase) {
-          $scope.$digest();
-        }
-      }
-    });
+  $scope.addTypes = function (option) {
+    $scope.types = _.sortBy(_.uniq($scope.types.concat(option.type ? [option.type] : _.filter($scope.trainingTypes, function (trty) {
+      return _.find(trty.certificates, { cert_pk: option.cert_pk });
+    }))), 'trty_order');
+
+    delete $scope.typeOption;
   };
 
   $scope.getFilterDisplay = function (key, value) {
@@ -118,6 +107,7 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
   }
 
   function filterTrainings() {
+    var page = $scope.tp.parameters().page;
     $scope.tp.settings({
       dataset: _($scope.trainings).thru(function (trainings) {
         return $scope.types.length === 0 ? trainings : _.filter(trainings, function (trng) {
@@ -129,6 +119,10 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
         return $scope.datesCondition ? _.filter(trainings, _.partial(helper.testCondition, _, $scope.datesCondition)) : trainings;
       }).value()
     });
+
+    if (init) {
+      $scope.tp.parameters({ page: page });
+    }
   }
 
   Promise.all([dataSvc.getTrainings(), dataSvc.getTrainingTypes(), dataSvc.getCertificates()]).then(_.spread(function (trainings, trainingTypes, certificates) {
@@ -147,8 +141,14 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
       };
     });
 
+    $scope.typeOptions = _.map(trainingTypes, function (type) {
+      return { display: type.trty_name, group: 'Type particulier', type: type };
+    }).concat(_.map(certificates, function (cert) {
+      return { display: cert.cert_short + ' - ' + cert.cert_name, group: 'Octroyant une certaine aptitude', cert_pk: cert.cert_pk };
+    }));
+
     $scope.certificates = _.values(certificates);
-    $scope.trainingTypes = _.values(trainingTypes);
+    $scope.trainingTypes = trainingTypes;
     $scope.tp = new NgTableParams(_.mapValues(_.omit(_.extend({ sorting: { trng_date: 'desc' }, count: 10 }, $location.search()), ['dates', 'types']), function (val) {
       return _.isString(val) ? decodeURI(val) : val;
     }), {
@@ -176,6 +176,7 @@ module.exports = function ($scope, dataSvc, $location, busySvc, NgTableParams, n
     setTimeout(function () {
       $scope.advancedSearch = !_.isUndefined($scope.datesCondition) || $scope.types.length > 0;
       $scope.$apply();
+      init = false;
     }, 0);
   }), _.partial(busySvc.done, 'trainings'));
 

@@ -5,139 +5,129 @@ var _ = require('lodash');
 var moment = require('moment');
 var lzString = require('lz-string');
 
-var recentOptions = [{
-  value: 'success',
-  display: 'Obtenue'
-}, {
-  value: 'danger',
-  display: 'Expirée'
-}];
-
-var statusOptions = [{
-  value: 'success',
-  display: 'Valide'
-}, {
-  value: 'warning',
-  display: 'À renouveler sous six mois'
-}, {
-  value: 'danger',
-  display: 'Expirée'
-}, {
-  value: 'any',
-  display: 'Obtenue - indépendamment de son statut actuel'
-}];
-
 var certificatesConditions = [{
-  value: 'status',
-  display: 'Selon statut actuel'
+  value: 'status-success',
+  display: 'Valide',
+  group: 'Statut actuel'
 }, {
-  value: 'recent',
-  display: 'Récemment expirée/obtenue'
+  value: 'status-danger',
+  display: 'Expiré',
+  group: 'Statut actuel'
 }, {
-  value: 'obtained',
-  display: 'Obtenue sur une certaine période'
+  value: 'status-any',
+  display: 'Intégré',
+  group: 'Dispositif'
 }, {
-  value: 'expiring',
-  display: 'Expirant prochainement'
+  value: 'status-blank',
+  display: 'Jamais intégré',
+  group: 'Dispositif'
 }, {
-  value: 'expiry',
-  display: 'Expirant sur une certaine période'
+  value: 'obtained-recent',
+  display: 'Récemment',
+  group: 'Aptitude obtenue/renouvelée'
+}, {
+  value: 'obtained-period',
+  display: 'Sur une certaine période',
+  group: 'Aptitude obtenue/renouvelée'
+}, {
+  value: 'expiring-recent',
+  display: 'Récemment',
+  group: 'Aptitude expirée/expirant'
+}, {
+  value: 'expiring-soon',
+  display: 'Prochainement',
+  group: 'Aptitude expirée/expirant'
+}, {
+  value: 'expiring-period',
+  display: 'Sur une certaine période',
+  group: 'Aptitude expirée/expirant'
 }];
 
 function getConditionDisplay(cert, params) {
   switch (params.condition.value) {
-    case 'status':
-      return cert.cert_short + (params.option.value === 'any' ? ' a été ' : ' est ') + params.option.display.toLowerCase();
-    case 'recent':
-      return cert.cert_short + ' a ' + (params.option.value === 'success' ? 'été obtenue/renouvelée' : 'expirée') + ' il y a moins de ' + params.data + ' mois';
-    case 'obtained':
+    case 'status-success':
+      return 'Aptitude ' + cert.cert_short + ' est actuellement valide';
+    case 'status-danger':
+      return 'Aptitude ' + cert.cert_short + ' est actuellement expirée';
+    case 'status-any':
+      return 'Dispositif ' + cert.cert_short + ' a été intégré';
+    case 'status-blank':
+      return 'Dispositif ' + cert.cert_short + ' n\'a jamais été intégré';
+    case 'obtained-recent':
+      return 'Aptitude ' + cert.cert_short + ' a été obtenue/renouvelée il y a moins de ' + params.data + ' mois';
+    case 'expiring-recent':
+      return 'Aptitude ' + cert.cert_short + ' a expiré il y a moins de ' + params.data + ' mois';
+    case 'expiring-soon':
+      return 'Aptitude ' + cert.cert_short + ' expire dans moins de ' + params.data + ' mois';
+    case 'obtained-period':
       return cert.cert_short + ' a été obtenue/renouvelée entre le ' + moment(params.data.from).format('DD/MM/YYYY') + ' et le ' + moment(params.data.to).format('DD/MM/YYYY');
-    case 'expiring':
-      return cert.cert_short + ' expire sous ' + params.data + ' mois';
-    case 'expiry':
+    case 'expiring-period':
       return cert.cert_short + ' expire entre le ' + moment(params.data.from).format('DD/MM/YYYY') + ' et le ' + moment(params.data.to).format('DD/MM/YYYY');
   }
 }
 
 module.exports = {
-  recentOptions: recentOptions,
-  statusOptions: statusOptions,
   certificatesConditions: certificatesConditions,
   getConditionDisplay: getConditionDisplay,
   isValid: function (params) {
-    var res = true;
     if (!params.condition) {
       return false;
     }
 
-    if (params.condition.value !== 'expiring' && params.condition.value !== 'obtained' && params.condition.value !== 'expiry') {
-      res = params.option !== undefined;
+    switch (params.condition.value) {
+      case 'status-success':
+      case 'status-danger':
+      case 'status-any':
+      case 'status-blank':
+        return true;
+      case 'obtained-recent':
+      case 'expiring-recent':
+      case 'expiring-soon':
+        return params.data;
+      case 'obtained-period':
+      case 'expiring-period':
+        return params.data && params.data.from && params.data.to && !isNaN(params.data.from.getTime()) && !isNaN(params.data.to.getTime());
     }
-
-    if (params.condition.value !== 'status') {
-      res = res && params.data !== undefined && params.data !== null;
-    }
-
-    if (params.condition.value === 'obtained' || params.condition.value === 'expiry') {
-      res = res && params.data && params.data.from;
-      res = res && params.data.to && !isNaN(params.data.from.getTime()) && !isNaN(params.data.to.getTime());
-    }
-
-    return res;
   },
   testCondition: function (certStats, params) {
+    var from, to, incl;
+    if (!certStats) {
+      return params.condition.value === 'status-blank';
+    }
+
     switch (params.condition.value) {
-      case 'recent':
-        if (!certStats) {
-          return false;
-        }
-
-        var xMonthsAgo = moment(new Date()).subtract(params.data, 'months');
-        if (params.option.value === 'danger') {
-          return moment(certStats.expiryDate).isBetween(xMonthsAgo, new Date());
-        }
-
+      case 'status-success':
+        return certStats.validityStatus === 'warning' || certStats.validityStatus === 'success';
+      case 'status-danger':
+        return certStats.validityStatus === 'danger';
+      case 'status-any':
+        return true;
+      case 'status-blank':
+        return false;
+      case 'obtained-recent':
+        from = moment(to = new Date()).subtract(params.data, 'months');
+        incl = '(]';
+        /* falls through */
+      case 'obtained-period':
         return _.some(certStats.trainings, function (trng) {
-          return trng.trem_outcome === 'VALIDATED' && moment(trng.trng_date).isBetween(xMonthsAgo, new Date());
+          return trng.trem_outcome === 'VALIDATED' && moment(trng.trng_date).isBetween(from || params.data.from, to || params.data.to, null, incl || '[]');
         });
-      case 'obtained':
-        if (!certStats) {
-          return false;
-        }
-
-        return _.some(certStats.trainings, function (trng) {
-          return trng.trem_outcome === 'VALIDATED' && moment(trng.trng_date).isBetween(params.data.from, params.data.to, null, '[]');
-        });
-      case 'expiring':
-        if (!certStats) {
-          return false;
-        }
-
-        var inXMonths = moment(new Date()).add(params.data, 'months');
-        return moment(certStats.expiryDate).isBetween(new Date(), inXMonths);
-      case 'expiry':
-        if (!certStats) {
-          return false;
-        }
-
-        return moment(certStats.expiryDate).isBetween(params.data.from, params.data.to, null, '[]');
-      case 'status':
-        if (!certStats) {
-          return false;
-        }
-
-        if (params.option.value === 'success') {
-          return certStats.validityStatus === 'warning' || certStats.validityStatus === 'success';
-        }
-
-        return params.option.value === 'any' || params.option.value === certStats.validityStatus;
+      case 'expiring-recent':
+        from = moment(to = new Date()).subtract(params.data, 'months');
+        incl = '(]';
+        /* falls through */
+      case 'expiring-soon':
+        to = moment(from = new Date()).add(params.data, 'months');
+        incl = '[)';
+        /* falls through */
+      case 'expiring-period':
+        return moment(certStats.expiryDate).isBetween(from || params.data.from, to || params.data.to, null, incl || '[]');
     }
   },
   stripDown: function (conditions) {
     return _.map(conditions, function (condition) {
       return {
         c: condition.params.condition.value,
-        o: condition.params.option ? condition.params.option.value : undefined,
         d: condition.params.data,
         cert: condition.cert.cert_pk
       };
@@ -147,7 +137,6 @@ module.exports = {
     return _.map(conditions, function (condition) {
       var params = {
         condition: _(certificatesConditions).find({ value: condition.c }),
-        option: condition.c === 'recent' ? _(recentOptions).find({ value: condition.o }) : _(statusOptions).find({ value: condition.o }),
         data: condition.d
       };
 

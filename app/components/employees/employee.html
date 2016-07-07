@@ -2,7 +2,7 @@
 <br />
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
-        <div class="panel panel-primary">
+        <div class="panel panel-{{site ? 'primary' : 'primary'}}">
             <div class="panel-heading panel-heading-buttonsgroup">
                 <div class="row">
                     <div class="col-sm-4 col-xs-12 panel-heading-title">Tableau de bord</div>
@@ -18,16 +18,17 @@
                 </div>
             </div>
             <div class="panel-body">
-                <div class="row">
+                <div class="row" ng-if="site">
                     <div class="col-xs-4 text-right">Type de contrat</div>
                     <div class="col-xs-8">
                         <span ng-if="empl.empl_permanent" class="label label-success">CDI</span><span ng-if="!empl.empl_permanent" class="label label-warning">CDD</span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-4 text-right">Affectation</div>
+                    <div class="col-xs-4 text-right" ng-class="{'text-danger' : !site}">Affectation</div>
                     <div class="col-xs-8">
-                        <a href="#/sites/{{site.site_pk}}">{{site.site_name}}</a>
+                        <a href="#/sites/{{site.site_pk}}" ng-if="site">{{site.site_name}}</a>
+                        <strong class="text-danger" ng-if="!site">Cet agent n'est plus list&eacute; dans la derni&egrave;re mise &agrave; jour</strong>
                     </div>
                 </div>
                 <div class="row">
@@ -41,13 +42,15 @@
                     </div>
                 </div>
                 <hr ng-if="empl.empl_notes || certificatesVoiding.length > 0" />
-                <div class="row" ng-repeat="voiding in certificatesVoiding">
+                <div class="row" ng-repeat="voiding in certificatesVoiding | orderBy: 'cert.cert_order'">
                     <div class="col-xs-4 text-right">Dispositif {{voiding.cert.cert_short}}</div>
                     <div class="col-xs-8 text-danger">Sorti(e) du dispositif {{voiding.cert.cert_short}} depuis le {{voiding.date | date: 'fullDate'}}</div>
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-8">{{voiding.emce_reason}}</div>
                 </div>
                 <div class="row" ng-if="empl.empl_notes">
                     <div class="col-xs-4 text-right">Notes</div>
-                    <div class="col-xs-8 preserve-whitespace text-muted">{{empl.empl_notes}}</div>
+                    <div class="col-xs-8 preserve-whitespace">{{empl.empl_notes}}</div>
                 </div>
             </div>
             <table class="table table-hover" ng-show="(checkedCertificates = (certificates | orderBy: 'cert_order' | filter: {'checked': true})).length > 0">
@@ -94,7 +97,7 @@
     </table>
 </div>
 
-<div class="side-panel-container text-right">
+<div class="side-panel-container text-right" ng-if="site">
     <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="editNotes()" if-role="'admin1'"><span class="glyphicon glyphicon-pencil"></span>&nbsp;{{empl.empl_notes ? 'Modifier' : 'Prendre'}} notes</button>
     <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="addVoiding()" if-role="'admin1'"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Sortie des dispositifs</button>
 </div>

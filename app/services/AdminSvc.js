@@ -48,19 +48,19 @@ module.exports = function ($http, $q, apiSvc) {
   };
 
   adminSvc.getTrainerProfiles = function () {
-    return apiSvc.get(apiSvc.adminEndpoint + 'trainerlevels');
+    return apiSvc.get(apiSvc.adminEndpoint + 'trainerprofiles');
   };
 
   adminSvc.postTrainerProfile = function (trainerProfile) {
-    return apiSvc.post(apiSvc.adminEndpoint + 'trainerlevels', trainerProfile);
+    return apiSvc.post(apiSvc.adminEndpoint + 'trainerprofiles', trainerProfile);
   };
 
   adminSvc.putTrainerProfile = function (trlv_pk, trainerProfile) {
-    return apiSvc.put(apiSvc.adminEndpoint + 'trainerlevels/' + trlv_pk, trainerProfile);
+    return apiSvc.put(apiSvc.adminEndpoint + 'trainerprofiles/' + trlv_pk, trainerProfile);
   };
 
   adminSvc.deleteTrainerProfile = function (trlv_pk) {
-    return apiSvc.delete(apiSvc.adminEndpoint + 'trainerlevels/' + trlv_pk);
+    return apiSvc.delete(apiSvc.adminEndpoint + 'trainerprofiles/' + trlv_pk);
   };
 
   return adminSvc;

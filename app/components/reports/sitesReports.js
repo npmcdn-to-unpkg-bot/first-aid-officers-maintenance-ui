@@ -13,13 +13,18 @@ function filtersSection(conditions, filters) {
       body: [
         [{ colSpan: 2, style: 'primary', alignment: 'center', text: _.unescape('Ce document pr&eacute;sente les sites dont') }, {}]
       ].concat(_.map(_.values(filters).concat(_.map(conditions, function (condition) {
+        var cert = condition.cert.cert_short;
         switch (condition.params.condition.value) {
           case 'number':
-            return { title: 'Nombre d\'agents ' + condition.cert.cert_short, value: condition.params.option.display + ' ' + condition.params.data, link: 'est' };
+            return { title: 'Nombre d\'agents ' + cert, value: condition.params.option.display + ' ' + condition.params.data, link: 'est' };
           case 'percent':
-            return { title: 'Taux de ' + condition.cert.cert_short, value: condition.params.option.display + ' ' + condition.params.data + '%', link: 'est' };
-          case 'target':
-            return { title: 'Cible ' + condition.cert.cert_short, value: condition.params.option.display.toLowerCase(), link: 'est' };
+            return { title: 'Taux d\'agents ' + cert, value: condition.params.option.display + ' ' + condition.params.data + '%', link: 'est' };
+          case 'target-success':
+            return { title: 'Cible ' + cert, value: 'atteinte', link: 'est' };
+          case 'target-warning':
+            return { title: 'Cible ' + cert, value: 'presque atteinte', link: 'est' };
+          case 'target-danger':
+            return { title: 'Cible ' + cert, value: 'pas atteinte', link: 'n\'est' };
         }
       })), function (filter, idx) {
         return [{

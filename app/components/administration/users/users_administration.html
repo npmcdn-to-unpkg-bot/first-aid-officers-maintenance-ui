@@ -14,7 +14,7 @@
                 <span ng-switch-when="roleLevel">
                     <label ng-if="$eval(col.field, empl)" class="label label-{{typeFor($eval(col.field, empl))}}">Niveau {{::$eval(col.field, empl)}}</label>
                 </span>
-                <span ng-switch-when="roleTrainer">{{::trainerProfiles[empl.roles.trainer].trlv_id}}</span>
+                <span ng-switch-when="roleTrainer">{{::trainerProfiles[empl.roles.trainer].trpr_id}}</span>
                 <span ng-switch-default>{{::$eval(col.field, empl)}}</span>
             </td>
         </tr>

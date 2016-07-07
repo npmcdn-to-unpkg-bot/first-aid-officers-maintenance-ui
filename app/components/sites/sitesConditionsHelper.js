@@ -43,9 +43,9 @@ var certificatesConditions = [{
 function getConditionDisplay(cert, params) {
   switch (params.condition.value) {
     case 'number':
-      return 'Agents ' + cert.cert_short + ' ' + params.option.short + ' ' + params.data;
+      return 'Nombre d\'agents ' + cert.cert_short + ' ' + params.option.short + ' ' + params.data;
     case 'percent':
-      return 'Taux ' + cert.cert_short + ' ' + params.option.short + ' ' + params.data + '%';
+      return 'Taux d\'agents' + cert.cert_short + ' ' + params.option.short + ' ' + params.data + '%';
     case 'target-success':
       return 'Cible ' + cert.cert_short + ' est atteinte';
     case 'target-warning':

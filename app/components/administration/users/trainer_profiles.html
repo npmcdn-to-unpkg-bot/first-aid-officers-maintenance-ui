@@ -1,10 +1,10 @@
 <h3>Profils formateurs<small> - <a href="#/administration/users">Gestion des utilisateurs</a></small></h3>
 <br />
 <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start;">
-    <div class="panel panel-primary" ng-repeat="profile in trainerProfiles track by profile.trlv_pk" style="flex-basis: 500px;">
+    <div class="panel panel-primary" ng-repeat="profile in trainerProfiles track by profile.trpr_pk" style="flex-basis: 500px;">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-xs-8" style="margin-top: 9px;">{{profile.trlv_id}}</div>
+                <div class="col-xs-8" style="margin-top: 9px;">{{profile.trpr_id}}</div>
                 <div class="col-xs-4 text-right">
                     <button type="button" class="btn btn-warning no-margin" ng-click="edit(profile)">Modifier</button>
                 </div>

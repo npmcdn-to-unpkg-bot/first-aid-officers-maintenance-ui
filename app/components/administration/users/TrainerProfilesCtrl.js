@@ -41,15 +41,15 @@ module.exports = function ($scope, adminSvc, dataSvc, busySvc, ngDialog, $route)
         }
 
         scope.exec = function () {
-          if (scope.profile.trlv_pk !== undefined) {
-            confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">modifier</span> le profil <span class="text-warning">' + scope.profile.trlv_id +
+          if (scope.profile.trpr_pk !== undefined) {
+            confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">modifier</span> le profil <span class="text-warning">' + scope.profile.trpr_id +
               '</span>&nbsp?',
               function () {
-                adminSvc.putTrainerProfile(scope.profile.trlv_pk, _.extend(_.cloneDeep(scope.profile), { types: _.map(scope.profile.types, 'trty_pk') }))
+                adminSvc.putTrainerProfile(scope.profile.trpr_pk, _.extend(_.cloneDeep(scope.profile), { types: _.map(scope.profile.types, 'trty_pk') }))
                   .then(_.partial(complete, { type: 'success', msg: 'Profil formateur mis &agrave; jour.' }), _.bind(scope.$emit, scope, 'error'));
               });
           } else {
-            confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-success">cr&eacute;er</span> le profil <span class="text-success">' + scope.profile.trlv_id +
+            confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-success">cr&eacute;er</span> le profil <span class="text-success">' + scope.profile.trpr_id +
               '</span>&nbsp?',
               function () {
                 adminSvc.postTrainerProfile(_.extend(_.cloneDeep(scope.profile), { types: _.map(scope.profile.types, 'trty_pk') }))
@@ -60,10 +60,10 @@ module.exports = function ($scope, adminSvc, dataSvc, busySvc, ngDialog, $route)
 
         scope.delete = function () {
           confirm(
-            '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-danger">supprimer</span> le profil <span class="text-danger">' + scope.profile.trlv_id +
+            '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-danger">supprimer</span> le profil <span class="text-danger">' + scope.profile.trpr_id +
             '</span>&nbsp?',
             function () {
-              adminSvc.deleteTrainerProfile(scope.profile.trlv_pk)
+              adminSvc.deleteTrainerProfile(scope.profile.trpr_pk)
                 .then(_.partial(complete, { type: 'success', msg: 'Profil formateur supprim&eacute;.' }), _.bind(scope.$emit, scope, 'error'));
             }, { _type: 'danger' });
         };

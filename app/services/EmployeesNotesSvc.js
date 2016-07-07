@@ -7,7 +7,7 @@ module.exports = function (apiSvc, dateFilter) {
       return apiSvc.put(apiSvc.employeesNotesEndpoint + empl_pk, { empl_notes: notes });
     },
     optOut: function (empl_pk, cert_pk, date, reason) {
-      return apiSvc.post(apiSvc.employeesNotesEndpoint + empl_pk + '/optout?cert_pk=' + cert_pk + '&date=' + dateFilter(date, 'yyyy-MM-dd'), reason);
+      return apiSvc.post(apiSvc.employeesNotesEndpoint + empl_pk + '/optout?cert_pk=' + cert_pk + '&date=' + dateFilter(date, 'yyyy-MM-dd'), { reason: reason });
     },
     optIn: function (empl_pk, cert_pk) {
       return apiSvc.delete(apiSvc.employeesNotesEndpoint + empl_pk + '/optout?cert_pk=' + cert_pk);

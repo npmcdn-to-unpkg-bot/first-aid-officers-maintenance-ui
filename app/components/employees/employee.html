@@ -50,7 +50,7 @@
                 </div>
                 <div class="row" ng-if="empl.empl_notes">
                     <div class="col-xs-4 text-right">Notes</div>
-                    <div class="col-xs-8 preserve-whitespace text-muted">{{empl.empl_notes}}</div>
+                    <div class="col-xs-8 preserve-whitespace">{{empl.empl_notes}}</div>
                 </div>
             </div>
             <table class="table table-hover" ng-show="(checkedCertificates = (certificates | orderBy: 'cert_order' | filter: {'checked': true})).length > 0">

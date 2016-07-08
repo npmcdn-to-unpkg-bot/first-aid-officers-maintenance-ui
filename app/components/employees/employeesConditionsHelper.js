@@ -117,8 +117,8 @@ module.exports = {
         incl = '(]';
         /* falls through */
       case 'expiring-soon':
-        to = moment(from = new Date()).add(params.data, 'months');
-        incl = '[)';
+        to = to || moment(from = new Date()).add(params.data, 'months');
+        incl = incl || '[)';
         /* falls through */
       case 'expiring-period':
         return moment(certStats.expiryDate).isBetween(from || params.data.from, to || params.data.to, null, incl || '[]');

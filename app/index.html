@@ -36,7 +36,7 @@
             <img src="./img/logo_complete.png">
         </div>
         <div ng-include="'./components/index/alerts.html'"></div>
-        <div class="container" deferred-cloak ng-if="clientInfo.clnt_name">
+        <div class="container" deferred-cloak ng-show="clientInfo.clnt_name">
             <header>
                 <div class="row top-panel" id="top-panel">
                     <div class="col-md-4 col-md-offset-4 col-sm-6">
@@ -67,14 +67,15 @@
                     <div ng-view autoscroll="true"></div>
                 </busy>
             </div>
-            <footer>
-                <div class="pull-right">
-                    <span class="version">&copy; 2014-{{today | date: 'yyyy'}} NCLS&nbsp;Development</span>
-                    <span class="text-danger">&nbsp;|&nbsp;</span>
-                    <a href="mailto:nclsdevelopment@gmail.com?subject=Enquiry about {{title}} at {{whereami}}" class="contact-us">nous contacter</a>
+            <footer class="row">
+                <div class="col-md-6">
+                    <div>Orca<span class="text-danger">&nbsp;|&nbsp;</span><span class="version">version 1.5.1-RC3</span></div>
+                    <div>{{clientInfo.clnt_name}}<span class="text-danger">&nbsp;|&nbsp;</span><a href="mailto:{{clientInfo.clnt_mailto}}" class="contact-us">contacter un administrateur</a></div>
                 </div>
-                <div>Orca<span class="text-danger">&nbsp;|&nbsp;</span><span class="version">version 1.5.1-RC3</span></div>
-                <div>{{clientInfo.clnt_name}}<span class="text-danger">&nbsp;|&nbsp;</span><a href="mailto:{{clientInfo.clnt_mailto}}" class="contact-us">contacter un administrateur</a></div>
+                <div class="col-md-6 text-right">
+                    <div>&copy; 2014-{{today | date: 'yyyy'}}<span class="text-danger">&nbsp;|&nbsp;</span><span class="version">NCLS&nbsp;Development</span></div>
+                    <div><a href="mailto:ericnicolas2+bo02btdqffcf6ehyura0@boards.trello.com" class="contact-us">Sugg&eacute;rer une am&eacute;lioration</a></div>
+                </div>
             </footer>
         </div>
     </body>

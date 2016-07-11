@@ -4,8 +4,6 @@ var _ = require('lodash');
 /*jshint camelcase: false*/
 
 module.exports = function ($rootScope, $scope, $document, $location, ngDialog, dataSvc, clientSvc) {
-  $scope.whereami = $location.host();
-  $scope.title = $document[0].title;
   $scope.today = new Date();
   $scope.navbar = {};
   $scope.clientInfo = {};

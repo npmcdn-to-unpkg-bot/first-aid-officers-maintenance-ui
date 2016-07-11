@@ -31,18 +31,17 @@ $screen-xs: 768px;
     }
 }
 
-.pre-loaded {
+.absolute-center {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     .circle {
         z-index: -1;
-        position: relative;
-        left: 50%;
         border-radius: 50%;
-        width: 50px;
-        height: 50px;
+        width: 500px;
+        height: 500px;
+        transform: translate(-250px, -250px);
         background-color: white;
         animation: expand 2s forwards;
         @keyframes expand {
@@ -50,7 +49,7 @@ $screen-xs: 768px;
                 transform: scale(0);
             }
             100% {
-                transform: scale(100);
+                transform: scale(30);
                 opacity: 0;
             }
         }

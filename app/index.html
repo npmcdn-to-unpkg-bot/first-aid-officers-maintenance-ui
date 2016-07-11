@@ -31,8 +31,10 @@
         }
         </script>
 
-        <div class="pre-loaded" deferred-uncloak>
+        <div class="absolute-center">
             <div class="circle"></div>
+        </div>
+        <div class="absolute-center" ng-hide="clientInfo.clnt_name">
             <img src="./img/logo_complete.png">
         </div>
         <div ng-include="'./components/index/alerts.html'"></div>

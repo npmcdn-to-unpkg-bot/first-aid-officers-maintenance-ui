@@ -11,29 +11,12 @@ require('bootstrap-switch');
 require('moment-fr');
 require('ng-table');
 require('../lib/jquery-ui.min.js');
-var Trianglify = require('trianglify');
 
+// Initialise Bootstrap Material Design
 $(function () {
   $.material.init({
     validate: false
   });
-
-  function trianglify() {
-    /*jshint camelcase: false*/
-    var pattern = new Trianglify({
-      width: window.innerWidth,
-      height: window.innerHeight,
-      x_colors: 'Blues'
-    });
-
-    document.body.style['background-image'] = 'url(' + pattern.png() + ')';
-  }
-
-  if (screen.width > 768) {
-    trianglify();
-    document.body.style['background-attachment'] = 'fixed';
-    window.onresize = trianglify;
-  }
 });
 
 angular.module('faomaintenanceApp', [
@@ -87,7 +70,8 @@ angular.module('faomaintenanceApp', [
       $httpProvider.interceptors.push(['$q', '$rootScope', function ($q, $rootScope) {
         return {
           request: function (config) {
-            if (($rootScope.currentUser === undefined || $rootScope.currentUser.info === undefined) && /(?:[^:]+:)?\/\/[^:\/]+(?::\d+)?\/api\/(?!auth\/)/.test(config.url)) {
+            if (($rootScope.currentUser === undefined || $rootScope.currentUser.info === undefined) &&
+              /(?:[^:]+:)?\/\/[^:\/]+(?::\d+)?\/api\/(?!auth|client\/)/.test(config.url)) {
               return $q.reject('Unauthentified API call');
             }
 
@@ -174,6 +158,10 @@ angular.module('faomaintenanceApp', [
           templateUrl: 'components/administration/certificates/certificates.html',
           controller: 'CertificatesCtrl'
         })
+        .when('/administration/client', {
+          templateUrl: 'components/administration/client/client_management.html',
+          controller: 'ClientMgmtCtrl'
+        })
         .when('/administration/sites', {
           templateUrl: 'components/administration/sites/sites_administration.html',
           controller: 'SitesAdministrationCtrl'
@@ -209,11 +197,21 @@ angular.module('faomaintenanceApp', [
   .directive('stSelectDistinct', ['$parse', require('./directives/stSelectDistinct.js')])
   .directive('stSelectDate', ['dateFilter', require('./directives/stSelectDate.js')])
   .directive('hoverState', ['$parse', require('./directives/hoverState.js')])
+  .directive('deferredCloak', function () {
+    return {
+      restrict: 'A',
+      link: function (scope, element, attrs) {
+        attrs.$set('deferredCloak', undefined);
+        element.removeClass('deferred-cloak');
+      }
+    };
+  })
   .factory('ApiSvc', ['$http', '$q', require('./services/ApiSvc.js')])
   .factory('AdminSvc', ['$http', '$q', 'ApiSvc', require('./services/AdminSvc.js')])
   .factory('AuthSvc', ['$http', '$q', '$cookies', 'ApiSvc', require('./services/AuthSvc.js')])
-  .factory('EmployeesNotesSvc', ['ApiSvc', 'dateFilter', require('./services/EmployeesNotesSvc.js')])
+  .factory('ClientSvc', ['$q', '$http', 'ApiSvc', require('./services/ClientSvc.js')])
   .factory('DataSvc', ['$http', '$q', 'ApiSvc', '$filter', require('./services/DataSvc.js')])
+  .factory('EmployeesNotesSvc', ['ApiSvc', 'dateFilter', require('./services/EmployeesNotesSvc.js')])
   .factory('TrainingsSvc', ['ApiSvc', require('./services/TrainingsSvc.js')])
   .factory('UpdateSvc', ['$http', '$q', 'ApiSvc', require('./services/UpdateSvc.js')])
 
@@ -221,31 +219,32 @@ angular.module('faomaintenanceApp', [
   .controller('CertificatesCtrl', ['$scope', 'UpdateSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
     require('./components/administration/certificates/CertificatesCtrl.js')
   ])
+  .controller('ClientMgmtCtrl', ['$scope', '$route', 'ClientSvc', 'BusySvc', 'ngDialog', require('./components/administration/client/ClientMgmtCtrl.js')])
   .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc', 'NgTableParams',
     require('./components/employees/EmployeeCtrl.js')
   ])
-  .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/employees/EmployeesCtrl.js')])
+  .controller('EmployeesCtrl', ['$scope', '$location', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', 'ClientSvc', require('./components/employees/EmployeesCtrl.js')])
   .controller('HomeCtrl', ['$scope', 'ngDialog', 'BusySvc', require('./components/home/HomeCtrl.js')])
-  .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', require('./components/index/IndexCtrl.js')])
+  .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', 'ClientSvc', require('./components/index/IndexCtrl.js')])
   .controller('LoginCtrl', ['$scope', '$rootScope', '$route', 'AuthSvc', 'BusySvc', require('./components/index/LoginCtrl.js')])
   .controller('RolesManagementCtrl', ['$rootScope', '$scope', '$route', '$routeParams', 'BusySvc', 'DataSvc', 'AdminSvc', 'ngDialog',
     require('./components/administration/users/RolesManagementCtrl.js')
   ])
-  .controller('SiteCtrl', ['$scope', '$routeParams', '$location', '$route', 'DataSvc', 'BusySvc', 'ngDialog', 'UpdateSvc', 'NgTableParams',
+  .controller('SiteCtrl', ['$scope', '$routeParams', '$location', '$route', 'DataSvc', 'BusySvc', 'ngDialog', 'UpdateSvc', 'NgTableParams', 'ClientSvc',
     require('./components/sites/SiteCtrl.js')
   ])
   .controller('SiteStatsCtrl', ['$scope', '$routeParams', 'DataSvc', 'BusySvc', require('./components/sites/SiteStatsCtrl.js')])
-  .controller('SitesCtrl', ['$scope', '$location', '$cookies', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/sites/SitesCtrl.js')])
+  .controller('SitesCtrl', ['$scope', '$location', '$cookies', 'DataSvc', 'BusySvc', 'NgTableParams', 'ngDialog', 'ClientSvc', require('./components/sites/SitesCtrl.js')])
   .controller('SitesAdministrationCtrl', ['$scope', 'DataSvc', 'ngDialog', '$route', 'BusySvc', 'UpdateSvc', 'NgTableParams',
     require('./components/administration/sites/SitesAdministrationCtrl.js')
   ])
   .controller('TrainerProfilesCtrl', ['$scope', 'AdminSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
     require('./components/administration/users/TrainerProfilesCtrl.js')
   ])
-  .controller('TrainingCtrl', ['$scope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'BusySvc', 'dateFilter', 'NgTableParams',
+  .controller('TrainingCtrl', ['$scope', '$routeParams', 'DataSvc', 'TrainingsSvc', '$location', 'ngDialog', 'BusySvc', 'dateFilter', 'NgTableParams', 'ClientSvc',
     require('./components/trainings/TrainingCtrl.js')
   ])
-  .controller('TrainingsCtrl', ['$scope', 'DataSvc', '$location', 'BusySvc', 'NgTableParams', 'ngDialog', require('./components/trainings/TrainingsCtrl.js')])
+  .controller('TrainingsCtrl', ['$scope', 'DataSvc', '$location', 'BusySvc', 'NgTableParams', 'ngDialog', 'ClientSvc', require('./components/trainings/TrainingsCtrl.js')])
   .controller('TrainingCompletionCtrl', ['$scope', '$routeParams', 'DataSvc', '$location', 'ngDialog', 'TrainingsSvc', 'BusySvc', 'dateFilter', 'NgTableParams',
     require('./components/trainings/TrainingCompletionCtrl.js')
   ])

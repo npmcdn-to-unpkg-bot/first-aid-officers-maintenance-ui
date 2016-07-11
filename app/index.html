@@ -1,21 +1,54 @@
 <!DOCTYPE html>
-<html lang="fr" ng-app="faomaintenanceApp">
+<html lang="fr" ng-app="faomaintenanceApp" ng-controller="IndexCtrl">
 
     <head>
         <meta charset="utf-8">
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/trianglify/0.4.0/trianglify.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="//npmcdn.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
         <script type="text/javascript" src="bundle.js" async></script>
-        <link rel="stylesheet" type="text/css" href="main.css" />
-        <title>Gestion des Formations Sécurité</title>
+        <title ng-bind="'Orca &mdash; ' + clientInfo.clnt_name">Orca</title>
         <link rel="shortcut icon" href="./img/favicon.ico" />
     </head>
 
-    <body ng-controller="IndexCtrl">
+    <body>
+        <script type="text/javascript">
+        // Create ripple effect after logo has loaded
+        $('#orca_logo').imagesLoaded(function() {
+            $('#ripple_container').append($('<div />', {
+                "class": 'circle'
+            }));
+        });
+
+        // Create background
+        function trianglify() {
+            /*jshint camelcase: false*/
+            var pattern = new Trianglify({
+                width: window.innerWidth,
+                height: window.innerHeight,
+                x_colors: 'Blues'
+            });
+
+            document.body.style['background-image'] = 'url(' + pattern.png() + ')';
+        }
+
+        if (screen.width > 768) {
+            trianglify();
+            document.body.style['background-attachment'] = 'fixed';
+            window.onresize = trianglify;
+        }
+        </script>
+
+        <div class="absolute-center" id="ripple_container"></div>
+        <div class="absolute-center" ng-hide="clientInfo.clnt_name" id="orca_logo">
+            <img src="./img/logo_complete.png">
+        </div>
         <div ng-include="'./components/index/alerts.html'"></div>
-        <div class="container">
+        <div class="container" deferred-cloak ng-show="clientInfo.clnt_name">
             <header>
                 <div class="row top-panel" id="top-panel">
                     <div class="col-md-4 col-md-offset-4 col-sm-6">
-                        <a href="#/home" class="logo"><img src="./img/logo.png" alt="Pole emploi" /></a>
+                        <a href="#/home" class="logo"><img ng-src="{{clientInfo.clnt_logo}}" alt="Logo {{clientInfo.clnt_name}}" /></a>
                     </div>
                     <div class="col-md-4 col-sm-6 connection-status">
                         <div ng-if="userInfo"><span ng-bind="'Connect&eacute;(e) en tant que'"></span> <span class="text-primary" ng-bind="userInfo.empl_firstname + ' ' + userInfo.empl_surname"></span>
@@ -31,7 +64,7 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#/home">Formations S&eacute;curit&eacute;</a>
+                            <a class="navbar-brand" href="#/home">Orca</a>
                         </div>
                         <div ng-include="'./components/index/navbar.html'" ng-if="currentUser.info"></div>
                     </div>
@@ -42,16 +75,18 @@
                     <div ng-view autoscroll="true"></div>
                 </busy>
             </div>
-            <footer>
-                <br />
-                <p>
-                    Gestion des formations s&eacute;curit&eacute; - <span class="version">version 1.5.1-RC3</span> - P&ocirc;le emploi IDF
-                    <span class="pull-right">&copy; 2014-<span ng-bind="today | date: 'yyyy'"></span> NCLS&nbsp;Development<span class="text-danger">&nbsp;|&nbsp;</span>
-                    <a href="mailto:nclsdevelopment@gmail.com?subject=Enquiry about {{title}} at {{whereami}}" class="contact-us">nous contacter</a>
-                    </span>
-                </p>
+            <footer class="row">
+                <div class="col-md-6">
+                    <div>Orca<span class="text-danger">&nbsp;|&nbsp;</span><span class="version">version 1.5.2-RC1</span></div>
+                    <div>{{clientInfo.clnt_name}}<span class="text-danger">&nbsp;|&nbsp;</span><a href="mailto:{{clientInfo.clnt_mailto}}" class="contact-us">contacter un administrateur</a></div>
+                </div>
+                <div class="col-md-6 text-right">
+                    <div>&copy; 2014-{{today | date: 'yyyy'}}<span class="text-danger">&nbsp;|&nbsp;</span><span class="version">NCLS&nbsp;Development</span></div>
+                    <div><a href="mailto:ericnicolas2+bo02btdqffcf6ehyura0@boards.trello.com" class="contact-us">Sugg&eacute;rer une am&eacute;lioration</a></div>
+                </div>
             </footer>
         </div>
+        <link rel="stylesheet" type="text/css" href="main.css" />
     </body>
 
 </html>

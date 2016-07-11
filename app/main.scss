@@ -31,6 +31,17 @@ $screen-xs: 768px;
     }
 }
 
+[deferred-cloak],
+[data-deferred-cloak],
+[x-deferred-cloak],
+.deferred-cloak {
+    display: none;
+}
+
+h1 .sub {
+    font-size: 30px;
+}
+
 .text-muted {
     color: #BDBDBD;
 }

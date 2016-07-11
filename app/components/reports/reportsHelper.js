@@ -7,7 +7,6 @@ var moment = require('moment');
 var pdfmake = require('pdfmake');
 var filesaverjs = require('filesaverjs');
 var XLSX = require('xlsx-browerify-shim');
-var imgs64 = require('../../img/imgs64.js');
 
 var styles = {
   'title': { fontSize: 16, color: 'black' },
@@ -51,14 +50,14 @@ function center(content) {
   return { columns: [{ width: '*', text: '' }, _.extend({ width: 'auto' }, content), { width: '*', text: '' }] };
 }
 
-function header(currentPage, pageCount, title, subtitle, dateStr) {
+function header(currentPage, pageCount, logo, title, subtitle, dateStr) {
   return {
     table: {
       widths: ['*', '*', '*'],
       body: [
         [
           { text: title, style: ['title', 'primary'] },
-          { image: imgs64.logo, alignment: 'center', width: 150, margin: [0, -10, 0, 0] },
+          { image: logo, alignment: 'center', fit: [160, 500], margin: [0, 0, 0, 0] },
           { text: [{ text: dateStr ? dateStr : moment().format('dddd Do MMMM YYYY'), style: 'primary' }, { text: '\n' + subtitle }], alignment: 'right' }
         ]
       ]

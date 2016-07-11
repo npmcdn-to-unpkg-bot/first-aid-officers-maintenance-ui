@@ -89,6 +89,7 @@
     "ccjmne-busy": "^0.9.1-BETA",
     "d3": "^3.5.16",
     "filesaverjs": "^0.2.2",
+    "jquery": "^2.2.4",
     "lodash": "^4.6.0",
     "lz-string": "^1.4.4",
     "moment": "^2.13.0",

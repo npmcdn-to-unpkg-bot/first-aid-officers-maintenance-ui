@@ -7,23 +7,15 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="https://npmcdn.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
         <script type="text/javascript" src="bundle.js" async></script>
-        <link rel="stylesheet" type="text/css" href="main.css" />
         <title ng-bind="'Orca &mdash; ' + clientInfo.clnt_name">Orca</title>
         <link rel="shortcut icon" href="./img/favicon.ico" />
     </head>
 
     <body>
         <script type="text/javascript">
-        // Initialise Bootstrap Material Design
-        $(function() {
-            $.material.init({
-                validate: false
-            });
-        });
-
         // Create ripple effect after logo has loaded
         $('#orca_logo').imagesLoaded(function() {
-            $('#lolz').append($('<div />', {
+            $('#ripple_container').append($('<div />', {
                 "class": 'circle'
             }));
         });
@@ -47,9 +39,7 @@
         }
         </script>
 
-        <div class="absolute-center" id="lolz">
-            <!-- <div class="circle"></div> -->
-        </div>
+        <div class="absolute-center" id="ripple_container"></div>
         <div class="absolute-center" ng-hide="clientInfo.clnt_name" id="orca_logo">
             <img src="./img/logo_complete.png">
         </div>
@@ -96,6 +86,7 @@
                 </div>
             </footer>
         </div>
+        <link rel="stylesheet" type="text/css" href="main.css" />
     </body>
 
 </html>

@@ -57,7 +57,7 @@ function header(currentPage, pageCount, logo, title, subtitle, dateStr) {
       body: [
         [
           { text: title, style: ['title', 'primary'] },
-          { image: logo, alignment: 'center', width: 150, margin: [0, 0, 0, 0] },
+          { image: logo, alignment: 'center', fit: [160, 500], margin: [0, 0, 0, 0] },
           { text: [{ text: dateStr ? dateStr : moment().format('dddd Do MMMM YYYY'), style: 'primary' }, { text: '\n' + subtitle }], alignment: 'right' }
         ]
       ]

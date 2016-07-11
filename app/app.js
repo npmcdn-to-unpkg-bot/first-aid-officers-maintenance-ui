@@ -1,5 +1,6 @@
 'use strict';
 
+var $ = window.jQuery = require('jquery');
 var angular = require('angular');
 var _ = require('lodash');
 require('angular-bootstrap-templates');
@@ -10,6 +11,13 @@ require('bootstrap-switch');
 require('moment-fr');
 require('ng-table');
 require('../lib/jquery-ui.min.js');
+
+// Initialise Bootstrap Material Design
+$(function () {
+  $.material.init({
+    validate: false
+  });
+});
 
 angular.module('faomaintenanceApp', [
     require('angular-cookies'),

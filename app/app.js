@@ -11,7 +11,6 @@ require('bootstrap-switch');
 require('moment-fr');
 require('ng-table');
 require('../lib/jquery-ui.min.js');
-var Trianglify = require('trianglify');
 
 $(function () {
   $.material.init({

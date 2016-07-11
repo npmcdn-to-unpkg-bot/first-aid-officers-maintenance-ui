@@ -1,7 +1,6 @@
 'use strict';
 
 function toDataUrl(src, callback, outputFormat) {
-  // Create an Image object
   var img = new Image();
   // Add CORS approval to prevent a tainted canvas
   img.crossOrigin = 'Anonymous';
@@ -24,12 +23,12 @@ function toDataUrl(src, callback, outputFormat) {
   if (img.complete || img.complete === undefined) {
     // Flush cache
     img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
-    // Try again
     img.src = src;
   }
 }
 
 module.exports = function ($q, $http, apiSvc) {
+  /*jshint camelcase: false*/
   return {
     getClientInfo: function () {
       return apiSvc.get(apiSvc.clientEndpoint).then(function (info) {
@@ -40,7 +39,6 @@ module.exports = function ($q, $http, apiSvc) {
     getBase64Logo: function () {
       var defer = $q.defer();
       apiSvc.get(apiSvc.clientEndpoint).then(function (info) {
-        /*jshint camelcase: false*/
         toDataUrl(info.clnt_logo, function (base64Img) {
           defer.resolve(base64Img);
         });
@@ -63,7 +61,6 @@ module.exports = function ($q, $http, apiSvc) {
       }).success(function () { deferred.resolve(); }).error(function () { deferred.reject(); });
 
       return deferred.promise;
-      //return apiSvc.post(apiSvc.clientEndpoint, formData, { headers: { 'Content-Type': undefined }, transformRequest: angular.identity });
     }
   };
 };

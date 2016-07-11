@@ -31,14 +31,20 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
   $rootScope.$on('clientUpdate', updateClientInfo);
 
   $rootScope._alerts = [];
-  $rootScope.$on('alert', function (event, alert) { $rootScope._alerts.push(_.extend(alert, { id: (_.maxBy($rootScope._alerts, 'id') || { id: 0 }).id + 1 })); });
+  $rootScope.$on('alert', function (event, alert) {
+    $rootScope._alerts.push(_.extend(alert, { id: (_.maxBy($rootScope._alerts, 'id') || { id: 0 }).id + 1 }));
+    $scope.$digest();
+  });
   $rootScope.$on('error', function () {
     $rootScope._alerts.push({
       type: 'danger',
-      msg: 'Une erreur est survenue. Merci de bien vouloir r&eacute;essayer ult&eacute;rieurement.\nSi le probl&egrave;me persiste, contactez un administrateur de la solution.',
+      msg: 'Une erreur est survenue. Merci de bien vouloir r&eacute;essayer ult&eacute;rieurement.\n' +
+        'Si le probl&egrave;me persiste, <a href="mailto:' + $scope.clientInfo.clnt_mailto + '">contactez un administrateur</a> de la solution.',
       static: true,
       id: (_.maxBy($rootScope._alerts, 'id') || { id: 0 }).id + 1
     });
+
+    $scope.$digest();
   });
 
   $rootScope.hasRole = function (role) {

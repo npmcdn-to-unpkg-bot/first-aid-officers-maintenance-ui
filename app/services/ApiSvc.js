@@ -18,6 +18,7 @@ module.exports = function ($http, $q) {
   apiSvc.adminEndpoint = apiSvc.apiBaseUrl + 'admin/';
   apiSvc.accountEndpoint = apiSvc.apiBaseUrl + 'account/';
   apiSvc.certificatesEndpoint = apiSvc.apiBaseUrl + 'certificates/';
+  apiSvc.clientEndpoint = apiSvc.apiBaseUrl + 'client/';
   apiSvc.employeesNotesEndpoint = apiSvc.apiBaseUrl + 'employees-notes/';
   apiSvc.resourcesEndpoint = apiSvc.apiBaseUrl + 'resources/';
   apiSvc.resourcesByKeysEndpoint = apiSvc.apiBaseUrl + 'resources-by-keys/';

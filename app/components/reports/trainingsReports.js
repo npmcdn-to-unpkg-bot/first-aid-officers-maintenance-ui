@@ -220,7 +220,7 @@ module.exports = {
       info: metadata,
       pageSize: format.format,
       pageOrientation: format.orientation,
-      header: _.partialRight(reportsHelper.header, trng.type.trty_name, _.unescape(trng.trng_outcome === 'COMPLETED' ? 'Proc&egrave;s Verbal' :
+      header: _.partialRight(reportsHelper.header, metadata.logo, trng.type.trty_name, _.unescape(trng.trng_outcome === 'COMPLETED' ? 'Proc&egrave;s Verbal' :
         'Feuille d\'&eacute;margement'), trng.displayDate),
       footer: _.partialRight(reportsHelper.footer, url)
     }, [trainingOverview(trng, trng.trng_outcome === 'COMPLETED'), employeesTable(trainees, trng.trng_outcome === 'COMPLETED')]);
@@ -235,7 +235,7 @@ module.exports = {
       info: metadata,
       pageSize: format.format,
       pageOrientation: format.orientation,
-      header: _.partialRight(reportsHelper.header, 'Extraction des Formations', '')
+      header: _.partialRight(reportsHelper.header, metadata.logo, 'Extraction des Formations', '')
     }, content);
   },
   generateXLSX: function (columns, data) {

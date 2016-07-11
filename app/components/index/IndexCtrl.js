@@ -3,11 +3,12 @@
 var _ = require('lodash');
 /*jshint camelcase: false*/
 
-module.exports = function ($rootScope, $scope, $document, $location, ngDialog, dataSvc) {
+module.exports = function ($rootScope, $scope, $document, $location, ngDialog, dataSvc, clientSvc) {
   $scope.whereami = $location.host();
   $scope.title = $document[0].title;
   $scope.today = new Date();
   $scope.navbar = {};
+  $scope.clientInfo = {};
 
   $scope.closeAlert = function (alert) {
     if ($rootScope._alerts.indexOf(alert) > -1) {
@@ -22,6 +23,10 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
   $rootScope.getUserInfo = function () {
     return $rootScope.currentUser.info;
   };
+
+  clientSvc.getClientInfo().then(function (info) {
+    $scope.clientInfo = info;
+  });
 
   $rootScope._alerts = [];
   $rootScope.$on('alert', function (event, alert) { $rootScope._alerts.push(_.extend(alert, { id: (_.maxBy($rootScope._alerts, 'id') || { id: 0 }).id + 1 })); });

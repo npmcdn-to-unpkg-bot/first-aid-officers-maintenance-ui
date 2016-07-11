@@ -32,6 +32,32 @@ body {
     color: #e6e6e6
 }
 
+.absolute-center {
+    pointer-events: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    .circle {
+        z-index: -1;
+        border-radius: 50%;
+        width: 500px;
+        height: 500px;
+        transform: translate(-250px, -250px);
+        background-color: white;
+        animation: expand 2s forwards;
+        @keyframes expand {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(10);
+                opacity: 0;
+            }
+        }
+    }
+}
+
 .alerts-container {
     position: fixed;
     z-index: 10001;

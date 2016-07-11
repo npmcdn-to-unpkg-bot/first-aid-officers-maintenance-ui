@@ -33,10 +33,10 @@
 
         <div class="pre-loaded" deferred-uncloak>
             <div class="circle"></div>
-            <img src="//s3-eu-west-1.amazonaws.com/orca-resources/logo_complete_small.png">
+            <img src="./img/logo_complete.png">
         </div>
         <div ng-include="'./components/index/alerts.html'"></div>
-        <div class="container" deferred-cloak>
+        <div class="container" deferred-cloak ng-if="clientInfo.clnt_name">
             <header>
                 <div class="row top-panel" id="top-panel">
                     <div class="col-md-4 col-md-offset-4 col-sm-6">

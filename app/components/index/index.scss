@@ -23,12 +23,39 @@ body {
     margin: 0px;
     text-align: center;
     .logo img {
-        height: 80px;
+        max-height: 80px;
+        max-width: 250px;
     }
 }
 
 .version {
     color: #e6e6e6
+}
+
+.absolute-center {
+    pointer-events: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    .circle {
+        z-index: -1;
+        border-radius: 50%;
+        width: 500px;
+        height: 500px;
+        transform: translate(-250px, -250px);
+        background-color: white;
+        animation: expand 2s forwards;
+        @keyframes expand {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(10);
+                opacity: 0;
+            }
+        }
+    }
 }
 
 .alerts-container {
@@ -60,7 +87,7 @@ body {
 }
 
 .connection-status {
-    margin: 14px 0 0 0;
+    margin-top: 7px;
     .btn {
         margin: 10px 1px 0 1px;
     }
@@ -81,6 +108,10 @@ header {
     .navbar {
         margin: 0 !important;
     }
+}
+
+footer {
+    padding: 20px 10px;
 }
 
 // AdBlock hides .alert.alert-warning

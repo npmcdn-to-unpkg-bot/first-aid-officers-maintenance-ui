@@ -160,7 +160,7 @@ module.exports = {
       info: metadata,
       pageSize: format.format,
       pageOrientation: format.orientation,
-      header: _.partialRight(reportsHelper.header, site.site_name, 'Tableau de bord'),
+      header: _.partialRight(reportsHelper.header, metadata.logo, site.site_name, 'Tableau de bord'),
       footer: _.partialRight(reportsHelper.footer, url),
     }, [reportsHelper.center(dashboard(site, columns, certificates)), reportsHelper.center(_.map(_.filter(certificates, 'checked'), _.partial(employeesList, employees)))]);
   },
@@ -174,7 +174,7 @@ module.exports = {
       info: metadata,
       pageSize: format.format,
       pageOrientation: format.orientation,
-      header: _.partialRight(reportsHelper.header, 'Extraction des Sites', '')
+      header: _.partialRight(reportsHelper.header, metadata.logo, 'Extraction des Sites', '')
     }, content);
   },
   generateXLSX: function (columns, data) {

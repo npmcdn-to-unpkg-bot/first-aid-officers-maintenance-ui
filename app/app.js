@@ -17,23 +17,6 @@ $(function () {
   $.material.init({
     validate: false
   });
-
-  function trianglify() {
-    /*jshint camelcase: false*/
-    var pattern = new Trianglify({
-      width: window.innerWidth,
-      height: window.innerHeight,
-      x_colors: 'Blues'
-    });
-
-    document.body.style['background-image'] = 'url(' + pattern.png() + ')';
-  }
-
-  if (screen.width > 768) {
-    trianglify();
-    document.body.style['background-attachment'] = 'fixed';
-    window.onresize = trianglify;
-  }
 });
 
 angular.module('faomaintenanceApp', [

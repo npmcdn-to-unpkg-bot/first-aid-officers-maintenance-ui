@@ -29,10 +29,13 @@ function toDataUrl(src, callback, outputFormat) {
   }
 }
 
-module.exports = function ($q, apiSvc) {
+module.exports = function ($q, $http, apiSvc) {
   return {
     getClientInfo: function () {
-      return apiSvc.get(apiSvc.clientEndpoint);
+      return apiSvc.get(apiSvc.clientEndpoint).then(function (info) {
+        info.clnt_logo = info.clnt_logo + '?' + new Date().getTime();
+        return info;
+      });
     },
     getBase64Logo: function () {
       var defer = $q.defer();
@@ -46,6 +49,21 @@ module.exports = function ($q, apiSvc) {
       });
 
       return defer.promise;
+    },
+    updateClientInfo: function (info) {
+      return apiSvc.put(apiSvc.clientEndpoint, info);
+    },
+    uploadLogo: function (file) {
+      var deferred = $q.defer();
+      var formData = new FormData();
+      formData.append('file', file);
+      $http.post(apiSvc.clientEndpoint, formData, {
+        transformRequest: undefined,
+        headers: { 'Content-Type': undefined }
+      }).success(function () { deferred.resolve(); }).error(function () { deferred.reject(); });
+
+      return deferred.promise;
+      //return apiSvc.post(apiSvc.clientEndpoint, formData, { headers: { 'Content-Type': undefined }, transformRequest: angular.identity });
     }
   };
 };

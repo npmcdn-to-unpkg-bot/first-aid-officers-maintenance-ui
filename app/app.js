@@ -1,6 +1,5 @@
 'use strict';
 
-var $ = window.jQuery = require('jquery');
 var angular = require('angular');
 var _ = require('lodash');
 require('angular-bootstrap-templates');
@@ -11,12 +10,6 @@ require('bootstrap-switch');
 require('moment-fr');
 require('ng-table');
 require('../lib/jquery-ui.min.js');
-
-$(function () {
-  $.material.init({
-    validate: false
-  });
-});
 
 angular.module('faomaintenanceApp', [
     require('angular-cookies'),
@@ -157,6 +150,10 @@ angular.module('faomaintenanceApp', [
           templateUrl: 'components/administration/certificates/certificates.html',
           controller: 'CertificatesCtrl'
         })
+        .when('/administration/client', {
+          templateUrl: 'components/administration/client/client_management.html',
+          controller: 'ClientMgmtCtrl'
+        })
         .when('/administration/sites', {
           templateUrl: 'components/administration/sites/sites_administration.html',
           controller: 'SitesAdministrationCtrl'
@@ -201,19 +198,10 @@ angular.module('faomaintenanceApp', [
       }
     };
   })
-  .directive('deferredUncloak', function () {
-    return {
-      restrict: 'A',
-      link: function (scope, element, attrs) {
-        attrs.$set('deferredCloak', true);
-        element.addClass('deferred-cloak');
-      }
-    };
-  })
   .factory('ApiSvc', ['$http', '$q', require('./services/ApiSvc.js')])
   .factory('AdminSvc', ['$http', '$q', 'ApiSvc', require('./services/AdminSvc.js')])
   .factory('AuthSvc', ['$http', '$q', '$cookies', 'ApiSvc', require('./services/AuthSvc.js')])
-  .factory('ClientSvc', ['$q', 'ApiSvc', require('./services/ClientSvc.js')])
+  .factory('ClientSvc', ['$q', '$http', 'ApiSvc', require('./services/ClientSvc.js')])
   .factory('DataSvc', ['$http', '$q', 'ApiSvc', '$filter', require('./services/DataSvc.js')])
   .factory('EmployeesNotesSvc', ['ApiSvc', 'dateFilter', require('./services/EmployeesNotesSvc.js')])
   .factory('TrainingsSvc', ['ApiSvc', require('./services/TrainingsSvc.js')])
@@ -223,6 +211,7 @@ angular.module('faomaintenanceApp', [
   .controller('CertificatesCtrl', ['$scope', 'UpdateSvc', 'DataSvc', 'BusySvc', 'ngDialog', '$route',
     require('./components/administration/certificates/CertificatesCtrl.js')
   ])
+  .controller('ClientMgmtCtrl', ['$scope', '$route', 'ClientSvc', 'BusySvc', 'ngDialog', require('./components/administration/client/ClientMgmtCtrl.js')])
   .controller('EmployeeCtrl', ['$rootScope', '$scope', '$routeParams', 'DataSvc', '$location', 'ngDialog', '$route', 'BusySvc', 'EmployeesNotesSvc', 'NgTableParams',
     require('./components/employees/EmployeeCtrl.js')
   ])

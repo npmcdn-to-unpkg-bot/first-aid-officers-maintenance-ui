@@ -22,9 +22,13 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
     return $rootScope.currentUser.info;
   };
 
-  clientSvc.getClientInfo().then(function (info) {
-    $scope.clientInfo = info;
-  });
+  function updateClientInfo() {
+    clientSvc.getClientInfo().then(function (info) {
+      $scope.clientInfo = info;
+    });
+  }
+  updateClientInfo();
+  $rootScope.$on('clientUpdate', updateClientInfo);
 
   $rootScope._alerts = [];
   $rootScope.$on('alert', function (event, alert) { $rootScope._alerts.push(_.extend(alert, { id: (_.maxBy($rootScope._alerts, 'id') || { id: 0 }).id + 1 })); });

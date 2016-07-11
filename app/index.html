@@ -4,6 +4,8 @@
     <head>
         <meta charset="utf-8">
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/trianglify/0.4.0/trianglify.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="https://npmcdn.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
         <script type="text/javascript" src="bundle.js" async></script>
         <link rel="stylesheet" type="text/css" href="main.css" />
         <title ng-bind="'Orca &mdash; ' + clientInfo.clnt_name">Orca</title>
@@ -11,8 +13,22 @@
     </head>
 
     <body>
-
         <script type="text/javascript">
+        // Initialise Bootstrap Material Design
+        $(function() {
+            $.material.init({
+                validate: false
+            });
+        });
+
+        // Create ripple effect after logo has loaded
+        $('#orca_logo').imagesLoaded(function() {
+            $('#lolz').append($('<div />', {
+                "class": 'circle'
+            }));
+        });
+
+        // Create background
         function trianglify() {
             /*jshint camelcase: false*/
             var pattern = new Trianglify({
@@ -31,10 +47,10 @@
         }
         </script>
 
-        <div class="absolute-center">
-            <div class="circle"></div>
+        <div class="absolute-center" id="lolz">
+            <!-- <div class="circle"></div> -->
         </div>
-        <div class="absolute-center" ng-hide="clientInfo.clnt_name">
+        <div class="absolute-center" ng-hide="clientInfo.clnt_name" id="orca_logo">
             <img src="./img/logo_complete.png">
         </div>
         <div ng-include="'./components/index/alerts.html'"></div>
@@ -42,7 +58,7 @@
             <header>
                 <div class="row top-panel" id="top-panel">
                     <div class="col-md-4 col-md-offset-4 col-sm-6">
-                        <a href="#/home" class="logo"><img src="{{clientInfo.clnt_logo}}" alt="Logo ORCA" /></a>
+                        <a href="#/home" class="logo"><img ng-src="{{clientInfo.clnt_logo}}" alt="Logo {{clientInfo.clnt_name}}" /></a>
                     </div>
                     <div class="col-md-4 col-sm-6 connection-status">
                         <div ng-if="userInfo"><span ng-bind="'Connect&eacute;(e) en tant que'"></span> <span class="text-primary" ng-bind="userInfo.empl_firstname + ' ' + userInfo.empl_surname"></span>

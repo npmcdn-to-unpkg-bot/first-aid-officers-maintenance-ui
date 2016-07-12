@@ -9,6 +9,10 @@ body {
     color: darken(white, 10%);
 }
 
+.navbar .navbar-brand img {
+    width: 50px;
+}
+
 .navbar .uib-typeahead .dropdown-menu li>a {
     padding: 3px 20px;
     font-size: 14px;
@@ -30,6 +34,18 @@ body {
 
 .version {
     color: #e6e6e6
+}
+
+.container {
+    animation: fadein 2s forwards;
+    @keyframes fadein {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
 }
 
 .absolute-center {

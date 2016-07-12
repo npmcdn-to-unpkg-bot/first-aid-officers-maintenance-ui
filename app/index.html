@@ -7,7 +7,7 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="//npmcdn.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
         <script type="text/javascript" src="bundle.js" async></script>
-        <title ng-bind="'Orca &mdash; ' + clientInfo.clnt_name">Orca</title>
+        <title ng-bind="'Orca' + (ready ? '&nbsp;&mdash;&nbsp;' + clientInfo.clnt_name : '')">Orca</title>
         <link rel="shortcut icon" href="./img/favicon.ico" />
     </head>
 
@@ -40,11 +40,11 @@
         </script>
 
         <div class="absolute-center" id="ripple_container"></div>
-        <div class="absolute-center" ng-hide="clientInfo.clnt_name" id="orca_logo">
+        <div class="absolute-center" id="orca_logo" ng-hide="ready">
             <img src="./img/logo_complete.png">
         </div>
         <div ng-include="'./components/index/alerts.html'"></div>
-        <div class="container" deferred-cloak ng-show="clientInfo.clnt_name">
+        <div class="container" deferred-cloak ng-show="ready">
             <header>
                 <div class="row top-panel" id="top-panel">
                     <div class="col-md-4 col-md-offset-4 col-sm-6">
@@ -64,7 +64,7 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#/home">Orca</a>
+                            <a class="navbar-brand" href="#/home"><img src="./img/logo_minimalist.png"></a>
                         </div>
                         <div ng-include="'./components/index/navbar.html'" ng-if="currentUser.info"></div>
                     </div>

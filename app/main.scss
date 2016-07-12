@@ -4,6 +4,7 @@ $brand-success: #4caf50 !default;
 $brand-danger: #e51c23 !default;
 $brand-warning: #ff9800 !default;
 $brand-info: $brand-primary !default;
+$spinkit-spinner-color: $brand-primary !default;
 $screen-xs: 768px;
 // Bootstrap's CDN also includes relevant Glyphicons
 @import url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
@@ -36,10 +37,6 @@ $screen-xs: 768px;
 [x-deferred-cloak],
 .deferred-cloak {
     display: none;
-}
-
-h1 .sub {
-    font-size: 30px;
 }
 
 .text-muted {

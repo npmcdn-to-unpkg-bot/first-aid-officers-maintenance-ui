@@ -7,6 +7,11 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
   $scope.today = new Date();
   $scope.navbar = {};
   $scope.clientInfo = {};
+  setTimeout(function () {
+    // Let the loading animation last for a tad longer :)
+    $rootScope.ready = true;
+    $rootScope.$apply();
+  }, 1000);
 
   $scope.closeAlert = function (alert) {
     if ($rootScope._alerts.indexOf(alert) > -1) {

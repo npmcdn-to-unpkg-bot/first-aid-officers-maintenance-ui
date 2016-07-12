@@ -20,7 +20,7 @@
                 <!-- <busy busy-task="step1.readfile"> -->
                 <div class="form-group">
                     <div class="row">
-                        <label for="sheetName" class="col-xs-4 control-label">Libell&eacute; de la page</label>
+                        <label for="sheetName" class="col-xs-4 control-label">Libell&eacute; de l'onglet</label>
                         <div class="col-xs-8">
                             <select id="sheetName" class="form-control" ng-model="step1.sheetName" ng-options="sheetName for sheetName in step1.workbook.SheetNames"></select>
                         </div>
@@ -31,7 +31,7 @@
                         <label class="col-xs-4 control-label checkbox-label">Contient une ligne d'en-t&ecirc;te</label>
                         <div class="col-xs-8 checkbox">
                             <label>
-                                <input type="checkbox" ng-model="step1.header" />{{step1.header ? 'Oui' : 'Non'}}
+                                <input type="checkbox" ng-model="step1.header" ng-init="step1.header=true" />{{step1.header ? 'Oui' : 'Non'}}
                             </label>
                         </div>
                     </div>

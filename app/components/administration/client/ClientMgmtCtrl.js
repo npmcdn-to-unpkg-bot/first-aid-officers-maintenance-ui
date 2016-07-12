@@ -3,9 +3,11 @@
 var _ = require('lodash');
 
 module.exports = function ($scope, $route, clientSvc, busySvc, ngDialog) {
+  busySvc.busy('clientManagement');
   clientSvc.getClientInfo().then(function (info) {
     $scope.client = info;
-  }, _.partial($scope.$emit, 'error'));
+    busySvc.done('clientManagement');
+  }, _.partial(busySvc.done, 'clientManagement'));
 
   $scope.update = function () {
     ngDialog.openConfirm({

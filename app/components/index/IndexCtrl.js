@@ -29,7 +29,9 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
 
   function updateClientInfo() {
     clientSvc.getClientInfo().then(function (info) {
-      $scope.clientInfo = info;
+      $scope.clientInfo = _.extend(info, {
+        clnt_logo: info.clnt_logo + '?' + new Date().getTime()
+      });
     });
   }
   updateClientInfo();

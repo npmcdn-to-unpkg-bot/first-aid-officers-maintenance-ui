@@ -122,7 +122,7 @@ function coreSection(columns, data) {
 }
 
 module.exports = {
-  generatePDF: function (format, metadata, conditions, filters, columns, data, logo) {
+  generatePDF: function (format, metadata, conditions, filters, columns, data) {
     var content = [reportsHelper.center(coreSection(_.reject(_.filter(columns, 'show'), { id: 'button' }), data))];
     if (_.keys(filters).length || conditions.length) {
       content.splice(0, 0, reportsHelper.center(filtersSection(conditions, filters)));
@@ -132,7 +132,7 @@ module.exports = {
       info: metadata,
       pageSize: format.format,
       pageOrientation: format.orientation,
-      header: _.partialRight(reportsHelper.header, logo, 'Extraction des Agents', '')
+      header: _.partialRight(reportsHelper.header, metadata.logo, 'Extraction des Agents', '')
     }, content);
   },
   generateXLSX: function (columns, data) {

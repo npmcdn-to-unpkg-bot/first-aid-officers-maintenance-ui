@@ -57,13 +57,13 @@ function header(currentPage, pageCount, logo, title, subtitle, dateStr) {
       body: [
         [
           { text: title, style: ['title', 'primary'] },
-          { image: logo, alignment: 'center', fit: [160, 500], margin: [0, 0, 0, 0] },
+          { image: logo, alignment: 'center', fit: [120, 60], margin: [-10, 0, 0, 0] },
           { text: [{ text: dateStr ? dateStr : moment().format('dddd Do MMMM YYYY'), style: 'primary' }, { text: '\n' + subtitle }], alignment: 'right' }
         ]
       ]
     },
     layout: 'noBorders',
-    margin: [30, 20]
+    margin: [20, 10, 10, 10]
   };
 }
 
@@ -77,7 +77,7 @@ function footer(currentPage, pageCount, url) {
       text: ['page ', { text: currentPage.toString(), style: 'em' }, ' sur ', { text: pageCount.toString(), style: 'em' }],
       alignment: 'right'
     }],
-    margin: [20, 20, 20, 0]
+    margin: [10, 10, 10, 0]
   };
 }
 
@@ -137,7 +137,7 @@ module.exports = {
       defaultStyle: { color: 'grey' },
       header: header,
       footer: footer,
-      pageMargins: [40, 90, 40, 60],
+      pageMargins: [20, 80, 20, 50],
       content: content
     }, docProperties));
   },

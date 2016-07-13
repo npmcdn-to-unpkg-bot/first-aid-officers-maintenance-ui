@@ -31,10 +31,7 @@ module.exports = function ($q, $http, apiSvc) {
   /*jshint camelcase: false*/
   return {
     getClientInfo: function () {
-      return apiSvc.get(apiSvc.clientEndpoint).then(function (info) {
-        info.clnt_logo = info.clnt_logo + '?' + new Date().getTime();
-        return info;
-      });
+      return apiSvc.get(apiSvc.clientEndpoint);
     },
     getBase64Logo: function () {
       var defer = $q.defer();

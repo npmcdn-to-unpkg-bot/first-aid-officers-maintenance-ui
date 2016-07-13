@@ -66,7 +66,16 @@ function filtersSection(conditions, filters) {
 function coreSection(columns, data) {
   return {
     table: {
-      widths: _.map(columns, _.constant('auto')),
+      widths: _.map(columns, function (col) {
+        switch (col.id) {
+          case 'empl_firstname':
+          case 'empl_surname':
+          case 'site.site_name':
+            return '*';
+          default:
+            return 'auto';
+        }
+      }),
       body: [
         _.map(columns, function (col) {
           return { style: 'primary', alignment: 'center', text: _.unescape(col.title) };
@@ -122,8 +131,8 @@ function coreSection(columns, data) {
 }
 
 module.exports = {
-  generatePDF: function (format, metadata, conditions, filters, columns, data, logo) {
-    var content = [reportsHelper.center(coreSection(_.reject(_.filter(columns, 'show'), { id: 'button' }), data))];
+  generatePDF: function (format, metadata, conditions, filters, columns, data) {
+    var content = [reportsHelper.center(coreSection(_.reject(_.filter(columns, 'show'), { id: 'button' }), data), true)];
     if (_.keys(filters).length || conditions.length) {
       content.splice(0, 0, reportsHelper.center(filtersSection(conditions, filters)));
     }
@@ -132,7 +141,8 @@ module.exports = {
       info: metadata,
       pageSize: format.format,
       pageOrientation: format.orientation,
-      header: _.partialRight(reportsHelper.header, logo, 'Extraction des Agents', '')
+      header: _.partialRight(reportsHelper.header, metadata.logo, 'Extraction des Agents', ''),
+      footer: _.partialRight(reportsHelper.footer, metadata.url, metadata.mailto)
     }, content);
   },
   generateXLSX: function (columns, data) {

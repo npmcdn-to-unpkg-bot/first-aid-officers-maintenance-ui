@@ -7,6 +7,11 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
   $scope.today = new Date();
   $scope.navbar = {};
   $scope.clientInfo = {};
+  setTimeout(function () {
+    // Let the loading animation last for a tad longer :)
+    $rootScope.ready = true;
+    $rootScope.$apply();
+  }, 1000);
 
   $scope.closeAlert = function (alert) {
     if ($rootScope._alerts.indexOf(alert) > -1) {
@@ -24,7 +29,9 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
 
   function updateClientInfo() {
     clientSvc.getClientInfo().then(function (info) {
-      $scope.clientInfo = info;
+      $scope.clientInfo = _.extend(info, {
+        clnt_logo: info.clnt_logo + '?' + new Date().getTime()
+      });
     });
   }
   updateClientInfo();

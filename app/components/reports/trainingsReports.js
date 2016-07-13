@@ -93,7 +93,17 @@ function filtersSection(datesCondition, filters, types) {
 function coreSection(columns, data) {
   return {
     table: {
-      widths: _.map(columns, _.constant('auto')),
+      widths: _.map(columns, function (col) {
+        switch (col.id) {
+          case 'registered':
+          case 'validated':
+          case 'flunked':
+          case 'trng_outcome':
+            return 'auto';
+          default:
+            return '*';
+        }
+      }),
       body: [
         _.map(columns, function (col) {
           return { style: 'primary', alignment: 'center', text: _.unescape(col.title) };
@@ -215,18 +225,18 @@ function employeesTable(trainees, completed) {
 }
 
 module.exports = {
-  generateSignInSheet: function generateSignInSheet(format, metadata, url, trng, trainees) {
+  generateSignInSheet: function generateSignInSheet(format, metadata, trng, trainees) {
     return reportsHelper.generatePDF({
       info: metadata,
       pageSize: format.format,
       pageOrientation: format.orientation,
       header: _.partialRight(reportsHelper.header, metadata.logo, trng.type.trty_name, _.unescape(trng.trng_outcome === 'COMPLETED' ? 'Proc&egrave;s Verbal' :
         'Feuille d\'&eacute;margement'), trng.displayDate),
-      footer: _.partialRight(reportsHelper.footer, url)
+      footer: _.partialRight(reportsHelper.footer, metadata.url, metadata.mailto)
     }, [trainingOverview(trng, trng.trng_outcome === 'COMPLETED'), employeesTable(trainees, trng.trng_outcome === 'COMPLETED')]);
   },
   generatePDF: function (format, metadata, datesCondition, filters, types, columns, data) {
-    var content = [reportsHelper.center(coreSection(_(columns).filter('show').reject({ id: 'button' }).reject({ id: 'certs' }).value(), data))];
+    var content = [reportsHelper.center(coreSection(_(columns).filter('show').reject({ id: 'button' }).reject({ id: 'certs' }).value(), data), true)];
     if (datesCondition || types.length || _.keys(filters).length) {
       content.splice(0, 0, reportsHelper.center(filtersSection(datesCondition, _.values(filters), types)));
     }
@@ -235,7 +245,8 @@ module.exports = {
       info: metadata,
       pageSize: format.format,
       pageOrientation: format.orientation,
-      header: _.partialRight(reportsHelper.header, metadata.logo, 'Extraction des Formations', '')
+      header: _.partialRight(reportsHelper.header, metadata.logo, 'Extraction des Formations', ''),
+      footer: _.partialRight(reportsHelper.footer, metadata.url, metadata.mailto)
     }, content);
   },
   generateXLSX: function (columns, data) {

@@ -8,10 +8,40 @@ var pdfmake = require('pdfmake');
 var filesaverjs = require('filesaverjs');
 var XLSX = require('xlsx-browerify-shim');
 
+var logo64;
+(function (src, callback, outputFormat) {
+  var img = new Image();
+  // Add CORS approval to prevent a tainted canvas
+  img.crossOrigin = 'Anonymous';
+  img.onload = function () {
+    var canvas = document.createElement('CANVAS');
+    var ctx = canvas.getContext('2d');
+    var dataURL;
+    // Resize the canavas to the image dimensions
+    canvas.height = this.height;
+    canvas.width = this.width;
+    ctx.drawImage(this, 0, 0);
+    dataURL = canvas.toDataURL(outputFormat);
+    callback(dataURL);
+    // Mark for garbage collection
+    canvas = null;
+  };
+
+  img.src = src;
+  // make sure the load event fires for cached images too
+  if (img.complete || img.complete === undefined) {
+    // Flush cache
+    img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+    img.src = src;
+  }
+})('../img/logo_complete.png', function (data) {
+  logo64 = data;
+});
+
 var styles = {
-  'title': { fontSize: 16, color: 'black' },
+  'title': { fontSize: 14, color: 'black' },
   'em': { color: 'black' },
-  'table-header': { bold: true, fontSize: 13 },
+  'table-header': { fontSize: 12 },
   'link': { decoration: 'underline', color: '#337ab7' },
   'primary': { color: '#337ab7' },
   'success': { color: '#4caf50' },
@@ -38,7 +68,7 @@ var tableLayoutNoInnerLines = _.extend(_.clone(tableLayoutDefault), {
   hLineColor: _.constant(styles['primary'].color) // jshint ignore: line
 });
 
-function center(content) {
+function center(content, fill) {
   if (_.isArray(content)) {
     return {
       columns: _.flattenDeep([{ width: '*', text: '' }, _.map(content, function (entry) {
@@ -47,7 +77,7 @@ function center(content) {
     };
   }
 
-  return { columns: [{ width: '*', text: '' }, _.extend({ width: 'auto' }, content), { width: '*', text: '' }] };
+  return { columns: [{ width: fill ? 'auto' : '*', text: '' }, _.extend({ width: fill ? '*' : 'auto' }, content), { width: fill ? 'auto' : '*', text: '' }] };
 }
 
 function header(currentPage, pageCount, logo, title, subtitle, dateStr) {
@@ -57,28 +87,57 @@ function header(currentPage, pageCount, logo, title, subtitle, dateStr) {
       body: [
         [
           { text: title, style: ['title', 'primary'] },
-          { image: logo, alignment: 'center', fit: [160, 500], margin: [0, 0, 0, 0] },
-          { text: [{ text: dateStr ? dateStr : moment().format('dddd Do MMMM YYYY'), style: 'primary' }, { text: '\n' + subtitle }], alignment: 'right' }
+          { image: logo, alignment: 'center', fit: [120, 60], margin: [-15, 0, 0, 0] },
+          { text: [{ text: dateStr ? dateStr : moment().format('dddd Do MMMM YYYY'), style: ['title', 'primary'] }, { text: '\n' + subtitle }], alignment: 'right' }
         ]
       ]
     },
     layout: 'noBorders',
-    margin: [30, 20]
+    margin: [20, 15, 20, 10]
   };
 }
 
-function footer(currentPage, pageCount, url) {
-  return {
+function footer(currentPage, pageCount, url, mailto) {
+  return [{
+    table: {
+      widths: ['*', '*', 'auto', '*', '*'],
+      body: [
+        [
+          { text: '', rowSpan: 2 },
+          { text: '', margin: [0, 5, 0, 0] },
+          { image: logo64, fit: [70, 50], rowSpan: 2, margin: [10, 0, 10, 0] },
+          { text: '' },
+          { text: '', rowSpan: 2 }
+        ],
+        ['', '', {}, '', '']
+      ]
+    },
+    layout: {
+      hLineWidth: function (i) {
+        return i === 1 ? 1 : 0;
+      },
+      vLineWidth: _.constant(0),
+      hLineColor: _.constant('lightgrey') // jshint ignore: line
+    },
+    margin: [10, 10, 10, 10]
+  }, {
     columns: [{
+      width: 'auto',
+      text: url ? [{ text: 'Consulter en ligne', link: url, style: 'link' }] : ''
+    }, {
       width: '*',
-      text: url ? ['Consulter en ligne : ', { text: url, link: url, style: 'link' }] : ''
+      text: mailto ? [
+        'Adresser modifications à ',
+        { text: mailto, link: mailto, style: 'link' }
+      ] : '',
+      alignment: 'center'
     }, {
       width: 'auto',
       text: ['page ', { text: currentPage.toString(), style: 'em' }, ' sur ', { text: pageCount.toString(), style: 'em' }],
       alignment: 'right'
     }],
-    margin: [20, 20, 20, 0]
-  };
+    margin: [20, 0, 20, 0]
+  }];
 }
 
 function createSheet(columns, data, createCell) {
@@ -134,10 +193,10 @@ module.exports = {
   generatePDF: function (docProperties, content) {
     return pdfmake.createPdf(_.extend({
       styles: styles,
-      defaultStyle: { color: 'grey' },
+      defaultStyle: { color: 'grey', fontSize: 10 },
       header: header,
       footer: footer,
-      pageMargins: [40, 90, 40, 60],
+      pageMargins: [20, 80, 20, 75],
       content: content
     }, docProperties));
   },

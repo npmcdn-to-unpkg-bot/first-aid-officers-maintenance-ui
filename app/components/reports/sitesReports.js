@@ -47,7 +47,15 @@ function filtersSection(conditions, filters) {
 function coreSection(columns, data) {
   return {
     table: {
-      widths: _.map(columns, _.constant('auto')),
+      widths: _.map(columns, function (col) {
+        switch (col.id) {
+          case 'site_name':
+          case 'dept':
+            return '*';
+          default:
+            return 'auto';
+        }
+      }),
       body: [
         _.map(columns, function (col) {
           return { style: 'primary', alignment: 'center', text: _.unescape(col.title) };
@@ -155,17 +163,20 @@ function employeesList(employees, cert) {
 }
 
 module.exports = {
-  generateDashboard: function (format, metadata, url, site, employees, columns, certificates) {
+  generateDashboard: function (format, metadata, site, employees, columns, certificates) {
     return reportsHelper.generatePDF({
       info: metadata,
       pageSize: format.format,
       pageOrientation: format.orientation,
       header: _.partialRight(reportsHelper.header, metadata.logo, site.site_name, 'Tableau de bord'),
-      footer: _.partialRight(reportsHelper.footer, url),
-    }, [reportsHelper.center(dashboard(site, columns, certificates)), reportsHelper.center(_.map(_.filter(certificates, 'checked'), _.partial(employeesList, employees)))]);
+      footer: _.partialRight(reportsHelper.footer, metadata.url, metadata.mailto),
+    }, [
+      reportsHelper.center(dashboard(site, columns, certificates)),
+      reportsHelper.center(_.map(_.filter(certificates, 'checked'), _.partial(employeesList, employees)), true)
+    ]);
   },
   generatePDF: function (format, metadata, conditions, filters, columns, data) {
-    var content = [reportsHelper.center(coreSection(_.reject(_.filter(columns, 'show'), { id: 'button' }), data))];
+    var content = [reportsHelper.center(coreSection(_.reject(_.filter(columns, 'show'), { id: 'button' }), data), true)];
     if (_.keys(filters).length || conditions.length) {
       content.splice(0, 0, reportsHelper.center(filtersSection(conditions, filters)));
     }
@@ -174,7 +185,8 @@ module.exports = {
       info: metadata,
       pageSize: format.format,
       pageOrientation: format.orientation,
-      header: _.partialRight(reportsHelper.header, metadata.logo, 'Extraction des Sites', '')
+      header: _.partialRight(reportsHelper.header, metadata.logo, 'Extraction des Sites', ''),
+      footer: _.partialRight(reportsHelper.footer, metadata.url, metadata.mailto)
     }, content);
   },
   generateXLSX: function (columns, data) {

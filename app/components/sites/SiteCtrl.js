@@ -110,7 +110,7 @@ module.exports = function ($scope, $routeParams, $location, $route, dataSvc, bus
                 logo: logo,
                 url: $location.absUrl(),
                 mailto: info.clnt_mailto
-              }, $location.absUrl().substring(0, $location.absUrl().indexOf('?')), $scope.site, data, $scope.cols, _.keyBy($scope.certificates, 'cert_pk'))
+              }, $scope.site, data, $scope.cols, _.keyBy($scope.certificates, 'cert_pk'))
               .download(moment().format('YYYY-MM-DD') + ' - ' + $scope.site.site_name + '.pdf');
             busySvc.done('report');
             close();

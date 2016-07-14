@@ -32,6 +32,10 @@ $screen-xs: 768px;
     }
 }
 
+body {
+    visibility: visible !important;
+}
+
 [deferred-cloak],
 [data-deferred-cloak],
 [x-deferred-cloak],

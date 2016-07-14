@@ -25,7 +25,7 @@
     <div class="panel-footer text-center">
         <div ng-if="dept.dept_pk">
             <button type="submit" class="btn btn-primary" ng-disabled="!dept.dept_name || !dept.dept_id">Modifier</button>
-            <button type="button" ng-click="delete(closeThisDialog)" class="btn btn-danger">Supprimer</button>
+            <button type="button" ng-click="delete(closeThisDialog)" class="btn btn-danger">Supprimer d&eacute;partement</button>
         </div>
         <button ng-if="!dept.dept_pk" type="submit" class="btn btn-primary" ng-disabled="!dept.dept_name || !dept.dept_id">Cr&eacute;er</button>
     </div>

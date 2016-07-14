@@ -43,7 +43,7 @@
     <div class="panel-footer text-center">
         <div ng-if="site.site_pk">
             <button type="submit" class="btn btn-primary" ng-disabled="!site.new_pk || !site.site_name || !site.site_dept_fk">Modifier</button>
-            <button type="button" ng-click="delete(closeThisDialog)" class="btn btn-danger">Supprimer</button>
+            <button type="button" ng-click="delete(closeThisDialog)" class="btn btn-danger">Supprimer site</button>
         </div>
         <button ng-if="!site.site_pk" type="submit" class="btn btn-primary" ng-disabled="!site.new_pk || !site.site_name || !site.site_dept_fk">Cr&eacute;er</button>
     </div>

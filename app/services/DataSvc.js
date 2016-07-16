@@ -15,6 +15,10 @@ module.exports = function ($http, $q, apiSvc, $filter) {
     return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'departments');
   };
 
+  dataSvc.getAllDepartments = function () {
+    return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'departments?unlisted=true');
+  };
+
   dataSvc.getLatestUpdate = function () {
     return apiSvc.get(apiSvc.resourcesEndpoint + 'update');
   };

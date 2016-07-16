@@ -21,7 +21,7 @@ module.exports = function ($scope, dataSvc, ngDialog, $route, busySvc, updateSvc
   ];
 
   function reload() {
-    Promise.all([dataSvc.getAllSites(), dataSvc.getDepartments()]).then(_.spread(function (sites, departments) {
+    Promise.all([dataSvc.getAllSites(), dataSvc.getAllDepartments()]).then(_.spread(function (sites, departments) {
       $scope.departments = departments;
       $scope.deptTable.settings({ dataset: _.values(departments) });
       $scope.siteTable.settings({
@@ -109,12 +109,12 @@ module.exports = function ($scope, dataSvc, ngDialog, $route, busySvc, updateSvc
         callback: function (_dept, close) {
           confirm('&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">' + (dept ? 'modifier' : 'cr&eacute;er') +
             '</span> le d&eacute;partement <span class="text-warning">' + _dept.dept_name +
-            '</span>&nbsp;?<hr />Cette op&eacute;ration est irr&eacute;versible et prend effet imm&eacute;diatement.',
+            '</span>&nbsp;?',
             function () {
               (dept ? updateSvc.editDept(_dept) : updateSvc.createDept(_dept)).then(function () {
                 $scope.$emit('alert', {
                   type: 'success',
-                  msg: 'D&eacute;partement<strong>' + _dept.dept_name + '</strong> ' + (dept ? 'modifi&eacute;.' : 'cr&eacute;&eacute;.')
+                  msg: 'D&eacute;partement <strong>' + _dept.dept_name + '</strong> ' + (dept ? 'modifi&eacute;.' : 'cr&eacute;&eacute;.')
                 });
                 reload();
                 close();

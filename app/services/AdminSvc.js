@@ -5,8 +5,8 @@ module.exports = function ($http, $q, apiSvc) {
 
   var adminSvc = {};
 
-  adminSvc.resetUserPassword = function (empl_pk) {
-    return apiSvc.delete(apiSvc.adminEndpoint + 'users/' + empl_pk + '/password');
+  adminSvc.resetUserPassword = function (user_id) {
+    return apiSvc.delete(apiSvc.adminEndpoint + 'users/' + user_id + '/password');
   };
 
   adminSvc.setPassword = function (pwd_current, pwd_new) {
@@ -17,7 +17,7 @@ module.exports = function ($http, $q, apiSvc) {
   };
 
   adminSvc.getInfo = function () {
-    return Promise.all([apiSvc.get(apiSvc.accountEndpoint), apiSvc.get(apiSvc.accountEndpoint + 'trainerlevel')]).then(function (results) {
+    return Promise.all([apiSvc.get(apiSvc.accountEndpoint), apiSvc.get(apiSvc.accountEndpoint + 'trainerprofile')]).then(function (results) {
       var user = results[0];
       if (user.roles['trainer'] !== undefined) { // jshint ignore: line
         user.roles['trainer'] = results[1]; // jshint ignore: line
@@ -31,20 +31,28 @@ module.exports = function ($http, $q, apiSvc) {
     return apiSvc.get(apiSvc.adminEndpoint + 'users/');
   };
 
-  adminSvc.getUserInfo = function (empl_pk) {
-    return apiSvc.get(apiSvc.adminEndpoint + 'users/' + empl_pk);
+  adminSvc.changeId = function (user_id, new_id) {
+    return apiSvc.put(apiSvc.adminEndpoint + 'users/' + user_id + '/' + new_id);
   };
 
-  adminSvc.updateUser = function (empl_pk, roles) {
-    return $http.put(apiSvc.adminEndpoint + 'users/' + empl_pk, roles);
+  adminSvc.changeOwnId = function (new_id) {
+    return apiSvc.put(apiSvc.accountEndpoint + 'id/' + new_id);
   };
 
-  adminSvc.createUser = function (empl_pk, roles) {
-    return $http.post(apiSvc.adminEndpoint + 'users/' + empl_pk, roles);
+  adminSvc.getUserInfo = function (user_id) {
+    return apiSvc.get(apiSvc.adminEndpoint + 'users/' + user_id);
   };
 
-  adminSvc.deleteUser = function (empl_pk) {
-    return $http.delete(apiSvc.adminEndpoint + 'users/' + empl_pk);
+  adminSvc.updateUser = function (user_id, data) {
+    return $http.put(apiSvc.adminEndpoint + 'users/' + user_id, data);
+  };
+
+  adminSvc.createUser = function (user_id, data) {
+    return $http.post(apiSvc.adminEndpoint + 'users/' + user_id, data);
+  };
+
+  adminSvc.deleteUser = function (user_id) {
+    return $http.delete(apiSvc.adminEndpoint + 'users/' + user_id);
   };
 
   adminSvc.getTrainerProfiles = function () {

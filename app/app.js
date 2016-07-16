@@ -179,7 +179,7 @@ angular.module('faomaintenanceApp', [
           controller: 'UsersAdministrationCtrl',
           reloadOnSearch: false
         })
-        .when('/administration/users/:empl_pk', {
+        .when('/administration/users/:user_id', {
           templateUrl: 'components/administration/users/roles_management.html',
           controller: 'RolesManagementCtrl'
         })
@@ -227,7 +227,7 @@ angular.module('faomaintenanceApp', [
   .controller('HomeCtrl', ['$scope', 'ngDialog', 'BusySvc', require('./components/home/HomeCtrl.js')])
   .controller('IndexCtrl', ['$rootScope', '$scope', '$document', '$location', 'ngDialog', 'DataSvc', 'ClientSvc', require('./components/index/IndexCtrl.js')])
   .controller('LoginCtrl', ['$scope', '$rootScope', '$route', 'AuthSvc', 'BusySvc', require('./components/index/LoginCtrl.js')])
-  .controller('RolesManagementCtrl', ['$rootScope', '$scope', '$route', '$routeParams', 'BusySvc', 'DataSvc', 'AdminSvc', 'ngDialog',
+  .controller('RolesManagementCtrl', ['$rootScope', '$scope', '$location', '$route', '$routeParams', 'BusySvc', 'DataSvc', 'AdminSvc', 'ngDialog',
     require('./components/administration/users/RolesManagementCtrl.js')
   ])
   .controller('SiteCtrl', ['$scope', '$routeParams', '$location', '$route', 'DataSvc', 'BusySvc', 'ngDialog', 'UpdateSvc', 'NgTableParams', 'ClientSvc',

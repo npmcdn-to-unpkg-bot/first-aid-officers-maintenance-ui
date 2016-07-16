@@ -5,6 +5,10 @@ var customFilters = require('angular').module('customFilters', []);
 var moment = require('moment');
 var _ = require('lodash');
 
+function summariseDept(dept) {
+  return dept.dept_name;
+}
+
 function summariseSite(site) {
   return site.site_name;
 }
@@ -60,6 +64,20 @@ customFilters.filter('orderByNullLast', function () {
     }
 
     return sorted.concat(res[1]);
+  };
+});
+
+customFilters.filter('filterDept', function () {
+  return function (departments, inputString) {
+    inputString = inputString.toUpperCase();
+    return _.map(_.filter(departments, function (dept) {
+      var deptSummary = summariseDept(dept).toUpperCase();
+      return _.every(inputString.split(' '), function (split) {
+        return deptSummary.indexOf(split) !== -1;
+      });
+    }), function (entry) {
+      return entry.summary = summariseDept(entry), entry;
+    });
   };
 });
 

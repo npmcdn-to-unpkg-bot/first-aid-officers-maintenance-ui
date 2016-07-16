@@ -150,7 +150,7 @@ module.exports = function ($rootScope, $scope, $location, $route, $routeParams, 
           roles: _($scope.roles).filter('checked').keyBy('type').mapValues(roleMapper).value()
         })
         .then(function () {
-          $scope.$emit('alert', { type: 'success', msg: 'Privil&egrave;ges de ' + $scope.user.summary + ' mis &agrave; jour.' });
+          $scope.$emit('alert', { type: 'success', msg: 'Privil&egrave;ges de <strong>' + $scope.user.summary + '</strong> mis &agrave; jour.' });
           busySvc.done('ongoingOperation');
           if ($scope.userInfo.user_id === $scope.user.user_id) {
             $scope.disconnect(true);

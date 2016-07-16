@@ -51,8 +51,12 @@
                         <a href="#/home" class="logo"><img ng-src="{{clientInfo.clnt_logo}}" alt="Logo {{clientInfo.clnt_name}}" /></a>
                     </div>
                     <div class="col-md-4 col-sm-6 connection-status">
-                        <div ng-if="userInfo"><span ng-bind="'Connect&eacute;(e) en tant que'"></span> <span class="text-primary" ng-bind="userInfo.empl_firstname + ' ' + userInfo.empl_surname"></span>
-                            <br />
+                        <div ng-if="userInfo">Connect&eacute;(e) en tant que&nbsp;:
+                            <div ng-switch="userInfo.user_type" class="text-primary">
+                                <span ng-switch-when="employee">{{userInfo.empl_firstname}} {{userInfo.empl_surname}}</span>
+                                <span ng-switch-when="site">{{userInfo.site_name}}</span>
+                                <span ng-switch-when="department">{{userInfo.dept_name}}</span>
+                            </div>
                             <button type="button" class="btn btn-danger btn-sm" ng-click="disconnect()" ng-bind="'Se d&eacute;connecter'"></button>
                         </div>
                     </div>
@@ -77,7 +81,7 @@
             </div>
             <footer class="row">
                 <div class="col-md-6">
-                    <div>Orca<span class="text-danger">&nbsp;|&nbsp;</span><span class="version">version 1.5.2</span></div>
+                    <div>Orca<span class="text-danger">&nbsp;|&nbsp;</span><span class="version">version 1.5.3-RC1</span></div>
                     <div>{{clientInfo.clnt_name}}<span class="text-danger">&nbsp;|&nbsp;</span><a href="mailto:{{clientInfo.clnt_mailto}}" class="contact-us">contacter un administrateur</a></div>
                 </div>
                 <div class="col-md-6 text-right">

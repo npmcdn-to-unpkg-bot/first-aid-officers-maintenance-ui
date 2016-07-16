@@ -1,0 +1,89 @@
+.scale-in {
+    &.ng-animate {
+        transition: .2s linear all;
+    }
+    &.ng-enter-prepare {
+        transform: scale(0);
+        opacity: 0;
+    }
+    &.ng-enter.ng-enter-active {
+        animation: scaleIn .2s;
+    }
+    &.ng-leave.ng-leave-active {
+        animation: scaleIn .2s reverse;
+    }
+}
+
+.panel {
+    &.ng-animate {
+        transition: 0.2s linear all;
+    }
+    &.ng-enter-prepare {
+        opacity: 0;
+    }
+    &.ng-enter {
+        opacity: 0;
+    }
+    &.ng-enter.ng-enter-active {
+        opacity: 1;
+        animation: slideLeft .2s;
+    }
+    &.ng-enter-stagger {
+        transition-delay: .1s;
+        transition-duration: 0s;
+    }
+}
+
+.alert {
+    transition: 0.2s linear all;
+    &.ng-enter-prepare {
+        opacity: 0;
+    }
+    &.ng-enter {
+        opacity: 0;
+    }
+    &.ng-enter.ng-enter-active {
+        opacity: 1;
+        animation: slideRight .2s;
+    }
+    &.ng-leave.ng-leave-active {
+        opacity: 0;
+        animation: slideRight .2s reverse;
+    }
+    &.ng-enter-stagger {
+        transition-delay: .1s;
+        transition-duration: 0s;
+    }
+}
+
+@keyframes slideRight {
+    from {
+        transform: translateX(-100px);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideLeft {
+    from {
+        transform: translateX(100px);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    80% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

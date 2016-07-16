@@ -56,15 +56,20 @@ table.table {
             }
         }
     }
+    tbody {
+        .clickme label.label {
+            pointer-events: none;
+        }
+        tr td {
+            vertical-align: middle;
+        }
+    }
     .btn {
         margin: 0;
         &.btn-role {
             width: 100%;
             padding: 8px;
         }
-    }
-    tbody tr td {
-        vertical-align: middle;
     }
     .input-group {
         width: 100%;

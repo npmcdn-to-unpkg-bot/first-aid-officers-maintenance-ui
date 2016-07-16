@@ -7,13 +7,13 @@
                 <div class="row">
                     <div class="col-sm-4 col-xs-12 panel-heading-title">Tableau de bord</div>
                     <div class="col-sm-8 col-xs-12 text-right">
-                        <state-sustain items="certificates" items-id="cert_short" state="checked" state-id="certificates_checked">
+                        <cert-sustain items="certificates">
                             <div class="btn-group">
                                 <label class="btn btn-raised btn-default btn-sm" ng-model="cert.checked" uib-btn-checkbox ng-repeat="cert in certificates | orderBy: 'cert_order'" uib-popover="{{cert.cert_name}}" popover-trigger="mouseenter"
                                     popover-append-to-body="true">{{cert.cert_short}}
                                 </label>
                             </div>
-                        </state-sustain>
+                        </cert-sustain>
                     </div>
                 </div>
             </div>

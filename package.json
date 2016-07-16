@@ -1,6 +1,6 @@
 {
   "name": "nclsdevelopment-orca",
-  "version": "1.5.2",
+  "version": "1.5.3-RC1",
   "description": "An AngularJS project with Gulp, JSHint, Browserify and a LiveReload server.",
   "scripts": {
     "start": "gulp dev build serve watch"

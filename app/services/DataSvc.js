@@ -152,12 +152,12 @@ module.exports = function ($http, $q, apiSvc, $filter) {
   };
 
   dataSvc.getCertificates = function () {
-    return apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'certificates');
+    return apiSvc.get(apiSvc.resourcesByKeysCommonEndpoint + 'certificates');
   };
 
   dataSvc.getTrainingTypes = function () {
     var deferred = $q.defer();
-    Promise.all([apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainingtypes'), apiSvc.get(apiSvc.resourcesByKeysEndpoint + 'trainingtypes_certificates'), dataSvc.getCertificates()])
+    Promise.all([apiSvc.get(apiSvc.resourcesByKeysCommonEndpoint + 'trainingtypes'), apiSvc.get(apiSvc.resourcesByKeysCommonEndpoint + 'trainingtypes_certificates'), dataSvc.getCertificates()])
       .then(function (results) {
         var res = results[0];
         _.each(results[1], function (certificates, trty_pk) {

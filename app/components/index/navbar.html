@@ -2,7 +2,7 @@
     <ul class="nav navbar-nav">
         <li ng-class="{ active: isActive('/sites')}" if-role="['access2']"><a href="#/sites">Sites</a></li>
         <li ng-class="{ active: isActive('/sites')}" if-role="['access1', '!access2']"><a href="#/sites/{{currentUser.info.restrictions.accessibleSites[0]}}">Site</a></li>
-        <li ng-class="{ active: isActive('/employees')}"><a href="#/employees">Agents</a></li>
+        <li ng-class="{ active: isActive('/employees')}" if-role="access1"><a href="#/employees">Agents</a></li>
         <li class="dropdown" ng-class="{ active: isActive('/trainings')}" if-role="'access4'">
             <a href="" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Formations&nbsp;<b class="caret"></b></a>
             <ul class="dropdown-menu">
@@ -13,7 +13,7 @@
             </ul>
         </li>
     </ul>
-    <form class="navbar-form navbar-left">
+    <form class="navbar-form navbar-left" if-role="access1">
         <div class="form-group uib-typeahead">
             <input type="text" class="form-control col-md-8" placeholder="Recherche globale..." uib-typeahead="select as select.summary for select in globalIndex | filterGlobal:$viewValue | limitTo:8"
                 ng-model="navbar.select" ng-focus="refreshIndex()" />

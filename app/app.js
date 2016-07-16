@@ -193,7 +193,7 @@ angular.module('faomaintenanceApp', [
   .directive('fileread', [require('./directives/fileread.js')])
   .directive('formValidity', [require('./directives/formValidity.js')])
   .directive('ifRole', ['$rootScope', 'ngIfDirective', require('./directives/ifRole.js')])
-  .directive('stateSustain', ['$cookies', require('./directives/stateSustain.js')])
+  .directive('certSustain', ['AdminSvc', require('./directives/certSustain.js')])
   .directive('stSelectDistinct', ['$parse', require('./directives/stSelectDistinct.js')])
   .directive('stSelectDate', ['dateFilter', require('./directives/stSelectDate.js')])
   .directive('hoverState', ['$parse', require('./directives/hoverState.js')])

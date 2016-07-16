@@ -16,6 +16,14 @@ module.exports = function ($http, $q, apiSvc) {
     });
   };
 
+  adminSvc.getRelevantCertificates = function () {
+    return apiSvc.get(apiSvc.accountEndpoint + 'certificates/');
+  };
+
+  adminSvc.setRelevantCertificates = function (certificates) {
+    return apiSvc.put(apiSvc.accountEndpoint + 'certificates/', certificates);
+  };
+
   adminSvc.getInfo = function () {
     return Promise.all([apiSvc.get(apiSvc.accountEndpoint), apiSvc.get(apiSvc.accountEndpoint + 'trainerprofile')]).then(function (results) {
       var user = results[0];

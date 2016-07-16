@@ -13,13 +13,6 @@
 
     <body style="visibility: hidden;">
         <script type="text/javascript">
-        // Create ripple effect after logo has loaded
-        $('#orca_logo').imagesLoaded(function() {
-            $('#ripple_container').append($('<div />', {
-                "class": 'circle'
-            }));
-        });
-
         // Create background
         function trianglify() {
             /*jshint camelcase: false*/
@@ -90,6 +83,14 @@
                 </div>
             </footer>
         </div>
+        <script type="text/javascript">
+        // Create ripple effect after logo has loaded
+        $('#orca_logo').imagesLoaded(function() {
+            $('#ripple_container').append($('<div />', {
+                "class": 'circle'
+            }));
+        });
+        </script>
         <link rel="stylesheet" type="text/css" href="main.css" />
     </body>
 

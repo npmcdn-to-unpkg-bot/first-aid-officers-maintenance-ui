@@ -15,6 +15,7 @@ $screen-xs: 768px;
 @import 'node_modules/ccjmne-busy/styles/ccjmne-busy';
 @import 'node_modules/ng-dialog/css/ngDialog-theme-default.min';
 @import 'node_modules/ng-dialog/css/ngDialog.min';
+@import 'styles/animations';
 @import 'styles/forms';
 @import 'styles/panels';
 @import 'styles/side_panel';
@@ -34,6 +35,23 @@ $screen-xs: 768px;
 
 body {
     visibility: visible !important;
+}
+
+.coloured .btn:not(.btn-default)[disabled] {
+    opacity: 1;
+    color: white;
+    &.btn-success {
+        background-color: $brand-success;
+    }
+    &.btn-primary {
+        background-color: $brand-primary;
+    }
+    &.btn-warning {
+        background-color: $brand-warning;
+    }
+    &.btn-danger {
+        background-color: $brand-danger;
+    }
 }
 
 [deferred-cloak],

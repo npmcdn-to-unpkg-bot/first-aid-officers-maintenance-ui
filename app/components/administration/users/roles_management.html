@@ -1,8 +1,13 @@
-<h3>Privil&egrave;ges de <span class="text-primary">{{empl.empl_gender ? 'M.' : 'Mme'}} {{empl.empl_surname}} {{empl.empl_firstname}}</span></h3>
+<h3>Compte
+    <span ng-if="user.user_type === 'employee'">de <span class="text-primary">{{user.empl_gender ? 'M.' : 'Mme'}} {{user.empl_surname}} {{user.empl_firstname}}</span></span>
+    <span ng-if="user.user_type === 'site'">du site <span class="text-primary">{{user.site_name}}</span></span>
+    <span ng-if="user.user_type === 'department'">du d&eacute;partement <span class="text-primary">{{user.dept_name}}</span></span>
+    <small>- {{user.user_id}}</small>
+</h3>
 <br />
-<script type="text/ng-template" id="popover_access.html">
-    <div>
-        Requiert <strong>gestion de compte</strong>
+<script type="text/ng-template" id="popover_access1.html">
+    <div class="text-center">
+        Un compte li&eacute; &agrave; un <strong>d&eacute;partement</strong> ne peut pas avoir un privil&egrave;ge d'acc&egrave;s <strong>inf&eacute;rieur &agrave; 2</strong>
     </div>
 </script>
 <script type="text/ng-template" id="popover_trainer.html">
@@ -32,16 +37,16 @@
 </script>
 <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start;">
     <div class="panel panel-{{role.checked ? role.levels ? colorFor(role.level) : 'success' : 'default'}}" style="flex-basis: 500px;" ng-repeat="role in roles">
-        <div class="panel-heading" uib-popover-template="disabled(role) ? ('popover_' + role.type + '.html') : none" popover-trigger="mouseenter">
+        <div class="panel-heading" uib-popover-template="editing && disabled(role) ? ('popover_' + role.type + '.html') : none" popover-trigger="mouseenter">
             <div class="row">
-                <div class="col-xs-8" style="margin-top: 6px;" ng-switch="role.type">
+                <div class="col-xs-8" style="margin: 6px 0;" ng-switch="role.type">
                     <span ng-switch-when="user">Gestion de compte</span>
                     <span ng-switch-when="access">Acc&egrave;s aux donn&eacute;es</span>
                     <span ng-switch-when="trainer">Gestion de formations</span>
                     <span ng-switch-when="admin">Administration</span>
                 </div>
                 <div class="col-xs-4 togglebutton text-right" style="margin-top: 3px;">
-                    <label>
+                    <label class="scale-in" ng-if="editing">
                         <input type="checkbox" ng-model="role.checked" ng-disabled="disabled(role)" />
                     </label>
                 </div>
@@ -50,8 +55,8 @@
         <form class="panel-body form-horizontal" ng-switch="role.type" autocomplete="off">
             <div ng-switch-when="user">
                 <div class="text-justify">
-                    Le privil&egrave;ge de <span class="text-primary">gestion de compte</span> r&eacute;gule les acc&egrave;s &agrave; la solution. Attribuer celui-ci &agrave; un agent
-                    correspond &agrave; la cr&eacute;ation d'un compte pour ce dernier.
+                    Le privil&egrave;ge de <span class="text-primary">gestion de compte</span> permet &agrave; un utilisateur de modifier lui-m&ecirc;me son identifiant ainsi que son
+                    mot de passe. Il est recommend&eacute; de ne pas accorder celui-ci aux comptes partag&eacute;s &mdash; de type <em>site</em> ou <em>d&eacute;partement</em>.
                 </div>
             </div>
             <div ng-switch-when="access">
@@ -65,8 +70,9 @@
                         <div class="row">
                             <label class="col-xs-4 control-label">Niveau d'acc&egrave;s</label>
                             <div class="col-xs-8">
-                                <div class="btn-group">
-                                    <label class="btn btn-raised btn-{{role.level === level ? colorFor(level) : 'default'}} btn-sm" ng-click="role.level=level" ng-repeat="level in [1, 2, 3, 4]">niv. {{level}}</label>
+                                <div class="btn-group coloured">
+                                    <label class="btn btn-raised btn-{{role.level === level ? colorFor(level) : 'default'}} btn-sm" ng-click="editing && (role.level=level)" ng-repeat="level in [1, 2, 3, 4]" ng-disabled="!editing || disabled(role, level)"
+                                        uib-popover-template="editing && disabled(role, level) ? ('popover_' + role.type + '' + level + '.html') : none" popover-append-to-body="true" popover-trigger="mouseenter">niv. {{level}}</label>
                                 </div>
                             </div>
                         </div>
@@ -98,14 +104,13 @@
                     ou supprimer des formations.
                 </div>
                 <div uib-collapse="!role.checked">
-
                     <hr />
                     <div class="form form-horizontal" autocomplete="off">
                         <div class="form-group">
                             <div class="row">
                                 <label class="col-xs-4 control-label">Profil</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control" ng-model="role.profile" ng-options="trpr as trpr.trpr_id for trpr in trainerProfiles"></select>
+                                    <select class="form-control" ng-model="role.profile" ng-options="trpr as trpr.trpr_id for trpr in trainerProfiles" ng-disabled="!editing"></select>
                                 </div>
                             </div>
                         </div>
@@ -133,9 +138,9 @@
                         <div class="row">
                             <label class="col-xs-4 control-label">Niveau d'acc&egrave;s</label>
                             <div class="col-xs-8">
-                                <div class="btn-group">
-                                    <label class="btn btn-raised btn-{{role.level === level ? colorFor(level) : 'default'}} btn-sm" ng-click="role.level=level" ng-repeat="level in [1, 2, 3, 4]" ng-disabled="disabled(role, level)"
-                                        uib-popover-template="disabled(role, level) ? ('popover_' + role.type + '' + level + '.html') : none" popover-append-to-body="true" popover-trigger="mouseenter">niv. {{level}}</label>
+                                <div class="btn-group coloured">
+                                    <label class="btn btn-raised btn-{{role.level === level ? colorFor(level) : 'default'}} btn-sm" ng-click="editing && (role.level=level)" ng-repeat="level in [1, 2, 3, 4]" ng-disabled="!editing || disabled(role, level)"
+                                        uib-popover-template="editing && disabled(role, level) ? ('popover_' + role.type + '' + level + '.html') : none" popover-append-to-body="true" popover-trigger="mouseenter">niv. {{level}}</label>
                                 </div>
                             </div>
                         </div>
@@ -154,15 +159,15 @@
                 </div>
             </div>
         </form>
-        <div uib-collapse="!role.checked">
-            <div class="panel-footer text-center" ng-if="role.type === 'user'">
-                <button type="button" class="btn btn-warning" ng-click="reset()">R&eacute;initialiser MDP.</button>
-            </div>
-        </div>
     </div>
 </div>
-<div class="side-panel-container text-right">
-    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="update()"><span class="glyphicon glyphicon-ok"></span>&nbsp;Sauvegarder modifications</button>
-    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="cancel()"><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Annuler</button>
+<div class="side-panel-container text-right" ng-show="!editing">
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="edit()"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Modifier privil&egrave;ges</button>
+    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="changeId()"><span class="glyphicon glyphicon-user"></span>&nbsp;Changer identifiant</button>
+    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="reset()"><span class="glyphicon glyphicon-erase"></span>&nbsp;R&eacute;initialiser mot de passe</button>
     <button type="button" class="btn btn-raised btn-danger side-panel-item" ng-click="close()"><span class="glyphicon glyphicon-remove"></span>&nbsp;Fermer compte</button>
+</div>
+<div class="side-panel-container text-right" ng-show="editing">
+    <button type="button" class="btn btn-raised btn-success side-panel-item" ng-click="update()"><span class="glyphicon glyphicon-ok"></span>&nbsp;Enregistrer</button>
+    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="cancel()"><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Annuler</button>
 </div>

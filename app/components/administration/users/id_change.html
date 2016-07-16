@@ -1,0 +1,19 @@
+<form class="panel panel-primary form form-horizontal" ng-submit="callback(new_id, closeThisDialog)" autocomplete="off">
+    <div class="panel-heading">
+        {{user.summary}}
+        <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <div class="row">
+                <label class="control-label col-xs-4">Identifiant</label>
+                <div class="col-xs-8">
+                    <input type="text" maxlength="16" class="form-control" ng-model="new_id" ng-init="new_id = user.user_id" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer text-center">
+        <button type="submit" class="btn btn-primary" ng-disabled="!new_id">Confirmer</button>
+    </div>
+</form>

@@ -40,7 +40,9 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
   $rootScope._alerts = [];
   $rootScope.$on('alert', function (event, alert) {
     $rootScope._alerts.push(_.extend(alert, { id: (_.maxBy($rootScope._alerts, 'id') || { id: 0 }).id + 1 }));
-    $scope.$digest();
+    if (!$scope.$$phase) {
+      $scope.$digest();
+    }
   });
   $rootScope.$on('error', function () {
     $rootScope._alerts.push({
@@ -51,7 +53,9 @@ module.exports = function ($rootScope, $scope, $document, $location, ngDialog, d
       id: (_.maxBy($rootScope._alerts, 'id') || { id: 0 }).id + 1
     });
 
-    $scope.$digest();
+    if (!$scope.$$phase) {
+      $scope.$digest();
+    }
   });
 
   $rootScope.hasRole = function (role) {

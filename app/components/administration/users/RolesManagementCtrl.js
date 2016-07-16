@@ -3,18 +3,7 @@
 var _ = require('lodash');
 /* jshint camelcase: false */
 
-module.exports = function ($rootScope, $scope, $route, $routeParams, busySvc, dataSvc, adminSvc, ngDialog) {
-  $scope.roles = [{
-    type: 'user'
-  }, {
-    type: 'access',
-    levels: true
-  }, {
-    type: 'trainer'
-  }, {
-    type: 'admin',
-    levels: true
-  }];
+module.exports = function ($rootScope, $scope, $location, $route, $routeParams, busySvc, dataSvc, adminSvc, ngDialog) {
 
   $scope.colorFor = function (level) {
     switch (level) {
@@ -35,7 +24,7 @@ module.exports = function ($rootScope, $scope, $route, $routeParams, busySvc, da
       case 'user':
         return false;
       case 'access':
-        return !_.find($scope.roles, { type: 'user' }).checked;
+        return level === 1 && $scope.user.user_type === 'department';
       case 'trainer':
         return !access.checked || access.level < 4;
       case 'admin':
@@ -55,16 +44,14 @@ module.exports = function ($rootScope, $scope, $route, $routeParams, busySvc, da
     }
   };
 
-  $scope.$watch('roles', function () {
-    var user = _.find($scope.roles, { type: 'user' });
+  $scope.$watch('roles', function (roles) {
+    if (!roles) {
+      return;
+    }
+
     var access = _.find($scope.roles, { type: 'access' });
     var trainer = _.find($scope.roles, { type: 'trainer' });
     var admin = _.find($scope.roles, { type: 'admin' });
-    if (!user.checked) {
-      $scope.roles[1].checked = false;
-      $scope.roles[2].checked = false;
-      $scope.roles[3].checked = false;
-    }
 
     if (!access.checked) {
       $scope.roles[2].checked = false;
@@ -77,7 +64,7 @@ module.exports = function ($rootScope, $scope, $route, $routeParams, busySvc, da
       if (access.level < 3) {
         $scope.roles[3].level = Math.min(1, $scope.roles[3].level);
       }
-      $scope.roles[1].level = access.level ? access.level : 1; // 1: default level
+      $scope.roles[1].level = access.level ? access.level : $scope.user.user_type === 'department' ? 2 : 1; // 1: default level, 2 for department-type users
     }
 
     if (trainer.checked) {
@@ -89,13 +76,40 @@ module.exports = function ($rootScope, $scope, $route, $routeParams, busySvc, da
     }
   }, true);
 
+  function init() {
+    _.each($scope.roles, function (role) {
+      switch (role.type) {
+        case 'access':
+        case 'admin':
+          role.level = $scope.user.roles[role.type];
+          break;
+        case 'trainer':
+          role.profile = $scope.trainerProfiles[$scope.user.roles[role.type]];
+      }
+      role.checked = !_.isUndefined($scope.user.roles[role.type]);
+    });
+
+    setTimeout(function () { $scope.$apply(); }, 0);
+  }
+
   busySvc.busy('rolesManagement');
-  busySvc.busy('ongoingOperation', true);
-  Promise.all([adminSvc.getUserInfo($routeParams.empl_pk), adminSvc.getTrainerProfiles(), dataSvc.getTrainingTypes(), dataSvc.getCertificates()])
-    .then(_.spread(function (empl, trainerProfiles, trainingtypes, certificates) {
+  Promise.all([adminSvc.getUserInfo($routeParams.user_id), adminSvc.getTrainerProfiles(), dataSvc.getTrainingTypes(), dataSvc.getCertificates()])
+    .then(_.spread(function (user, trainerProfiles, trainingtypes, certificates) {
+      $scope.roles = [{ type: 'user' }, { type: 'access', levels: true }, { type: 'trainer' }, { type: 'admin', levels: true }];
       $scope.trainingtypes = trainingtypes;
       $scope.certificates = certificates;
-      $scope.empl = _.extend(empl, { fullname: (empl.empl_gender ? 'M.' : 'Mme') + ' ' + empl.empl_surname + ' ' + empl.empl_firstname });
+      $scope.user = _.extend(user, {
+        summary: (function (type, resource) {
+          switch (type) {
+            case 'employee':
+              return (resource.empl_gender ? 'M.' : 'Mme') + ' ' + resource.empl_surname + ' ' + resource.empl_firstname;
+            case 'site':
+              return resource.site_name;
+            case 'department':
+              return resource.dept_name;
+          }
+        })(user.user_type, user)
+      });
       $scope.trainerProfiles = _.each(trainerProfiles, function (profile) {
         profile.types = _.map(profile.types, _.partial(_.get, trainingtypes));
       });
@@ -103,20 +117,7 @@ module.exports = function ($rootScope, $scope, $route, $routeParams, busySvc, da
       busySvc.done('rolesManagement');
 
       // timeout for uib-collapse to open
-      setTimeout(function () {
-        _.each($scope.roles, function (role) {
-          switch (role.type) {
-            case 'access':
-            case 'admin':
-              role.level = empl.roles[role.type];
-              break;
-            case 'trainer':
-              role.profile = trainerProfiles[empl.roles[role.type]];
-          }
-          role.checked = !_.isUndefined(empl.roles[role.type]);
-        });
-        $scope.$apply();
-      }, 0);
+      setTimeout(init, 0);
     }), _.partial(busySvc.done, 'rolesManagement'));
 
   function roleMapper(role) {
@@ -131,73 +132,135 @@ module.exports = function ($rootScope, $scope, $route, $routeParams, busySvc, da
     }
   }
 
+  //TODO: IMPL SELF UPDATE
   $scope.update = function () {
-    var roles = _($scope.roles).filter('checked').keyBy('type').mapValues(roleMapper).value();
-    if (!roles['user']) { // jshint ignore: line
-      return $scope.close();
-    }
-
-    var creation = _.isEmpty($scope.empl.roles);
     ngDialog.openConfirm({
       template: './components/dialogs/warning.html',
       scope: _.extend($scope.$new(), {
-        innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">' + (creation ? 'cr&eacute;er un compte</span> pour ' :
-          'modifier les privil&egrave;ges</span> de ') + $scope.empl.fullname + '&nbsp;?'
+        innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">modifier les privil&egrave;ges</span> de <span class="text-warning">' + $scope.user
+          .summary + '</span>&nbsp;?' + ($scope.userInfo.user_id === $scope.user.user_id ?
+            '<hr />En confirmant, <span class="text-warning">vous serez d&eacute;connect&eacute(e)</span> et devrez vous identifier de nouveau.' : '')
       })
     }).then(function () {
-      (creation ? adminSvc.createUser : adminSvc.updateUser)($scope.empl.empl_pk, _($scope.roles).filter('checked').keyBy('type').mapValues(roleMapper).value())
-      .then(function (response) {
-        if (creation) {
-          $scope.$emit('alert', {
-            type: 'success',
-            msg: 'Mot de passe g&eacute;n&eacute;r&eacute;&nbsp: <strong><samp>' + response.data +
-              '</samp></strong><hr />Veuillez transmettre son nouveau mot de passe &agrave; ' + $scope.empl.fullname + '.',
-            static: true
-          });
-        } else {
-          $scope.$emit('alert', { type: 'success', msg: 'Privil&egrave;ges de ' + $scope.empl.fullname + ' mis &agrave; jour.' });
-
-        }
-        busySvc.done('ongoingOperation');
-        window.history.back();
-      }, _.partial($scope.$emit, 'error'));
+      adminSvc.updateUser($scope.user.user_id, {
+          user_type: $scope.user.user_type,
+          user_empl_fk: $scope.user.empl_pk,
+          user_site_fk: $scope.user.site_pk,
+          user_dept_fk: $scope.user.dept_pk,
+          roles: _($scope.roles).filter('checked').keyBy('type').mapValues(roleMapper).value()
+        })
+        .then(function () {
+          $scope.$emit('alert', { type: 'success', msg: 'Privil&egrave;ges de ' + $scope.user.summary + ' mis &agrave; jour.' });
+          busySvc.done('ongoingOperation');
+          if ($scope.userInfo.user_id === $scope.user.user_id) {
+            $scope.disconnect(true);
+          } else {
+            $route.reload();
+          }
+        }, _.partial($scope.$emit, 'error'));
     });
   };
 
+  //TODO: IMPL SELF CLOSE
   $scope.close = function () {
     ngDialog.openConfirm({
       template: './components/dialogs/warning.html',
       scope: _.extend($scope.$new(), {
         _type: 'danger',
-        innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-danger">fermer le compte</span> de ' + $scope.empl.fullname + '&nbsp;?'
+        innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-danger">fermer le compte</span> de <span class="text-danger">' + $scope.user.summary +
+          '</span>&nbsp;?' + ($scope.userInfo.user_id === $scope.user.user_id ?
+            '<hr />En confirmant, <span class="text-danger">vous serez d&eacute;connect&eacute(e)</span>.' : '')
       })
     }).then(function () {
-      adminSvc.deleteUser($scope.empl.empl_pk).then(function () {
-        $scope.$emit('alert', { type: 'success', msg: 'Compte de ' + $scope.empl.fullname + ' ferm&eacute;.' });
+      adminSvc.deleteUser($scope.user.user_id).then(function () {
+        $scope.$emit('alert', { type: 'success', msg: 'Compte de <strong>' + $scope.user.summary + '</strong> ferm&eacute;.' });
         busySvc.done('ongoingOperation');
-        window.history.back();
+
+        if ($scope.userInfo.user_id === $scope.user.user_id) {
+          $scope.disconnect(true);
+        } else {
+          window.history.back();
+        }
       }, _.partial($scope.$emit, 'error'));
     });
   };
 
   $scope.cancel = function () {
-    window.history.back();
+    $scope.editing = false;
+    init();
+    busySvc.done('ongoingOperation');
   };
 
+  $scope.edit = function () {
+    $scope.editing = true;
+    busySvc.busy('ongoingOperation', true);
+  };
+
+  //TODO: IMPL SELF ID CHANGE
+  $scope.changeId = function () {
+    ngDialog.open({
+      template: 'components/administration/users/id_change.html',
+      scope: _.extend($scope.$new(), {
+        callback: function (new_id, close) {
+          ngDialog.openConfirm({
+            template: 'components/dialogs/warning.html',
+            scope: _.extend($scope.$new(), {
+              innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">changer l\'identifiant</span> de <span class="text-warning">' +
+                $scope.user.summary + '</span>&nbsp;?' + ($scope.userInfo.user_id === $scope.user.user_id ?
+                  '<hr />En confirmant, <span class="text-warning">vous serez d&eacute;connect&eacute(e)</span> et devrez vous identifier en utilisant votre nouvel identifiant.' :
+                  '')
+            })
+          }).then(function () {
+            adminSvc.changeId($scope.user.user_id, new_id).then(function () {
+              $scope.$emit('alert', {
+                type: 'success',
+                msg: '<strong>' + $scope.user.summary + '</strong> utilise dor&eacute;navant l\'identifiant <kbd>' + new_id +
+                  '</kbd><hr />Veuillez transmettre son/leur nouvel identifiant &agrave;/aux agent(s) concern&eacute;(s).',
+                static: true
+              });
+              close();
+              if ($scope.userInfo.user_id === $scope.user.user_id) {
+                $scope.disconnect(true);
+              } else {
+                $location.path('administration/users/' + new_id).search({}).replace();
+              }
+            }, function () {
+              $scope.$emit('alert', {
+                type: 'danger',
+                msg: 'L\'identifiant <kbd>' + new_id +
+                  '</kbd> est actuellement attribu&eacute; &agrave; un autre compte utilisateur et n\'est ainsi pas disponible.',
+                static: true
+              });
+            });
+          });
+        }
+      })
+    });
+  };
+
+  //TODO: IMPL SELF RESET
   $scope.reset = function () {
     ngDialog.openConfirm({
       template: 'components/dialogs/warning.html',
       scope: _.extend($scope.$new(), {
-        innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">r&eacute;initialiser le mot de passe</span> de cet agent&nbsp;? Cette modification est irr&eacute;versible et prend effet imm&eacute;diatement.'
+        innerHtml: '&Ecirc;tes-vous s&ucirc;r(e) de vouloir <span class="text-warning">r&eacute;initialiser le mot de passe</span> de <span class="text-warning">' +
+          $scope.user.summary + '</span>&nbsp;? Cette modification est irr&eacute;versible et prend effet imm&eacute;diatement.' + ($scope.userInfo.user_id === $scope.user
+            .user_id ?
+            '<hr />En confirmant, <span class="text-warning">vous serez d&eacute;connect&eacute(e)</span> et devrez vous identifier en utilisant votre nouveau mot de passe.' :
+            '')
       })
     }).then(function () {
-      adminSvc.resetUserPassword($scope.empl.empl_pk).then(function (password) {
+      adminSvc.resetUserPassword($scope.user.user_id).then(function (password) {
         $scope.$emit('alert', {
           type: 'success',
-          msg: 'Mot de passe r&eacute;initialis&eacute;&nbsp: <strong><samp>' + password +
-            '</samp></strong><hr />Veuillez transmettre son nouveau mot de passe &agrave; l\'agent concern&eacute;.',
+          msg: 'Mot de passe r&eacute;initialis&eacute; pour <strong>' + $scope.user.summary + '</strong>&nbsp: <kbd>' + password +
+            '</kbd><hr />Veuillez transmettre son/leur nouveau mot de passe &agrave;/aux agent(s) concern&eacute;(s).',
           static: true
         });
+
+        if ($scope.userInfo.user_id === $scope.user.user_id) {
+          $scope.disconnect(true);
+        }
       });
     });
   };

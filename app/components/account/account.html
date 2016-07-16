@@ -1,111 +1,80 @@
-<h3>Gestion du compte</h3>
+<h3>Compte
+    <span ng-if="user.user_type === 'employee'">de <span class="text-primary">{{user.empl_gender ? 'M.' : 'Mme'}} {{user.empl_surname}} {{user.empl_firstname}}</span></span>
+    <span ng-if="user.user_type === 'site'">du site <span class="text-primary">{{user.site_name}}</span></span>
+    <span ng-if="user.user_type === 'department'">du d&eacute;partement <span class="text-primary">{{user.dept_name}}</span></span>
+    <small>- {{user.user_id}}</small>
+</h3>
 <br />
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
         <div class="panel panel-primary">
             <div class="panel-heading">Privil&egrave;ges</div>
             <div class="panel-body">
-                <div class="row" ng-if="user = empl.roles['user']">
-                    <div class="col-xs-4 text-right">Gestion de compte</div>
-                    <div class="col-xs-8">
-                        <label class="label label-success">Activ&eacute;e</label>
-                        <hr />Permet de modifier son mot de passe.
+                <div ng-repeat="(type, data) in user.roles" ng-switch="type">
+                    <hr ng-if="!$first" />
+                    <div class="row" ng-switch-when="user">
+                        <div class="col-xs-4 text-right">Gestion de compte</div>
+                        <div class="col-xs-8">
+                            <label class="label label-success">Activ&eacute;e</label>
+                            <hr /> Permet de modifier son identifiant ainsi que son mot de passe.
+                        </div>
                     </div>
-                </div>
-                <hr ng-if="user" />
-                <div class="row" ng-if="access = empl.roles['access']">
-                    <div class="col-xs-4 text-right">Acc&egrave;s aux donn&eacute;es</div>
-                    <div class="col-xs-8">
-                        <label class="label label-{{colorFor(access)}}">Niveau {{access}}</label>
-                        <hr />Permet la consultation&nbsp;:
-                        <div ng-switch="access">
-                            <ul ng-switch-when="1">
-                                <li>des fiches <strong>de son site</strong> et de ses agents.</li>
-                            </ul>
-                            <ul ng-switch-when="2">
-                                <li>des fiches sites et agents <strong>de son d&eacute;partement</strong>.</li>
-                            </ul>
-                            <ul ng-switch-when="3">
-                                <li>de <strong>toutes</strong> les fiches sites et agents.</li>
-                            </ul>
-                            <ul ng-switch-when="4">
-                                <li>des <strong>fiches formations</strong>, et&nbsp;:</li>
-                                <li>de <strong>toutes</strong> les fiches sites et agents.</li>
+                    <div class="row" ng-switch-when="access">
+                        <div class="col-xs-4 text-right">Acc&egrave;s aux donn&eacute;es</div>
+                        <div class="col-xs-8">
+                            <label class="label label-{{colorFor(data)}}">Niveau {{data}}</label>
+                            <hr />Permet la consultation&nbsp;:
+                            <div ng-switch="data">
+                                <ul ng-switch-when="1">
+                                    <li>des fiches <strong>de son site</strong> et de ses agents.</li>
+                                </ul>
+                                <ul ng-switch-when="2">
+                                    <li>des fiches sites et agents <strong>de son d&eacute;partement</strong>.</li>
+                                </ul>
+                                <ul ng-switch-when="3">
+                                    <li>de <strong>toutes</strong> les fiches sites et agents.</li>
+                                </ul>
+                                <ul ng-switch-when="4">
+                                    <li>des <strong>fiches formations</strong>, et&nbsp;:</li>
+                                    <li>de <strong>toutes</strong> les fiches sites et agents.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-switch-when="trainer">
+                        <div class="col-xs-4 text-right">Profil formateur</div>
+                        <div class="col-xs-8">
+                            <span class="text-primary">{{data.trpr_id}}</span>
+                            <hr /> Permet de g&eacute;rer les formations des types suivants&nbsp;:
+                            <ul>
+                                <li ng-repeat="type in data.types | orderBy: 'trty_order'">{{type.trty_name}}
+                                    <span class="pull-right text-right">
+                                    <label class="label label-success" ng-repeat="cert in type.certificates">{{cert.cert_short}}</label>
+                                </span>
+                                </li>
                             </ul>
                         </div>
                     </div>
-                </div>
-                <hr ng-if="access" />
-                <div class="row" ng-if="trainer = empl.roles['trainer']">
-                    <div class="col-xs-4 text-right">Profil formateur</div>
-                    <div class="col-xs-8">
-                        <span class="text-primary">{{trainer.trlv_id}}</span>
-                        <hr /> Permet de g&eacute;rer les formations des types suivants&nbsp;:
-                        <ul>
-                            <li ng-repeat="type in trainer.types | orderBy: 'trty_order'">{{type.trty_name}}
-                                <span class="pull-right text-right">
-                                    <label class="label label-success" ng-repeat="cert in type.certificates">{{cert.cert_short}}</label>
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <hr ng-if="trainer" />
-                <div class="row" ng-if="admin = empl.roles['admin']">
-                    <div class="col-xs-4 text-right">Administration</div>
-                    <div class="col-xs-8">
-                        <label class="label label-{{colorFor(admin)}}">Niveau {{admin}}</label>
-                        <hr /> Permet la gestion&nbsp;:
-                        <ul>
-                            <li ng-show="admin === 4">des <strong>comptes utilisateurs</strong> et de leurs privil&egrave;ges,</li>
-                            <li ng-show="admin >= 3">des <strong>aptitudes</strong> et types de formation,</li>
-                            <li ng-show="admin >= 2">des <strong>sites</strong> et de leur d&eacute;partements,</li>
-                            <li ng-show="admin >= 2">de la mise &agrave; jour des <strong>affectations</strong> des agents, ainsi que&nbsp;:</li>
-                            <li ng-show="admin >= 1">des <strong>notes</strong> des agents et de leur exclusion des dispositifs.</li>
-                        </ul>
+                    <div class="row" ng-switch-when="admin">
+                        <div class="col-xs-4 text-right">Administration</div>
+                        <div class="col-xs-8">
+                            <label class="label label-{{colorFor(data)}}">Niveau {{data}}</label>
+                            <hr /> Permet la gestion&nbsp;:
+                            <ul>
+                                <li ng-show="data === 4">des <strong>comptes utilisateurs</strong> et de leurs privil&egrave;ges,</li>
+                                <li ng-show="data >= 3">des <strong>aptitudes</strong> et types de formation,</li>
+                                <li ng-show="data >= 2">des <strong>sites</strong> et de leur d&eacute;partements,</li>
+                                <li ng-show="data >= 2">de la mise &agrave; jour des <strong>affectations</strong> des agents, ainsi que&nbsp;:</li>
+                                <li ng-show="data >= 1">des <strong>notes</strong> des agents et de leur exclusion des dispositifs.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-8 col-md-offset-2">
-        <form name="form" ng-submit="changePassword()" role="form" class="form-horizontal panel panel-primary">
-            <div class="panel-heading">S&eacute;curit&eacute;</div>
-            <div class="panel-body">
-                <div class="form-group" ng-class="{ 'has-error': form.password_current.$dirty && form.password_current.$error.required }">
-                    <div class="row">
-                        <label for="password_current" class="col-xs-6 col-sm-4 control-label">Mot de passe actuel</label>
-                        <div class="col-xs-6 col-sm-8">
-                            <input type="password" name="password_current" id="password_current" class="form-control" ng-model="password_current" required />
-                            <span ng-show="form.password_current.$dirty && form.password_current.$error.required" class="help-block">Mot de passe requis</span>
-                        </div>
-                    </div>
-                </div>
-                <hr />
-                <div class="form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
-                    <div class="row">
-                        <label for="password" class="col-xs-6 col-sm-4 control-label">Nouveau mot de passe</label>
-                        <div class="col-xs-6 col-sm-8">
-                            <input type="password" name="password" id="password" class="form-control" ng-model="password" required />
-                            <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Mot de passe requis</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group" ng-class="{ 'has-error': form.password_confirm.$dirty && (form.password_confirm.$error.required || password_confirm !== password) }">
-                    <div class="row">
-                        <label for="password_confirm" class="col-xs-6 col-sm-4 control-label">Confirmer le mot de passe</label>
-                        <div class="col-xs-6 col-sm-8">
-                            <input type="password" name="password_confirm" id="password_confirm" class="form-control" required ng-model="password_confirm" ng-disabled="!password" />
-                            <span ng-show="form.password_confirm.$dirty && (form.password_confirm.$error.required || password_confirm !== password)" class="help-block">Les deux mots de passe doivent correspondre</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-footer text-center">
-                <button type="submit" ng-disabled="form.$invalid || password_confirm !== password" class="btn btn-primary">Mofidier mon mot de passe</button>
-            </div>
-        </form>
-    </div>
+<div class="side-panel-container text-right" ng-if="user.roles['user']">
+    <button type="button" class="btn btn-raised btn-primary side-panel-item" ng-click="changeId()"><span class="glyphicon glyphicon-user"></span>&nbsp;Changer identifiant</button>
+    <button type="button" class="btn btn-raised btn-warning side-panel-item" ng-click="changePassword()"><span class="glyphicon glyphicon-lock"></span>&nbsp;Modifier mot de passe</button>
 </div>

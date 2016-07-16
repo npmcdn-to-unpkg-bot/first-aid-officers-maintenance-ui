@@ -1,0 +1,42 @@
+<form class="panel panel-primary form form-horizontal" ng-submit="callback(user, closeThisDialog)" autocomplete="off">
+    <div class="panel-heading">
+        Nouveau compte
+        <span class="clickme pull-right" ng-click="closeThisDialog()">&nbsp;<span class="glyphicon glyphicon-remove"></span></span>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <div class="row">
+                <label class="control-label col-xs-4">Type</label>
+                <div class="col-xs-8">
+                    <select class="form-control" ng-model="user.user_type" ng-options="option as option.display for option in types" ng-change="user.link=undefined"></select>
+                </div>
+            </div>
+        </div>
+        <div uib-collapse="!user.user_type">
+            <div class="form-group">
+                <div class="row">
+                    <label class="control-label col-xs-4">{{user.user_type.display}}</label>
+                    <div class="col-xs-8" ng-switch="user.user_type.value">
+                        <input ng-switch-when="employee" type="text" class="form-control" ng-model="user.link" placeholder="Rechercher..." class="form-control" uib-typeahead="empl as empl.summary for empl in employeesIndex | filterEmpl:$viewValue | limitTo:8"
+                        />
+                        <input ng-switch-when="site" type="text" class="form-control" ng-model="user.link" placeholder="Rechercher..." class="form-control" uib-typeahead="site as site.summary for site in sitesIndex | filterSite:$viewValue | limitTo:8"
+                        />
+                        <input ng-switch-when="department" type="text" class="form-control" ng-model="user.link" placeholder="Rechercher..." class="form-control" uib-typeahead="dept as dept.summary for dept in departments | filterDept:$viewValue | limitTo:8"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="control-label col-xs-4">Identifiant</label>
+                    <div class="col-xs-8">
+                        <input type="text" maxlength="16" class="form-control" ng-model="user.user_id" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer text-center">
+        <button type="submit" class="btn btn-primary" ng-disabled="disabled(user || {})">Cr&eacute;er</button>
+    </div>
+</form>

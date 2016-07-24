@@ -2,7 +2,7 @@
     <div class="panel panel-primary">
         <div class="panel-heading">Donn&eacute;es charg&eacute;es</div>
         <div class="panel-body">
-            Ligne <span class="text-primary" ng-bind="step2.current + 1" /> sur <span class="text-primary">{{data.length}}</span>
+            Ligne <span class="text-primary" ng-bind="step2.current + (step1.header ? 2 : 1)" /> sur <span class="text-primary">{{data.length + (step1.header ? 1 : 0)}}</span>
             <span class="pull-right">
 				<a href="" ng-click="step2.prev()" ng-disabled="step2.current === 0"><small class="glyphicon glyphicon-chevron-left"></small>&nbsp;Pr&eacute;c&eacute;dent</a>
 				<span class="text-danger">&nbsp;|&nbsp;</span>
@@ -14,7 +14,7 @@
                 <tr>
                     <th width="40%" class="text-center">En-t&ecirc;te</th>
                     <th width="60%" class="text-center">
-                        Donn&eacute;es pour la ligne <span class="text-primary" ng-bind="step2.current + 1" />
+                        Donn&eacute;es pour la ligne <span class="text-primary" ng-bind="step2.current + (step1.header ? 2 : 1)" />
                     </th>
                 </tr>
             </thead>
@@ -38,7 +38,7 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-xs-12">
-                    Ligne <span class="text-primary" ng-bind="step2.current + 1" /> sur <span class="text-primary">{{data.length}}</span>
+                    Ligne <span class="text-primary" ng-bind="step2.current + (step1.header ? 2 : 1)" /> sur <span class="text-primary">{{data.length + (step1.header ? 1 : 0)}}</span>
                     <span class="pull-right">
 						<a href="" ng-click="step2.prev()" ng-disabled="step2.current === 0"><small class="glyphicon glyphicon-chevron-left"></small>&nbsp;Pr&eacute;c&eacute;dent</a>
 						<span class="text-danger">&nbsp;|&nbsp;</span>

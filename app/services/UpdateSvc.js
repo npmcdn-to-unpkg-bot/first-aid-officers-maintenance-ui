@@ -7,10 +7,10 @@ module.exports = function ($http, $q, apiSvc) {
       return apiSvc.post(apiSvc.updateEndpoint, employees);
     },
     deleteSite: function (site_pk) {
-      return apiSvc.delete(encodeURI(apiSvc.updateEndpoint + 'sites/' + site_pk));
+      return apiSvc.delete(apiSvc.updateEndpoint + 'sites/' + site_pk);
     },
     editSite: function (site) {
-      return apiSvc.put(encodeURI(apiSvc.updateEndpoint + 'sites/' + (site.site_pk || site.new_pk)), {
+      return apiSvc.put(apiSvc.updateEndpoint + 'sites/' + (site.site_pk || site.new_pk), {
         site_pk: site.new_pk || site.site_pk,
         site_name: site.site_name,
         site_dept_fk: site.site_dept_fk.toString(),

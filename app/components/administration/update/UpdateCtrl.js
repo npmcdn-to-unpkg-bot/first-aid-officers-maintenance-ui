@@ -59,8 +59,14 @@ module.exports = function ($scope, updateSvc, dataSvc, ngDialog, busySvc, NgTabl
         }
       }
 
-      data.push(row);
+      if (_.any(row, function (value) {
+          return value !== '';
+        })) {
+        data.push(row);
+      }
+
     }
+
     return data;
   }
 
@@ -119,7 +125,7 @@ module.exports = function ($scope, updateSvc, dataSvc, ngDialog, busySvc, NgTabl
             return entry[field.source] ? entry[field.source].trim() : '';
           });
 
-          res.line = idx + 1;
+          res.line = idx + ($scope.step1.header ? 2 : 1);
           _.each($scope.step2.template, function (field, name) {
             if (!$scope.step3.validate(name, entry[field.source] ? entry[field.source].trim() : '')) {
               if (res.error) {

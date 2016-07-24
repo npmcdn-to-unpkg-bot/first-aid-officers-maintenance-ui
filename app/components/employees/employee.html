@@ -46,11 +46,11 @@
                     <div class="col-xs-4 text-right">Dispositif {{voiding.cert.cert_short}}</div>
                     <div class="col-xs-8 text-danger">Sorti(e) du dispositif {{voiding.cert.cert_short}} depuis le {{voiding.date | date: 'fullDate'}}</div>
                     <div class="col-xs-4"></div>
-                    <div class="col-xs-8 text-grey">{{voiding.emce_reason}}</div>
+                    <div class="col-xs-8 text-muted">{{voiding.emce_reason}}</div>
                 </div>
                 <div class="row" ng-if="empl.empl_notes">
                     <div class="col-xs-4 text-right">Notes</div>
-                    <div class="col-xs-8 preserve-whitespace text-grey">{{empl.empl_notes}}</div>
+                    <div class="col-xs-8 preserve-whitespace text-muted">{{empl.empl_notes}}</div>
                 </div>
             </div>
             <table class="table table-hover" ng-show="(checkedCertificates = (certificates | orderBy: 'cert_order' | filter: {'checked': true})).length > 0">

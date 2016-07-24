@@ -59,7 +59,7 @@ module.exports = function ($scope, updateSvc, dataSvc, ngDialog, busySvc, NgTabl
         }
       }
 
-      if (_.any(row, function (value) {
+      if (_.some(row, function (value) {
           return value !== '';
         })) {
         data.push(row);
@@ -206,12 +206,13 @@ module.exports = function ($scope, updateSvc, dataSvc, ngDialog, busySvc, NgTabl
     update: function () {
       busySvc.busy('actualUpdate', true);
       updateSvc.update($scope.employees).then(function () {
-        $scope.$emit('alert', { type: 'success', msg: 'Mise &agrave; jour effectu&eacute;e avec succ&egrave;s.' });
+        $scope.$emit('alert', { type: 'success', msg: 'Mise &agrave; jour effectu&eacute;e avec succ&egrave;s.', static: true });
         $scope.$emit('update');
         busySvc.done('actualUpdate');
         busySvc.done('ongoingOperation');
         window.history.back();
       }, function () {
+        $scope.$emit('error');
         busySvc.done('actualUpdate');
       });
     },
